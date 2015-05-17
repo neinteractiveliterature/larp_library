@@ -27,6 +27,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'devise'
 gem 'devise_cas_authenticatable'
+gem 'cancancan'
 
 gem 'haml'
 
