@@ -1,0 +1,31 @@
+.row
+  .col-md-8  
+    %h1= @project.title
+
+    - if @project.authors.present?
+      %p
+        %em By #{@project.authors}
+
+    = simple_format @project.description
+
+  .col-md-4
+    .panel.panel-default
+      .panel-heading
+        %h2{style: "margin: 0"} Files
+      .panel-body
+        %ul.project-files
+          - @project.project_files.each do |project_file|
+            %li
+              = link_to project_file.filename, project_file.url
+              %small (#{number_to_human_size project_file.filesize})
+        
+        = s3_uploader_form callback_url: url_for([@project, :project_files]), callback_param: "project[content_url]", id: "s3-uploader" do
+          %label{for: "file"} Upload files
+          = file_field_tag :file, multiple: true
+
+        %script#template-upload{type: "text/x-tmpl"}
+          .upload{id: "file-{%=o.unique_id%}"}
+            {%=o.name%}
+            .progress
+              .bar{style: "width: 0%"}
+  

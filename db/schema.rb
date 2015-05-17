@@ -11,7 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150517165436) do
+ActiveRecord::Schema.define(version: 20150517181758) do
+
+  create_table "project_files", force: :cascade do |t|
+    t.integer  "project_id"
+    t.string   "url"
+    t.string   "filename"
+    t.string   "filetype"
+    t.integer  "filesize"
+    t.integer  "uploader_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "project_files", ["project_id"], name: "index_project_files_on_project_id"
 
   create_table "projects", force: :cascade do |t|
     t.text     "title"

@@ -29,6 +29,9 @@ gem 'devise'
 gem 'devise_cas_authenticatable'
 gem 'cancancan'
 
+gem 's3_direct_upload'
+gem 'flavour_saver' # Handlebars templating
+
 gem 'haml'
 
 # Use ActiveModel has_secure_password
