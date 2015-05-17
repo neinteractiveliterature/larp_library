@@ -2,20 +2,37 @@
 %html
   %head
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"}/
     %title Alleged Entertainment Library
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
   %body
-    - if notice.present?
-      .alert.alert-success.alert-dismissible{role: "alert"}
-        %button.close{type: "button", "data-dismiss" => "alert", "aria-label" => "Close"}
-          %span{"aria-hidden" => "true"} &times;
-        = notice
-    - if alert.present?
-      .alert.alert-danger.alert-dismissible{role: "alert"}
-        %button.close{type: "button", "data-dismiss" => "alert", "aria-label" => "Close"}
-          %span{"aria-hidden" => "true"} &times;
-        = alert
-  
-    = yield
+    .container
+      %nav#topbar
+        %ul#mainnav
+          %li.col-md-4.col-sm-6{style: "text-align: center;"}
+            = link_to root_path do
+              = image_tag "aegames.png", class: "img-responsive", style: "display: inline-block;"
+          %li.col-md-8.col-sm-6
+            %ul#globalnav
+              - if user_signed_in?
+                = link_to "Sign out", destroy_user_session_path, method: "delete"
+              - else
+                = link_to "Sign in", new_user_session_path
+        %ul#subnav
+          %li
+            %a{:href => "/"}= image_tag "aegames-mini.png"
+        
+      - if notice.present?
+        .alert.alert-success.alert-dismissible{role: "alert"}
+          %button.close{type: "button", "data-dismiss" => "alert", "aria-label" => "Close"}
+            %span{"aria-hidden" => "true"} &times;
+          = notice
+      - if alert.present?
+        .alert.alert-danger.alert-dismissible{role: "alert"}
+          %button.close{type: "button", "data-dismiss" => "alert", "aria-label" => "Close"}
+            %span{"aria-hidden" => "true"} &times;
+          = alert
+
+      = yield

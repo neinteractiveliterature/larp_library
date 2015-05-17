@@ -14,5 +14,96 @@
  *= require_tree .
  */
 
+@import url(http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400,700);
+
+$font-family-sans-serif: Lato, Trebuchet MS, Helvetica, Bitstream Vera Sans, sans-serif;
+$font-family-serif: Lora, georgia, times new roman, times, serif;
+$headings-font-family: $font-family-serif;
+$font-size-base: 14px;
+$brand-primary: #cc4444;
+$body-bg: #eee;
+$gray-base: #444;
+
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+#topbar {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+#globalnav {
+  margin: 0;
+  padding: 0;
+  
+  li {
+    display: inline-block;
+    list-style-type:none;
+    margin-left: 8pt;
+    margin-right: 8pt;
+    padding: 0;
+    font-size: $font-size-base * 1.25;
+  }
+}
+
+#mainnav {
+  background-color: black;
+  min-height: 79px;
+  width: 100%;
+  display: block;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  
+  > li {
+    padding: 0;
+    margin: 0;
+    display: block;
+    float: none;
+  }
+  
+  @media (min-width: $screen-sm-min) { 
+    display: table;
+    
+    > li {
+      display: table-cell; 
+      vertical-align: middle;
+    }
+  }
+  
+  @media (max-width: $screen-sm-max) {
+    > li {
+      text-align: center;
+    }
+  }
+  
+  a:visited {
+    color: $brand-primary;
+  }
+}
+
+#subnav {
+  background-color: #f52222;
+  color: white;
+  border: 6px solid #f52222;
+  border-top: none;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  min-height: 16px;
+  font-size: 12px;
+  
+  padding: 0;
+  margin: 0;
+  
+  li {
+    list-style-type: none;
+    display: inline-block;
+    padding: 0;
+    margin-left: 8pt;
+    margin-right: 8pt;
+  }
+}
+
+#subnav a {
+  color: white;
+}
