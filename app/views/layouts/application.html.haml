@@ -1,0 +1,21 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title Alleged Entertainment Library
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  %body
+    - if notice.present?
+      .alert.alert-success.alert-dismissible{role: "alert"}
+        %button.close{type: "button", "data-dismiss" => "alert", "aria-label" => "Close"}
+          %span{"aria-hidden" => "true"} &times;
+        = notice
+    - if alert.present?
+      .alert.alert-danger.alert-dismissible{role: "alert"}
+        %button.close{type: "button", "data-dismiss" => "alert", "aria-label" => "Close"}
+          %span{"aria-hidden" => "true"} &times;
+        = alert
+  
+    = yield
