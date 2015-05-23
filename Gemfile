@@ -39,6 +39,9 @@ gem 'truncate_html'
 gem 'ace-rails-ap'
 gem "selectize-rails"
 
+gem 'elasticsearch-rails'
+gem 'elasticsearch-model'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

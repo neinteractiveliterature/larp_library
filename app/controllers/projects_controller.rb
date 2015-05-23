@@ -4,6 +4,21 @@ class ProjectsController < ApplicationController
   respond_to :html
   
   def index
+    @projects = if params[:q].present?
+      Project.search(
+      query: {
+        multi_match: {
+          query: params[:q],
+          fields: ['title^3', 'authors^2', 'tag_names^2', 'description'],
+          fuzziness: 'AUTO'
+        }
+      }
+      ).records
+    else
+      Project.order(:title)
+    end
+    
+    @projects = @projects.includes(:project_files)
   end
   
   def new

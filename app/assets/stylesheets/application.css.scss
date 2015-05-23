@@ -10,26 +10,15 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require font-awesome
  *= require_self
  *= require s3_direct_upload_progress_bars
- *= require font-awesome
  *= require selectize
  *= require selectize.bootstrap3
  *= require_tree .
  */
 
-@import url(http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400,700);
-
-$font-family-sans-serif: Lato, Trebuchet MS, Helvetica, Bitstream Vera Sans, sans-serif;
-$font-family-serif: Lora, georgia, times new roman, times, serif;
-$headings-font-family: $font-family-serif;
-$font-size-base: 14px;
-$brand-primary: #cc4444;
-$body-bg: #eee;
-$gray-base: #444;
-
-@import "bootstrap-sprockets";
-@import "bootstrap";
+@import "bootstrap_custom";
 
 #topbar {
   width: 100%;
