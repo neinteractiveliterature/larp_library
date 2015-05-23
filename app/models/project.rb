@@ -1,6 +1,5 @@
 class Project < ActiveRecord::Base
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
+  include Concerns::Elasticsearch
   
   mapping do
     indexes :title, :type => 'string'

@@ -1,6 +1,5 @@
 class Tag < ActiveRecord::Base
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
+  include Concerns::Elasticsearch
   
   has_and_belongs_to_many :projects
   

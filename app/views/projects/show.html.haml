@@ -2,16 +2,7 @@
   .col-md-8  
     %h1= @project.title
 
-    - if @project.authors.present?
-      %p
-        %em By #{@project.authors}
-        
-    - if @project.tags.any?
-      %ul.list-inline
-        %li
-          %strong Tags:
-        - @project.tags.sort_by(&:name).each do |tag|
-          %li.label.label-default= tag.name
+    = render 'project_headers', project: @project
 
     = markdown @project.description
     
@@ -26,13 +17,14 @@
         %ul.project-files.list-unstyled
           = render @project.project_files
         
-        = s3_uploader_form callback_url: url_for([@project, :project_files]), callback_param: "project[content_url]", id: "s3-uploader" do
-          %label{for: "file"} Upload files
-          = file_field_tag :file, multiple: true
+        - if can? :edit, @project
+          = s3_uploader_form callback_url: url_for([@project, :project_files]), callback_param: "project[content_url]", id: "s3-uploader" do
+            %label{for: "file"} Upload files
+            = file_field_tag :file, multiple: true
 
-        %script#template-upload{type: "text/x-tmpl"}
-          .upload{id: "file-{%=o.unique_id%}"}
-            {%=o.name%}
-            .progress
-              .bar{style: "width: 0%"}
+          %script#template-upload{type: "text/x-tmpl"}
+            .upload{id: "file-{%=o.unique_id%}"}
+              {%=o.name%}
+              .progress
+                .bar{style: "width: 0%"}
   

@@ -6,13 +6,11 @@
       
     %h2{style: "margin: 0"}= project.title
     
-    - if project.authors.present?
-      %p{style: "margin: 0"}
-        %em By #{project.authors}
+    = render 'project_headers', project: project
   .panel-body    
     .row
       .col-md-8
-        = truncate_html markdown(project.description), length: 500, omission: "... ".html_safe + link_to("(read more)", "#", class: "expand")
+        = truncate_html markdown(project.description), length: 500, omission: "... ".html_safe + link_to("(read more)", project, class: "expand")
       .col-md-4
         %ul.project-files.list-unstyled
           = render project.project_files
