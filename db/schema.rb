@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150517181758) do
+ActiveRecord::Schema.define(version: 20150523164556) do
 
   create_table "project_files", force: :cascade do |t|
     t.integer  "project_id"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20150517181758) do
     t.string   "filename"
     t.string   "filetype"
     t.integer  "filesize"
+    t.string   "filepath"
     t.integer  "uploader_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
@@ -34,6 +35,22 @@ ActiveRecord::Schema.define(version: 20150517181758) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  create_table "projects_tags", id: false, force: :cascade do |t|
+    t.integer "project_id"
+    t.integer "tag_id"
+  end
+
+  add_index "projects_tags", ["project_id"], name: "index_projects_tags_on_project_id"
+  add_index "projects_tags", ["tag_id"], name: "index_projects_tags_on_tag_id"
+
+  create_table "tags", force: :cascade do |t|
+    t.text     "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "tags", ["name"], name: "index_tags_on_name"
 
   create_table "users", force: :cascade do |t|
     t.string   "username",           default: "",    null: false

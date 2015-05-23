@@ -6,6 +6,7 @@ class CreateProjectFiles < ActiveRecord::Migration
       t.string :filename
       t.string :filetype
       t.integer :filesize
+      t.string :filepath
       t.references :uploader
 
       t.timestamps null: false

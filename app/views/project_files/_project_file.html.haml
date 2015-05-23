@@ -1,0 +1,19 @@
+%li
+  = link_to project_file.url do
+    - case Mime::Type.lookup(project_file.filetype).symbol
+    - when :png, :jpeg, :gif
+      %i.fa.fa-file-image-o
+    - when :pdf
+      %i.fa.fa-file-pdf-o
+    - when :zip
+      %i.fa.fa-file-zip-o
+    - when :text
+      %i.fa.fa-file-text-o
+    - else
+      %i.fa.fa-file-o
+    = project_file.filename
+  %small (#{number_to_human_size project_file.filesize})
+  
+  - if can? :delete, project_file
+    .pull-right
+      = link_to "&times;".html_safe, [project_file.project, project_file], method: "delete", "data-confirm" => "Are you sure?"

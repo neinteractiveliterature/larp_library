@@ -8,7 +8,13 @@
     = f.text_field :authors, class: 'form-control'
     
   .form-group
-    = f.label :description
-    = f.text_area :description, class: 'form-control'
+    = f.label :tags
+    = f.select :tag_names, f.object.tag_names, {}, class: 'form-control tag-selector', multiple: true
+    
+  .form-group
+    = f.label :description do
+      Description
+      %small (Markdown allowed)
+    = f.text_area :description, class: 'form-control ace-editor', style: 'height: 6em;', rows: 6
   
   = f.submit class: 'btn btn-default'

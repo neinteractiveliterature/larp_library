@@ -20,3 +20,33 @@ $ ->
     
     newFile = $("<li><a href=\"#{upload.url}\">#{upload.filename}</a> <small>(#{number_to_human_size upload.filesize})</small></li>")
     $fileList.append newFile
+    
+  $('.ace-editor').each ->
+    editorDiv = $('<div class="form-control" style="height: 15em"></div>')
+    $(this).hide().after(editorDiv)
+    
+    editor = ace.edit(editorDiv.get(0))
+    editor.setTheme("ace/theme/textmate")
+    editor.getSession().setMode("ace/mode/markdown")
+    editor.getSession().setUseWrapMode(true)
+
+    editor.getSession().setValue($(this).val())
+    $(this).closest('form').on 'submit', =>
+      $(this).val(editor.getSession().getValue())
+      
+  $('.tag-selector').selectize
+    plugins: ['remove_button']
+    valueField: 'name'
+    labelField: 'name'
+    searchField: 'name'
+    create: true
+    delimiter: ','
+    persist: false
+    create: (input) -> { name: input }
+    load: (query, callback) ->
+      $.ajax
+        url: '/tags?q=' + encodeURIComponent(query)
+        type: 'GET'
+        dataType: 'json'
+        error: -> callback()
+        success: (res) -> callback(res)

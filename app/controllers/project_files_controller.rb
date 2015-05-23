@@ -10,8 +10,13 @@ class ProjectFilesController < ApplicationController
     respond_with @project, @project_file
   end
   
+  def destroy
+    @project_file.destroy
+    redirect_to :back
+  end
+  
   private
   def project_file_params
-    params.permit(:url, :filename, :filesize, :filetype)
+    params.permit(:url, :filename, :filesize, :filetype, :filepath)
   end
 end
