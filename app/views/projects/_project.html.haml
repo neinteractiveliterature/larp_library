@@ -4,9 +4,16 @@
       .pull-right
         = link_to "Admin", project, class: "btn btn-default"
       
-    %h2{style: "margin: 0"}= project.title
+    %h2{style: "margin: 0"}
+      = link_to project.title, project, class: 'link-unstyled'
     
-    = render 'project_headers', project: project
+    %ul.list-unstyled{style: 'margin: 0'}
+      = render 'project_headers', project: project
+      - if project.license_object
+        %li
+          %strong Licensing:
+          = project.license_object.name
+      
   .panel-body    
     .row
       .col-md-8

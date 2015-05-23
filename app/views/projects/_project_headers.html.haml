@@ -1,10 +1,11 @@
 - if project.authors.present?
-  %p{style: 'margin-bottom: 0'}
+  %li
     %em By #{project.authors}
     
 - if project.tags.any?
-  %ul.list-inline{style: 'margin-top: 0'}
-    %li
-      %strong Tags:
-    - project.tags.sort_by(&:name).each do |tag|
-      %li.label.label-default= tag.name
+  %li
+    %ul.list-inline
+      %li
+        %strong Tags:
+      - project.tags.sort_by(&:name).each do |tag|
+        %li.label.label-default= tag.name

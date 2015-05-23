@@ -35,6 +35,8 @@ gem 'fog'
 gem 'haml'
 gem 'redcarpet'
 gem 'truncate_html'
+gem 'will_paginate'
+gem 'will_paginate-bootstrap'
 
 gem 'ace-rails-ap'
 gem "selectize-rails"

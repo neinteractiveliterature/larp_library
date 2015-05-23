@@ -8,6 +8,8 @@
         %i.fa.fa-search.form-control-feedback
 
 = render partial: @projects.order(:title)
+= will_paginate @projects, renderer: BootstrapPagination::Rails
 
 - if can? :create, Project
-  = link_to "New project", new_project_path, class: "btn btn-default"
+  %p
+    = link_to "New project", new_project_path, class: "btn btn-default"

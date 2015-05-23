@@ -2,7 +2,8 @@
   .col-md-8  
     %h1= @project.title
 
-    = render 'project_headers', project: @project
+    %ul.list-unstyled{style: 'margin-top: 0'}
+      = render 'project_headers', project: @project
 
     = markdown @project.description
     
@@ -27,4 +28,27 @@
               {%=o.name%}
               .progress
                 .bar{style: "width: 0%"}
-  
+    
+    - license = @project.license_object
+    - if license
+      .panel.panel-default
+        .panel-heading
+          %h2{style: "margin: 0"} Licensing
+        .panel-body
+          - dedication = capture do
+            - if license[:dedication_html]
+              =raw license[:dedication_html]
+            - else
+              This work is licensed under a
+              = succeed '.' do
+                %a{rel: "license", href: license.url}= license.name
+                license
+        
+          - if license.logo_url
+            .media
+              .media-left.media-middle
+                %a{rel: "license", href: license.url}
+                  %img{alt: license.name, style: "border-width:0", src: license.logo_url}
+              .media-body= dedication
+          - else
+            = dedication

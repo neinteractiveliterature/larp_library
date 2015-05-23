@@ -13,12 +13,12 @@ class ProjectsController < ApplicationController
           fuzziness: 'AUTO'
         }
       }
-      ).records
+      ).records.page(params[:page])
     else
-      Project.order(:title)
+      Project.order(:title).page(params[:page])
     end
     
-    @projects = @projects.includes(:project_files)
+    @projects = @projects.includes(:project_files, :tags)
   end
   
   def new
@@ -40,6 +40,6 @@ class ProjectsController < ApplicationController
   
   private
   def project_params
-    params.require(:project).permit(:title, :authors, :description, tag_names: [])
+    params.require(:project).permit(:title, :authors, :description, :license, tag_names: [])
   end
 end
