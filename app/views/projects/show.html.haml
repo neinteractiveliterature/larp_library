@@ -1,8 +1,6 @@
 .row
-  .col-md-8  
-    %h1= @project.title
-
-    %ul.list-unstyled{style: 'margin-top: 0'}
+  .col-md-8
+    %p
       = render 'project_headers', project: @project
 
     = markdown @project.description
@@ -52,3 +50,11 @@
               .media-body= dedication
           - else
             = dedication
+    
+    - if can? :delete, @project
+      .panel.panel-default
+        .panel-heading
+          %h2{style: "margin: 0"} Delete
+        
+        .panel-body
+          = link_to "Delete project", @project, method: "delete", class: "btn btn-danger", "data-confirm" => "Are you sure you want to completely remove #{@project.title}?"

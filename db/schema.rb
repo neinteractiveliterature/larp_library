@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150523164556) do
+ActiveRecord::Schema.define(version: 20150524121642) do
 
   create_table "project_files", force: :cascade do |t|
     t.integer  "project_id"
@@ -32,8 +32,13 @@ ActiveRecord::Schema.define(version: 20150523164556) do
     t.text     "authors"
     t.text     "license"
     t.text     "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "min_players"
+    t.integer  "max_players"
+    t.integer  "length_quantity"
+    t.string   "length_units"
+    t.integer  "publication_year"
   end
 
   create_table "projects_tags", id: false, force: :cascade do |t|

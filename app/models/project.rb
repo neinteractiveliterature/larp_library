@@ -39,7 +39,7 @@ class Project < ActiveRecord::Base
     indexes :tag_names, :type => 'string'
   end
   
-  has_many :project_files
+  has_many :project_files, dependent: :destroy
   has_and_belongs_to_many :tags
   
   validates :license, inclusion: { in: LICENSES.keys.map(&:to_s) }

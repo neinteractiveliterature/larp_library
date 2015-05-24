@@ -4,21 +4,36 @@ class ProjectsController < ApplicationController
   respond_to :html
   
   def index
-    @projects = if params[:q].present?
-      Project.search(
-      query: {
+    must_queries = []
+    if params[:q].present?
+      must_queries << {
         multi_match: {
           query: params[:q],
           fields: ['title^3', 'authors^2', 'tag_names^2', 'description'],
           fuzziness: 'AUTO'
         }
       }
-      ).records.page(params[:page])
-    else
-      Project.order(:title).page(params[:page])
+    elsif params[:tag].present?
+      must_queries << {
+        term: {
+          tag_names: params[:tag]
+        }
+      }
     end
     
-    @projects = @projects.includes(:project_files, :tags)
+    query = if must_queries.any?
+      {
+        bool: {
+          must: must_queries
+        }
+      }
+    else
+      {
+        match_all: {}
+      }
+    end
+    
+    @projects = Project.search(query: query, sort: ["_score", "title"]).page(params[:page]).records
   end
   
   def new
@@ -38,8 +53,23 @@ class ProjectsController < ApplicationController
     respond_with @project
   end
   
+  def destroy
+    @project.destroy
+    respond_with @project
+  end
+  
   private
   def project_params
-    params.require(:project).permit(:title, :authors, :description, :license, tag_names: [])
+    params.require(:project).permit(
+      :title, 
+      :authors, 
+      :description, 
+      :license, 
+      :publication_year,
+      :min_players,
+      :max_players,
+      :length_quantity,
+      :length_units,
+      tag_names: [])
   end
 end
