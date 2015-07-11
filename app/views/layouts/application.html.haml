@@ -23,7 +23,6 @@
                   = link_to "Sign out", destroy_user_session_path, method: "delete"
                 - else
                   = link_to "Sign in", new_user_session_path
-        / %ul#subnav
 
         
       - if notice.present?
@@ -38,3 +37,11 @@
           = alert
 
       = yield
+
+      %nav
+        %ul.list-inline{style: 'text-align: center'}
+          %li
+            %small Larp Library &copy; 2015 Alleged Entertainment
+          %li &mdash;
+          %li= link_to "About us", page_path('about')
+          %li= link_to "Licensing", page_path('licensing')
