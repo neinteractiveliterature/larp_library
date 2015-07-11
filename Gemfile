@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.1'
+gem 'rails', '4.2.3'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use SCSS for stylesheets
@@ -45,6 +45,13 @@ gem 'elasticsearch-rails'
 gem 'elasticsearch-model'
 
 gem 'high_voltage'
+
+gem 'figaro'
+
+gem 'capistrano', '3.3.5', group: :development
+gem 'capistrano-rails'
+gem 'capistrano-rbenv'
+gem 'capistrano-passenger'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
