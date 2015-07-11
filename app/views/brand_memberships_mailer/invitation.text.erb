@@ -1,0 +1,29 @@
+<% brand_name = @brand_membership.brand.name -%>
+Welcome to Larp Library!
+========================
+
+<%
+paragraph_text = <<-EOF.strip
+Larp Library is a site for larp authors to publish their work under free-to-use
+licenses.
+EOF
+
+paragraph_text << if @inviting_user
+  "  #{@inviting_user.name} has invited you to join #{brand_name} on Larp Library."
+else
+  "  You've been invited to join #{brand_name} on Larp Library."
+end
+-%><%= paragraph_text %>
+
+This membership allows you to:
+
+* Publish larps as <%= brand_name %>
+* Edit existing <%= brand_name %> larps
+<% if @brand_membership.admin? -%>
+* Add and remove members from #{brand_name}
+* Edit the public description and branding for #{brand_name}
+<% end -%>
+
+To accept this invitation, go to: <%= pre_accept_brand_membership_url(@brand_membership.brand, @brand_membership) %>
+
+If you don't want to join <%= @brand_membership.brand.name %>, please just ignore this email (and possibly let <%= @inviting_user.name %> know).

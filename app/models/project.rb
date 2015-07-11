@@ -37,12 +37,15 @@ class Project < ActiveRecord::Base
     indexes :license, :index => :not_analyzed
     indexes :description, :type => 'string'
     indexes :tag_names, :type => 'string'
+    indexes :brand_name, :type => 'string'
   end
   
   has_many :project_files, dependent: :destroy
   has_and_belongs_to_many :tags
+  belongs_to :brand
   
   validates :license, inclusion: { in: LICENSES.keys.map(&:to_s) }
+  validates :brand, presence: true
   
   self.per_page = 10
   
@@ -73,7 +76,16 @@ class Project < ActiveRecord::Base
       authors: authors,
       license: license,
       description: description,
-      tag_names: tag_names
+      tag_names: tag_names,
+      brand_name: brand.try(:name)
     }.as_json
+  end
+  
+  def to_param
+    if title
+      "#{id}-#{title.parameterize}"
+    else
+      id
+    end
   end
 end

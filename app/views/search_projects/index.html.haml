@@ -1,6 +1,6 @@
 .media
   .media-body
-    %h1 Alleged Entertainment Library
+    %h1 Larps
   .media-right.media-bottom{style: "min-width: 150px; width: 33%"}
     = form_tag projects_path, method: 'GET', class: 'form' do
       .form-group.has-feedback
@@ -9,7 +9,3 @@
 
 = render partial: @projects.order(:title)
 = will_paginate @projects, renderer: BootstrapPagination::Rails
-
-- if can? :create, Project
-  %p
-    = link_to "New project", new_project_path, class: "btn btn-default"

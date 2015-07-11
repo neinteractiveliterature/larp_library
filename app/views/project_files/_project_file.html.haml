@@ -16,4 +16,4 @@
   
   - if can? :delete, project_file
     .pull-right
-      = link_to "&times;".html_safe, [project_file.project, project_file], method: "delete", "data-confirm" => "Are you sure?"
+      = link_to "&times;".html_safe, [project_file.project.brand, project_file.project, project_file], method: "delete", "data-confirm" => "Are you sure?"

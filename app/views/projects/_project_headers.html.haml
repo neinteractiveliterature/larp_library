@@ -1,7 +1,8 @@
 %h2{style: "margin: 0"}
-  = link_to project.title, project, class: 'link-unstyled'
-  - if project.publication_year
-    %small (#{project.publication_year})
+  = link_to project.title, [project.brand, project], class: 'link-unstyled'
+  - parenthesized = [project.publication_year, project.brand && link_to(project.brand.name, project.brand, class: 'link-unstyled')].compact
+  - if parenthesized.present?
+    %small (#{safe_join parenthesized, ", "})
 
 %ul.list-unstyled{style: 'margin: 0'}
   - if project.authors.present?

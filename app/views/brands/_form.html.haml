@@ -1,0 +1,43 @@
+= form_for @brand do |f|
+  = errors_for f.object
+
+  .form-group
+    = f.label :name do
+      Name
+      %small (your team's name, or your name if you create larps on your own)
+    = f.text_field :name, class: 'form-control'
+  
+  .form-group
+    = f.label :description do
+      Description
+      %small (Markdown allowed)
+    = f.text_area :description, class: 'form-control ace-editor', style: 'height: 6em;', rows: 6
+  
+  - unless f.object.new_record?
+    %div.membership
+      %h2 Membership
+      %p
+        All members can create, edit and delete published projects.  Admins can access this page.
+      
+      %table.table
+        = f.fields_for :brand_memberships do |membership_fields|
+          %tr
+            %td
+              - if membership_fields.object.new_record?
+                = membership_fields.hidden_field :inviting_user_id, value: current_user.id
+                = membership_fields.email_field :email, placeholder: "Email", class: "form-control"
+              - elsif membership_fields.object.user
+                %i.fa.fa-user
+                = membership_fields.object.user.name
+              - else
+                Invitation sent to #{membership_fields.object.invitation_email}
+            %td
+              = membership_fields.label :admin
+              = membership_fields.check_box :admin, disabled: membership_fields.object.user == current_user
+
+            %td
+              - unless membership_fields.object.new_record?
+                = membership_fields.label :_destroy, "Delete?"
+                = membership_fields.check_box :_destroy, disabled: membership_fields.object.user == current_user
+  
+  = f.submit "Save changes", class: 'btn btn-default'

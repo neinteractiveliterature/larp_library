@@ -1,0 +1,6 @@
+New brand: <%= @brand.name %>
+===========<%= "=" * @brand.name.length %>
+
+<%= @brand.creator.name %> has submitted a brand called <%= @brand.name %> for approval on Larp Library.
+
+To accept or reject it, go here: <%= unapproved_brands_url %>

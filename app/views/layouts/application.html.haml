@@ -11,18 +11,20 @@
     .container
       %nav#topbar
         %ul#mainnav
-          %li.col-md-4.col-sm-6{style: "text-align: center;"}
-            = link_to root_path do
-              = image_tag "aegames.png", class: "img-responsive", style: "display: inline-block;"
+          %li.col-md-4.col-sm-6.topbar-brand{style: "text-align: center;"}
+            = link_to "Larp Library", root_path
           %li.col-md-8.col-sm-6
             %ul#globalnav
-              - if user_signed_in?
-                = link_to "Sign out", destroy_user_session_path, method: "delete"
-              - else
-                = link_to "Sign in", new_user_session_path
-        %ul#subnav
-          %li
-            %a{:href => "/"}= image_tag "aegames-mini.png"
+              %li= link_to "Larps", projects_path
+              %li= link_to "Creators", brands_path
+              %li= link_to "Publish your larp", new_brand_path
+              %li
+                - if user_signed_in?
+                  = link_to "Sign out", destroy_user_session_path, method: "delete"
+                - else
+                  = link_to "Sign in", new_user_session_path
+        / %ul#subnav
+
         
       - if notice.present?
         .alert.alert-success.alert-dismissible{role: "alert"}

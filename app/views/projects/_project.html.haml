@@ -2,14 +2,14 @@
   .panel-heading
     - if can? :edit, project
       .pull-right
-        = link_to "Admin", project, class: "btn btn-default"
+        = link_to "Admin", [project.brand, project], class: "btn btn-default"
       
-    = render 'project_headers', project: project
+    = render 'projects/project_headers', project: project
       
   .panel-body    
     .row
       .col-md-8
-        = truncate_html markdown(project.description), length: 500, omission: "... ".html_safe + link_to("(read more)", project, class: "expand")
+        = truncate_html markdown(project.description), length: 500, omission: "... ".html_safe + link_to("(read more)", [project.brand, project], class: "expand")
       .col-md-4
         %ul.project-files.list-unstyled
           = render project.project_files

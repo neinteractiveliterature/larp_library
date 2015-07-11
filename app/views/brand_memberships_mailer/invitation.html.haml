@@ -1,0 +1,5 @@
+= render partial: 'brand_memberships/description', locals: { brand_membership: @brand_membership }
+  
+%p
+  %strong= link_to "To accept this invitation, follow this link.", pre_accept_brand_membership_url(@brand_membership.brand, @brand_membership)
+  If you don't want to join #{@brand_membership.brand.name}, please just ignore this email (and possibly let #{@inviting_user.name} know).

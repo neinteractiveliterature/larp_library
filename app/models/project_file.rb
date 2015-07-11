@@ -13,6 +13,6 @@ class ProjectFile < ActiveRecord::Base
   end
   
   def s3_key
-    URI.unescape(filepath.gsub(%r(\A/#{S3DirectUpload.config.bucket}/), ''))
+    CGI.unescape(filepath.gsub(%r(\A/#{S3DirectUpload.config.bucket}/), ''))
   end
 end

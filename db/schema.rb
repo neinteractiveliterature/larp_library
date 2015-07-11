@@ -11,7 +11,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150524121642) do
+ActiveRecord::Schema.define(version: 20150711170125) do
+
+  create_table "brand_memberships", force: :cascade do |t|
+    t.integer  "brand_id"
+    t.integer  "user_id"
+    t.boolean  "admin"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.text     "invitation_token"
+    t.text     "invitation_email"
+  end
+
+  add_index "brand_memberships", ["brand_id", "invitation_token"], name: "index_brand_memberships_on_brand_id_and_invitation_token", unique: true
+  add_index "brand_memberships", ["brand_id"], name: "index_brand_memberships_on_brand_id"
+  add_index "brand_memberships", ["user_id"], name: "index_brand_memberships_on_user_id"
+
+  create_table "brands", force: :cascade do |t|
+    t.text     "name",                        null: false
+    t.text     "slug",                        null: false
+    t.text     "description"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.boolean  "approved",    default: false, null: false
+    t.integer  "creator_id"
+  end
+
+  add_index "brands", ["slug"], name: "index_brands_on_slug", unique: true
 
   create_table "project_files", force: :cascade do |t|
     t.integer  "project_id"
@@ -39,7 +65,10 @@ ActiveRecord::Schema.define(version: 20150524121642) do
     t.integer  "length_quantity"
     t.string   "length_units"
     t.integer  "publication_year"
+    t.integer  "brand_id"
   end
+
+  add_index "projects", ["brand_id"], name: "index_projects_on_brand_id"
 
   create_table "projects_tags", id: false, force: :cascade do |t|
     t.integer "project_id"

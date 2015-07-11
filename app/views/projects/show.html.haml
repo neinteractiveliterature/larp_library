@@ -6,7 +6,7 @@
     = markdown @project.description
     
     - if can? :edit, @project
-      = link_to "Edit project", [:edit, @project], class: "btn btn-default"
+      = link_to "Edit project", [:edit, @brand, @project], class: "btn btn-default"
 
   .col-md-4
     .panel.panel-default
@@ -17,7 +17,7 @@
           = render @project.project_files
         
         - if can? :edit, @project
-          = s3_uploader_form callback_url: url_for([@project, :project_files]), callback_param: "project[content_url]", id: "s3-uploader" do
+          = s3_uploader_form callback_url: url_for([@brand, @project, :project_files]), callback_param: "project[content_url]", id: "s3-uploader" do
             %label{for: "file"} Upload files
             = file_field_tag :file, multiple: true
 
@@ -57,4 +57,4 @@
           %h2{style: "margin: 0"} Delete
         
         .panel-body
-          = link_to "Delete project", @project, method: "delete", class: "btn btn-danger", "data-confirm" => "Are you sure you want to completely remove #{@project.title}?"
+          = link_to "Delete project", [@brand, @project], method: "delete", class: "btn btn-danger", "data-confirm" => "Are you sure you want to completely remove #{@project.title}?"

@@ -1,47 +1,15 @@
 class ProjectsController < ApplicationController
-  load_and_authorize_resource
+  load_resource :brand, find_by: :slug
+  load_and_authorize_resource through: :brand
   
   respond_to :html
-  
-  def index
-    must_queries = []
-    if params[:q].present?
-      must_queries << {
-        multi_match: {
-          query: params[:q],
-          fields: ['title^3', 'authors^2', 'tag_names^2', 'description'],
-          fuzziness: 'AUTO'
-        }
-      }
-    elsif params[:tag].present?
-      must_queries << {
-        term: {
-          tag_names: params[:tag]
-        }
-      }
-    end
-    
-    query = if must_queries.any?
-      {
-        bool: {
-          must: must_queries
-        }
-      }
-    else
-      {
-        match_all: {}
-      }
-    end
-    
-    @projects = Project.search(query: query, sort: ["_score", "title"]).page(params[:page]).records
-  end
   
   def new
   end
   
   def create
     @project.save
-    respond_with @project
+    respond_with @brand, @project
   end
   
   def edit
@@ -50,12 +18,12 @@ class ProjectsController < ApplicationController
   def update
     @project.attributes = project_params
     @project.save
-    respond_with @project
+    respond_with @brand, @project
   end
   
   def destroy
     @project.destroy
-    respond_with @project
+    respond_with @brand, @project
   end
   
   private
