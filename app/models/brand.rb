@@ -1,5 +1,5 @@
 class Brand < ActiveRecord::Base
-  has_many :brand_memberships
+  has_many :brand_memberships, dependent: :destroy
   has_many :users, through: :brand_memberships
   has_many :projects
   belongs_to :creator, class_name: "User"
