@@ -54,6 +54,8 @@ gem 'capistrano-rails'
 gem 'capistrano-rbenv'
 gem 'capistrano-passenger'
 
+gem 'rollbar'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

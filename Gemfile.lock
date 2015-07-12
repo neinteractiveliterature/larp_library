@@ -285,6 +285,8 @@ GEM
     redcarpet (3.2.3)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
+    rollbar (1.5.3)
+      multi_json (~> 1.3)
     rubycas-client (2.3.9)
       activesupport
     s3_direct_upload (0.1.7)
@@ -366,6 +368,7 @@ DEPENDENCIES
   pry-rails
   rails (= 4.2.3)
   redcarpet
+  rollbar
   s3_direct_upload
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
