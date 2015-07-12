@@ -1,5 +1,6 @@
 class ProjectFilesController < ApplicationController
-  load_resource :project
+  load_resource :brand, find_by: :slug
+  load_resource :project, through: :brand
   load_and_authorize_resource through: :project
   
   respond_to :json
@@ -7,7 +8,7 @@ class ProjectFilesController < ApplicationController
   def create
     @project_file.uploader = current_user
     @project_file.save
-    respond_with @project, @project_file
+    respond_with @brand, @project, @project_file
   end
   
   def destroy
