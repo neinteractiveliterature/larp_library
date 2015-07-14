@@ -1,6 +1,6 @@
 %li
   = link_to project_file.url do
-    - case Mime::Type.lookup(project_file.filetype).symbol
+    - case Mime::Type.lookup(project_file.filetype).try(:symbol)
     - when :png, :jpeg, :gif
       %i.fa.fa-file-image-o
     - when :pdf
