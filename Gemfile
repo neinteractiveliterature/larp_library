@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-
+ruby '2.2.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.3'
@@ -55,6 +55,7 @@ gem 'capistrano-rbenv'
 gem 'capistrano-passenger'
 
 gem 'rollbar'
+gem 'rails_12factor'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -78,3 +79,6 @@ group :development, :test do
   gem 'pry-rails'
 end
 
+group :production do
+  gem 'puma'
+end
