@@ -5,7 +5,7 @@ set :rbenv_ruby, '2.1.2'
 set :rbenv_custom_path, "/opt/rbenv"
 
 set :application, 'larp_library'
-set :repo_url, "https://github.com/nbudin/larp_library.git"
+set :repo_url, "https://github.com/neinteractiveliterature/larp_library.git"
 
 set :passenger_restart_with_touch, true
 
