@@ -3,7 +3,7 @@ class BrandsController < ApplicationController
   respond_to :html
 
   def index
-    @brands = @brands.select("brands.*, count(projects.id) as project_count").joins("left join projects on projects.brand_id = brands.id").group(:brand_id).order("project_count desc")
+    @brands = @brands.select("brands.*, count(projects.id) as project_count").joins("left join projects on projects.brand_id = brands.id").group("projects.brand_id, brands.id").order("project_count desc")
   end
 
   def show
