@@ -27,7 +27,7 @@
       %ul.list-group
         - @project_promotions.each do |project_promotion|
           %li.list-group-item
-            = render 'projects/project_headers', project: project_promotion.project, title_tag: "h4", metadata_class: "text-muted"
+            = render 'projects/project_headers', project: project_promotion.project, title_tag: "h4", metadata_class: "text-muted", hide_authors: true, hide_brand_and_year: true
         %li.list-group-item
           %h4
             = link_to "Browse all larps", projects_path
