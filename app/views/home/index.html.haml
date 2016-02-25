@@ -1,0 +1,33 @@
+.row
+  .col-md-8
+    %h2 Welcome to Larp Library
+
+    %p
+      Larp Library is an online repository of free-to-run live action roleplaying games.  All larps in the library are
+      freely licensed for anyone to download, read, run, and play.  You can
+      = succeed "." do
+        = link_to "browse or search our library of games here", projects_path
+
+    %p
+      If you're a larp creator and are interested in sharing your work, you can
+      = link_to "sign up here", new_brand_path
+      and get your own brand page, from which you can publish all your projects.
+
+    %p
+      Larp Library is a project of
+      = succeed "," do
+        = link_to "New England Interactive Literature", "http://interactiveliterature.org"
+      the same organization that runs the New England Intercon conventions and NELCO and publishes Game Wrap.
+
+  .col-md-4
+    .panel.panel-default
+      .panel-heading
+        %h2{style: "margin: 0"} Featured larps
+
+      %ul.list-group
+        - @project_promotions.each do |project_promotion|
+          %li.list-group-item
+            = render 'projects/project_headers', project: project_promotion.project, title_tag: "h4", metadata_class: "text-muted"
+        %li.list-group-item
+          %h4
+            = link_to "Browse all larps", projects_path

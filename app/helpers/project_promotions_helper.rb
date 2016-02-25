@@ -1,0 +1,2 @@
+module ProjectPromotionsHelper
+end

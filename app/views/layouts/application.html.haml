@@ -17,6 +17,8 @@
             %ul#globalnav
               %li= link_to "Larps", projects_path
               %li= link_to "Creators", brands_path
+              - if can? :create, ProjectPromotion
+                %li= link_to "Promotions", project_promotions_path
               %li= link_to "Publish your larp", new_brand_path
               %li
                 - if user_signed_in?
@@ -24,7 +26,7 @@
                 - else
                   = link_to "Sign in", new_user_session_path
 
-        
+
       - if notice.present?
         .alert.alert-success.alert-dismissible{role: "alert"}
           %button.close{type: "button", "data-dismiss" => "alert", "aria-label" => "Close"}
@@ -41,7 +43,7 @@
       %nav
         %ul.list-inline{style: 'text-align: center'}
           %li
-            %small 
+            %small
               Larp Library &copy; 2015
               = link_to 'New England Interactive Literature', 'http://interactiveliterature.org'
           %li &mdash;
