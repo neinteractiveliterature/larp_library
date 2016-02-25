@@ -8,7 +8,7 @@
   - if project.authors.present?
     %li
       %em By #{project.authors}
-  
+
   - if project.min_players || project.max_players || (project.length_quantity && project.length_units)
     %li
       %ul.list-inline
@@ -24,11 +24,10 @@
           %li
             %i.fa.fa-clock-o
             = pluralize project.length_quantity, project.length_units
-  
+
   - if project.tag_names.any?
     %li
       %ul.list-inline{style: "margin-left: 0"}
         - project.tag_names.sort.each do |tag_name|
           %li.label.label-default= tag_name
-        
-  
+

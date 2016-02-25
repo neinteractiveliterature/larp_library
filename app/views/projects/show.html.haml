@@ -4,35 +4,35 @@
       = render 'project_headers', project: @project
 
     = markdown @project.description
-    
-    - if can? :edit, @project
-      = link_to "Edit project", [:edit, @brand, @project], class: "btn btn-default"
+
+    %ul.list-inline
+      - if can? :edit, @project
+        %li= link_to "Edit project", [:edit, @brand, @project], class: "btn btn-default"
+      - if can? :delete, @project
+        %li= link_to "Delete project", [@brand, @project], method: "delete", class: "btn btn-link text-danger", "data-confirm" => "Are you sure you want to completely remove #{@project.title}?"
 
   .col-md-4
     .panel.panel-default
       .panel-heading
-        %h2{style: "margin: 0"} Files
+        %h2{style: "margin: 0"} Downloads
       .panel-body
         %ul.project-files.list-unstyled
           = render @project.project_files
-        
-        - if can? :edit, @project
-          = s3_uploader_form callback_url: url_for([@brand, @project, :project_files]), callback_param: "project[content_url]", id: "s3-uploader" do
-            %label{for: "file"} Upload files
-            = file_field_tag :file, multiple: true
 
-          %script#template-upload{type: "text/x-tmpl"}
-            .upload{id: "file-{%=o.unique_id%}"}
-              {%=o.name%}
-              .progress
-                .bar{style: "width: 0%"}
-    
-    - license = @project.license_object
-    - if license
-      .panel.panel-default
-        .panel-heading
-          %h2{style: "margin: 0"} Licensing
-        .panel-body
+        - if can? :edit, @project
+          .well
+            = s3_uploader_form callback_url: url_for([@brand, @project, :project_files]), callback_param: "project[content_url]", id: "s3-uploader" do
+              %label{for: "file"} Upload files
+              = file_field_tag :file, multiple: true
+
+            %script#template-upload{type: "text/x-tmpl"}
+              .upload{id: "file-{%=o.unique_id%}"}
+                {%=o.name%}
+                .progress
+                  .bar{style: "width: 0%"}
+
+        - license = @project.license_object
+        - if license
           - dedication = capture do
             - if license[:dedication_html]
               =raw license[:dedication_html]
@@ -41,7 +41,7 @@
               = succeed '.' do
                 %a{rel: "license", href: license.url}= license.name
                 license
-        
+
           - if license.logo_url
             .media
               .media-left.media-middle
@@ -50,11 +50,4 @@
               .media-body= dedication
           - else
             = dedication
-    
-    - if can? :delete, @project
-      .panel.panel-default
-        .panel-heading
-          %h2{style: "margin: 0"} Delete
-        
-        .panel-body
-          = link_to "Delete project", [@brand, @project], method: "delete", class: "btn btn-danger", "data-confirm" => "Are you sure you want to completely remove #{@project.title}?"
+
