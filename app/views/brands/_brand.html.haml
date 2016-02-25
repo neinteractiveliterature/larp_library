@@ -2,6 +2,10 @@
   .panel-heading
     %h2{style: "margin: 0"}
       = link_to brand.name, brand, class: 'link-unstyled'
-      
-  .panel-body    
+
+      - if brand.respond_to?(:project_count)
+        %small
+          (#{pluralize brand.project_count, "larp"})
+
+  .panel-body
     = truncate_html markdown(brand.description), length: 500, omission: "... ".html_safe + link_to("(read more)", brand, class: "expand")
