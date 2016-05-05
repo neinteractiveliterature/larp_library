@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5.1'
+gem 'rails', '4.2.6'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3', groups: [:development, :test]
 gem 'pg', group: :production
@@ -54,7 +54,7 @@ gem 'capistrano-rbenv'
 gem 'capistrano-passenger'
 
 gem 'rollbar'
-gem 'rails_12factor', group: :production
+# gem 'rails_12factor', group: :production
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
