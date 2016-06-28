@@ -12,7 +12,6 @@
  *
  *= require font-awesome
  *= require_self
- *= require s3_direct_upload_progress_bars
  *= require selectize
  *= require selectize.bootstrap3
  *= require_tree .
@@ -32,7 +31,7 @@
 #globalnav {
   margin: 0;
   padding: 0;
-  
+
   li {
     display: inline-block;
     list-style-type:none;
@@ -46,7 +45,7 @@
 #mainnav {
   background-color: $brand-primary;
   background: linear-gradient(to bottom, lighten($brand-primary, 7.5%), darken($brand-primary, 7.5%));
-  
+
   min-height: 79px;
   width: 100%;
   display: block;
@@ -55,41 +54,41 @@
   padding: 0;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
-  
+
   > li {
     padding: 0;
     margin: 0;
     display: block;
     float: none;
   }
-  
-  @media (min-width: $screen-sm-min) { 
+
+  @media (min-width: $screen-sm-min) {
     display: table;
-    
+
     > li {
-      display: table-cell; 
+      display: table-cell;
       vertical-align: middle;
     }
   }
-  
+
   @media (max-width: $screen-sm-max) {
     > li {
       text-align: center;
     }
   }
-  
+
   a, a:visited {
     color: white;
   }
-  
+
   .topbar-brand {
     font-family: Rouge Script;
     font-size: 48px;
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-    
+
     a {
       color: white;
-      
+
       &:hover, &:active {
         text-decoration: none;
       }
