@@ -29,7 +29,7 @@ gem 'devise'
 gem 'devise_cas_authenticatable'
 gem 'cancancan'
 
-gem 's3_direct_upload'
+gem 'rails-assets-evaporatejs', source: 'https://rails-assets.org'
 gem 'fog'
 
 gem 'haml'

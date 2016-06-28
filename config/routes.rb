@@ -15,7 +15,11 @@ Rails.application.routes.draw do
     end
 
     resources :projects, except: [:index] do
-      resources :project_files, only: [:create, :show, :destroy]
+      resources :project_files, only: [:create, :show, :destroy] do
+        collection do
+          get :auth_upload
+        end
+      end
     end
   end
 

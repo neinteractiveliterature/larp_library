@@ -20,16 +20,9 @@
           = render @project.project_files
 
         - if can? :edit, @project
-          .well
-            = s3_uploader_form callback_url: url_for([@brand, @project, :project_files]), callback_param: "project[content_url]", id: "s3-uploader" do
-              %label{for: "file"} Upload files
-              = file_field_tag :file, multiple: true
-
-            %script#template-upload{type: "text/x-tmpl"}
-              .upload{id: "file-{%=o.unique_id%}"}
-                {%=o.name%}
-                .progress
-                  .bar{style: "width: 0%"}
+          .well.s3-upload{"data-aws-access-key-id" => ENV['AWS_ACCESS_KEY_ID'], "data-signer-url" => url_for([:auth_upload, @brand, @project, :project_files]), "data-bucket" => (ENV['AWS_S3_BUCKET'] || "larp-library-#{Rails.env}"), "data-nonce" => SecureRandom.hex, "data-complete-callback-url" => url_for([@brand, @project, :project_files])}
+            %label{for: "file"} Upload files
+            = file_field_tag :file, multiple: true
 
         - license = @project.license_object
         - if license
