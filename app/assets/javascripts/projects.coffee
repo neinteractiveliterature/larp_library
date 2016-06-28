@@ -61,12 +61,18 @@ $ ->
 
       $form.append(progressContainer)
 
+      headers = { 'x-amz-security-token': $form.data('temporary-session-token') }
+
       fileId = evaporate.add
         name: objectName
         file: file
         contentType: file.type
         progress: setProgressFraction
         error: setError
+
+        xAmzHeadersAtInitiate: { 'x-amz-security-token': headers['x-amz-security-token'], 'x-amz-acl': 'public-read' }
+        xAmzHeadersAtUpload: headers
+        xAmzHeadersAtComplete: headers
 
         complete: (xhr, awsObjectKey) =>
           $.ajax

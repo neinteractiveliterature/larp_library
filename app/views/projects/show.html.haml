@@ -20,7 +20,7 @@
           = render @project.project_files
 
         - if can? :edit, @project
-          .well.s3-upload{"data-aws-access-key-id" => ENV['AWS_ACCESS_KEY_ID'], "data-signer-url" => url_for([:auth_upload, @brand, @project, :project_files]), "data-bucket" => (ENV['AWS_S3_BUCKET'] || "larp-library-#{Rails.env}"), "data-nonce" => SecureRandom.hex, "data-complete-callback-url" => url_for([@brand, @project, :project_files])}
+          .well.s3-upload{"data-aws-access-key-id" => ENV['AWS_ACCESS_KEY_ID'], "data-signer-url" => url_for([:auth_upload, @brand, @project, :project_files]), "data-bucket" => (ENV['AWS_S3_BUCKET'] || "larp-library-#{Rails.env}"), "data-nonce" => SecureRandom.hex, "data-complete-callback-url" => url_for([@brand, @project, :project_files]), "data-temporary-session-token" => @temporary_session_token}
             %label{for: "file"} Upload files
             = file_field_tag :file, multiple: true
 
