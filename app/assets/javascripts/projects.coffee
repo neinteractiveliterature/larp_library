@@ -69,8 +69,6 @@ $ ->
         error: setError
 
         xAmzHeadersAtInitiate: { 'x-amz-acl': 'public-read' }
-        xAmzHeadersAtUpload: headers
-        xAmzHeadersAtComplete: headers
 
         complete: (xhr, awsObjectKey) =>
           $.ajax
