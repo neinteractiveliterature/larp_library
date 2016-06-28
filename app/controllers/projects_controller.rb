@@ -5,12 +5,6 @@ class ProjectsController < ApplicationController
   respond_to :html
 
   def show
-    if can? :edit, @project
-      token_service = Fog::AWS::STS.new(aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'], aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'])
-      token_response = token_service.get_session_token.data[:body]
-
-      @temporary_session_token = token_response["SessionToken"]
-    end
   end
 
   def new
