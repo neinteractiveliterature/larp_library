@@ -15,12 +15,16 @@ class ProjectFile < ActiveRecord::Base
   private
   def delete_s3_file
     s3 = Fog::Storage.new(provider: "AWS", aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'], aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'])
-    bucket = s3.directories.get(ENV['AWS_S3_BUCKET'] || "larp-library-#{Rails.env}")
+    bucket = s3.directories.get(s3_bucket)
     file = bucket.files.get(s3_key)
     file.destroy
   end
 
   def s3_key
-    CGI.unescape filepath.gsub(%r(\A/#{S3DirectUpload.config.bucket}/), '')
+    CGI.unescape filepath.gsub(%r(\A/#{s3_bucket}/), '')
+  end
+
+  def s3_bucket
+    ENV['AWS_S3_BUCKET'] || "larp-library-#{Rails.env}"
   end
 end
