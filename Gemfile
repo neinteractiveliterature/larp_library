@@ -18,7 +18,7 @@ gem 'bootstrap-sass', '~> 3.3.4'
 gem 'font-awesome-rails'
 
 # Use jquery as the JavaScript library
-gem 'jquery-rails'
+gem 'jquery-rails', '2.1.4'  # pegging this at 2.1.4 to hopefully work around s3_direct_upload compat
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 gem 'jquery-turbolinks'
