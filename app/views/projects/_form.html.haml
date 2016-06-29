@@ -4,53 +4,53 @@
   .form-group
     = f.label :title
     = f.text_field :title, class: 'form-control'
-  
+
   .form-group
     = f.label :authors
     = f.text_field :authors, class: 'form-control'
-  
+
   .form-group
     = f.label :publication_year
     = f.number_field :publication_year, class: 'form-control'
-    
+
   .form-group
     = f.label :tags
     = f.select :tag_names, f.object.tag_names, {}, class: 'form-control tag-selector', multiple: true
-  
+
   .form-group
     = f.label :description do
       Description
       %small (Markdown allowed)
     = f.text_area :description, class: 'form-control ace-editor', style: 'height: 6em;', rows: 6
-  
+
   .row
     .col-sm-6.col-md-4.col-lg-3
       .form-group
         = f.label :min_players, "Minimum player count"
         = f.number_field :min_players, class: 'form-control'
-      
+
     .col-sm-6.col-md-4.col-lg-3
       .form-group
         = f.label :max_players, "Maximum player count"
         = f.number_field :max_players, class: 'form-control'
-    
+
     .col-md-4.col-lg-6
-  
+
   .row
     .col-xs-6.col-md-4.col-lg-3
       .form-group
         = f.label :length_quantity, "Game length"
         = f.number_field :length_quantity, class: 'form-control'
-      
+
     .col-xs-6.col-md-4.col-lg-3
       .form-group
         = f.label :length_units, "Length units", style: "visibility: hidden"
         = f.select :length_units, [["minute(s)", "minutes"], ["hour(s)", "hours"], ["day(s)", "days"]], {}, class: 'form-control'
-    
+
     .col-md-4.col-lg-6
-    
+
   .form-group
     = f.label :license
-    = f.select :license, Project::LICENSES.map { |key, license| [license[:name], key] }, {}, class: 'form-control'
-  
+    = f.select :license, Project::LICENSES.map { |key, license| [license[:name] + (license[:discouraged] ? " (discouraged, see our licensing page for details)" : ""), key] }, {}, class: 'form-control'
+
   = f.submit class: 'btn btn-default'

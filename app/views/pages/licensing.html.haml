@@ -8,7 +8,10 @@
 
 %ul
   - Project::LICENSES.each do |license_key, license|
-    %li= link_to license[:name], license[:url]
+    %li
+      = link_to license[:name], license[:url]
+      - if license[:discouraged]
+        (discouraged)
 
 %p
   These copyright licenses are chosen deliberately, and reflect a range of rights grants.  Creative Commons Attribution
@@ -29,14 +32,14 @@
 %p
   %strong Creative Commons Non-Commercial variants
   are good licenses, but probably not for larps.  A conservative reading of the license would prohibit running a
-  larp at a convention for which there is a registration fee, which would be a surprising requirement for most GMs.
+  larp at a convention for which there is a registration fee, which would be a surprising requirement for most GMs.  We do allow CC Non-Commercial because many existing larps are licensed under it, but we highly encourage you to consider a different CC variant.
 
 %p
   %strong The LARPA and ILF GameBank Licenses
   are, in our opinion, bad licenses in general.  They are fairly obviously not written by lawyers, and fail to grant
   some very important rights, namely: the right to modify the work (almost everyone modifies larps at least a little
   when running them) and the right to redistribute the work.  They also impose fairly onerous accounting requirements
-  on GMs by requiring them not to make a profit, but allowing them to charge for materials.  (If you run a game 
+  on GMs by requiring them not to make a profit, but allowing them to charge for materials.  (If you run a game
   under one of these licenses, be sure to save your receipts!)
 
 %p
@@ -54,6 +57,4 @@
 
 %p
   %strong Custom licenses
-  are, in general, not a great idea unless you have a lawyer to draft or consult on it.  If you have the money to hire
-  a lawyer to draft you a license for a larp, you probably have the money to host the larp yourself rather than using
-  this site. :-P
+  are, in general, not a great idea unless you have a lawyer to draft or consult on it.  If you have a license that's been drafted and/or approved by a legal professional, and you think it meets our goals, please contact us to discuss adding it.

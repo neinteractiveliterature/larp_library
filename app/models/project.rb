@@ -1,6 +1,6 @@
 class Project < ActiveRecord::Base
   include Concerns::Elasticsearch
-  
+
   LICENSES = {
     cc40_by: {
       name: "Creative Commons Attribution 4.0 International",
@@ -8,7 +8,7 @@ class Project < ActiveRecord::Base
       logo_url: "https://i.creativecommons.org/l/by/4.0/88x31.png"
     },
     cc40_by_sa: {
-      name: "Creative Commons Attribution ShareAlike 4.0 International",
+      name: "Creative Commons Attribution-ShareAlike 4.0 International",
       url: "http://creativecommons.org/licenses/by-sa/4.0/",
       logo_url: "https://i.creativecommons.org/l/by-sa/4.0/88x31.png"
     },
@@ -28,9 +28,21 @@ class Project < ActiveRecord::Base
       url: "https://creativecommons.org/publicdomain/mark/1.0/",
       logo_url: "https://licensebuttons.net/l/publicdomain/88x31.png",
       dedication_html: "This work is free of known copyright restrictions."
+    },
+    cc40_by_nc: {
+      name: "Creative Commons Attribution-NonCommercial 4.0 International",
+      url: "http://creativecommons.org/licenses/by-nc/4.0/",
+      logo_url: "https://i.creativecommons.org/l/by-nc/4.0/88x31.png",
+      discouraged: true
+    },
+    cc40_by_nc_sa: {
+      name: "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International",
+      url: "http://creativecommons.org/licenses/by-nc-sa/4.0/",
+      logo_url: "https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png",
+      discouraged: true
     }
   }
-  
+
   mapping do
     indexes :title, :type => 'string'
     indexes :authors, :type => 'string'
@@ -39,37 +51,37 @@ class Project < ActiveRecord::Base
     indexes :tag_names, :type => 'string'
     indexes :brand_name, :type => 'string'
   end
-  
+
   has_many :project_files, dependent: :destroy
   has_and_belongs_to_many :tags
   belongs_to :brand
-  
+
   validates :license, inclusion: { in: LICENSES.keys.map(&:to_s) }
   validates :brand, presence: true
-  
+
   self.per_page = 10
-  
+
   def tag_names
     tags.map(&:name)
   end
-  
+
   def tag_names=(new_tag_names)
     new_tag_names = new_tag_names.reject(&:blank?)
     existing_tag_names = tag_names
-    
+
     removed_tags = tags.where(name: (existing_tag_names - new_tag_names))
     self.tags.delete(removed_tags)
-    
+
     (new_tag_names - existing_tag_names).each do |new_tag_name|
       tag = Tag.find_or_create_by(name: new_tag_name)
       self.tags << tag
     end
   end
-  
+
   def license_object
     OpenStruct.new(LICENSES[license.to_sym]) if license.present?
   end
-  
+
   def as_indexed_json(options={})
     {
       title: title,
@@ -80,7 +92,7 @@ class Project < ActiveRecord::Base
       brand_name: brand.try(:name)
     }.as_json
   end
-  
+
   def to_param
     if title
       "#{id}-#{title.parameterize}"
