@@ -44,7 +44,7 @@ class Project < ActiveRecord::Base
   }
 
   mapping do
-    indexes :title, :type => 'string'
+    indexes :title, :type => 'string', fields: { raw: { type: 'string', index: :not_analyzed } }
     indexes :authors, :type => 'string'
     indexes :license, :index => :not_analyzed
     indexes :description, :type => 'string'

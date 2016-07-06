@@ -16,7 +16,7 @@ class SearchProjectsController < ApplicationController
         }
       }
     end
-    
+
     query = if must_queries.any?
       {
         bool: {
@@ -28,7 +28,7 @@ class SearchProjectsController < ApplicationController
         match_all: {}
       }
     end
-    
-    @projects = Project.search(query: query, sort: ["_score", "title"]).page(params[:page]).records
+
+    @projects = Project.search(query: query, sort: ["_score", "title.raw"]).page(params[:page]).records
   end
 end
