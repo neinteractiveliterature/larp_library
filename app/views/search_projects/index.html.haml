@@ -7,5 +7,5 @@
         = text_field_tag 'q', params[:q], class: 'form-control', placeholder: "Search"
         %i.fa.fa-search.form-control-feedback
 
-= render partial: @projects.order(:title)
+= render partial: @projects
 = will_paginate @projects, renderer: BootstrapPagination::Rails
