@@ -48,7 +48,7 @@ class Project < ActiveRecord::Base
     indexes :authors, :type => 'string'
     indexes :license, :index => :not_analyzed
     indexes :description, :type => 'string'
-    indexes :tag_names, :type => 'string'
+    indexes :tag_names, :type => 'string', index: :not_analyzed
     indexes :brand_name, :type => 'string'
     indexes :brand_id, :type => 'integer'
   end
@@ -63,7 +63,7 @@ class Project < ActiveRecord::Base
   self.per_page = 10
 
   def tag_names
-    tags.map(&:name)
+    tags.map(&:name).map(&:downcase)
   end
 
   def tag_names=(new_tag_names)
@@ -95,7 +95,8 @@ class Project < ActiveRecord::Base
       license: license,
       description: description,
       tag_names: tag_names,
-      brand_name: brand.try(:name)
+      brand_name: brand.try(:name),
+      brand_id: brand.try(:id)
     }.as_json
   end
 

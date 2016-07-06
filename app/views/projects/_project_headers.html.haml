@@ -35,5 +35,5 @@
     %li
       %ul.list-inline{style: "margin-left: 0"}
         - project.tag_names.sort.each do |tag_name|
-          %li.label.label-default= link_to tag_name, projects_path(q: tag_name), style: "color: white"
+          %li.label.label-default= link_to tag_name, projects_path(tag: tag_name), style: "color: white"
 
