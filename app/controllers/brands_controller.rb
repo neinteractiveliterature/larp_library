@@ -7,7 +7,8 @@ class BrandsController < ApplicationController
   end
 
   def show
-    @projects = @brand.projects.order(:title).page(params[:page])
+    search = ProjectSearch.new(brand_id: @brand.id)
+    @projects = Project.search(search).page(params[:page]).records
   end
 
   def new

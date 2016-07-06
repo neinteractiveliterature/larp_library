@@ -50,6 +50,7 @@ class Project < ActiveRecord::Base
     indexes :description, :type => 'string'
     indexes :tag_names, :type => 'string'
     indexes :brand_name, :type => 'string'
+    indexes :brand_id, :type => 'integer'
   end
 
   has_many :project_files, dependent: :destroy
