@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160225202721) do
+ActiveRecord::Schema.define(version: 20160709170550) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "brand_memberships", force: :cascade do |t|
     t.integer  "brand_id"
@@ -23,9 +26,9 @@ ActiveRecord::Schema.define(version: 20160225202721) do
     t.text     "invitation_email"
   end
 
-  add_index "brand_memberships", ["brand_id", "invitation_token"], name: "index_brand_memberships_on_brand_id_and_invitation_token", unique: true
-  add_index "brand_memberships", ["brand_id"], name: "index_brand_memberships_on_brand_id"
-  add_index "brand_memberships", ["user_id"], name: "index_brand_memberships_on_user_id"
+  add_index "brand_memberships", ["brand_id", "invitation_token"], name: "index_brand_memberships_on_brand_id_and_invitation_token", unique: true, using: :btree
+  add_index "brand_memberships", ["brand_id"], name: "index_brand_memberships_on_brand_id", using: :btree
+  add_index "brand_memberships", ["user_id"], name: "index_brand_memberships_on_user_id", using: :btree
 
   create_table "brands", force: :cascade do |t|
     t.text     "name",                        null: false
@@ -37,7 +40,7 @@ ActiveRecord::Schema.define(version: 20160225202721) do
     t.integer  "creator_id"
   end
 
-  add_index "brands", ["slug"], name: "index_brands_on_slug", unique: true
+  add_index "brands", ["slug"], name: "index_brands_on_slug", unique: true, using: :btree
 
   create_table "project_files", force: :cascade do |t|
     t.integer  "project_id"
@@ -51,7 +54,7 @@ ActiveRecord::Schema.define(version: 20160225202721) do
     t.datetime "updated_at",  null: false
   end
 
-  add_index "project_files", ["project_id"], name: "index_project_files_on_project_id"
+  add_index "project_files", ["project_id"], name: "index_project_files_on_project_id", using: :btree
 
   create_table "project_promotions", force: :cascade do |t|
     t.integer  "project_id", null: false
@@ -59,7 +62,7 @@ ActiveRecord::Schema.define(version: 20160225202721) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "project_promotions", ["project_id"], name: "index_project_promotions_on_project_id"
+  add_index "project_promotions", ["project_id"], name: "index_project_promotions_on_project_id", using: :btree
 
   create_table "projects", force: :cascade do |t|
     t.text     "title"
@@ -76,15 +79,33 @@ ActiveRecord::Schema.define(version: 20160225202721) do
     t.integer  "brand_id"
   end
 
-  add_index "projects", ["brand_id"], name: "index_projects_on_brand_id"
+  add_index "projects", ["brand_id"], name: "index_projects_on_brand_id", using: :btree
 
   create_table "projects_tags", id: false, force: :cascade do |t|
     t.integer "project_id"
     t.integer "tag_id"
   end
 
-  add_index "projects_tags", ["project_id"], name: "index_projects_tags_on_project_id"
-  add_index "projects_tags", ["tag_id"], name: "index_projects_tags_on_tag_id"
+  add_index "projects_tags", ["project_id"], name: "index_projects_tags_on_project_id", using: :btree
+  add_index "projects_tags", ["tag_id"], name: "index_projects_tags_on_tag_id", using: :btree
+
+  create_table "tag_categories", force: :cascade do |t|
+    t.text     "name"
+    t.text     "color"
+    t.text     "icon"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "tag_categories", ["name"], name: "index_tag_categories_on_name", unique: true, using: :btree
+
+  create_table "tag_categories_tags", id: false, force: :cascade do |t|
+    t.integer "tag_id",          null: false
+    t.integer "tag_category_id", null: false
+  end
+
+  add_index "tag_categories_tags", ["tag_category_id"], name: "index_tag_categories_tags_on_tag_category_id", using: :btree
+  add_index "tag_categories_tags", ["tag_id"], name: "index_tag_categories_tags_on_tag_id", using: :btree
 
   create_table "tags", force: :cascade do |t|
     t.text     "name"
@@ -92,7 +113,7 @@ ActiveRecord::Schema.define(version: 20160225202721) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "tags", ["name"], name: "index_tags_on_name"
+  add_index "tags", ["name"], name: "index_tags_on_name", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "username",           default: "",    null: false
@@ -109,6 +130,11 @@ ActiveRecord::Schema.define(version: 20160225202721) do
     t.datetime "updated_at"
   end
 
-  add_index "users", ["username"], name: "index_users_on_username", unique: true
+  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
+  add_foreign_key "brand_memberships", "brands"
+  add_foreign_key "brand_memberships", "users"
+  add_foreign_key "project_files", "projects"
+  add_foreign_key "project_files", "users", column: "uploader_id"
+  add_foreign_key "project_promotions", "projects"
 end
