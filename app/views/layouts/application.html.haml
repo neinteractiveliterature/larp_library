@@ -17,8 +17,16 @@
             %ul#globalnav
               %li= link_to "Larps", projects_path
               %li= link_to "Creators", brands_path
-              - if can? :create, ProjectPromotion
-                %li= link_to "Promotions", project_promotions_path
+              - if current_user.try(:admin?)
+                %li.dropdown
+                  %a.dropdown-toggle{href: "#", "data-toggle" => "dropdown", role: "button", "aria-haspopup" => true, "aria-expanded" => false}
+                    Admin
+                    %span.caret
+                  %ul.dropdown-menu
+                    - if can? :create, ProjectPromotion
+                      %li= link_to "Promotions", project_promotions_path
+                    - if can? :update, Tag
+                      %li= link_to "Tags", tags_path
               %li= link_to "Publish your larp", new_brand_path
               %li
                 - if user_signed_in?
