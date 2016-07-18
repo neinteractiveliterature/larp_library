@@ -8,9 +8,8 @@ class CreateTagCategories < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    create_join_table :tags, :tag_categories do |t|
-      t.index :tag_id
-      t.index :tag_category_id
+    change_table :tags do |t|
+      t.references :tag_category, index: true, foreign_key: true
     end
   end
 end

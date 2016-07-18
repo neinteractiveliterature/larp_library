@@ -99,21 +99,15 @@ ActiveRecord::Schema.define(version: 20160709170550) do
 
   add_index "tag_categories", ["name"], name: "index_tag_categories_on_name", unique: true, using: :btree
 
-  create_table "tag_categories_tags", id: false, force: :cascade do |t|
-    t.integer "tag_id",          null: false
-    t.integer "tag_category_id", null: false
-  end
-
-  add_index "tag_categories_tags", ["tag_category_id"], name: "index_tag_categories_tags_on_tag_category_id", using: :btree
-  add_index "tag_categories_tags", ["tag_id"], name: "index_tag_categories_tags_on_tag_id", using: :btree
-
   create_table "tags", force: :cascade do |t|
     t.text     "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "tag_category_id"
   end
 
   add_index "tags", ["name"], name: "index_tags_on_name", using: :btree
+  add_index "tags", ["tag_category_id"], name: "index_tags_on_tag_category_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "username",           default: "",    null: false
@@ -137,4 +131,5 @@ ActiveRecord::Schema.define(version: 20160709170550) do
   add_foreign_key "project_files", "projects"
   add_foreign_key "project_files", "users", column: "uploader_id"
   add_foreign_key "project_promotions", "projects"
+  add_foreign_key "tags", "tag_categories"
 end

@@ -78,6 +78,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.10.0)
+    color (1.8)
     colorize (0.7.7)
     columnize (0.9.0)
     concurrent-ruby (1.0.2)
@@ -352,6 +353,7 @@ DEPENDENCIES
   capistrano-rails
   capistrano-rbenv
   coffee-rails (~> 4.1.0)
+  color
   devise
   devise_cas_authenticatable
   elasticsearch-model
