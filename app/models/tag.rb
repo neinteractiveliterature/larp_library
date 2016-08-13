@@ -22,4 +22,8 @@ class Tag < ActiveRecord::Base
   def icon
     tag_category.try(:icon) || TagCategory.new.icon
   end
+
+  def as_indexed_json(options={})
+    self.as_json(methods: [:category_name])
+  end
 end

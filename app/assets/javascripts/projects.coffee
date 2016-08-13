@@ -13,6 +13,12 @@ number_to_human_size = (size) ->
   else
     (size / 1024.0 / 1024.0 / 1024.0).toFixed(2) + ' GiB';
 
+render_tag = (tag, escape) ->
+  "<div class=\"label label-default\" style=\"background-color: #{tag.color}; color: #{tag.text_color}; font-size: 90%\">" +
+  "<i class=\"fa fa-#{escape tag.icon}\" style=\"display: inline-block; vertical-align: middle; margin-right: 0.2em\" aria-hidden></i>" +
+  escape(tag.name) +
+  "</div>"
+
 $ ->
   $(".s3-upload input[type=file]").on 'change', (e) ->
     $this = $(this)
@@ -105,19 +111,30 @@ $ ->
     $(this).closest('form').on 'submit', =>
       $(this).val(editor.getSession().getValue())
 
-  $('.tag-selector').selectize
-    plugins: ['remove_button']
-    valueField: 'name'
-    labelField: 'name'
-    searchField: 'name'
-    create: true
-    delimiter: ','
-    persist: false
-    create: (input) -> { name: input }
-    load: (query, callback) ->
-      $.ajax
-        url: '/tags?q=' + encodeURIComponent(query)
-        type: 'GET'
-        dataType: 'json'
-        error: -> callback()
-        success: (res) -> callback(res)
+  $('.tag-selector').each ->
+    $this = $(this)
+    $this.selectize
+      plugins: ['remove_button']
+      options: $this.data('options')
+      valueField: 'name'
+      labelField: 'name'
+      searchField: 'name'
+      create: true
+      delimiter: ','
+      persist: false
+      create: (input) -> { name: input }
+      load: (query, callback) ->
+        $.ajax
+          url: '/tags?q=' + encodeURIComponent(query)
+          type: 'GET'
+          dataType: 'json'
+          error: -> callback()
+          success: (res) -> callback(res)
+      render:
+        item: render_tag
+        option: (option, escape) ->
+          category_name = if option.category_name then "(#{option.category_name})" else ""
+          "<div>#{render_tag(option, escape)} #{category_name}</div>"
+      score: (search) ->
+        scoreFunction = this.getScoreFunction(search)
+        (item) -> scoreFunction({name: "#{item.name} #{item.category_name}"})

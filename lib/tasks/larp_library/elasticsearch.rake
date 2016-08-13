@@ -3,7 +3,8 @@ namespace :larp_library do
     desc "Create indexes and import all records"
     task setup: :environment do
       [Project, Tag].each do |klass|
-        klass.__elasticsearch__.create_index!
+        puts "Importing #{klass.name.pluralize}"
+        klass.__elasticsearch__.create_index! force: true
         klass.import
       end
     end
