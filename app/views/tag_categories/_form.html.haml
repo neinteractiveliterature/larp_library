@@ -1,0 +1,24 @@
+= form_for tag_category, class: 'form' do |f|
+  = errors_for f.object
+
+  .form-group
+    = f.label :name
+    = f.text_field :name, class: 'form-control'
+
+  .form-group
+    = f.label :color do
+      Color
+      %small (use HTML hex colors)
+    = f.text_field :color, class: 'form-control'
+
+  .form-group
+    = f.label :icon do
+      Icon
+      %small
+        (use #{link_to "Font Awesome icon names", "http://fontawesome.io/icons/", target: '_blank'})
+    = f.text_field :icon, class: 'form-control'
+
+  %ul.list-inline
+    %li= f.submit "Save changes", class: 'btn btn-default'
+    - if f.object.persisted?
+      %li= link_to "Delete tag category", f.object, method: 'delete', class: 'btn btn-danger', "data-confirm" => "Are you sure you want to delete this tag category?"

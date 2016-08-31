@@ -35,8 +35,5 @@
     %li
       %ul.list-inline{style: "margin-left: 0"}
         - project.tags.sort_by { |t| t.name.downcase }.each do |tag|
-          %li.label.label-default{style: "background-color: #{tag.color}; font-size: 90%;"}
-            = link_to projects_path(tag: tag.name), style: "color: #{tag.text_color}" do
-              %i.fa{class: "fa-#{tag.icon}", display: "inline-block", style: "vertical-align: middle; margin-right: 0.2em", "aria-hidden" => true}
-              = tag.name
+          = render tag, href: projects_path(tag: tag.name)
 

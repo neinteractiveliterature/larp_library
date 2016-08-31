@@ -26,7 +26,8 @@ Rails.application.routes.draw do
   get "/brands/:brand_id/invitations/:id" => 'brand_memberships#pre_accept', as: 'pre_accept_brand_membership'
   post "/brands/:brand_id/invitations/:id" => 'brand_memberships#accept', as: 'accept_brand_membership'
 
-  resources :tags, only: [:index]
+  resources :tags, except: [:show]
+  resources :tag_categories, except: [:show]
 
   root 'home#index'
 end

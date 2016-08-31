@@ -27,6 +27,8 @@
                       %li= link_to "Promotions", project_promotions_path
                     - if can? :update, Tag
                       %li= link_to "Tags", tags_path
+                    - if can? :update, TagCategory
+                      %li= link_to "Tag Categories", tag_categories_path
               %li= link_to "Publish your larp", new_brand_path
               %li
                 - if user_signed_in?
