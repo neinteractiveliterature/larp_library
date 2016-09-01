@@ -1,5 +1,5 @@
 .row
-  .col-md-8
+  .col-md-4
     %h2 Welcome to Larp Library
 
     %p
@@ -31,3 +31,24 @@
         %li.list-group-item
           %h4
             = link_to "Browse all larps", projects_path
+
+  .col-md-4
+    .panel.panel-default
+      .panel-heading
+        %h2{style: "margin: 0"} Browse by tag
+
+      %ul.list-group
+        - @tags_by_category.keys.sort_by { |category| [category ? 0 : 1, category.try(:name)] }.each do |category|
+          - tags = @tags_by_category[category]
+          %li.list-group-item
+            %h4{style: "margin-top: 0"}
+              - if category
+                = category.name
+              - else
+                Miscellaneous
+
+            %ul.list-unstyled
+              - tags.each do |tag|
+                %li{style: "margin-bottom: 8px"}
+                  = render tag, href: projects_path(tag: tag.name)
+                  %small{style: "margin-left: 1em"} (#{pluralize tag.projects.size, "project"})
