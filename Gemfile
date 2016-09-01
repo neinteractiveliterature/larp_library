@@ -30,6 +30,7 @@ gem 'devise_cas_authenticatable'
 gem 'cancancan'
 
 gem 'rails-assets-evaporatejs', source: 'https://rails-assets.org'
+gem 'rails-assets-bootstrap-colorpicker', source: 'https://rails-assets.org'
 gem 'fog'
 
 gem 'haml'

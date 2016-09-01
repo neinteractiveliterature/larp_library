@@ -9,7 +9,11 @@
     = f.label :color do
       Color
       %small (use HTML hex colors)
-    = f.text_field :color, class: 'form-control'
+    .input-group.colorpicker
+      %span.input-group-addon
+        %i
+      = f.text_field :color, class: 'form-control'
+
 
   .form-group
     = f.label :icon do
