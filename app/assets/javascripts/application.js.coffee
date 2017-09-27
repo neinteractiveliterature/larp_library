@@ -1,8 +1,6 @@
 #= require jquery
-#= require jquery.turbolinks
 #= require jquery_ujs
 #= require bootstrap-sprockets
-#= require turbolinks
 #= require evaporatejs
 #= require bootstrap-colorpicker
 #= require ace/ace
