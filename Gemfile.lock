@@ -236,7 +236,7 @@ GEM
     mime-types-data (3.2016.0521)
     mini_portile2 (2.3.0)
     minitest (5.10.3)
-    multi_json (1.12.0)
+    multi_json (1.12.2)
     multipart-post (2.0.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
@@ -294,7 +294,7 @@ GEM
     redcarpet (3.2.3)
     responders (2.2.0)
       railties (>= 4.2.0, < 5.1)
-    rollbar (2.11.2)
+    rollbar (2.15.4)
       multi_json
     rubycas-client (2.3.9)
       activesupport
