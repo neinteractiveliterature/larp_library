@@ -47,7 +47,7 @@ gem 'high_voltage'
 
 gem 'figaro'
 
-gem 'capistrano', '3.3.5', group: :development
+gem 'capistrano', '3.10.0', group: :development
 gem 'capistrano-rails'
 gem 'capistrano-rbenv'
 gem 'capistrano-passenger'
