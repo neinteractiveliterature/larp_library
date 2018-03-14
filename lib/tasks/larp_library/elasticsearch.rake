@@ -6,7 +6,11 @@ namespace :larp_library do
 
       [Project, Tag].each do |klass|
         puts "Importing #{klass.count} #{klass.name.pluralize}"
-        klass.__elasticsearch__.create_index!
+        klass.__elasticsearch__.client.indices.put_mapping(
+          type: klass.__elasticsearch__.document_type,
+          index: klass.__elasticsearch__.index_name,
+          body: klass.__elasticsearch__.mappings.to_hash
+        )
         klass.import
       end
     end
