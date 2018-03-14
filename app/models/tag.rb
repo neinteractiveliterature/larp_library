@@ -7,8 +7,8 @@ class Tag < ActiveRecord::Base
   delegate :name, to: :tag_category, prefix: 'category', allow_nil: true
 
   mapping do
-    indexes :name, :type => 'string'
-    indexes :category_name, :type => 'string'
+    indexes :name, :type => 'text'
+    indexes :category_name, :type => 'text'
   end
 
   def color

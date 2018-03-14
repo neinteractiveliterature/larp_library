@@ -44,12 +44,12 @@ class Project < ActiveRecord::Base
   }
 
   mapping do
-    indexes :title, :type => 'string', fields: { raw: { type: 'string', index: :not_analyzed } }
-    indexes :authors, :type => 'string'
-    indexes :license, :index => :not_analyzed
-    indexes :description, :type => 'string'
-    indexes :tag_names, :type => 'string', index: :not_analyzed
-    indexes :brand_name, :type => 'string'
+    indexes :title, :type => 'text', fields: { raw: { type: 'keyword' } }
+    indexes :authors, :type => 'text'
+    indexes :license, :type => 'keyword'
+    indexes :description, :type => 'text'
+    indexes :tag_names, :type => 'keyword'
+    indexes :brand_name, :type => 'text'
     indexes :brand_id, :type => 'integer'
   end
 
