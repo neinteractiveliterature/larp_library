@@ -33,6 +33,7 @@ gem 'rails_12factor'
 gem 'rails-assets-evaporatejs', source: 'https://rails-assets.org'
 gem 'rails-assets-bootstrap-colorpicker', source: 'https://rails-assets.org'
 gem 'fog'
+gem 'xmlrpc'
 
 gem 'haml'
 gem 'redcarpet'

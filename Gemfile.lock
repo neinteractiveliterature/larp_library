@@ -350,6 +350,7 @@ GEM
     will_paginate (3.0.7)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
+    xmlrpc (0.3.0)
 
 PLATFORMS
   ruby
@@ -394,6 +395,7 @@ DEPENDENCIES
   web-console (~> 2.0)
   will_paginate
   will_paginate-bootstrap
+  xmlrpc
 
 RUBY VERSION
    ruby 2.5.0p0
