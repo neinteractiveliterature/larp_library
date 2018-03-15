@@ -76,8 +76,8 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-  
-  config.action_mailer.default_url_options = { host: 'library.interactiveliterature.org' }
+
+  config.action_mailer.default_url_options = { host: 'www.larplibrary.org', protocol: 'https' }
 end
 
 ActionMailer::Base.smtp_settings = {
@@ -85,7 +85,7 @@ ActionMailer::Base.smtp_settings = {
   :address        => ENV['MAILGUN_SMTP_SERVER'],
   :user_name      => ENV['MAILGUN_SMTP_LOGIN'],
   :password       => ENV['MAILGUN_SMTP_PASSWORD'],
-  :domain         => 'library.interactiveliterature.org',
+  :domain         => 'larplibrary.org',
   :authentication => :plain,
 }
 ActionMailer::Base.delivery_method = :smtp
