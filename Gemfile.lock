@@ -271,7 +271,7 @@ GEM
     rails-assets-bootstrap-colorpicker (2.3.3)
       rails-assets-bootstrap (>= 2)
       rails-assets-jquery (>= 1.10)
-    rails-assets-evaporatejs (1.4.2)
+    rails-assets-evaporatejs (1.6.3)
     rails-assets-jquery (3.1.0)
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
@@ -381,7 +381,7 @@ DEPENDENCIES
   puma
   rails (= 4.2.9)
   rails-assets-bootstrap-colorpicker!
-  rails-assets-evaporatejs!
+  rails-assets-evaporatejs (= 1.6.3)!
   rails_12factor
   redcarpet
   rollbar
