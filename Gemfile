@@ -20,7 +20,7 @@ gem 'bootstrap-sass', '~> 3.3.7'
 gem 'font-awesome-rails'
 
 # Use jquery as the JavaScript library
-gem 'jquery-rails', '= 4.3.1'  # pegging this at 2.1.4 to hopefully work around s3_direct_upload compat
+gem 'jquery-rails', '4.3.3'    # pegging this at 2.1.4 to hopefully work around s3_direct_upload compat
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
