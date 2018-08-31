@@ -3,7 +3,7 @@ GEM
   remote: https://rails-assets.org/
   specs:
     CFPropertyList (2.3.1)
-    ace-rails-ap (3.0.2)
+    ace-rails-ap (4.1.4)
     actionmailer (4.2.10)
       actionpack (= 4.2.10)
       actionview (= 4.2.10)
