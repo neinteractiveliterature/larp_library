@@ -52,11 +52,6 @@ gem 'high_voltage'
 
 gem 'figaro'
 
-gem 'capistrano', '3.3.5', group: :development
-gem 'capistrano-rails'
-gem 'capistrano-rbenv'
-gem 'capistrano-passenger'
-
 gem 'rollbar'
 # gem 'rails_12factor', group: :production
 
@@ -65,9 +60,6 @@ gem 'rollbar'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
