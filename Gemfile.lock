@@ -81,10 +81,10 @@ GEM
     concurrent-ruby (1.0.5)
     crass (1.0.3)
     debug_inspector (0.0.2)
-    devise (4.4.1)
+    devise (4.4.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
-      railties (>= 4.1.0, < 5.2)
+      railties (>= 4.1.0, < 6.0)
       responders
       warden (~> 1.2.3)
     devise_cas_authenticatable (1.9.2)
@@ -366,7 +366,7 @@ DEPENDENCIES
   capistrano-rbenv
   coffee-rails (~> 4.2.2)
   color
-  devise (~> 4.4.1)
+  devise (~> 4.4.3)
   devise_cas_authenticatable
   elasticsearch-model
   elasticsearch-rails
