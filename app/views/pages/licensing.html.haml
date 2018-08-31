@@ -11,7 +11,10 @@
     %li
       = link_to license[:name], license[:url]
       - if license[:discouraged]
-        (discouraged)
+        - if license[:discouraged_reason]
+          (#{license[:discouraged_reason].gsub(/, see our licensing page for details/, '')})
+        - else
+          (discouraged)
 
 %p
   These copyright licenses are chosen deliberately, and reflect a range of rights grants.  Creative Commons Attribution
@@ -27,7 +30,7 @@
   This means you must be the copyright holder of the entirety of your larp, including any media distributed with it, or
   you must have the copyright holder's permission to release the work under the license you choose.
 
-%h2 The "Why not [THIS LICENSE?]" section
+%h2 Licenses we discourage
 
 %p
   %strong Creative Commons Non-Commercial variants
@@ -36,7 +39,7 @@
 
 %p
   %strong The LARPA and ILF GameBank Licenses
-  are, in our opinion, bad licenses in general.  They are fairly obviously not written by lawyers, and fail to grant
+  have some serious issues, in our opinion.  They fail to grant
   some very important rights, namely: the right to modify the work (almost everyone modifies larps at least a little
   when running them) and the right to redistribute the work.  They also impose fairly onerous accounting requirements
   on GMs by requiring them not to make a profit, but allowing them to charge for materials.  (If you run a game

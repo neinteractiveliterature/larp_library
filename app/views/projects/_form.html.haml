@@ -51,6 +51,6 @@
 
   .form-group
     = f.label :license
-    = f.select :license, Project::LICENSES.map { |key, license| [license[:name] + (license[:discouraged] ? " (discouraged, see our licensing page for details)" : ""), key] }, {}, class: 'form-control'
+    = f.select :license, license_options, {}, class: 'form-control'
 
   = f.submit class: 'btn btn-default'

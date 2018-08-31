@@ -40,6 +40,34 @@ class Project < ActiveRecord::Base
       url: "http://creativecommons.org/licenses/by-nc-sa/4.0/",
       logo_url: "https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png",
       discouraged: true
+    },
+    cc20_by: {
+      name: "Creative Commons Attribution 2.0 Generic",
+      url: "http://creativecommons.org/licenses/by/2.0/",
+      logo_url: "https://i.creativecommons.org/l/by/2.0/88x31.png",
+      discouraged: true,
+      discouraged_reason: "obsolete, please use 4.0 if possible"
+    },
+    cc20_by_sa: {
+      name: "Creative Commons Attribution-ShareAlike 2.0 Generic",
+      url: "http://creativecommons.org/licenses/by-sa/2.0/",
+      logo_url: "https://i.creativecommons.org/l/by-sa/2.0/88x31.png",
+      discouraged: true,
+      discouraged_reason: "obsolete, please use 4.0 if possible"
+    },
+    cc20_by_nc: {
+      name: "Creative Commons Attribution-NonCommercial 2.0 Generic",
+      url: "http://creativecommons.org/licenses/by-nc/2.0/",
+      logo_url: "https://i.creativecommons.org/l/by-nc/2.0/88x31.png",
+      discouraged: true,
+      discouraged_reason: "obsolete and also discouraged, see our licensing page for details"
+    },
+    cc20_by_nc_sa: {
+      name: "Creative Commons Attribution-NonCommercial-ShareAlike 2.0 Generic",
+      url: "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+      logo_url: "https://i.creativecommons.org/l/by-nc-sa/2.0/88x31.png",
+      discouraged: true,
+      discouraged_reason: "obsolete and also discouraged, see our licensing page for details"
     }
   }
 
