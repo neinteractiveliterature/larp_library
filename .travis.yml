@@ -5,5 +5,4 @@ services:
 rvm:
  - 2.5.0
 before_script:
-  - cp config/database.yml.travis config/database.yml
   - bin/rake db:test:prepare
