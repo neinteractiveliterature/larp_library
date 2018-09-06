@@ -3,10 +3,12 @@ module Concerns::Elasticsearch
 
   included do
     include Elasticsearch::Model
-    include Elasticsearch::Model::Callbacks
 
     if Rails.env.test?
       index_name "#{self.model_name.collection.gsub(/\//, '-')}-test"
     end
+
+    after_commit(on: [:create, :update]) { __elasticsearch__.index_document }
+    after_commit(on: [:destroy]) { __elasticsearch__.delete_document }
   end
 end
