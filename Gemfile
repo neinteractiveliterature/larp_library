@@ -28,7 +28,7 @@ gem 'devise', '~> 4.4.1'
 gem 'devise_cas_authenticatable'
 gem 'cancancan'
 
-gem 'rails_12factor'
+gem 'rails_12factor', group: [:development, :production]
 
 gem 'rails-assets-evaporatejs', '1.6.3', source: 'https://rails-assets.org'
 gem 'rails-assets-bootstrap-colorpicker', source: 'https://rails-assets.org'
@@ -65,13 +65,13 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
-
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 
   gem 'pry-rails'
+
+  gem 'factory_bot_rails'
+  gem 'database_cleaner'
 end
 
 group :production do
