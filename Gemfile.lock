@@ -41,7 +41,7 @@ GEM
     arel (6.0.4)
     autoprefixer-rails (7.1.4.1)
       execjs
-    bcrypt (3.1.11)
+    bcrypt (3.1.12)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
@@ -68,7 +68,7 @@ GEM
       railties (>= 4.1.0, < 5.2)
       responders
       warden (~> 1.2.3)
-    devise_cas_authenticatable (1.9.2)
+    devise_cas_authenticatable (1.10.3)
       devise (>= 1.2.0)
       rubycas-client (>= 2.2.1)
     elasticsearch (5.0.4)
