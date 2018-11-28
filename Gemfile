@@ -30,7 +30,7 @@ gem 'cancancan'
 
 gem 'rails_12factor', group: [:development, :production]
 
-gem 'rails-assets-evaporatejs', '1.6.3', source: 'https://rails-assets.org'
+gem 'rails-assets-evaporatejs', '2.1.4', source: 'https://rails-assets.org'
 gem 'rails-assets-bootstrap-colorpicker', source: 'https://rails-assets.org'
 gem 'fog'
 gem 'xmlrpc'
