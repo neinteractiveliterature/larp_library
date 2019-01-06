@@ -2,7 +2,7 @@ require 'rollbar/rails'
 Rollbar.configure do |config|
   # Without configuration, Rollbar is enabled in all environments.
   # To disable in specific environments, set config.enabled=false.
-  
+
   config.access_token = ENV['ROLLBAR_ACCESS_TOKEN']
   config.enabled = false unless config.access_token
 
@@ -10,7 +10,7 @@ Rollbar.configure do |config|
   if Rails.env.test?
     config.enabled = false
   end
-  
+
 
   # By default, Rollbar will try to call the `current_user` controller method
   # to fetch the logged-in user object, and then call that object's `id`,
@@ -30,10 +30,9 @@ Rollbar.configure do |config|
   # via the rollbar interface.
   # Valid levels: 'critical', 'error', 'warning', 'info', 'debug', 'ignore'
   # 'ignore' will cause the exception to not be reported at all.
-  # config.exception_level_filters.merge!('MyCriticalException' => 'critical')
-  #
-  # You can also specify a callable, which will be called with the exception instance.
-  # config.exception_level_filters.merge!('MyCriticalException' => lambda { |e| 'critical' })
+  config.exception_level_filters.merge!({
+    'ActionController::RoutingError' => 'ignore'
+  })
 
   # Enable asynchronous reporting (uses girl_friday or Threading if girl_friday
   # is not installed)
