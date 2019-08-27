@@ -51,8 +51,8 @@ gem 'color'
 gem 'ace-rails-ap'
 gem "selectize-rails"
 
-gem 'elasticsearch-rails'
-gem 'elasticsearch-model'
+gem 'elasticsearch-rails', '6.0.0'
+gem 'elasticsearch-model', '6.0.0'
 
 gem 'high_voltage'
 
