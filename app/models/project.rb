@@ -1,5 +1,5 @@
 class Project < ActiveRecord::Base
-  include Concerns::Elasticsearch
+  include ElasticsearchModel
 
   LICENSES = {
     cc40_by: {

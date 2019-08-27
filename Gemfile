@@ -3,7 +3,7 @@ ruby '2.5.7'
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '= 4.2.11.1'
+gem 'rails', '= 6.0.0'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3', groups: [:development, :test]
 gem 'pg', group: :production
@@ -12,11 +12,12 @@ gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.2.2'
+gem 'coffee-rails', '~> 5.0.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
 gem 'bootstrap-sass', '~> 3.4.1'
+gem 'listen'
 gem 'font-awesome-rails'
 
 # Use jquery as the JavaScript library
@@ -24,14 +25,19 @@ gem 'jquery-rails', '= 4.3.1'  # pegging this at 2.1.4 to hopefully work around 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
+<<<<<<< HEAD
 gem 'devise', '~> 4.4'
+=======
+gem 'devise', '~> 4.7.0'
+>>>>>>> d5b956e (Basic Rails 6 upgrade)
 gem 'devise_cas_authenticatable'
 gem 'cancancan'
 
 gem 'rails_12factor', group: [:development, :production]
 
 gem 'rails-assets-evaporatejs', '1.6.3', source: 'https://rails-assets.org'
-gem 'rails-assets-bootstrap-colorpicker', source: 'https://rails-assets.org'
+gem 'rails-assets-bootstrap-colorpicker', '2.3.3', source: 'https://rails-assets.org'
+gem 'rails-assets-bootstrap', '~> 3.3.7', source: 'https://rails-assets.org'
 gem 'fog'
 gem 'xmlrpc'
 

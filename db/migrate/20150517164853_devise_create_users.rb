@@ -1,13 +1,13 @@
-class DeviseCreateUsers < ActiveRecord::Migration
+class DeviseCreateUsers < ActiveRecord::Migration[4.2]
   def change
     create_table(:users) do |t|
       ## CAS authenticatable
       t.string :username,           null: false, default: ""
-      
+
       t.string :email
       t.string :firstname
       t.string :lastname
-      
+
       t.boolean :admin, default: false
 
       ## Trackable

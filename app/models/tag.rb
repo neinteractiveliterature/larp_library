@@ -1,5 +1,5 @@
 class Tag < ActiveRecord::Base
-  include Concerns::Elasticsearch
+  include ElasticsearchModel
 
   has_and_belongs_to_many :projects
   belongs_to :tag_category

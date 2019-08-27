@@ -1,4 +1,4 @@
-class CreateProjectFiles < ActiveRecord::Migration
+class CreateProjectFiles < ActiveRecord::Migration[4.2]
   def change
     create_table :project_files do |t|
       t.references :project, index: true, foreign_key: true
@@ -11,7 +11,7 @@ class CreateProjectFiles < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    
+
     add_foreign_key :project_files, :users, column: "uploader_id"
   end
 end

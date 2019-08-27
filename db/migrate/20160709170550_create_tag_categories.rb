@@ -1,4 +1,4 @@
-class CreateTagCategories < ActiveRecord::Migration
+class CreateTagCategories < ActiveRecord::Migration[4.2]
   def change
     create_table :tag_categories do |t|
       t.text :name, index: { unique: true }
