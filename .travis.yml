@@ -11,3 +11,4 @@ before_script:
   - sudo /etc/init.d/elasticsearch start
   - until curl --silent -XGET --fail http://localhost:9200; do printf '.'; sleep 1; done
   - bin/rake db:test:prepare
+  - RAILS_ENV=test bin/rails larp_library:elasticsearch:setup
