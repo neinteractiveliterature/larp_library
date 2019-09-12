@@ -24,7 +24,7 @@ gem 'jquery-rails', '= 4.3.1'  # pegging this at 2.1.4 to hopefully work around 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
-gem 'devise', '~> 4.4.1'
+gem 'devise', '~> 4.4'
 gem 'devise_cas_authenticatable'
 gem 'cancancan'
 
