@@ -28,7 +28,6 @@ gem 'jquery-rails', '= 4.3.1'  # pegging this at 2.1.4 to hopefully work around 
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'devise', '~> 4.4'
-gem 'devise_cas_authenticatable'
 gem 'cancancan'
 gem 'omniauth-oauth2'
 

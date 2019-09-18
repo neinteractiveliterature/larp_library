@@ -70,9 +70,6 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-    devise_cas_authenticatable (1.9.2)
-      devise (>= 1.2.0)
-      rubycas-client (>= 2.2.1)
     dotenv (2.7.5)
     dotenv-rails (2.7.5)
       dotenv (= 2.7.5)
@@ -317,8 +314,6 @@ GEM
       railties (>= 4.2.0, < 6.0)
     rollbar (2.17.0)
       multi_json
-    rubycas-client (2.3.9)
-      activesupport
     sass (3.5.1)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -371,7 +366,6 @@ DEPENDENCIES
   color
   database_cleaner
   devise (~> 4.4)
-  devise_cas_authenticatable
   dotenv-rails
   elasticsearch-model
   elasticsearch-rails

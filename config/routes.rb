@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
+  devise_scope :user do
+    delete 'sign_out', to: 'devise/sessions#destroy', as: :destroy_user_session
+  end
 
-  get "/projects" => 'search_projects#index', as: :projects
+  get '/projects' => 'search_projects#index', as: :projects
   resources :projects, only: [:index]
   resources :project_promotions, only: [:index, :create, :destroy]
 
@@ -23,8 +26,8 @@ Rails.application.routes.draw do
     end
   end
 
-  get "/brands/:brand_id/invitations/:id" => 'brand_memberships#pre_accept', as: 'pre_accept_brand_membership'
-  post "/brands/:brand_id/invitations/:id" => 'brand_memberships#accept', as: 'accept_brand_membership'
+  get '/brands/:brand_id/invitations/:id' => 'brand_memberships#pre_accept', as: 'pre_accept_brand_membership'
+  post '/brands/:brand_id/invitations/:id' => 'brand_memberships#accept', as: 'accept_brand_membership'
 
   resources :tags, except: [:show]
   resources :tag_categories, except: [:show]
