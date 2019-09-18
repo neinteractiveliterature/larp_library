@@ -15,6 +15,9 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.2.2'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
+gem 'dotenv-rails', require: 'dotenv/rails-now'
+gem 'graphql-client'
+gem 'json-jwt'
 
 gem 'bootstrap-sass', '~> 3.3.7'
 gem 'font-awesome-rails'
@@ -27,6 +30,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'devise', '~> 4.4'
 gem 'devise_cas_authenticatable'
 gem 'cancancan'
+gem 'omniauth-oauth2'
 
 gem 'rails_12factor', group: [:development, :production]
 
