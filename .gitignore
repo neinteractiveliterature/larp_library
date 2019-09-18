@@ -40,3 +40,7 @@ yarn-debug.log*
 *.pgdump
 /.eslintcache
 /stats.json
+
+# Ignore local .env files
+/.env.local
+/.env.*.local

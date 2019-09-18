@@ -15,6 +15,9 @@ gem 'devise', '~> 4.8.0'
 gem 'devise_cas_authenticatable', '~> 2.0.0.alpha1'
 gem 'rack-cas'
 gem 'cancancan'
+gem 'omniauth-oauth2'
+gem 'graphql-client'
+gem 'json-jwt'
 
 gem 'aws-sdk-s3'
 
