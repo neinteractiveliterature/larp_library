@@ -240,7 +240,7 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
-    puma (4.3.1)
+    puma (4.3.2)
       nio4r (~> 2.0)
     rack (1.6.13)
     rack-test (0.6.3)
