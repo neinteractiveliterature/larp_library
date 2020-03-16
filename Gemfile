@@ -53,6 +53,9 @@ gem 'high_voltage'
 gem 'figaro'
 
 gem 'rollbar'
+
+gem 'aws-sdk-rails'
+
 # gem 'rails_12factor', group: :production
 
 # Use ActiveModel has_secure_password
