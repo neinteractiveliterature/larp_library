@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "larp-library@aegames.org"
+  default from: "noreply@larplibrary.org"
   layout 'mailer'
 end
