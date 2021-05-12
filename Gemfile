@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 gem 'dotenv-rails', groups: [:development, :test]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '= 6.0.3.7'
+gem 'rails', '= 6.1.3.2'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3', groups: [:development, :test]
 gem 'pg', group: :production
@@ -13,9 +13,6 @@ gem 'pg', group: :production
 gem 'minipack'
 
 gem 'listen'
-
-# bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'devise', '~> 4.8.0'
 gem 'devise_cas_authenticatable'
