@@ -31,8 +31,8 @@ gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 gem 'color'
 
-gem 'elasticsearch-rails', '6.0.0'
-gem 'elasticsearch-model', '6.0.0'
+gem 'elasticsearch-rails', '~> 6.1.1'
+gem 'elasticsearch-model', '~> 6.1.1'
 
 gem 'high_voltage'
 
