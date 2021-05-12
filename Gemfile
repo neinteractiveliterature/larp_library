@@ -2,28 +2,17 @@ ruby '2.5.7'
 
 source 'https://rubygems.org'
 
+gem 'dotenv-rails', groups: [:development, :test]
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '= 6.0.3.7'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3', groups: [:development, :test]
 gem 'pg', group: :production
-# Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
-# Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 5.0.0'
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
 
-gem 'webpacker', '~> 6.x'
+gem 'minipack'
 
-gem 'bootstrap-sass', '~> 3.4.1'
 gem 'listen'
-gem 'font-awesome-rails'
-
-# Use jquery as the JavaScript library
-gem 'jquery-rails', '= 4.4.0'
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
@@ -32,9 +21,6 @@ gem 'devise', '~> 4.8.0'
 gem 'devise_cas_authenticatable'
 gem 'cancancan'
 
-gem 'rails-assets-evaporatejs', '1.6.3', source: 'https://rails-assets.org'
-gem 'rails-assets-bootstrap-colorpicker', '2.3.3', source: 'https://rails-assets.org'
-gem 'rails-assets-bootstrap', '~> 3.3.7', source: 'https://rails-assets.org'
 gem 'fog'
 gem 'xmlrpc'
 
@@ -44,9 +30,6 @@ gem 'truncate_html'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 gem 'color'
-
-gem 'ace-rails-ap'
-gem "selectize-rails"
 
 gem 'elasticsearch-rails', '6.0.0'
 gem 'elasticsearch-model', '6.0.0'

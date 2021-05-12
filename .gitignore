@@ -7,6 +7,10 @@
 # Local config files
 /.env.*.local
 
+# Build artifacts
+/public/packs
+/public/assets
+
 # Ignore bundler config.
 /.bundle
 
