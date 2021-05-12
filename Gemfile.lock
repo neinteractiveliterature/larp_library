@@ -309,7 +309,7 @@ GEM
       actionview
       railties (>= 4.2)
     minitest (5.14.4)
-    multi_json (1.13.1)
+    multi_json (1.15.0)
     multipart-post (2.1.1)
     nio4r (2.5.4)
     nokogiri (1.11.3)
@@ -369,8 +369,7 @@ GEM
     responders (3.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
-    rollbar (2.17.0)
-      multi_json
+    rollbar (3.1.2)
     ruby2_keywords (0.0.4)
     ruby_dep (1.5.0)
     rubycas-client (2.3.9)
