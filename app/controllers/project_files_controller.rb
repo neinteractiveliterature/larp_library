@@ -14,7 +14,7 @@ class ProjectFilesController < ApplicationController
 
   def destroy
     @project_file.destroy
-    redirect_to :back
+    redirect_back
   end
 
   def auth_upload
