@@ -365,11 +365,6 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.3.0)
       loofah (~> 2.3)
-    rails_12factor (0.0.3)
-      rails_serve_static_assets
-      rails_stdout_logging
-    rails_serve_static_assets (0.0.5)
-    rails_stdout_logging (0.0.5)
     railties (6.0.3.7)
       actionpack (= 6.0.3.7)
       activesupport (= 6.0.3.7)
@@ -479,7 +474,6 @@ DEPENDENCIES
   rails-assets-bootstrap (~> 3.3.7)!
   rails-assets-bootstrap-colorpicker (= 2.3.3)!
   rails-assets-evaporatejs (= 1.6.3)!
-  rails_12factor
   redcarpet
   rollbar
   sass-rails (~> 5.0)

@@ -32,8 +32,6 @@ gem 'devise', '~> 4.8.0'
 gem 'devise_cas_authenticatable'
 gem 'cancancan'
 
-gem 'rails_12factor', group: [:development, :production]
-
 gem 'rails-assets-evaporatejs', '1.6.3', source: 'https://rails-assets.org'
 gem 'rails-assets-bootstrap-colorpicker', '2.3.3', source: 'https://rails-assets.org'
 gem 'rails-assets-bootstrap', '~> 3.3.7', source: 'https://rails-assets.org'
