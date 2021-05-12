@@ -14,10 +14,11 @@ class ProjectFile < ActiveRecord::Base
 
   private
   def delete_s3_file
-    s3 = Fog::Storage.new(provider: "AWS", aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'], aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'])
-    bucket = s3.directories.get(s3_bucket)
-    file = bucket.files.get(s3_key)
-    file.destroy
+    s3 = Aws::S3::Client.new
+    s3.delete_object({
+      bucket: s3_bucket,
+      key: s3_key
+    })
   end
 
   def s3_key

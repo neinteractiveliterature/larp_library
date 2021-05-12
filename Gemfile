@@ -18,8 +18,7 @@ gem 'devise', '~> 4.8.0'
 gem 'devise_cas_authenticatable'
 gem 'cancancan'
 
-gem 'fog'
-gem 'xmlrpc'
+gem 'aws-sdk-s3'
 
 gem 'haml'
 gem 'redcarpet'
