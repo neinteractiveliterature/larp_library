@@ -1,5 +1,5 @@
 import $ from "jquery";
-import "rails-ujs";
+import Rails from "@rails/ujs";
 import "bootstrap-sass/assets/javascripts/bootstrap";
 import "selectize";
 import "bootstrap-colorpicker";
@@ -13,3 +13,5 @@ $(() => {
     component: ".input-group-addon",
   });
 });
+
+Rails.start();
