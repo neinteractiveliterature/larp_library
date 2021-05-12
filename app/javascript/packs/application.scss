@@ -1,0 +1,97 @@
+/*
+Any CSS added to this file or imported from this file, e.g. `@import '../stylesheets/my-css.css'`,
+will be included in the "application" pack. Any CSS imported from application.js or as part of the
+application.js dependency graph, e.g. `import '../stylesheets/my-css.css'` will also be included
+in the "application" pack.
+
+To reference this file, add <%= stylesheet_pack_tag 'application' %> to the appropriate
+layout file, like app/views/layouts/application.html.erb
+*/
+
+$fa-font-path: "~font-awesome/fonts/";
+@import "font-awesome/scss/font-awesome";
+@import "styles/bootstrap_custom";
+@import "selectize/dist/css/selectize";
+@import "selectize/dist/css/selectize.bootstrap3";
+@import "bootstrap-colorpicker/dist/css/bootstrap-colorpicker";
+
+#topbar {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.link-unstyled {
+  color: $gray-base;
+}
+
+#globalnav {
+  margin: 0;
+  padding: 0;
+
+  li {
+    display: inline-block;
+    list-style-type:none;
+    margin-left: 8pt;
+    margin-right: 8pt;
+    padding: 0;
+    font-size: $font-size-base * 1.25;
+  }
+}
+
+#mainnav {
+  background-color: $brand-primary;
+  background: linear-gradient(to bottom, lighten($brand-primary, 7.5%), darken($brand-primary, 7.5%));
+
+  min-height: 79px;
+  width: 100%;
+  display: block;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+
+  > li {
+    padding: 0;
+    margin: 0;
+    display: block;
+    float: none;
+  }
+
+  @media (min-width: $screen-sm-min) {
+    display: table;
+
+    > li {
+      display: table-cell;
+      vertical-align: middle;
+    }
+  }
+
+  @media (max-width: $screen-sm-max) {
+    > li {
+      text-align: center;
+    }
+  }
+
+  .topbar-brand {
+    font-family: Rouge Script;
+    font-size: 48px;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+
+    a {
+      color: white;
+
+      &:hover, &:active {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+#mainnav, #globalnav {
+  > li {
+    > a, > a:visited {
+      color: white;
+    }
+  }
+}

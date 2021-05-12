@@ -22,7 +22,7 @@ class ProjectFilesController < ApplicationController
     hmac = OpenSSL::HMAC.digest(digest, ENV['AWS_SECRET_ACCESS_KEY'].encode('UTF-8'), request['to_sign'].encode('UTF-8'))
     hmac64 = Base64.encode64(hmac).chomp
 
-    render text: hmac64, status: 200
+    render plain: hmac64, status: 200
   end
 
   private

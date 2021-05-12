@@ -1,8 +1,8 @@
 class Tag < ActiveRecord::Base
-  include Concerns::Elasticsearch
+  include ElasticsearchModel
 
   has_and_belongs_to_many :projects
-  belongs_to :tag_category
+  belongs_to :tag_category, optional: true
 
   delegate :name, to: :tag_category, prefix: 'category', allow_nil: true
 

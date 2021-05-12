@@ -1,9 +1,14 @@
 language: ruby
+sudo: true
 cache: bundler
 services:
   - postgresql
-  - elasticsearch
 rvm:
  - 2.5.7
 before_script:
+  - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.2.3.deb
+  - sudo dpkg -i --force-confnew elasticsearch-6.2.3.deb
+  - sudo /etc/init.d/elasticsearch start
+  - until curl --silent -XGET --fail http://localhost:9200; do printf '.'; sleep 1; done
   - bin/rake db:test:prepare
+  - RAILS_ENV=test bin/rails larp_library:elasticsearch:setup

@@ -1,4 +1,4 @@
-class AddMetadataToProjects < ActiveRecord::Migration
+class AddMetadataToProjects < ActiveRecord::Migration[4.2]
   def change
     change_table :projects do |t|
       t.integer :min_players

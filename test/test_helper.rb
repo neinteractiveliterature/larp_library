@@ -5,7 +5,7 @@ require 'rails/test_help'
 DatabaseCleaner.strategy = :truncation
 
 class ActiveSupport::TestCase
-  self.use_transactional_fixtures = false
+  self.use_transactional_tests = false
 
   include FactoryBot::Syntax::Methods
 

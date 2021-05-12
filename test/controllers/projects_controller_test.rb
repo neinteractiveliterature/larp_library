@@ -7,7 +7,9 @@ class ProjectsControllerTest < ActionController::TestCase
     user.brands << project.brand
     sign_in user
 
-    put :update, id: project.id, brand_id: project.brand.slug, project: { tag_names: ['a', 'b', 'c'] }
+    put :update, params: {
+      id: project.id, brand_id: project.brand.slug, project: { tag_names: ['a', 'b', 'c'] }
+    }
 
     assert_equal ['a', 'b', 'c'], elasticsearch_source(project)['tag_names'].sort
   end
