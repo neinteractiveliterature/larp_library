@@ -3,7 +3,7 @@ ruby '2.5.7'
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '= 6.0.0'
+gem 'rails', '= 6.0.3.7'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3', groups: [:development, :test]
 gem 'pg', group: :production
@@ -16,20 +16,19 @@ gem 'coffee-rails', '~> 5.0.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
+gem 'webpacker', '~> 6.x'
+
 gem 'bootstrap-sass', '~> 3.4.1'
 gem 'listen'
 gem 'font-awesome-rails'
 
 # Use jquery as the JavaScript library
-gem 'jquery-rails', '= 4.3.1'  # pegging this at 2.1.4 to hopefully work around s3_direct_upload compat
+gem 'jquery-rails', '= 4.4.0'
+
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
-<<<<<<< HEAD
-gem 'devise', '~> 4.4'
-=======
-gem 'devise', '~> 4.7.0'
->>>>>>> d5b956e (Basic Rails 6 upgrade)
+gem 'devise', '~> 4.8.0'
 gem 'devise_cas_authenticatable'
 gem 'cancancan'
 
