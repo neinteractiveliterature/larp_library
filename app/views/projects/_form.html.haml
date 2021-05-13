@@ -15,7 +15,7 @@
 
   .form-group
     = f.label :tags
-    = f.select :tag_names, f.object.tag_names, {}, class: 'form-control tag-selector', multiple: true, "data-options" => f.object.tags.to_json(methods: [:color, :text_color, :icon, :category_name])
+    = react_component "TagSelectorInput", name: 'project[tag_names][]', initialValue: f.object.tags.as_json(methods: [:color, :text_color, :icon, :category_name, :name])
 
   .form-group
     = f.label :description do

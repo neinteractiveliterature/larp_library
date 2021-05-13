@@ -11,8 +11,6 @@ layout file, like app/views/layouts/application.html.erb
 $fa-font-path: "~font-awesome/fonts/";
 @import "font-awesome/scss/font-awesome";
 @import "styles/bootstrap_custom";
-@import "selectize/dist/css/selectize";
-@import "selectize/dist/css/selectize.bootstrap3";
 @import "bootstrap-colorpicker/dist/css/bootstrap-colorpicker";
 
 #topbar {

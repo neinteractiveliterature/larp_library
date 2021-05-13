@@ -17,17 +17,6 @@ function numberToHumanSize(size) {
   }
 }
 
-function renderTag(tag, escape) {
-  return (
-    `<div class="label label-default" style="background-color: ${tag.color}; color: ${tag.text_color}; font-size: 90%">` +
-    `<i class="fa fa-${escape(
-      tag.icon
-    )}" style="display: inline-block; vertical-align: middle; margin-right: 0.2em" aria-hidden></i>` +
-    escape(tag.name) +
-    "</div>"
-  );
-}
-
 $(function () {
   $(".s3-upload input[type=file]").on("change", function (e) {
     const $this = $(this);
@@ -138,57 +127,6 @@ $(function () {
 
     return $this.closest("form").on("submit", () => {
       return $this.val(editor.getSession().getValue());
-    });
-  });
-
-  return $(".tag-selector").each(function () {
-    var $this;
-    $this = $(this);
-    return $this.selectize({
-      plugins: ["remove_button"],
-      options: $this.data("options"),
-      valueField: "name",
-      labelField: "name",
-      searchField: "name",
-      delimiter: ",",
-      persist: false,
-      create: function (input) {
-        return {
-          name: input,
-        };
-      },
-      load: function (query, callback) {
-        return $.ajax({
-          url: "/tags?q=" + encodeURIComponent(query),
-          type: "GET",
-          dataType: "json",
-          error: function () {
-            return callback();
-          },
-          success: function (res) {
-            return callback(res);
-          },
-        });
-      },
-      render: {
-        item: renderTag,
-        option: function (option, escape) {
-          var category_name;
-          category_name = option.category_name
-            ? `(${option.category_name})`
-            : "";
-          return `<div>${renderTag(option, escape)} ${category_name}</div>`;
-        },
-      },
-      score: function (search) {
-        var scoreFunction;
-        scoreFunction = this.getScoreFunction(search);
-        return function (item) {
-          return scoreFunction({
-            name: `${item.name} ${item.category_name}`,
-          });
-        };
-      },
     });
   });
 });
