@@ -22,7 +22,7 @@ const config = {
   },
   entry: {
     application: [
-      path.resolve(__dirname, "./app/javascript/packs/application.js"),
+      path.resolve(__dirname, "./app/javascript/packs/application.ts"),
       path.resolve(__dirname, "./app/javascript/packs/application.scss"),
     ],
   },
@@ -32,12 +32,17 @@ const config = {
     static: false,
   },
   resolve: {
-    extensions: [".js", ".mjs", ".ts", ".coffee"],
+    extensions: [".js", ".mjs", ".ts", ".tsx", ".coffee"],
     modules: [path.resolve(__dirname, "./app/javascript"), "node_modules"],
   },
   devtool: "cheap-module-source-map",
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
+      },
       {
         test: /\.s[ac]ss$/i,
         use: [
