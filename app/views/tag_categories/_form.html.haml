@@ -6,14 +6,8 @@
     = f.text_field :name, class: 'form-control'
 
   .form-group
-    = f.label :color do
-      Color
-      %small (use HTML hex colors)
-    .input-group.colorpicker
-      %span.input-group-addon
-        %i
-      = f.text_field :color, class: 'form-control'
-
+    = f.label :color
+    = react_component "ColorPickerInput", id: 'tag_category_color', name: 'tag_category[color]', initialValue: f.object.color
 
   .form-group
     = f.label :icon do
