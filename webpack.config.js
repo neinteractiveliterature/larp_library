@@ -45,13 +45,11 @@ const config = {
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [
-          MiniCssExtractPlugin.loader,
-          // Translates CSS into CommonJS
-          "css-loader",
-          // Compiles Sass to CSS
-          "sass-loader",
-        ],
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+      },
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf|svg)$/i,

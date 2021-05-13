@@ -93,3 +93,22 @@ $fa-font-path: "~font-awesome/fonts/";
     }
   }
 }
+
+.CodeMirror {
+  font-family: $font-family-monospace;
+}
+
+@for $i from 1 to 20 {
+  .codemirror-height-#{$i} {
+    height: auto;
+
+    .form-control {
+      height: auto;
+    }
+
+    .markdown-preview,
+    .CodeMirror-scroll {
+      min-height: #{$i}rem !important;
+    }
+  }
+}

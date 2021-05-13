@@ -1,8 +1,5 @@
 import $ from "jquery";
 import Evaporate from "evaporate";
-import ace from "ace-builds/src-noconflict/ace";
-import MarkdownMode from "ace-builds/src-noconflict/mode-markdown";
-import TextmateTheme from "ace-builds/src-noconflict/theme-textmate";
 
 // from https://gist.github.com/233053/f401f59c344ab2d42a341513c6caaa2bb3b2da2d
 function numberToHumanSize(size) {
@@ -109,24 +106,6 @@ $(function () {
           })
         );
       }
-    });
-  });
-
-  $(".ace-editor").each(function () {
-    const $this = $(this);
-    const editorDiv = $(
-      '<div class="form-control" style="height: 15em"></div>'
-    );
-    $this.hide().after(editorDiv);
-
-    const editor = ace.edit(editorDiv.get(0));
-    editor.setTheme(TextmateTheme);
-    editor.getSession().setMode(MarkdownMode);
-    editor.getSession().setUseWrapMode(true);
-    editor.getSession().setValue($this.val());
-
-    return $this.closest("form").on("submit", () => {
-      return $this.val(editor.getSession().getValue());
     });
   });
 });

@@ -11,6 +11,8 @@
     "ace-code-editor": "^1.2.3",
     "bootstrap-colorpicker": "2",
     "bootstrap-sass": "3",
+    "classnames": "^2.3.1",
+    "codemirror": "^5.61.0",
     "coffeescript": "^2.5.1",
     "css-loader": "^5.2.4",
     "css-minimizer-webpack-plugin": "^3.0.0",
@@ -20,6 +22,7 @@
     "md5": "^2.3.0",
     "mini-css-extract-plugin": "^1.6.0",
     "react": "^17.0.2",
+    "react-codemirror2": "^7.2.1",
     "react-color": "^2.19.3",
     "react-dom": "^17.0.2",
     "react-select": "^4.3.1",
@@ -33,6 +36,7 @@
     "webpack-manifest-plugin": "^3.1.1"
   },
   "devDependencies": {
+    "@types/codemirror": "^5.60.0",
     "@types/jquery": "^3.5.5",
     "@types/react": "^17.0.5",
     "@types/react-color": "^3.0.4",
