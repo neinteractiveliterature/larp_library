@@ -22,7 +22,7 @@ const config = {
   },
   entry: {
     application: [
-      path.resolve(__dirname, "./app/javascript/packs/application.ts"),
+      path.resolve(__dirname, "./app/javascript/packs/application.tsx"),
       path.resolve(__dirname, "./app/javascript/packs/application.scss"),
     ],
   },

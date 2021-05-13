@@ -14,7 +14,7 @@ function fetchTags(query: string) {
 
 export type TagSelectorProps = {
   value: TagAttributes[];
-  onChange: React.Dispatch<React.SetStateAction<readonly TagAttributes[]>>;
+  onChange: React.Dispatch<React.SetStateAction<TagAttributes[]>>;
 };
 
 function TagSelector({ value, onChange }: TagSelectorProps): JSX.Element {
@@ -23,11 +23,15 @@ function TagSelector({ value, onChange }: TagSelectorProps): JSX.Element {
       isMulti
       loadOptions={(inputValue) => fetchTags(inputValue)}
       value={value}
-      onChange={(newValue) => onChange(newValue)}
+      onChange={(newValue) => onChange([...newValue])}
       getOptionValue={(option) => option.name}
       getOptionLabel={(option) => option.name}
       formatOptionLabel={(option) => <Tag tag={option} />}
       styles={{
+        container: (provided) => ({
+          ...provided,
+          zIndex: 1100,
+        }),
         multiValueLabel: (provided) => ({
           ...provided,
           padding: 0,
