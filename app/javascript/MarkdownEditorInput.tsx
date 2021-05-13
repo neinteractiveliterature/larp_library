@@ -1,25 +1,25 @@
 import { useState } from "react";
-import ColorPicker from "./ColorPicker";
+import MarkdownEditor from "./MarkdownEditor";
 
-export type ColorPickerInputProps = {
+export type MarkdownEditorInputProps = {
   initialValue: string;
   name: string;
   id: string;
 };
 
-function ColorPickerInput({
+function MarkdownEditorInput({
   name,
   id,
   initialValue,
-}: ColorPickerInputProps): JSX.Element {
+}: MarkdownEditorInputProps): JSX.Element {
   const [value, setValue] = useState(initialValue);
 
   return (
     <>
-      <ColorPicker value={value} onChange={setValue} />
+      <MarkdownEditor value={value} onChange={setValue} />
       <input id={id} name={name} type="hidden" value={value} />
     </>
   );
 }
 
-export default ColorPickerInput;
+export default MarkdownEditorInput;

@@ -6,19 +6,19 @@
       Name
       %small (your team's name, or your name if you create larps on your own)
     = f.text_field :name, class: 'form-control'
-  
+
   .form-group
     = f.label :description do
       Description
       %small (Markdown allowed)
-    = f.text_area :description, class: 'form-control ace-editor', style: 'height: 6em;', rows: 6
-  
+    = react_component 'MarkdownEditorInput', name: 'brand[description]', id: 'brand_description', initialValue: f.object.description
+
   - unless f.object.new_record?
     %div.membership
       %h2 Membership
       %p
         All members can create, edit and delete published projects.  Admins can access this page.
-      
+
       %table.table
         = f.fields_for :brand_memberships do |membership_fields|
           %tr
@@ -39,5 +39,5 @@
               - unless membership_fields.object.new_record?
                 = membership_fields.label :_destroy, "Delete?"
                 = membership_fields.check_box :_destroy, disabled: membership_fields.object.user == current_user
-  
+
   = f.submit "Save changes", class: 'btn btn-default'
