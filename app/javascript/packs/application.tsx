@@ -1,8 +1,10 @@
 // @ts-expect-error no types for rails/ujs
 import Rails from "@rails/ujs";
-import "bootstrap/dist/js/bootstrap";
 import React from "react";
 import ReactDOM from "react-dom";
+
+import "bootstrap/js/dist/alert";
+import "bootstrap/js/dist/dropdown";
 
 function LazyWrapper<P>(
   Component: React.ComponentType<P>
