@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* global require, process, __dirname, module */
+
 const path = require("path");
 const { env } = require("process");
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
@@ -63,11 +66,12 @@ const config = {
     new DefinePlugin({
       "process.env.ASSET_PATH": JSON.stringify(ASSET_PATH),
     }),
-    new ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery",
-    }),
   ],
 };
+
+if (process.env.ANALYZE_BUNDLE_SIZE) {
+  const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+  config.plugins.push(new BundleAnalyzerPlugin());
+}
 
 module.exports = config;

@@ -13,7 +13,7 @@ export type TagProps = {
 function Tag({ tag }: TagProps): JSX.Element {
   return (
     <div
-      className="label label-default"
+      className="badge badge-pill"
       style={{
         backgroundColor: tag.color,
         color: tag.text_color,

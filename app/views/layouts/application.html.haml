@@ -19,16 +19,16 @@
               %li= link_to "Creators", brands_path
               - if current_user.try(:admin?)
                 %li.dropdown
-                  %a.dropdown-toggle{href: "#", "data-toggle" => "dropdown", role: "button", "aria-haspopup" => true, "aria-expanded" => false}
+                  %a.dropdown-toggle{href: "#", "data-bs-toggle" => "dropdown", role: "button", "aria-haspopup" => true, "aria-expanded" => false}
                     Admin
                     %span.caret
                   %ul.dropdown-menu
                     - if can? :create, ProjectPromotion
-                      %li= link_to "Promotions", project_promotions_path
+                      %li= link_to "Promotions", project_promotions_path, class: 'dropdown-item'
                     - if can? :update, Tag
-                      %li= link_to "Tags", tags_path
+                      %li= link_to "Tags", tags_path, class: 'dropdown-item'
                     - if can? :update, TagCategory
-                      %li= link_to "Tag Categories", tag_categories_path
+                      %li= link_to "Tag Categories", tag_categories_path, class: 'dropdown-item'
               %li= link_to "Publish your larp", new_brand_path
               %li
                 - if user_signed_in?
@@ -39,12 +39,12 @@
 
       - if notice.present?
         .alert.alert-success.alert-dismissible{role: "alert"}
-          %button.close{type: "button", "data-dismiss" => "alert", "aria-label" => "Close"}
+          %button.close{type: "button", "data-bs-dismiss" => "alert", "aria-label" => "Close"}
             %span{"aria-hidden" => "true"} &times;
           = notice
       - if alert.present?
         .alert.alert-danger.alert-dismissible{role: "alert"}
-          %button.close{type: "button", "data-dismiss" => "alert", "aria-label" => "Close"}
+          %button.close{type: "button", "data-bs-dismiss" => "alert", "aria-label" => "Close"}
             %span{"aria-hidden" => "true"} &times;
           = alert
 
@@ -52,10 +52,10 @@
 
       %nav
         %ul.list-inline{style: 'text-align: center'}
-          %li
+          %li.list-inline-item
             %small
               Larp Library &copy; 2015-#{Time.now.year}
               = link_to 'New England Interactive Literature', 'http://interactiveliterature.org'
-          %li &mdash;
-          %li= link_to "About us", page_path('about')
-          %li= link_to "Licensing", page_path('licensing')
+          %li.list-inline-item &mdash;
+          %li.list-inline-item= link_to "About us", page_path('about')
+          %li.list-inline-item= link_to "Licensing", page_path('licensing')

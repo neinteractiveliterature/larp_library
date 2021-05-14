@@ -1,15 +1,15 @@
 = form_for tag, class: 'form' do |f|
   = errors_for f.object
 
-  .form-group
-    = f.label :name
+  .mb-3
+    = f.label :name, class: 'form-label'
     = f.text_field :name, class: 'form-control'
 
-  .form-group
-    = f.label :tag_category_id, "Category"
+  .mb-3
+    = f.label :tag_category_id, "Category", class: 'form-label'
     = f.collection_select :tag_category_id, TagCategory.order(:name), :id, :name, { include_blank: true }, class: 'form-control'
 
   %ul.list-inline
-    %li= f.submit "Save changes", class: 'btn btn-default'
+    %li= f.submit "Save changes", class: 'btn btn-primary'
     - if f.object.persisted?
       %li= link_to "Delete tag", f.object, method: 'delete', class: 'btn btn-danger', "data-confirm" => "Are you sure you want to delete this tag?"
