@@ -7,7 +7,7 @@ module ApplicationHelper
   def errors_for(object)
     if object.errors.any?
       content_tag(:div, class: "card bg-danger") do
-        concat(content_tag(:div, class: "card-heading") do
+        concat(content_tag(:div, class: "card-header") do
           concat(content_tag(:h4, class: "m-0") do
             concat "#{pluralize(object.errors.count, "error")} prohibited this #{object.class.name.downcase} from being saved:"
           end)
