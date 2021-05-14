@@ -2,15 +2,15 @@
   = errors_for f.object
 
   .mb-3
-    = f.label, class: 'form-label' :name
+    = f.label :name, class: 'form-label'
     = f.text_field :name, class: 'form-control'
 
   .mb-3
-    = f.label, class: 'form-label' :color
+    = f.label :color, class: 'form-label'
     = react_component "ColorPickerInput", id: 'tag_category_color', name: 'tag_category[color]', initialValue: f.object.color
 
   .mb-3
-    = f.label, class: 'form-label' :icon do
+    = f.label :icon, class: 'form-label' do
       Icon
       %small
         (use #{link_to "Font Awesome icon names", "http://fontawesome.io/icons/", target: '_blank'})
