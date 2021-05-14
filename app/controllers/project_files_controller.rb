@@ -14,7 +14,7 @@ class ProjectFilesController < ApplicationController
 
   def destroy
     @project_file.destroy
-    redirect_back fallback_location: brand_project_url(@brand, @project)
+    head :ok
   end
 
   def auth_upload

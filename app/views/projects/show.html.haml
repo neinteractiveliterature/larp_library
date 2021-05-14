@@ -16,13 +16,17 @@
       .panel-heading
         %h2{style: "margin: 0"} Downloads
       .panel-body
-        %ul.project-files.list-unstyled
-          = render @project.project_files
-
-        - if can? :edit, @project
-          .well.s3-upload{"data-aws-access-key-id" => ENV['AWS_ACCESS_KEY_ID'], "data-signer-url" => url_for([:auth_upload, @brand, @project, :project_files]), "data-bucket" => (ENV['AWS_S3_BUCKET'] || "larp-library-#{Rails.env}"), "data-nonce" => SecureRandom.hex, "data-complete-callback-url" => url_for([@brand, @project, :project_files]), "data-temporary-session-token" => @temporary_session_token}
-            %label{for: "file"} Upload files
-            = file_field_tag :file, multiple: true
+        = react_component "ProjectFilesSection",
+            awsAccessKeyId: ENV['AWS_ACCESS_KEY_ID'],
+            signerURL: url_for([:auth_upload, @brand, @project, :project_files]),
+            bucket: (ENV['AWS_S3_BUCKET'] || "larp-library-#{Rails.env}"),
+            nonce: SecureRandom.hex,
+            completeCallbackURL: url_for([@brand, @project, :project_files]),
+            csrfToken: form_authenticity_token,
+            canUpload: can?(:edit, @project),
+            canDelete: can?(:delete, ProjectFile.new(project: @project)),
+            initialFiles: @project.project_files.as_json,
+            projectURL: url_for([@brand, @project])
 
         - license = @project.license_object
         - if license
@@ -43,4 +47,3 @@
               .media-body= dedication
           - else
             = dedication
-

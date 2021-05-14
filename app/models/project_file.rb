@@ -12,6 +12,12 @@ class ProjectFile < ActiveRecord::Base
     write_attribute :url, CGI.unescape(url)
   end
 
+  def mime_type
+    Mime::Type.lookup(filetype).try(:symbol)
+  rescue Mime::Type::InvalidMimeType => e
+    :unknown
+  end
+
   private
   def delete_s3_file
     s3 = Aws::S3::Client.new
