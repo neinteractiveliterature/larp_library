@@ -10,13 +10,23 @@ jobs:
   test:
     name: test
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v2
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      - name: Install dependencies
-        run: bundle install
+      - name: Database setup
+        run: DATABASE_URL=postgres://postgres:postgres@postgres/larp_library_test bundle exec rails db:create db:migrate
       - name: Run tests
-        run: bundle exec rails test
+        run: DATABASE_URL=postgres://postgres:postgres@postgres/larp_library_test bundle exec rails test
