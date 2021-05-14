@@ -28,7 +28,13 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+      - name: Start Elasticsearch
+        uses: elastic/elastic-github-actions/elasticsearch@master
+        with:
+          stack-version: 6
       - name: Database setup
         run: DATABASE_URL=postgres://postgres:postgres@localhost/larp_library_test bundle exec rails db:create db:migrate
+      - name: Elasticsearch index setup
+        run: DATABASE_URL=postgres://postgres:postgres@localhost/larp_library_test bundle exec rails larp_library:elasticsearch:setup
       - name: Run tests
         run: DATABASE_URL=postgres://postgres:postgres@localhost/larp_library_test bundle exec rails test
