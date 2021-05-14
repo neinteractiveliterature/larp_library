@@ -1,5 +1,4 @@
 import React from "react";
-import fetchJSON from "./fetchJSON";
 import { S3UploadFile } from "./S3Upload";
 
 function getIconForMimeType(mimeType: string | null | undefined): string {
