@@ -1,5 +1,7 @@
 module Types
   class ProjectType < Types::BaseObject
+    perform_authorization
+
     field :id, ID, null: false
     field :title, String, null: true
     field :authors, String, null: true

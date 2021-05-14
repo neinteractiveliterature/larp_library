@@ -16,6 +16,10 @@ class Connections::SearchRequestConnection < GraphQL::Pagination::Connection
     encode(response.results[idx]['sort'].to_json)
   end
 
+  def total_count
+    response.results.total
+  end
+
   private
 
   def response

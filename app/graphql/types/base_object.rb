@@ -16,5 +16,11 @@ module Types
         association_loader model_class, association
       end
     end
+
+    def self.perform_authorization(action = :read)
+      define_singleton_method :authorized? do |object, context|
+        super(object, context) && context[:current_ability].can?(action, object)
+      end
+    end
   end
 end

@@ -15,5 +15,16 @@ module Types
         ProjectSearch.new(query_string: query_string, tag: tag, brand_id: brand_id).to_hash
       )
     end
+
+    field :brands, Types::BrandType.connection_type, null: false
+
+    def brands
+      Brand.
+        select("brands.*, count(projects.id) as project_count").
+        joins("left join projects on projects.brand_id = brands.id").
+        group("projects.brand_id, brands.id").
+        order("project_count desc").
+        accessible_by(context[:current_ability])
+    end
   end
 end

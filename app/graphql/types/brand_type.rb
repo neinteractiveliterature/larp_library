@@ -1,5 +1,7 @@
 module Types
   class BrandType < Types::BaseObject
+    perform_authorization
+
     field :id, ID, null: false
     field :name, String, null: false
     field :slug, String, null: false
@@ -8,7 +10,7 @@ module Types
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
     field :approved, Boolean, null: false
     field :creator_id, Integer, null: true
-    field :projects, [Types::ProjectType], null: false
+    field :projects, Types::ProjectType.connection_type, null: false
 
     association_loader Brand, :projects
   end
