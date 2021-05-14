@@ -1,11 +1,11 @@
-.panel.panel-default
-  .panel-heading
-    %h2{style: "margin: 0"}
+.card
+  .card-heading
+    %h2.m-0
       = link_to brand.name, brand, class: 'link-unstyled'
 
       - if brand.respond_to?(:project_count)
         %small
           (#{pluralize brand.project_count, "larp"})
 
-  .panel-body
+  .card-body
     = truncate_html markdown(brand.description), length: 500, omission: "... ".html_safe + link_to("(read more)", brand, class: "expand")

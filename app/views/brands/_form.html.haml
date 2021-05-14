@@ -1,14 +1,14 @@
 = form_for @brand do |f|
   = errors_for f.object
 
-  .form-group
-    = f.label :name do
+  .mb-3
+    = f.label :name, class: 'form-label' do
       Name
       %small (your team's name, or your name if you create larps on your own)
     = f.text_field :name, class: 'form-control'
 
-  .form-group
-    = f.label :description do
+  .mb-3
+    = f.label :description, class: 'form-label' do
       Description
       %small (Markdown allowed)
     = react_component 'MarkdownEditorInput', name: 'brand[description]', id: 'brand_description', initialValue: f.object.description
@@ -40,4 +40,4 @@
                 = membership_fields.label :_destroy, "Delete?"
                 = membership_fields.check_box :_destroy, disabled: membership_fields.object.user == current_user
 
-  = f.submit "Save changes", class: 'btn btn-default'
+  = f.submit "Save changes", class: 'btn btn-primary'

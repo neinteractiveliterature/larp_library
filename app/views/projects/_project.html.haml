@@ -1,9 +1,9 @@
-.panel.panel-default
-  .panel-heading
-    .pull-right
-      = link_to "View", [project.brand, project], class: "btn btn-default"
+.card.mb-2
+  .card-header.d-flex
+    .flex-grow-1.me-1
+      = render 'projects/project_headers', project: project
+    %div
+      = link_to "View", [project.brand, project], class: "btn btn-secondary"
 
-    = render 'projects/project_headers', project: project
-
-  .panel-body
+  .card-body
     = truncate_html markdown(project.description), length: 500, omission: "... ".html_safe + link_to("(read more)", [project.brand, project], class: "expand")

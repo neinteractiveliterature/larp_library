@@ -1,56 +1,56 @@
 = form_for [@brand, @project] do |f|
   = errors_for f.object
 
-  .form-group
-    = f.label :title
+  .mb-3
+    = f.label :title, class: 'form-label'
     = f.text_field :title, class: 'form-control'
 
-  .form-group
-    = f.label :authors
+  .mb-3
+    = f.label :authors, class: 'form-label'
     = f.text_field :authors, class: 'form-control'
 
-  .form-group
-    = f.label :publication_year
+  .mb-3
+    = f.label :publication_year, class: 'form-label'
     = f.number_field :publication_year, class: 'form-control'
 
-  .form-group
-    = f.label :tags
+  .mb-3
+    = f.label :tags, class: 'form-label'
     = react_component "TagSelectorInput", name: 'project[tag_names][]', initialValue: f.object.tags.as_json(methods: [:color, :text_color, :icon, :category_name, :name])
 
-  .form-group
-    = f.label :description do
+  .mb-3
+    = f.label :description, class: 'form-label' do
       Description
       %small (Markdown allowed)
     = react_component 'MarkdownEditorInput', name: 'project[description]', id: 'project_description', initialValue: f.object.description
 
   .row
     .col-sm-6.col-md-4.col-lg-3
-      .form-group
-        = f.label :min_players, "Minimum player count"
+      .mb-3
+        = f.label :min_players, "Minimum player count", class: 'form-label'
         = f.number_field :min_players, class: 'form-control'
 
     .col-sm-6.col-md-4.col-lg-3
-      .form-group
-        = f.label :max_players, "Maximum player count"
+      .mb-3
+        = f.label :max_players, "Maximum player count", class: 'form-label'
         = f.number_field :max_players, class: 'form-control'
 
     .col-md-4.col-lg-6
 
   .row
     .col-xs-6.col-md-4.col-lg-3
-      .form-group
-        = f.label :length_quantity, "Game length"
+      .mb-3
+        = f.label :length_quantity, "Game length", class: 'form-label'
         = f.number_field :length_quantity, class: 'form-control'
 
     .col-xs-6.col-md-4.col-lg-3
-      .form-group
-        = f.label :length_units, "Length units", style: "visibility: hidden"
+      .mb-3
+        = f.label :length_units, "Length units"
         = f.select :length_units, [["minute(s)", "minutes"], ["hour(s)", "hours"], ["day(s)", "days"]], {}, class: 'form-control'
 
     .col-md-4.col-lg-6
 
-  .form-group
-    = f.label :license
+  .mb-3
+    = f.label :license, class: 'form-label'
     = f.select :license, license_options, {}, class: 'form-control'
 
-  = f.submit class: 'btn btn-default'
+  = f.submit class: 'btn btn-primary'

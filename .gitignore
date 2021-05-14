@@ -10,6 +10,7 @@
 # Build artifacts
 /public/packs
 /public/assets
+/stats.json
 
 # Ignore bundler config.
 /.bundle

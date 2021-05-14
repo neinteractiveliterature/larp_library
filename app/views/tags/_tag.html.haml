@@ -1,4 +1,5 @@
-%li.label.label-default{style: "background-color: #{tag.color}; font-size: 90%;"}
-  = link_to href, style: "color: #{tag.text_color}" do
-    %i.fa{class: "fa-#{tag.icon}", display: "inline-block", style: "vertical-align: middle; margin-right: 0.2em", "aria-hidden" => true}
-    = tag.name
+%li.list-inline-item
+  .badge.badge-pill{style: "background-color: #{tag.color}; font-size: 90%;"}
+    = link_to href, style: "color: #{tag.text_color}" do
+      %i.fa{class: "fa-#{tag.icon}", display: "inline-block", style: "vertical-align: middle; margin-right: 0.2em", "aria-hidden" => true}
+      = tag.name

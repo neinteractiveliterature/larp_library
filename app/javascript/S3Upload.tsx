@@ -110,42 +110,41 @@ function S3Upload({
   };
 
   return (
-    <div className="well">
-      <label htmlFor="file">Upload files</label>
-      <input
-        type="file"
-        id="file"
-        multiple
-        onChange={fileChanged}
-        disabled={uploading}
-      />
+    <div className="card bg-light">
+      <div className="card-body">
+        <label htmlFor="file">Upload files</label>
+        <input
+          type="file"
+          id="file"
+          multiple
+          onChange={fileChanged}
+          disabled={uploading}
+        />
 
-      {uploading && (
-        <div style={{ marginTop: "10px", marginBottom: "10px" }}>
-          <div>
-            <small data-file-name></small>
-          </div>
-          {error && <div className="text-danger">{error}</div>}
-          {message}
-          <div className="progress">
-            {" "}
-            <div
-              className={
-                error
-                  ? "progress-bar progress-bar-danger"
-                  : "progress-bar progress-bar-striped active"
-              }
-              role="progressbar"
-              aria-valuenow={progressPercent}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              style={{ width: `${progressPercent}%` }}
-            >
-              <span className="sr-only">{progressPercent}% Complete</span>
+        {uploading && (
+          <div style={{ marginTop: "10px", marginBottom: "10px" }}>
+            {error && <div className="text-danger">{error}</div>}
+            {message}
+            <div className="progress">
+              {" "}
+              <div
+                className={
+                  error
+                    ? "progress-bar progress-bar-danger"
+                    : "progress-bar progress-bar-striped active"
+                }
+                role="progressbar"
+                aria-valuenow={progressPercent}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                style={{ width: `${progressPercent}%` }}
+              >
+                <span className="sr-only">{progressPercent}% Complete</span>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

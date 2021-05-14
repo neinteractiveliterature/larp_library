@@ -19,7 +19,7 @@
     %li
       %ul.list-inline
         - if project.min_players || project.max_players
-          %li
+          %li.list-inline-item
             %i.fa.fa-users
             = [project.min_players, project.max_players].uniq.compact.join(" - ")
             - if (project.max_players || project.min_players) == 1
@@ -27,13 +27,13 @@
             - else
               players
         - if project.length_quantity && project.length_units
-          %li
+          %li.list-inline-item
             %i.fa.fa-clock-o
             = pluralize project.length_quantity, project.length_units
 
   - if project.tag_names.any?
     %li
-      %ul.list-inline{style: "margin-left: 0"}
+      %ul.list-inline
         - project.tags.sort_by { |t| t.name.downcase }.each do |tag|
           = render tag, href: projects_path(tag: tag.name)
 

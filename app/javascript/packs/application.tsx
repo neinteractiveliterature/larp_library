@@ -1,6 +1,6 @@
 // @ts-expect-error no types for rails/ujs
 import Rails from "@rails/ujs";
-import "bootstrap-sass/assets/javascripts/bootstrap";
+import "bootstrap/dist/js/bootstrap";
 import React from "react";
 import ReactDOM from "react-dom";
 

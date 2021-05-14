@@ -11,7 +11,6 @@ layout file, like app/views/layouts/application.html.erb
 $fa-font-path: "~font-awesome/fonts/";
 @import "font-awesome/scss/font-awesome";
 @import "styles/bootstrap_custom";
-@import "bootstrap-colorpicker/dist/css/bootstrap-colorpicker";
 
 #topbar {
   width: 100%;
@@ -56,7 +55,7 @@ $fa-font-path: "~font-awesome/fonts/";
     float: none;
   }
 
-  @media (min-width: $screen-sm-min) {
+  @include media-breakpoint-up(sm) {
     display: table;
 
     > li {
@@ -65,7 +64,7 @@ $fa-font-path: "~font-awesome/fonts/";
     }
   }
 
-  @media (max-width: $screen-sm-max) {
+  @include media-breakpoint-down(sm) {
     > li {
       text-align: center;
     }

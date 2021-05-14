@@ -1,22 +1,22 @@
 = form_for tag_category, class: 'form' do |f|
   = errors_for f.object
 
-  .form-group
-    = f.label :name
+  .mb-3
+    = f.label, class: 'form-label' :name
     = f.text_field :name, class: 'form-control'
 
-  .form-group
-    = f.label :color
+  .mb-3
+    = f.label, class: 'form-label' :color
     = react_component "ColorPickerInput", id: 'tag_category_color', name: 'tag_category[color]', initialValue: f.object.color
 
-  .form-group
-    = f.label :icon do
+  .mb-3
+    = f.label, class: 'form-label' :icon do
       Icon
       %small
         (use #{link_to "Font Awesome icon names", "http://fontawesome.io/icons/", target: '_blank'})
     = f.text_field :icon, class: 'form-control'
 
   %ul.list-inline
-    %li= f.submit "Save changes", class: 'btn btn-default'
+    %li.list-inline-item= f.submit "Save changes", class: 'btn btn-primary'
     - if f.object.persisted?
-      %li= link_to "Delete tag category", f.object, method: 'delete', class: 'btn btn-danger', "data-confirm" => "Are you sure you want to delete this tag category?"
+      %li.list-inline-item= link_to "Delete tag category", f.object, method: 'delete', class: 'btn btn-danger', "data-confirm" => "Are you sure you want to delete this tag category?"

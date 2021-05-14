@@ -17,7 +17,7 @@ function MarkdownEditorInput({
   return (
     <>
       <MarkdownEditor value={value} onChange={setValue} />
-      <input id={id} name={name} type="hidden" value={value} />
+      <input id={id} name={name} type="hidden" value={value ?? ""} />
     </>
   );
 }
