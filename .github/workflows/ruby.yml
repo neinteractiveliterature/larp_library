@@ -20,6 +20,8 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v2
       - name: Set up Ruby
@@ -27,6 +29,6 @@ jobs:
         with:
           bundler-cache: true
       - name: Database setup
-        run: DATABASE_URL=postgres://postgres:postgres@postgres/larp_library_test bundle exec rails db:create db:migrate
+        run: DATABASE_URL=postgres://postgres:postgres@localhost/larp_library_test bundle exec rails db:create db:migrate
       - name: Run tests
-        run: DATABASE_URL=postgres://postgres:postgres@postgres/larp_library_test bundle exec rails test
+        run: DATABASE_URL=postgres://postgres:postgres@localhost/larp_library_test bundle exec rails test
