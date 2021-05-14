@@ -1,17 +1,19 @@
 module Types
   class QueryType < Types::BaseObject
-    # Add `node(id: ID!) and `nodes(ids: [ID!]!)`
     include GraphQL::Types::Relay::HasNodeField
     include GraphQL::Types::Relay::HasNodesField
 
-    # Add root-level fields here.
-    # They will be entry points for queries on your schema.
+    field :projects, Types::ProjectType.connection_type, null: false do
+      argument :query_string, String, required: false
+      argument :tag, String, required: false
+      argument :brand_id, Integer, required: false
+    end
 
-    # TODO: remove me
-    field :test_field, String, null: false,
-      description: "An example field added by the generator"
-    def test_field
-      "Hello World!"
+    def projects(query_string: nil, tag: nil, brand_id: nil)
+      SearchRequest.new(
+        Project,
+        ProjectSearch.new(query_string: query_string, tag: tag, brand_id: brand_id).to_hash
+      )
     end
   end
 end
