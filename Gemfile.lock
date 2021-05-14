@@ -157,6 +157,10 @@ GEM
       thor (>= 0.14.0, < 2)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    graphiql-rails (1.7.0)
+      railties
+      sprockets-rails
+    graphql (1.12.9)
     haml (5.2.1)
       temple (>= 0.8.0)
       tilt
@@ -280,6 +284,8 @@ DEPENDENCIES
   elasticsearch-rails (~> 6.1.1)
   factory_bot_rails
   figaro
+  graphiql-rails
+  graphql
   haml
   high_voltage
   listen
