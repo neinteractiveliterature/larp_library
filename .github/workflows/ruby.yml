@@ -31,7 +31,7 @@ jobs:
       - name: Start Elasticsearch
         uses: elastic/elastic-github-actions/elasticsearch@master
         with:
-          stack-version: 6
+          stack-version: 6.8.15
       - name: Database setup
         run: DATABASE_URL=postgres://postgres:postgres@localhost/larp_library_test bundle exec rails db:create db:migrate
       - name: Elasticsearch index setup
