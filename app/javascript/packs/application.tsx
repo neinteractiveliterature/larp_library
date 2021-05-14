@@ -1,14 +1,8 @@
-// import $ from "jquery";
 // @ts-expect-error no types for rails/ujs
 import Rails from "@rails/ujs";
 import "bootstrap-sass/assets/javascripts/bootstrap";
-import "evaporate";
 import React from "react";
 import ReactDOM from "react-dom";
-
-import "../projects";
-
-Rails.start();
 
 function LazyWrapper<P>(
   Component: React.ComponentType<P>
@@ -30,12 +24,17 @@ const REACT_CLASSES: { [className: string]: React.ComponentType<any> } = {
   MarkdownEditorInput: LazyWrapper(
     React.lazy(() => import("../MarkdownEditorInput"))
   ),
+  ProjectFilesSection: LazyWrapper(
+    React.lazy(() => import("../ProjectFilesSection"))
+  ),
   TagSelectorInput: LazyWrapper(
     React.lazy(() => import("../TagSelectorInput"))
   ),
 };
 
 window.addEventListener("load", () => {
+  Rails.start();
+
   document.querySelectorAll("[data-react-class]").forEach((element) => {
     const className = element.getAttribute("data-react-class");
     const reactClass = REACT_CLASSES[className ?? ""];
