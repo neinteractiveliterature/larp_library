@@ -1,6 +1,6 @@
 import { Reference } from '@apollo/client';
 import React from 'react';
-import { useGraphQLConfirm } from '../Litform/Confirm';
+import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import { useDeleteProjectFileMutation } from './mutations.generated';
 import { ProjectFilesQueryData, ProjectFilesQueryDocument } from './queries.generated';
 
