@@ -17,7 +17,7 @@ const config = {
     filename: 'js/[name]-[contenthash].js',
     chunkFilename: 'js/[name]-[contenthash].chunk.js',
     hotUpdateChunkFilename: 'js/[id]-[chunkash].hot-update.js',
-    assetModuleFilename: 'static/[fullhash][ext][query]',
+    assetModuleFilename: 'static/[contenthash][ext][query]',
     path: path.resolve(__dirname, './public/packs'),
     publicPath: ASSET_PATH,
   },
