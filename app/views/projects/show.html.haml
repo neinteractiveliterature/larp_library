@@ -22,12 +22,10 @@
               signerURL: url_for([:auth_upload, @brand, @project, :project_files]),
               bucket: (ENV['AWS_S3_BUCKET'] || "larp-library-#{Rails.env}"),
               nonce: SecureRandom.hex,
-              completeCallbackURL: url_for([@brand, @project, :project_files]),
-              csrfToken: form_authenticity_token,
               canUpload: can?(:edit, @project),
               canDelete: can?(:delete, ProjectFile.new(project: @project)),
               initialFiles: @project.project_files.as_json,
-              projectURL: url_for([@brand, @project])
+              projectId: @project.id.to_s
 
         - license = @project.license_object
         - if license

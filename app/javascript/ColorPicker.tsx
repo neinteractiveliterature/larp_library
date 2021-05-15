@@ -1,5 +1,5 @@
-import { ChromePicker, ColorResult } from "react-color";
-import tinycolor2 from "tinycolor2";
+import { ChromePicker, ColorResult } from 'react-color';
+import tinycolor2 from 'tinycolor2';
 
 function decodeValue(value?: string | null) {
   return tinycolor2(value ?? undefined).toRgb();

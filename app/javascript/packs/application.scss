@@ -8,9 +8,9 @@ To reference this file, add <%= stylesheet_pack_tag 'application' %> to the appr
 layout file, like app/views/layouts/application.html.erb
 */
 
-$fa-font-path: "~font-awesome/fonts/";
-@import "font-awesome/scss/font-awesome";
-@import "styles/bootstrap_custom";
+$fa-font-path: '~font-awesome/fonts/';
+@import 'font-awesome/scss/font-awesome';
+@import 'styles/bootstrap_custom';
 
 #topbar {
   width: 100%;
@@ -27,7 +27,7 @@ $fa-font-path: "~font-awesome/fonts/";
 
   li {
     display: inline-block;
-    list-style-type:none;
+    list-style-type: none;
     margin-left: 8pt;
     margin-right: 8pt;
     padding: 0;
@@ -37,7 +37,11 @@ $fa-font-path: "~font-awesome/fonts/";
 
 #mainnav {
   background-color: $brand-primary;
-  background: linear-gradient(to bottom, lighten($brand-primary, 7.5%), darken($brand-primary, 7.5%));
+  background: linear-gradient(
+    to bottom,
+    lighten($brand-primary, 7.5%),
+    darken($brand-primary, 7.5%)
+  );
 
   min-height: 79px;
   width: 100%;
@@ -78,16 +82,19 @@ $fa-font-path: "~font-awesome/fonts/";
     a {
       color: white;
 
-      &:hover, &:active {
+      &:hover,
+      &:active {
         text-decoration: none;
       }
     }
   }
 }
 
-#mainnav, #globalnav {
+#mainnav,
+#globalnav {
   > li {
-    > a, > a:visited {
+    > a,
+    > a:visited {
       color: white;
     }
   }

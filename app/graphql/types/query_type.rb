@@ -3,6 +3,14 @@ module Types
     include GraphQL::Types::Relay::HasNodeField
     include GraphQL::Types::Relay::HasNodesField
 
+    field :project, Types::ProjectType, null: false do
+      argument :id, ID, required: true
+    end
+
+    def project(id:)
+      Project.find(id)
+    end
+
     field :projects, Types::ProjectType.connection_type, null: false do
       argument :query_string, String, required: false
       argument :tag, String, required: false
@@ -14,6 +22,14 @@ module Types
         Project,
         ProjectSearch.new(query_string: query_string, tag: tag, brand_id: brand_id).to_hash
       )
+    end
+
+    field :brand, Types::BrandType, null: false do
+      argument :id, ID, required: true
+    end
+
+    def brand(id:)
+      Brand.find(id)
     end
 
     field :brands, Types::BrandType.connection_type, null: false

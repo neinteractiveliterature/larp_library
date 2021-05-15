@@ -12,7 +12,8 @@ $hr-border: $gray-base;
 @import '~bootstrap/scss/bootstrap';
 
 // Port Bootstrap 4 link behavior to Bootstrap 5
-a, .btn-link {
+a,
+.btn-link {
   text-decoration: none;
 
   &:hover {

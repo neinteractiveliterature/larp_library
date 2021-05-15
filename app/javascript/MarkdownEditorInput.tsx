@@ -1,5 +1,5 @@
-import { useState } from "react";
-import MarkdownEditor from "./MarkdownEditor";
+import { useState } from 'react';
+import MarkdownEditor from './MarkdownEditor';
 
 export type MarkdownEditorInputProps = {
   initialValue: string;
@@ -7,17 +7,13 @@ export type MarkdownEditorInputProps = {
   id: string;
 };
 
-function MarkdownEditorInput({
-  name,
-  id,
-  initialValue,
-}: MarkdownEditorInputProps): JSX.Element {
+function MarkdownEditorInput({ name, id, initialValue }: MarkdownEditorInputProps): JSX.Element {
   const [value, setValue] = useState(initialValue);
 
   return (
     <>
       <MarkdownEditor value={value} onChange={setValue} />
-      <input id={id} name={name} type="hidden" value={value ?? ""} />
+      <input id={id} name={name} type="hidden" value={value ?? ''} />
     </>
   );
 }

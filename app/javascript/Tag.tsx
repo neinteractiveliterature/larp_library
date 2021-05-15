@@ -17,15 +17,15 @@ function Tag({ tag }: TagProps): JSX.Element {
       style={{
         backgroundColor: tag.color,
         color: tag.text_color,
-        fontSize: "90%",
+        fontSize: '90%',
       }}
     >
       <i
         className={`fa fa-${tag.icon}`}
         style={{
-          display: "inline-block",
-          verticalAlign: "middle",
-          marginRight: "0.2em",
+          display: 'inline-block',
+          verticalAlign: 'middle',
+          marginRight: '0.2em',
         }}
         aria-hidden
       ></i>

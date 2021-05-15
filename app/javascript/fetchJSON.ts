@@ -9,7 +9,7 @@ class HTTPResponseError extends Error {
 
 export default async function fetchJSON(
   input: RequestInfo,
-  init?: RequestInit | undefined
+  init?: RequestInit | undefined,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> {
   const response = await fetch(input, init);
