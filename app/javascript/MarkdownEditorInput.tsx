@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import MarkdownEditor from './MarkdownEditor';
+import { CodeInput } from '@neinteractiveliterature/litform';
+import ReactMarkdown from 'react-markdown';
 
 export type MarkdownEditorInputProps = {
   initialValue: string;
@@ -12,7 +13,12 @@ function MarkdownEditorInput({ name, id, initialValue }: MarkdownEditorInputProp
 
   return (
     <>
-      <MarkdownEditor value={value} onChange={setValue} />
+      <CodeInput
+        mode="markdown"
+        value={value}
+        onChange={setValue}
+        getPreviewContent={async (markdown) => <ReactMarkdown>{markdown}</ReactMarkdown>}
+      />
       <input id={id} name={name} type="hidden" value={value ?? ''} />
     </>
   );
