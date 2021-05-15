@@ -1,8 +1,6 @@
 import { ApolloProvider } from '@apollo/client';
 import { Suspense, useRef } from 'react';
-import Confirm from './Litform/Confirm';
-import ErrorBoundary from './Litform/ErrorBoundary';
-import PageLoadingIndicator from './Litform/PageLoadingIndicator';
+import { Confirm, ErrorBoundary, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import useLarpLibraryApolloClient from './useLarpLibraryApolloClient';
 
 function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.ComponentType<P> {

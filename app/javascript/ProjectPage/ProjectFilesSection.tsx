@@ -1,5 +1,4 @@
-import ErrorDisplay from '../Litform/ErrorDisplay';
-import LoadingIndicator from '../Litform/LoadingIndicator';
+import { ErrorDisplay, LoadingIndicator } from '@neinteractiveliterature/litform';
 import ProjectFile from './ProjectFile';
 import { useProjectFilesQuery } from './queries.generated';
 import S3Upload, { S3UploadFile, S3UploadProps } from './S3Upload';

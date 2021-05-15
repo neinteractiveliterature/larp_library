@@ -7,7 +7,7 @@ import {
   HttpLink,
 } from '@apollo/client';
 import { TypedTypePolicies } from './apolloClientHelpers.generated';
-import { useAuthHeadersLink, useErrorHandlerLink } from './Litform/ApolloLinkHelpers';
+import { useAuthHeadersLink, useErrorHandlerLink } from '@neinteractiveliterature/litform';
 
 export function useLarpLibraryApolloLink(
   authenticityToken: string,
