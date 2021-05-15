@@ -1,13 +1,13 @@
-import React from "react";
-import AsyncSelect from "react-select/async";
-import fetchJSON from "./fetchJSON";
-import Tag, { TagAttributes } from "./Tag";
+import React from 'react';
+import AsyncSelect from 'react-select/async';
+import fetchJSON from './fetchJSON';
+import Tag, { TagAttributes } from './Tag';
 
 function fetchTags(query: string) {
   const params = new URLSearchParams({ q: query });
   return fetchJSON(`/tags?${params.toString()}`, {
     headers: {
-      Accept: "application/json",
+      Accept: 'application/json',
     },
   });
 }

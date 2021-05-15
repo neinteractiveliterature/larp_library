@@ -20,6 +20,8 @@ gem 'cancancan'
 
 gem 'aws-sdk-s3'
 
+gem 'graphql'
+
 gem 'haml'
 gem 'redcarpet'
 gem 'truncate_html'
@@ -62,3 +64,4 @@ end
 group :production do
   gem 'puma'
 end
+gem 'graphiql-rails', group: :development

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import Evaporate from "evaporate";
-import fetchJSON from "./fetchJSON";
+import React, { useState } from 'react';
+import Evaporate from 'evaporate';
+import { useCompleteProjectFileUploadMutation } from './mutations.generated';
+import { ProjectFilesQueryData, ProjectFilesQueryDocument } from './queries.generated';
 
 export type S3UploadFile = {
   id: number;
@@ -15,9 +16,7 @@ export type S3UploadProps = {
   signerURL: string;
   bucket: string;
   nonce: string;
-  completeCallbackURL: string;
-  fileUploaded: (upload: S3UploadFile) => void;
-  csrfToken: string;
+  projectId: string;
 };
 
 function S3Upload({
@@ -25,14 +24,13 @@ function S3Upload({
   signerURL,
   bucket,
   nonce,
-  completeCallbackURL,
-  fileUploaded,
-  csrfToken,
+  projectId,
 }: S3UploadProps): JSX.Element {
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState<string>();
   const [progressPercent, setProgressPercent] = useState(0);
   const [error, setError] = useState<string>();
+  const [completeProjectFileUpload] = useCompleteProjectFileUploadMutation();
 
   const uploadNextFile = async (fileQueue: File[]) => {
     if (!fileQueue || fileQueue.length === 0) {
@@ -48,12 +46,10 @@ function S3Upload({
       aws_key: awsAccessKeyId,
       signerUrl: signerURL,
       bucket: bucket,
-      awsSignatureVersion: "2",
+      awsSignatureVersion: '2',
     });
     const uniqueId = Math.random().toString(36).substr(2, 16);
-    const objectName = `uploads/${new Date().getTime()}-${uniqueId}-${nonce}/${
-      file.name
-    }`;
+    const objectName = `uploads/${new Date().getTime()}-${uniqueId}-${nonce}/${file.name}`;
 
     try {
       const awsObjectKey = await evaporate.add({
@@ -64,28 +60,41 @@ function S3Upload({
           setProgressPercent(progress * 100);
         },
         xAmzHeadersAtInitiate: {
-          "x-amz-acl": "public-read",
+          'x-amz-acl': 'public-read',
         },
       });
 
-      const response = await fetchJSON(completeCallbackURL, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken,
+      await completeProjectFileUpload({
+        variables: {
+          projectId,
+          url: `https://${bucket}.s3.amazonaws.com/${awsObjectKey}`,
+          filename: file.name,
+          filetype: file.type,
+          filesize: file.size,
+          filepath: awsObjectKey,
         },
-        body: JSON.stringify({
-          project_file: {
-            url: `https://${bucket}.s3.amazonaws.com/${awsObjectKey}`,
-            filename: file.name,
-            filetype: file.type,
-            filesize: file.size,
-            filepath: awsObjectKey,
-          },
-        }),
+        update: (cache, result) => {
+          const data = cache.readQuery<ProjectFilesQueryData>({
+            query: ProjectFilesQueryDocument,
+            variables: { projectId },
+          });
+          const newFile = result.data?.completeProjectFileUpload?.projectFile;
+          if (data && newFile) {
+            cache.writeQuery<ProjectFilesQueryData>({
+              query: ProjectFilesQueryDocument,
+              variables: { projectId },
+              data: {
+                ...data,
+                project: {
+                  ...data.project,
+                  projectFiles: [...data.project.projectFiles, newFile],
+                },
+              },
+            });
+          }
+        },
       });
-      fileUploaded(response);
+
       uploadNextFile(fileQueue.slice(1));
     } catch (error) {
       setError(error.message);
@@ -113,25 +122,19 @@ function S3Upload({
     <div className="card bg-light">
       <div className="card-body">
         <label htmlFor="file">Upload files</label>
-        <input
-          type="file"
-          id="file"
-          multiple
-          onChange={fileChanged}
-          disabled={uploading}
-        />
+        <input type="file" id="file" multiple onChange={fileChanged} disabled={uploading} />
 
         {uploading && (
-          <div style={{ marginTop: "10px", marginBottom: "10px" }}>
+          <div style={{ marginTop: '10px', marginBottom: '10px' }}>
             {error && <div className="text-danger">{error}</div>}
             {message}
             <div className="progress">
-              {" "}
+              {' '}
               <div
                 className={
                   error
-                    ? "progress-bar progress-bar-danger"
-                    : "progress-bar progress-bar-striped active"
+                    ? 'progress-bar progress-bar-danger'
+                    : 'progress-bar progress-bar-striped active'
                 }
                 role="progressbar"
                 aria-valuenow={progressPercent}

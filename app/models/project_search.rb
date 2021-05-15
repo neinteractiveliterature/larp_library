@@ -1,5 +1,5 @@
 class ProjectSearch
-  attr_reader :query_string, :tag, :brand_id
+  attr_reader :query_string, :tag, :brand_id, :search_after
 
   def initialize(query_string: nil, tag: nil, brand_id: nil)
     @query_string = query_string

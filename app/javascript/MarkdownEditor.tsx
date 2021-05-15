@@ -1,26 +1,22 @@
-import { useCallback, ReactNode } from "react";
-import * as React from "react";
-import {
-  Controlled as CodeMirror,
-  IControlledCodeMirror,
-  DomEvent,
-} from "react-codemirror2";
-import classNames from "classnames";
+import { useCallback, ReactNode } from 'react';
+import * as React from 'react';
+import { Controlled as CodeMirror, IControlledCodeMirror, DomEvent } from 'react-codemirror2';
+import classNames from 'classnames';
 
-import { EditorConfiguration } from "codemirror";
-import "codemirror/mode/markdown/markdown";
-import "codemirror/mode/htmlmixed/htmlmixed";
-import "codemirror/mode/javascript/javascript";
-import "codemirror/addon/mode/multiplex";
-import "codemirror/lib/codemirror.css";
-import "codemirror/addon/edit/matchbrackets";
-import "codemirror/addon/edit/matchtags";
-import "codemirror/addon/fold/foldcode";
-import "codemirror/addon/fold/brace-fold";
-import "codemirror/addon/fold/markdown-fold";
-import "codemirror/addon/fold/xml-fold";
-import "codemirror/addon/fold/foldgutter";
-import "codemirror/addon/fold/foldgutter.css";
+import { EditorConfiguration } from 'codemirror';
+import 'codemirror/mode/markdown/markdown';
+import 'codemirror/mode/htmlmixed/htmlmixed';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/addon/mode/multiplex';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/addon/edit/matchbrackets';
+import 'codemirror/addon/edit/matchtags';
+import 'codemirror/addon/fold/foldcode';
+import 'codemirror/addon/fold/brace-fold';
+import 'codemirror/addon/fold/markdown-fold';
+import 'codemirror/addon/fold/xml-fold';
+import 'codemirror/addon/fold/foldgutter';
+import 'codemirror/addon/fold/foldgutter.css';
 
 const defaultCodeMirrorOptions: EditorConfiguration = {
   lineNumbers: true,
@@ -29,20 +25,17 @@ const defaultCodeMirrorOptions: EditorConfiguration = {
   matchBrackets: true,
   tabSize: 2,
   indentWithTabs: false,
-  gutters: ["CodeMirror-foldgutter", "CodeMirror-linenumbers"],
+  gutters: ['CodeMirror-foldgutter', 'CodeMirror-linenumbers'],
   extraKeys: {
     Tab: (cm) => {
       // always use spaces, not tabs
-      const spaces = Array((cm.getOption("indentUnit") ?? 2) + 1).join(" ");
+      const spaces = Array((cm.getOption('indentUnit') ?? 2) + 1).join(' ');
       cm.replaceSelection(spaces);
     },
   },
 };
 
-export type MarkdownInputProps = Omit<
-  IControlledCodeMirror,
-  "onChange" | "onBeforeChange"
-> & {
+export type MarkdownInputProps = Omit<IControlledCodeMirror, 'onChange' | 'onBeforeChange'> & {
   onChange: (value: string) => void;
   disabled?: boolean;
   codeMirrorOptions?: EditorConfiguration;
@@ -69,7 +62,7 @@ function MarkdownInput({
     (editor, data, newValue) => {
       onChange(newValue);
     },
-    [onChange]
+    [onChange],
   );
 
   const renderContent = () => {
@@ -87,8 +80,8 @@ function MarkdownInput({
           lineNumbers: false,
           foldGutter: false,
           gutters: [],
-          mode: "markdown",
-          readOnly: disabled ? "nocursor" : false,
+          mode: 'markdown',
+          readOnly: disabled ? 'nocursor' : false,
           ...(codeMirrorOptions || {}),
         }}
         {...eventHandlers}
@@ -102,18 +95,16 @@ function MarkdownInput({
     <div className={className}>
       <div
         className={classNames(
-          `form-control p-0 intercode-code-input codemirror-height-${
-            lines || 10
-          }`,
-          formControlClassName
+          `form-control p-0 intercode-code-input codemirror-height-${lines || 10}`,
+          formControlClassName,
         )}
-        style={{ overflow: "hidden" }}
+        style={{ overflow: 'hidden' }}
       >
         <div
-          className={classNames("form-control", editorWrapperClassName, {
-            "bg-disabled": disabled,
+          className={classNames('form-control', editorWrapperClassName, {
+            'bg-disabled': disabled,
           })}
-          style={{ border: 0, boxShadow: "none", padding: 0 }}
+          style={{ border: 0, boxShadow: 'none', padding: 0 }}
         >
           {renderContent()}
         </div>

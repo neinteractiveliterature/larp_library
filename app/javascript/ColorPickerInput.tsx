@@ -1,5 +1,5 @@
-import { useState } from "react";
-import ColorPicker from "./ColorPicker";
+import { useState } from 'react';
+import ColorPicker from './ColorPicker';
 
 export type ColorPickerInputProps = {
   initialValue: string;
@@ -7,11 +7,7 @@ export type ColorPickerInputProps = {
   id: string;
 };
 
-function ColorPickerInput({
-  name,
-  id,
-  initialValue,
-}: ColorPickerInputProps): JSX.Element {
+function ColorPickerInput({ name, id, initialValue }: ColorPickerInputProps): JSX.Element {
   const [value, setValue] = useState(initialValue);
 
   return (
