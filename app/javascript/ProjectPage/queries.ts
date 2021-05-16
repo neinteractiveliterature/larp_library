@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { ProjectHeadersFragment } from '../ProjectSearch/queries';
 
 export const ProjectFileFieldsFragment = gql`
   fragment ProjectFileFieldsFragment on ProjectFile {
@@ -10,10 +11,26 @@ export const ProjectFileFieldsFragment = gql`
   }
 `;
 
-export const ProjectFilesQuery = gql`
-  query ProjectFilesQuery($projectId: ID!) {
+export const ProjectPageQuery = gql`
+  query ProjectPageQuery($projectId: ID!) {
     project(id: $projectId) {
       id
+      description
+      currentUserCanEdit
+      currentUserCanDelete
+      currentUserCanUploadFiles
+      currentUserCanDeleteFiles
+
+      ...ProjectHeadersFragment
+
+      license {
+        id
+        name
+        url
+        logoUrl
+        dedicationHtml
+      }
+
       projectFiles {
         id
         ...ProjectFileFieldsFragment
@@ -21,5 +38,6 @@ export const ProjectFilesQuery = gql`
     }
   }
 
+  ${ProjectHeadersFragment}
   ${ProjectFileFieldsFragment}
 `;

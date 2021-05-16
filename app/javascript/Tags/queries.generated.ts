@@ -9,7 +9,7 @@ export type TagFragment = (
   & Pick<Types.Tag, 'id' | 'name'>
   & { tagCategory?: Types.Maybe<(
     { __typename: 'TagCategory' }
-    & Pick<Types.TagCategory, 'name' | 'color' | 'textColor' | 'icon'>
+    & Pick<Types.TagCategory, 'id' | 'name' | 'color' | 'textColor' | 'icon'>
   )> }
 );
 
@@ -35,6 +35,7 @@ export const TagFragmentDoc = gql`
   id
   name
   tagCategory {
+    id
     name
     color
     textColor

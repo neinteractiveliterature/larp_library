@@ -6,6 +6,7 @@ export const TagFragment = gql`
     name
 
     tagCategory {
+      id
       name
       color
       textColor

@@ -14,7 +14,7 @@ module Types
       when GraphQL::Pagination::ActiveRecordRelationConnection
         model = object.items.klass
         scoped_query = object.items.select(:id).to_sql
-        model.where("id IN (SELECT #{model.connection.quote_table_name(model.table_name)}.id FROM (#{scoped_query}) scoped_query)").count
+        model.where("id IN (SELECT scoped_query.id FROM (#{scoped_query}) scoped_query)").count
       when Connections::SearchRequestConnection
         object.total_count
       else

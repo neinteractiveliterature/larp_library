@@ -122,6 +122,7 @@ An ISO 8601-encoded datetime
 scalar ISO8601DateTime
 
 type License {
+  dedicationHtml: String
   id: ID!
   logoUrl: String!
   name: String!
@@ -170,8 +171,12 @@ type PageInfo {
 
 type Project {
   authors: String
-  brand: Brand
+  brand: Brand!
   createdAt: ISO8601DateTime!
+  currentUserCanDelete: Boolean!
+  currentUserCanDeleteFiles: Boolean!
+  currentUserCanEdit: Boolean!
+  currentUserCanUploadFiles: Boolean!
   description: String
   id: ID!
   lengthQuantity: Int
@@ -235,6 +240,13 @@ type ProjectFile {
   url: String!
 }
 
+type ProjectPromotion {
+  createdAt: ISO8601DateTime!
+  id: ID!
+  project: Project!
+  updatedAt: ISO8601DateTime!
+}
+
 type Query {
   brand(id: ID!): Brand!
   brands(
@@ -259,6 +271,7 @@ type Query {
     last: Int
   ): BrandConnection!
   project(id: ID!): Project!
+  projectPromotions: [ProjectPromotion!]!
   projects(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -283,6 +296,27 @@ type Query {
     queryString: String
     tag: String
   ): ProjectConnection!
+  tagCategories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): TagCategoryConnection!
   tags(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -345,6 +379,42 @@ type TagCategory {
   tags: [Tag!]!
   textColor: String
   updatedAt: ISO8601DateTime!
+}
+
+"""
+The connection type for TagCategory.
+"""
+type TagCategoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [TagCategoryEdge!]!
+
+  """
+  A list of nodes.
+  """
+  nodes: [TagCategory!]!
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+"""
+An edge in a connection.
+"""
+type TagCategoryEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: TagCategory
 }
 
 """

@@ -14,14 +14,34 @@ module Types
     field :length_quantity, Integer, null: true
     field :length_units, String, null: true
     field :publication_year, Integer, null: true
-    field :brand, Types::BrandType, null: true
+    field :brand, Types::BrandType, null: false
     field :project_files, [Types::ProjectFileType], null: false
     field :tags, [Types::TagType], null: false
+    field :current_user_can_edit, Boolean, null: false
+    field :current_user_can_delete, Boolean, null: false
+    field :current_user_can_upload_files, Boolean, null: false
+    field :current_user_can_delete_files, Boolean, null: false
 
     association_loaders Project, :brand, :project_files, :tags
 
     def license
       Project::LICENSES[object.license.to_sym]&.merge(id: object.license)
+    end
+
+    def current_user_can_edit
+      context[:current_ability].can?(:edit, object)
+    end
+
+    def current_user_can_delete
+      context[:current_ability].can?(:delete, object)
+    end
+
+    def current_user_can_upload_files
+      context[:current_ability].can?(:create, ProjectFile.new(project: object))
+    end
+
+    def current_user_can_delete_files
+      context[:current_ability].can?(:delete, ProjectFile.new(project: object))
     end
   end
 end

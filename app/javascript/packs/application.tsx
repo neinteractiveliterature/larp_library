@@ -6,10 +6,13 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/js/dist/alert';
 import 'bootstrap/js/dist/dropdown';
 import AppWrapper from '../AppWrapper';
+import AppRoot from '../AppRoot';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const REACT_CLASSES: { [className: string]: React.ComponentType<any> } = {
+  AppRoot: AppWrapper(AppRoot),
   ColorPickerInput: AppWrapper(React.lazy(() => import('../ColorPickerInput'))),
+  HomePage: AppWrapper(React.lazy(() => import('../HomePage/HomePage'))),
   MarkdownEditorInput: AppWrapper(React.lazy(() => import('../MarkdownEditorInput'))),
   ProjectFilesSection: AppWrapper(React.lazy(() => import('../ProjectPage/ProjectFilesSection'))),
   TagSelectorInput: AppWrapper(React.lazy(() => import('../Tags/TagSelectorInput'))),

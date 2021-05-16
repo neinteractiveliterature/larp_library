@@ -65,5 +65,17 @@ module Types
         Tag.order("upper(name)")
       end
     end
+
+    field :tag_categories, Types::TagCategoryType.connection_type, null: false
+
+    def tag_categories
+      TagCategory.order(:name)
+    end
+
+    field :project_promotions, [Types::ProjectPromotionType], null: false
+
+    def project_promotions
+      ProjectPromotion.joins(:project).order('projects.title')
+    end
   end
 end

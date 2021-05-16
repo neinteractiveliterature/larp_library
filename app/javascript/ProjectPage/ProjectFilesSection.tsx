@@ -1,48 +1,33 @@
-import { ErrorDisplay, LoadingIndicator } from '@neinteractiveliterature/litform';
+import { Project } from '../graphqlTypes.generated';
 import ProjectFile from './ProjectFile';
-import { useProjectFilesQuery } from './queries.generated';
-import S3Upload, { S3UploadFile, S3UploadProps } from './S3Upload';
+import { ProjectFileFieldsFragment } from './queries.generated';
+import S3Upload, { S3UploadProps } from './S3Upload';
 
-export type ProjectFilesSectionProps = S3UploadProps & {
-  initialFiles: S3UploadFile[];
-  canUpload: boolean;
-  canDelete: boolean;
+export type ProjectFilesSectionProps = Omit<S3UploadProps, 'projectId'> & {
   projectURL: string;
-  projectId: string;
+  project: Pick<Project, 'id' | 'currentUserCanUploadFiles' | 'currentUserCanDeleteFiles'> & {
+    projectFiles: ProjectFileFieldsFragment[];
+  };
 };
 
 function ProjectFilesSection(props: ProjectFilesSectionProps): JSX.Element {
-  const { data, loading, error } = useProjectFilesQuery({
-    variables: { projectId: props.projectId },
-  });
-
-  const { canDelete, canUpload, projectURL, ...s3UploadProps } = props;
-
-  if (loading) {
-    return <LoadingIndicator />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  const projectFiles = data?.project.projectFiles ?? [];
+  const { projectURL, project, ...s3UploadProps } = props;
 
   return (
     <>
       <ul className="list-unstyled">
-        {projectFiles.map((file) => (
+        {props.project.projectFiles.map((file) => (
           <ProjectFile
             file={file}
-            projectId={props.projectId}
-            canDelete={canDelete}
+            projectId={project.id}
+            canDelete={project.currentUserCanDeleteFiles}
             projectURL={projectURL}
             key={file.id}
           />
         ))}
       </ul>
 
-      {canUpload && <S3Upload {...s3UploadProps} />}
+      {project.currentUserCanUploadFiles && <S3Upload project={project} {...s3UploadProps} />}
     </>
   );
 }

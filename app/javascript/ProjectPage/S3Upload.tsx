@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Evaporate from 'evaporate';
 import { useCompleteProjectFileUploadMutation } from './mutations.generated';
-import { ProjectFilesQueryData, ProjectFilesQueryDocument } from './queries.generated';
+import { S3ConfigurationContext } from '../S3ConfigurationContext';
+import { ApolloCache, DocumentNode, Reference } from '@apollo/client';
+import { ProjectFileFieldsFragment } from './queries';
+import { Project } from '../graphqlTypes.generated';
+import { Modifier } from '@apollo/client/cache/core/types/common';
 
 export type S3UploadFile = {
   id: number;
@@ -12,20 +16,36 @@ export type S3UploadFile = {
 };
 
 export type S3UploadProps = {
-  awsAccessKeyId: string;
   signerURL: string;
-  bucket: string;
-  nonce: string;
-  projectId: string;
+  project: Pick<Project, 'id'>;
 };
 
-function S3Upload({
-  awsAccessKeyId,
-  signerURL,
-  bucket,
-  nonce,
-  projectId,
-}: S3UploadProps): JSX.Element {
+function addNewObjectToReferenceArrayModifier<Q, T extends { id: string }>(
+  cache: ApolloCache<Q>,
+  newObject: T,
+  fragment: DocumentNode,
+) {
+  const modifier: Modifier<(Reference | undefined)[]> = (
+    existingProjectFileRefs,
+    { readField },
+  ) => {
+    const newProjectFileRef = cache.writeFragment({
+      data: newObject,
+      fragment: fragment,
+    });
+
+    if (existingProjectFileRefs.some((ref: Reference) => readField('id', ref) === newObject.id)) {
+      return existingProjectFileRefs;
+    }
+
+    return [...existingProjectFileRefs, newProjectFileRef];
+  };
+
+  return modifier;
+}
+
+function S3Upload({ signerURL, project }: S3UploadProps): JSX.Element {
+  const { awsAccessKeyId, bucketName } = useContext(S3ConfigurationContext);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState<string>();
   const [progressPercent, setProgressPercent] = useState(0);
@@ -45,11 +65,11 @@ function S3Upload({
     const evaporate = await Evaporate.create({
       aws_key: awsAccessKeyId,
       signerUrl: signerURL,
-      bucket: bucket,
+      bucket: bucketName,
       awsSignatureVersion: '2',
     });
     const uniqueId = Math.random().toString(36).substr(2, 16);
-    const objectName = `uploads/${new Date().getTime()}-${uniqueId}-${nonce}/${file.name}`;
+    const objectName = `uploads/${new Date().getTime()}-${uniqueId}/${file.name}`;
 
     try {
       const awsObjectKey = await evaporate.add({
@@ -66,29 +86,24 @@ function S3Upload({
 
       await completeProjectFileUpload({
         variables: {
-          projectId,
-          url: `https://${bucket}.s3.amazonaws.com/${awsObjectKey}`,
+          projectId: project.id,
+          url: `https://${bucketName}.s3.amazonaws.com/${awsObjectKey}`,
           filename: file.name,
           filetype: file.type,
           filesize: file.size,
           filepath: awsObjectKey,
         },
         update: (cache, result) => {
-          const data = cache.readQuery<ProjectFilesQueryData>({
-            query: ProjectFilesQueryDocument,
-            variables: { projectId },
-          });
-          const newFile = result.data?.completeProjectFileUpload?.projectFile;
-          if (data && newFile) {
-            cache.writeQuery<ProjectFilesQueryData>({
-              query: ProjectFilesQueryDocument,
-              variables: { projectId },
-              data: {
-                ...data,
-                project: {
-                  ...data.project,
-                  projectFiles: [...data.project.projectFiles, newFile],
-                },
+          const newProjectFile = result.data?.completeProjectFileUpload?.projectFile;
+          if (newProjectFile) {
+            cache.modify({
+              id: cache.identify(project),
+              fields: {
+                projectFiles: addNewObjectToReferenceArrayModifier(
+                  cache,
+                  newProjectFile,
+                  ProjectFileFieldsFragment,
+                ),
               },
             });
           }

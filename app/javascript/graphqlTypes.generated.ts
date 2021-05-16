@@ -95,6 +95,7 @@ export type DeleteProjectFilePayload = {
 
 export type License = {
   __typename: 'License';
+  dedicationHtml?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   logoUrl: Scalars['String'];
   name: Scalars['String'];
@@ -133,8 +134,12 @@ export type PageInfo = {
 export type Project = {
   __typename: 'Project';
   authors?: Maybe<Scalars['String']>;
-  brand?: Maybe<Brand>;
+  brand: Brand;
   createdAt: Scalars['ISO8601DateTime'];
+  currentUserCanDelete: Scalars['Boolean'];
+  currentUserCanDeleteFiles: Scalars['Boolean'];
+  currentUserCanEdit: Scalars['Boolean'];
+  currentUserCanUploadFiles: Scalars['Boolean'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   lengthQuantity?: Maybe<Scalars['Int']>;
@@ -184,12 +189,22 @@ export type ProjectFile = {
   url: Scalars['String'];
 };
 
+export type ProjectPromotion = {
+  __typename: 'ProjectPromotion';
+  createdAt: Scalars['ISO8601DateTime'];
+  id: Scalars['ID'];
+  project: Project;
+  updatedAt: Scalars['ISO8601DateTime'];
+};
+
 export type Query = {
   __typename: 'Query';
   brand: Brand;
   brands: BrandConnection;
   project: Project;
+  projectPromotions: Array<ProjectPromotion>;
   projects: ProjectConnection;
+  tagCategories: TagCategoryConnection;
   tags: TagConnection;
 };
 
@@ -220,6 +235,14 @@ export type QueryProjectsArgs = {
   last?: Maybe<Scalars['Int']>;
   queryString?: Maybe<Scalars['String']>;
   tag?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryTagCategoriesArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
 
@@ -259,6 +282,27 @@ export type TagCategory = {
   tags: Array<Tag>;
   textColor?: Maybe<Scalars['String']>;
   updatedAt: Scalars['ISO8601DateTime'];
+};
+
+/** The connection type for TagCategory. */
+export type TagCategoryConnection = {
+  __typename: 'TagCategoryConnection';
+  /** A list of edges. */
+  edges: Array<TagCategoryEdge>;
+  /** A list of nodes. */
+  nodes: Array<TagCategory>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+/** An edge in a connection. */
+export type TagCategoryEdge = {
+  __typename: 'TagCategoryEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node?: Maybe<TagCategory>;
 };
 
 /** The connection type for Tag. */

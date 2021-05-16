@@ -34,8 +34,9 @@ export type DeleteProjectFilePayloadFieldPolicy = {
 	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
 	projectFile?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type LicenseKeySpecifier = ('id' | 'logoUrl' | 'name' | 'url' | LicenseKeySpecifier)[];
+export type LicenseKeySpecifier = ('dedicationHtml' | 'id' | 'logoUrl' | 'name' | 'url' | LicenseKeySpecifier)[];
 export type LicenseFieldPolicy = {
+	dedicationHtml?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	logoUrl?: FieldPolicy<any> | FieldReadFunction<any>,
 	name?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -53,11 +54,15 @@ export type PageInfoFieldPolicy = {
 	hasPreviousPage?: FieldPolicy<any> | FieldReadFunction<any>,
 	startCursor?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type ProjectKeySpecifier = ('authors' | 'brand' | 'createdAt' | 'description' | 'id' | 'lengthQuantity' | 'lengthUnits' | 'license' | 'maxPlayers' | 'minPlayers' | 'projectFiles' | 'publicationYear' | 'tags' | 'title' | 'updatedAt' | ProjectKeySpecifier)[];
+export type ProjectKeySpecifier = ('authors' | 'brand' | 'createdAt' | 'currentUserCanDelete' | 'currentUserCanDeleteFiles' | 'currentUserCanEdit' | 'currentUserCanUploadFiles' | 'description' | 'id' | 'lengthQuantity' | 'lengthUnits' | 'license' | 'maxPlayers' | 'minPlayers' | 'projectFiles' | 'publicationYear' | 'tags' | 'title' | 'updatedAt' | ProjectKeySpecifier)[];
 export type ProjectFieldPolicy = {
 	authors?: FieldPolicy<any> | FieldReadFunction<any>,
 	brand?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	currentUserCanDelete?: FieldPolicy<any> | FieldReadFunction<any>,
+	currentUserCanDeleteFiles?: FieldPolicy<any> | FieldReadFunction<any>,
+	currentUserCanEdit?: FieldPolicy<any> | FieldReadFunction<any>,
+	currentUserCanUploadFiles?: FieldPolicy<any> | FieldReadFunction<any>,
 	description?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	lengthQuantity?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -96,12 +101,21 @@ export type ProjectFileFieldPolicy = {
 	uploaderId?: FieldPolicy<any> | FieldReadFunction<any>,
 	url?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('brand' | 'brands' | 'project' | 'projects' | 'tags' | QueryKeySpecifier)[];
+export type ProjectPromotionKeySpecifier = ('createdAt' | 'id' | 'project' | 'updatedAt' | ProjectPromotionKeySpecifier)[];
+export type ProjectPromotionFieldPolicy = {
+	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	project?: FieldPolicy<any> | FieldReadFunction<any>,
+	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type QueryKeySpecifier = ('brand' | 'brands' | 'project' | 'projectPromotions' | 'projects' | 'tagCategories' | 'tags' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	brand?: FieldPolicy<any> | FieldReadFunction<any>,
 	brands?: FieldPolicy<any> | FieldReadFunction<any>,
 	project?: FieldPolicy<any> | FieldReadFunction<any>,
+	projectPromotions?: FieldPolicy<any> | FieldReadFunction<any>,
 	projects?: FieldPolicy<any> | FieldReadFunction<any>,
+	tagCategories?: FieldPolicy<any> | FieldReadFunction<any>,
 	tags?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type TagKeySpecifier = ('createdAt' | 'id' | 'name' | 'projects' | 'tagCategory' | 'updatedAt' | TagKeySpecifier)[];
@@ -123,6 +137,18 @@ export type TagCategoryFieldPolicy = {
 	tags?: FieldPolicy<any> | FieldReadFunction<any>,
 	textColor?: FieldPolicy<any> | FieldReadFunction<any>,
 	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type TagCategoryConnectionKeySpecifier = ('edges' | 'nodes' | 'pageInfo' | 'totalCount' | TagCategoryConnectionKeySpecifier)[];
+export type TagCategoryConnectionFieldPolicy = {
+	edges?: FieldPolicy<any> | FieldReadFunction<any>,
+	nodes?: FieldPolicy<any> | FieldReadFunction<any>,
+	pageInfo?: FieldPolicy<any> | FieldReadFunction<any>,
+	totalCount?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type TagCategoryEdgeKeySpecifier = ('cursor' | 'node' | TagCategoryEdgeKeySpecifier)[];
+export type TagCategoryEdgeFieldPolicy = {
+	cursor?: FieldPolicy<any> | FieldReadFunction<any>,
+	node?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type TagConnectionKeySpecifier = ('edges' | 'nodes' | 'pageInfo' | 'totalCount' | TagConnectionKeySpecifier)[];
 export type TagConnectionFieldPolicy = {
@@ -194,6 +220,10 @@ export type TypedTypePolicies = TypePolicies & {
 		keyFields?: false | ProjectFileKeySpecifier | (() => undefined | ProjectFileKeySpecifier),
 		fields?: ProjectFileFieldPolicy,
 	},
+	ProjectPromotion?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | ProjectPromotionKeySpecifier | (() => undefined | ProjectPromotionKeySpecifier),
+		fields?: ProjectPromotionFieldPolicy,
+	},
 	Query?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | QueryKeySpecifier | (() => undefined | QueryKeySpecifier),
 		fields?: QueryFieldPolicy,
@@ -205,6 +235,14 @@ export type TypedTypePolicies = TypePolicies & {
 	TagCategory?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | TagCategoryKeySpecifier | (() => undefined | TagCategoryKeySpecifier),
 		fields?: TagCategoryFieldPolicy,
+	},
+	TagCategoryConnection?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | TagCategoryConnectionKeySpecifier | (() => undefined | TagCategoryConnectionKeySpecifier),
+		fields?: TagCategoryConnectionFieldPolicy,
+	},
+	TagCategoryEdge?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | TagCategoryEdgeKeySpecifier | (() => undefined | TagCategoryEdgeKeySpecifier),
+		fields?: TagCategoryEdgeFieldPolicy,
 	},
 	TagConnection?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | TagConnectionKeySpecifier | (() => undefined | TagConnectionKeySpecifier),

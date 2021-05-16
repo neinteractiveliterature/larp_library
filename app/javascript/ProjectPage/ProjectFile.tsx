@@ -2,7 +2,8 @@ import { Reference } from '@apollo/client';
 import React from 'react';
 import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import { useDeleteProjectFileMutation } from './mutations.generated';
-import { ProjectFilesQueryData, ProjectFilesQueryDocument } from './queries.generated';
+import { ProjectPageQuery } from './queries';
+import { ProjectPageQueryData } from './queries.generated';
 
 function getIconForMimeType(mimeType: string | null | undefined): string {
   if (mimeType == null) {
@@ -42,7 +43,7 @@ function numberToHumanSize(size: number) {
 }
 
 export type ProjectFileProps = {
-  file: ProjectFilesQueryData['project']['projectFiles'][number];
+  file: ProjectPageQueryData['project']['projectFiles'][number];
   canDelete: boolean;
   projectURL: string;
   projectId: string;
@@ -62,8 +63,8 @@ function ProjectFile({ file, canDelete, projectURL, projectId }: ProjectFileProp
         deleteProjectFile({
           variables: { id: file.id },
           update: (cache) => {
-            const data = cache.readQuery<ProjectFilesQueryData>({
-              query: ProjectFilesQueryDocument,
+            const data = cache.readQuery<ProjectPageQueryData>({
+              query: ProjectPageQuery,
               variables: { projectId },
             });
             if (data) {
