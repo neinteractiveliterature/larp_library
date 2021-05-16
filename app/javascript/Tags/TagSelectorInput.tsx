@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { TagAttributes } from './Tag';
+import { TagFragment } from './queries.generated';
 import TagSelector from './TagSelector';
 
 export type TagSelectorInputProps = {
-  initialValue: TagAttributes[];
+  initialValue: TagFragment[];
   name: string;
 };
 

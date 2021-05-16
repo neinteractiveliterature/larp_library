@@ -1,0 +1,28 @@
+import { gql } from '@apollo/client';
+
+export const TagFragment = gql`
+  fragment TagFragment on Tag {
+    id
+    name
+
+    tagCategory {
+      name
+      color
+      textColor
+      icon
+    }
+  }
+`;
+
+export const TagAutocompleteQuery = gql`
+  query TagAutocompleteQuery($queryString: String) {
+    tags(queryString: $queryString) {
+      nodes {
+        id
+        ...TagFragment
+      }
+    }
+  }
+
+  ${TagFragment}
+`;

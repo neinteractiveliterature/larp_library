@@ -28,6 +28,7 @@ export type Brand = {
   users: Array<User>;
 };
 
+
 export type BrandProjectsArgs = {
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
@@ -91,6 +92,7 @@ export type DeleteProjectFilePayload = {
   projectFile: ProjectFile;
 };
 
+
 export type License = {
   __typename: 'License';
   id: Scalars['ID'];
@@ -105,9 +107,11 @@ export type Mutation = {
   deleteProjectFile?: Maybe<DeleteProjectFilePayload>;
 };
 
+
 export type MutationCompleteProjectFileUploadArgs = {
   input: CompleteProjectFileUploadInput;
 };
+
 
 export type MutationDeleteProjectFileArgs = {
   input: DeleteProjectFileInput;
@@ -186,11 +190,14 @@ export type Query = {
   brands: BrandConnection;
   project: Project;
   projects: ProjectConnection;
+  tags: TagConnection;
 };
+
 
 export type QueryBrandArgs = {
   id: Scalars['ID'];
 };
+
 
 export type QueryBrandsArgs = {
   after?: Maybe<Scalars['String']>;
@@ -199,9 +206,11 @@ export type QueryBrandsArgs = {
   last?: Maybe<Scalars['Int']>;
 };
 
+
 export type QueryProjectArgs = {
   id: Scalars['ID'];
 };
+
 
 export type QueryProjectsArgs = {
   after?: Maybe<Scalars['String']>;
@@ -213,15 +222,25 @@ export type QueryProjectsArgs = {
   tag?: Maybe<Scalars['String']>;
 };
 
+
+export type QueryTagsArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  queryString?: Maybe<Scalars['String']>;
+};
+
 export type Tag = {
   __typename: 'Tag';
   createdAt: Scalars['ISO8601DateTime'];
   id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
   projects: ProjectConnection;
   tagCategory?: Maybe<TagCategory>;
   updatedAt: Scalars['ISO8601DateTime'];
 };
+
 
 export type TagProjectsArgs = {
   after?: Maybe<Scalars['String']>;
@@ -236,9 +255,31 @@ export type TagCategory = {
   createdAt: Scalars['ISO8601DateTime'];
   icon?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
   tags: Array<Tag>;
+  textColor?: Maybe<Scalars['String']>;
   updatedAt: Scalars['ISO8601DateTime'];
+};
+
+/** The connection type for Tag. */
+export type TagConnection = {
+  __typename: 'TagConnection';
+  /** A list of edges. */
+  edges: Array<TagEdge>;
+  /** A list of nodes. */
+  nodes: Array<Tag>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+/** An edge in a connection. */
+export type TagEdge = {
+  __typename: 'TagEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node?: Maybe<Tag>;
 };
 
 export type User = {

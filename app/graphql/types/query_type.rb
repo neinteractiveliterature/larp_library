@@ -42,5 +42,28 @@ module Types
         order("project_count desc").
         accessible_by(context[:current_ability])
     end
+
+    field :tags, Types::TagType.connection_type, null: false do
+      argument :query_string, String, required: false
+    end
+
+    def tags(query_string: nil)
+      if query_string.present?
+        SearchRequest.new(
+          Tag,
+          {
+            query: {
+              multi_match: {
+                query: query_string,
+                fields: [:name, :category_name],
+                type: 'phrase_prefix'
+              }
+            }
+          }
+        )
+      else
+        Tag.order("upper(name)")
+      end
+    end
   end
 end

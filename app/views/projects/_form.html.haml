@@ -15,7 +15,7 @@
 
   .mb-3
     = f.label :tags, class: 'form-label'
-    = react_component "TagSelectorInput", name: 'project[tag_names][]', initialValue: f.object.tags.as_json(methods: [:color, :text_color, :icon, :category_name, :name])
+    = tag_selector_input f.object.tags
 
   .mb-3
     = f.label :description, class: 'form-label' do
