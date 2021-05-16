@@ -5,7 +5,7 @@ import { ProjectFileFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { ProjectFileFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions = {};
+const defaultOptions =  {}
 export type CompleteProjectFileUploadMutationVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
   url: Types.Scalars['String'];
@@ -15,59 +15,46 @@ export type CompleteProjectFileUploadMutationVariables = Types.Exact<{
   filepath: Types.Scalars['String'];
 }>;
 
-export type CompleteProjectFileUploadMutationData = { __typename: 'Mutation' } & {
-  completeProjectFileUpload?: Types.Maybe<
-    { __typename: 'CompleteProjectFileUploadPayload' } & {
-      projectFile: { __typename: 'ProjectFile' } & Pick<Types.ProjectFile, 'id'> &
-        ProjectFileFieldsFragment;
-    }
-  >;
-};
+
+export type CompleteProjectFileUploadMutationData = (
+  { __typename: 'Mutation' }
+  & { completeProjectFileUpload?: Types.Maybe<(
+    { __typename: 'CompleteProjectFileUploadPayload' }
+    & { projectFile: (
+      { __typename: 'ProjectFile' }
+      & Pick<Types.ProjectFile, 'id'>
+      & ProjectFileFieldsFragment
+    ) }
+  )> }
+);
 
 export type DeleteProjectFileMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
-export type DeleteProjectFileMutationData = { __typename: 'Mutation' } & {
-  deleteProjectFile?: Types.Maybe<
-    { __typename: 'DeleteProjectFilePayload' } & Pick<
-      Types.DeleteProjectFilePayload,
-      'clientMutationId'
-    >
-  >;
-};
+
+export type DeleteProjectFileMutationData = (
+  { __typename: 'Mutation' }
+  & { deleteProjectFile?: Types.Maybe<(
+    { __typename: 'DeleteProjectFilePayload' }
+    & Pick<Types.DeleteProjectFilePayload, 'clientMutationId'>
+  )> }
+);
+
 
 export const CompleteProjectFileUploadDocument = gql`
-  mutation CompleteProjectFileUpload(
-    $projectId: ID!
-    $url: String!
-    $filename: String!
-    $filesize: Int!
-    $filetype: String
-    $filepath: String!
+    mutation CompleteProjectFileUpload($projectId: ID!, $url: String!, $filename: String!, $filesize: Int!, $filetype: String, $filepath: String!) {
+  completeProjectFileUpload(
+    input: {projectId: $projectId, url: $url, filename: $filename, filesize: $filesize, filetype: $filetype, filepath: $filepath}
   ) {
-    completeProjectFileUpload(
-      input: {
-        projectId: $projectId
-        url: $url
-        filename: $filename
-        filesize: $filesize
-        filetype: $filetype
-        filepath: $filepath
-      }
-    ) {
-      projectFile {
-        id
-        ...ProjectFileFieldsFragment
-      }
+    projectFile {
+      id
+      ...ProjectFileFieldsFragment
     }
   }
-  ${ProjectFileFieldsFragmentDoc}
-`;
-export type CompleteProjectFileUploadMutationFn = Apollo.MutationFunction<
-  CompleteProjectFileUploadMutationData,
-  CompleteProjectFileUploadMutationVariables
->;
+}
+    ${ProjectFileFieldsFragmentDoc}`;
+export type CompleteProjectFileUploadMutationFn = Apollo.MutationFunction<CompleteProjectFileUploadMutationData, CompleteProjectFileUploadMutationVariables>;
 
 /**
  * __useCompleteProjectFileUploadMutation__
@@ -91,38 +78,21 @@ export type CompleteProjectFileUploadMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCompleteProjectFileUploadMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CompleteProjectFileUploadMutationData,
-    CompleteProjectFileUploadMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CompleteProjectFileUploadMutationData,
-    CompleteProjectFileUploadMutationVariables
-  >(CompleteProjectFileUploadDocument, options);
-}
-export type CompleteProjectFileUploadMutationHookResult = ReturnType<
-  typeof useCompleteProjectFileUploadMutation
->;
-export type CompleteProjectFileUploadMutationResult =
-  Apollo.MutationResult<CompleteProjectFileUploadMutationData>;
-export type CompleteProjectFileUploadMutationOptions = Apollo.BaseMutationOptions<
-  CompleteProjectFileUploadMutationData,
-  CompleteProjectFileUploadMutationVariables
->;
+export function useCompleteProjectFileUploadMutation(baseOptions?: Apollo.MutationHookOptions<CompleteProjectFileUploadMutationData, CompleteProjectFileUploadMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CompleteProjectFileUploadMutationData, CompleteProjectFileUploadMutationVariables>(CompleteProjectFileUploadDocument, options);
+      }
+export type CompleteProjectFileUploadMutationHookResult = ReturnType<typeof useCompleteProjectFileUploadMutation>;
+export type CompleteProjectFileUploadMutationResult = Apollo.MutationResult<CompleteProjectFileUploadMutationData>;
+export type CompleteProjectFileUploadMutationOptions = Apollo.BaseMutationOptions<CompleteProjectFileUploadMutationData, CompleteProjectFileUploadMutationVariables>;
 export const DeleteProjectFileDocument = gql`
-  mutation DeleteProjectFile($id: ID!) {
-    deleteProjectFile(input: { id: $id }) {
-      clientMutationId
-    }
+    mutation DeleteProjectFile($id: ID!) {
+  deleteProjectFile(input: {id: $id}) {
+    clientMutationId
   }
-`;
-export type DeleteProjectFileMutationFn = Apollo.MutationFunction<
-  DeleteProjectFileMutationData,
-  DeleteProjectFileMutationVariables
->;
+}
+    `;
+export type DeleteProjectFileMutationFn = Apollo.MutationFunction<DeleteProjectFileMutationData, DeleteProjectFileMutationVariables>;
 
 /**
  * __useDeleteProjectFileMutation__
@@ -141,21 +111,10 @@ export type DeleteProjectFileMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useDeleteProjectFileMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteProjectFileMutationData,
-    DeleteProjectFileMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<DeleteProjectFileMutationData, DeleteProjectFileMutationVariables>(
-    DeleteProjectFileDocument,
-    options,
-  );
-}
+export function useDeleteProjectFileMutation(baseOptions?: Apollo.MutationHookOptions<DeleteProjectFileMutationData, DeleteProjectFileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteProjectFileMutationData, DeleteProjectFileMutationVariables>(DeleteProjectFileDocument, options);
+      }
 export type DeleteProjectFileMutationHookResult = ReturnType<typeof useDeleteProjectFileMutation>;
 export type DeleteProjectFileMutationResult = Apollo.MutationResult<DeleteProjectFileMutationData>;
-export type DeleteProjectFileMutationOptions = Apollo.BaseMutationOptions<
-  DeleteProjectFileMutationData,
-  DeleteProjectFileMutationVariables
->;
+export type DeleteProjectFileMutationOptions = Apollo.BaseMutationOptions<DeleteProjectFileMutationData, DeleteProjectFileMutationVariables>;

@@ -1,13 +1,7 @@
-export type TagAttributes = {
-  color: string;
-  text_color: string;
-  icon: string;
-  name: string;
-  category_name: string;
-};
+import { TagFragment } from './queries.generated';
 
 export type TagProps = {
-  tag: TagAttributes;
+  tag: TagFragment;
 };
 
 function Tag({ tag }: TagProps): JSX.Element {
@@ -15,13 +9,13 @@ function Tag({ tag }: TagProps): JSX.Element {
     <div
       className="badge badge-pill"
       style={{
-        backgroundColor: tag.color,
-        color: tag.text_color,
+        backgroundColor: tag.tagCategory?.color ?? '#777777',
+        color: tag.tagCategory?.textColor ?? '#FFFFFF',
         fontSize: '90%',
       }}
     >
       <i
-        className={`fa fa-${tag.icon}`}
+        className={`fa fa-${tag.tagCategory?.icon ?? 'tag'}`}
         style={{
           display: 'inline-block',
           verticalAlign: 'middle',
