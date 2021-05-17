@@ -4,6 +4,8 @@ import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import { useDeleteProjectFileMutation } from './mutations.generated';
 import { ProjectPageQuery } from './queries';
 import { ProjectPageQueryData } from './queries.generated';
+import { Project } from '../graphqlTypes.generated';
+import { deleteObjectFromReferenceArrayUpdater } from '../MutationModifierHelpers';
 
 function getIconForMimeType(mimeType: string | null | undefined): string {
   if (mimeType == null) {
@@ -44,12 +46,10 @@ function numberToHumanSize(size: number) {
 
 export type ProjectFileProps = {
   file: ProjectPageQueryData['project']['projectFiles'][number];
-  canDelete: boolean;
-  projectURL: string;
-  projectId: string;
+  project: Pick<Project, 'id' | 'currentUserCanDeleteFiles'>;
 };
 
-function ProjectFile({ file, canDelete, projectURL, projectId }: ProjectFileProps): JSX.Element {
+function ProjectFile({ file, project }: ProjectFileProps): JSX.Element {
   const [deleteProjectFile] = useDeleteProjectFileMutation();
   const confirm = useGraphQLConfirm();
 
@@ -62,24 +62,7 @@ function ProjectFile({ file, canDelete, projectURL, projectId }: ProjectFileProp
       action: () =>
         deleteProjectFile({
           variables: { id: file.id },
-          update: (cache) => {
-            const data = cache.readQuery<ProjectPageQueryData>({
-              query: ProjectPageQuery,
-              variables: { projectId },
-            });
-            if (data) {
-              cache.modify({
-                id: cache.identify(data.project),
-                fields: {
-                  projectFiles(existingProjectFileRefs, { readField }) {
-                    return existingProjectFileRefs.filter(
-                      (projectFileRef: Reference) => file.id !== readField('id', projectFileRef),
-                    );
-                  },
-                },
-              });
-            }
-          },
+          update: deleteObjectFromReferenceArrayUpdater(project, 'projectFiles', file),
         }),
     });
   };
@@ -90,11 +73,11 @@ function ProjectFile({ file, canDelete, projectURL, projectId }: ProjectFileProp
         <i className={`fa ${getIconForMimeType(file.filetype)}`} /> {file.filename}
       </a>{' '}
       <small>{numberToHumanSize(file.filesize)}</small>
-      {canDelete && (
+      {project.currentUserCanDeleteFiles && (
         <div className="pull-right">
-          <a href={`${projectURL}/project_files/${file.id}`} onClick={deleteClicked}>
+          <button type="button" className="btn btn-link" onClick={deleteClicked}>
             &times;
-          </a>
+          </button>
         </div>
       )}
     </li>

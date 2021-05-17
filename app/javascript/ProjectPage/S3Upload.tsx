@@ -2,10 +2,12 @@ import React, { useContext, useState } from 'react';
 import Evaporate from 'evaporate';
 import { useCompleteProjectFileUploadMutation } from './mutations.generated';
 import { S3ConfigurationContext } from '../S3ConfigurationContext';
-import { ApolloCache, DocumentNode, Reference } from '@apollo/client';
 import { ProjectFileFieldsFragment } from './queries';
 import { Project } from '../graphqlTypes.generated';
-import { Modifier } from '@apollo/client/cache/core/types/common';
+import {
+  addNewObjectToReferenceArrayModifier,
+  addNewObjectToReferenceArrayUpdater,
+} from '../MutationModifierHelpers';
 
 export type S3UploadFile = {
   id: number;
@@ -19,30 +21,6 @@ export type S3UploadProps = {
   signerURL: string;
   project: Pick<Project, 'id'>;
 };
-
-function addNewObjectToReferenceArrayModifier<Q, T extends { id: string }>(
-  cache: ApolloCache<Q>,
-  newObject: T,
-  fragment: DocumentNode,
-) {
-  const modifier: Modifier<(Reference | undefined)[]> = (
-    existingProjectFileRefs,
-    { readField },
-  ) => {
-    const newProjectFileRef = cache.writeFragment({
-      data: newObject,
-      fragment: fragment,
-    });
-
-    if (existingProjectFileRefs.some((ref: Reference) => readField('id', ref) === newObject.id)) {
-      return existingProjectFileRefs;
-    }
-
-    return [...existingProjectFileRefs, newProjectFileRef];
-  };
-
-  return modifier;
-}
 
 function S3Upload({ signerURL, project }: S3UploadProps): JSX.Element {
   const { awsAccessKeyId, bucketName } = useContext(S3ConfigurationContext);
@@ -93,21 +71,12 @@ function S3Upload({ signerURL, project }: S3UploadProps): JSX.Element {
           filesize: file.size,
           filepath: awsObjectKey,
         },
-        update: (cache, result) => {
-          const newProjectFile = result.data?.completeProjectFileUpload?.projectFile;
-          if (newProjectFile) {
-            cache.modify({
-              id: cache.identify(project),
-              fields: {
-                projectFiles: addNewObjectToReferenceArrayModifier(
-                  cache,
-                  newProjectFile,
-                  ProjectFileFieldsFragment,
-                ),
-              },
-            });
-          }
-        },
+        update: addNewObjectToReferenceArrayUpdater(
+          project,
+          'projectFiles',
+          (data) => data.completeProjectFileUpload?.projectFile,
+          ProjectFileFieldsFragment,
+        ),
       });
 
       uploadNextFile(fileQueue.slice(1));

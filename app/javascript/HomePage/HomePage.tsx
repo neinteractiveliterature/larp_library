@@ -18,7 +18,7 @@ export default LoadQueryWrapper(useHomePageQuery, function HomePage({ data }) {
   );
 
   return (
-    <div className="row">
+    <div className="row mb-4">
       <div className="col-md-4">
         <h2>Welcome to Larp Library</h2>
         <p>
@@ -69,22 +69,25 @@ export default LoadQueryWrapper(useHomePageQuery, function HomePage({ data }) {
             <h2 className="m-0">Browse by tag</h2>
           </div>
           <ul className="list-group list-group-flush">
-            {tagCategoriesSorted.map((category) => (
-              <li className="list-group-item" key={category.id}>
-                <h4 className="mt-0">{category.name}</h4>
-                <ul className="list-unstyled">
-                  {tagsByCategoryId[category.id].map((tag) => (
-                    <li className="mb-1" key={tag.id}>
-                      <Tag tag={tag} linkTo={generateProjectSearchPath({ tag: tag.name })} />
-                      <small className="ms-1">
-                        ({tag.projects.totalCount}{' '}
-                        {tag.projects.totalCount === 1 ? 'project' : 'projects'})
-                      </small>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
+            {tagCategoriesSorted.map(
+              (category) =>
+                tagsByCategoryId[category.id] && (
+                  <li className="list-group-item" key={category.id}>
+                    <h4 className="mt-0">{category.name}</h4>
+                    <ul className="list-unstyled">
+                      {tagsByCategoryId[category.id].map((tag) => (
+                        <li className="mb-1" key={tag.id}>
+                          <Tag tag={tag} linkTo={generateProjectSearchPath({ tag: tag.name })} />
+                          <small className="ms-1">
+                            ({tag.projects.totalCount}{' '}
+                            {tag.projects.totalCount === 1 ? 'project' : 'projects'})
+                          </small>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ),
+            )}
             {tagsByCategoryId['uncategorized'] && (
               <li className="list-group-item">
                 <h4 className="mt-0">Miscellaneous</h4>

@@ -50,6 +50,7 @@ function ProjectHeaders({
           </Link>
           {!hideBrandAndYear && (project.brand.name != null || project.publicationYear != null) && (
             <small>
+              {' '}
               (
               {project.brand.name && (
                 <Link to={generateBrandPath(project.brand)} className="link-unstyled">

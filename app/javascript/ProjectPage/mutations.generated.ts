@@ -6,6 +6,19 @@ import { gql } from '@apollo/client';
 import { ProjectFileFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
+export type DeleteProjectMutationVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+}>;
+
+
+export type DeleteProjectMutationData = (
+  { __typename: 'Mutation' }
+  & { deleteProject?: Types.Maybe<(
+    { __typename: 'DeleteProjectPayload' }
+    & Pick<Types.DeleteProjectPayload, 'clientMutationId'>
+  )> }
+);
+
 export type CompleteProjectFileUploadMutationVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
   url: Types.Scalars['String'];
@@ -42,6 +55,39 @@ export type DeleteProjectFileMutationData = (
 );
 
 
+export const DeleteProjectDocument = gql`
+    mutation DeleteProject($id: ID!) {
+  deleteProject(input: {id: $id}) {
+    clientMutationId
+  }
+}
+    `;
+export type DeleteProjectMutationFn = Apollo.MutationFunction<DeleteProjectMutationData, DeleteProjectMutationVariables>;
+
+/**
+ * __useDeleteProjectMutation__
+ *
+ * To run a mutation, you first call `useDeleteProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteProjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteProjectMutation, { data, loading, error }] = useDeleteProjectMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteProjectMutation(baseOptions?: Apollo.MutationHookOptions<DeleteProjectMutationData, DeleteProjectMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteProjectMutationData, DeleteProjectMutationVariables>(DeleteProjectDocument, options);
+      }
+export type DeleteProjectMutationHookResult = ReturnType<typeof useDeleteProjectMutation>;
+export type DeleteProjectMutationResult = Apollo.MutationResult<DeleteProjectMutationData>;
+export type DeleteProjectMutationOptions = Apollo.BaseMutationOptions<DeleteProjectMutationData, DeleteProjectMutationVariables>;
 export const CompleteProjectFileUploadDocument = gql`
     mutation CompleteProjectFileUpload($projectId: ID!, $url: String!, $filename: String!, $filesize: Int!, $filetype: String, $filepath: String!) {
   completeProjectFileUpload(

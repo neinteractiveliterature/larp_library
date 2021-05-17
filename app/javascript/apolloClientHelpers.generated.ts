@@ -34,6 +34,11 @@ export type DeleteProjectFilePayloadFieldPolicy = {
 	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
 	projectFile?: FieldPolicy<any> | FieldReadFunction<any>
 };
+export type DeleteProjectPayloadKeySpecifier = ('clientMutationId' | 'project' | DeleteProjectPayloadKeySpecifier)[];
+export type DeleteProjectPayloadFieldPolicy = {
+	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
+	project?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type LicenseKeySpecifier = ('dedicationHtml' | 'id' | 'logoUrl' | 'name' | 'url' | LicenseKeySpecifier)[];
 export type LicenseFieldPolicy = {
 	dedicationHtml?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -42,9 +47,10 @@ export type LicenseFieldPolicy = {
 	name?: FieldPolicy<any> | FieldReadFunction<any>,
 	url?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('completeProjectFileUpload' | 'deleteProjectFile' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('completeProjectFileUpload' | 'deleteProject' | 'deleteProjectFile' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	completeProjectFileUpload?: FieldPolicy<any> | FieldReadFunction<any>,
+	deleteProject?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteProjectFile?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type PageInfoKeySpecifier = ('endCursor' | 'hasNextPage' | 'hasPreviousPage' | 'startCursor' | PageInfoKeySpecifier)[];
@@ -191,6 +197,10 @@ export type TypedTypePolicies = TypePolicies & {
 	DeleteProjectFilePayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | DeleteProjectFilePayloadKeySpecifier | (() => undefined | DeleteProjectFilePayloadKeySpecifier),
 		fields?: DeleteProjectFilePayloadFieldPolicy,
+	},
+	DeleteProjectPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | DeleteProjectPayloadKeySpecifier | (() => undefined | DeleteProjectPayloadKeySpecifier),
+		fields?: DeleteProjectPayloadFieldPolicy,
 	},
 	License?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | LicenseKeySpecifier | (() => undefined | LicenseKeySpecifier),

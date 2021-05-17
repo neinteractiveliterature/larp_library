@@ -1,9 +1,10 @@
 import { LoadQueryWrapper, useGraphQLConfirm } from '@neinteractiveliterature/litform/lib';
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ProjectHeaders from '../ProjectSearch/ProjectHeaders';
 import { generateProjectPath } from '../URLGenerators';
+import { useDeleteProjectMutation } from './mutations.generated';
 import ProjectFilesSection from './ProjectFilesSection';
 import { useProjectPageQuery } from './queries.generated';
 
@@ -15,9 +16,12 @@ function useProjectPageQueryFromParam() {
 export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPage({ data }) {
   const { project } = data;
   const confirm = useGraphQLConfirm();
+  const [deleteProject] = useDeleteProjectMutation();
+  const navigate = useNavigate();
 
-  const deleteProjectConfirmed = () => {
-    // TODO implment project deletion
+  const deleteProjectConfirmed = async () => {
+    await deleteProject({ variables: { id: project.id } });
+    navigate('/projects', { replace: true });
   };
 
   return (
@@ -64,7 +68,6 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
                 <ProjectFilesSection
                   signerURL={`${generateProjectPath(project)}/project_files/auth_upload`}
                   project={project}
-                  projectURL={`${generateProjectPath(project)}`}
                 />
               </div>
 
