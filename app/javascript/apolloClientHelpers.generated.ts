@@ -39,19 +39,22 @@ export type DeleteProjectPayloadFieldPolicy = {
 	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
 	project?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type LicenseKeySpecifier = ('dedicationHtml' | 'id' | 'logoUrl' | 'name' | 'url' | LicenseKeySpecifier)[];
+export type LicenseKeySpecifier = ('dedicationHtml' | 'discouraged' | 'discouragedReason' | 'id' | 'logoUrl' | 'name' | 'url' | LicenseKeySpecifier)[];
 export type LicenseFieldPolicy = {
 	dedicationHtml?: FieldPolicy<any> | FieldReadFunction<any>,
+	discouraged?: FieldPolicy<any> | FieldReadFunction<any>,
+	discouragedReason?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	logoUrl?: FieldPolicy<any> | FieldReadFunction<any>,
 	name?: FieldPolicy<any> | FieldReadFunction<any>,
 	url?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('completeProjectFileUpload' | 'deleteProject' | 'deleteProjectFile' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('completeProjectFileUpload' | 'deleteProject' | 'deleteProjectFile' | 'updateProject' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	completeProjectFileUpload?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteProject?: FieldPolicy<any> | FieldReadFunction<any>,
-	deleteProjectFile?: FieldPolicy<any> | FieldReadFunction<any>
+	deleteProjectFile?: FieldPolicy<any> | FieldReadFunction<any>,
+	updateProject?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type PageInfoKeySpecifier = ('endCursor' | 'hasNextPage' | 'hasPreviousPage' | 'startCursor' | PageInfoKeySpecifier)[];
 export type PageInfoFieldPolicy = {
@@ -114,10 +117,11 @@ export type ProjectPromotionFieldPolicy = {
 	project?: FieldPolicy<any> | FieldReadFunction<any>,
 	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('brand' | 'brands' | 'project' | 'projectPromotions' | 'projects' | 'tagCategories' | 'tags' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('brand' | 'brands' | 'licenses' | 'project' | 'projectPromotions' | 'projects' | 'tagCategories' | 'tags' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	brand?: FieldPolicy<any> | FieldReadFunction<any>,
 	brands?: FieldPolicy<any> | FieldReadFunction<any>,
+	licenses?: FieldPolicy<any> | FieldReadFunction<any>,
 	project?: FieldPolicy<any> | FieldReadFunction<any>,
 	projectPromotions?: FieldPolicy<any> | FieldReadFunction<any>,
 	projects?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -167,6 +171,11 @@ export type TagEdgeKeySpecifier = ('cursor' | 'node' | TagEdgeKeySpecifier)[];
 export type TagEdgeFieldPolicy = {
 	cursor?: FieldPolicy<any> | FieldReadFunction<any>,
 	node?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type UpdateProjectPayloadKeySpecifier = ('clientMutationId' | 'project' | UpdateProjectPayloadKeySpecifier)[];
+export type UpdateProjectPayloadFieldPolicy = {
+	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
+	project?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type UserKeySpecifier = ('admin' | 'email' | 'firstname' | 'id' | 'lastname' | 'username' | UserKeySpecifier)[];
 export type UserFieldPolicy = {
@@ -261,6 +270,10 @@ export type TypedTypePolicies = TypePolicies & {
 	TagEdge?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | TagEdgeKeySpecifier | (() => undefined | TagEdgeKeySpecifier),
 		fields?: TagEdgeFieldPolicy,
+	},
+	UpdateProjectPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | UpdateProjectPayloadKeySpecifier | (() => undefined | UpdateProjectPayloadKeySpecifier),
+		fields?: UpdateProjectPayloadFieldPolicy,
 	},
 	User?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | UserKeySpecifier | (() => undefined | UserKeySpecifier),

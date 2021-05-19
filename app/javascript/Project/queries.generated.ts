@@ -11,6 +11,26 @@ export type ProjectFileFieldsFragment = (
   & Pick<Types.ProjectFile, 'id' | 'url' | 'filename' | 'filesize' | 'filetype'>
 );
 
+export type LicenseFieldsFragment = (
+  { __typename: 'License' }
+  & Pick<Types.License, 'id' | 'name' | 'url' | 'logoUrl' | 'dedicationHtml' | 'discouraged' | 'discouragedReason'>
+);
+
+export type ProjectFieldsFragment = (
+  { __typename: 'Project' }
+  & Pick<Types.Project, 'id' | 'description' | 'currentUserCanEdit' | 'currentUserCanDelete' | 'currentUserCanUploadFiles' | 'currentUserCanDeleteFiles'>
+  & { license?: Types.Maybe<(
+    { __typename: 'License' }
+    & Pick<Types.License, 'id'>
+    & LicenseFieldsFragment
+  )>, projectFiles: Array<(
+    { __typename: 'ProjectFile' }
+    & Pick<Types.ProjectFile, 'id'>
+    & ProjectFileFieldsFragment
+  )> }
+  & ProjectHeadersFragment
+);
+
 export type ProjectPageQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
 }>;
@@ -20,19 +40,25 @@ export type ProjectPageQueryData = (
   { __typename: 'Query' }
   & { project: (
     { __typename: 'Project' }
-    & Pick<Types.Project, 'id' | 'description' | 'currentUserCanEdit' | 'currentUserCanDelete' | 'currentUserCanUploadFiles' | 'currentUserCanDeleteFiles'>
-    & { license?: Types.Maybe<(
-      { __typename: 'License' }
-      & Pick<Types.License, 'id' | 'name' | 'url' | 'logoUrl' | 'dedicationHtml'>
-    )>, projectFiles: Array<(
-      { __typename: 'ProjectFile' }
-      & Pick<Types.ProjectFile, 'id'>
-      & ProjectFileFieldsFragment
-    )> }
-    & ProjectHeadersFragment
-  ) }
+    & ProjectFieldsFragment
+  ), licenses: Array<(
+    { __typename: 'License' }
+    & Pick<Types.License, 'id'>
+    & LicenseFieldsFragment
+  )> }
 );
 
+export const LicenseFieldsFragmentDoc = gql`
+    fragment LicenseFieldsFragment on License {
+  id
+  name
+  url
+  logoUrl
+  dedicationHtml
+  discouraged
+  discouragedReason
+}
+    `;
 export const ProjectFileFieldsFragmentDoc = gql`
     fragment ProjectFileFieldsFragment on ProjectFile {
   id
@@ -42,31 +68,39 @@ export const ProjectFileFieldsFragmentDoc = gql`
   filetype
 }
     `;
-export const ProjectPageQueryDocument = gql`
-    query ProjectPageQuery($projectId: ID!) {
-  project(id: $projectId) {
+export const ProjectFieldsFragmentDoc = gql`
+    fragment ProjectFieldsFragment on Project {
+  id
+  description
+  currentUserCanEdit
+  currentUserCanDelete
+  currentUserCanUploadFiles
+  currentUserCanDeleteFiles
+  ...ProjectHeadersFragment
+  license {
     id
-    description
-    currentUserCanEdit
-    currentUserCanDelete
-    currentUserCanUploadFiles
-    currentUserCanDeleteFiles
-    ...ProjectHeadersFragment
-    license {
-      id
-      name
-      url
-      logoUrl
-      dedicationHtml
-    }
-    projectFiles {
-      id
-      ...ProjectFileFieldsFragment
-    }
+    ...LicenseFieldsFragment
+  }
+  projectFiles {
+    id
+    ...ProjectFileFieldsFragment
   }
 }
     ${ProjectHeadersFragmentDoc}
+${LicenseFieldsFragmentDoc}
 ${ProjectFileFieldsFragmentDoc}`;
+export const ProjectPageQueryDocument = gql`
+    query ProjectPageQuery($projectId: ID!) {
+  project(id: $projectId) {
+    ...ProjectFieldsFragment
+  }
+  licenses {
+    id
+    ...LicenseFieldsFragment
+  }
+}
+    ${ProjectFieldsFragmentDoc}
+${LicenseFieldsFragmentDoc}`;
 
 /**
  * __useProjectPageQuery__

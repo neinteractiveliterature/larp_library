@@ -1,5 +1,17 @@
 import { gql } from '@apollo/client';
-import { ProjectFileFieldsFragment } from './queries';
+import { ProjectFieldsFragment, ProjectFileFieldsFragment } from './queries';
+
+export const UpdateProject = gql`
+  mutation UpdateProject($id: ID!, $projectAttributes: ProjectAttributes!) {
+    updateProject(input: { id: $id, projectAttributes: $projectAttributes }) {
+      project {
+        ...ProjectFieldsFragment
+      }
+    }
+  }
+
+  ${ProjectFieldsFragment}
+`;
 
 export const DeleteProject = gql`
   mutation DeleteProject($id: ID!) {

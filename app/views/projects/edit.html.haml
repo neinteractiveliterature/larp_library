@@ -1,1 +1,3 @@
-= render 'form'
+= react_component "AppRoot",
+  s3Configuration: { awsAccessKeyId: ENV['AWS_ACCESS_KEY_ID'],
+  bucketName: (ENV['AWS_S3_BUCKET'] || "larp-library-#{Rails.env}") }

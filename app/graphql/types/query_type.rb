@@ -77,5 +77,11 @@ module Types
     def project_promotions
       ProjectPromotion.joins(:project).order('projects.title')
     end
+
+    field :licenses, [Types::LicenseType], null: false
+
+    def licenses
+      Project::LICENSES.map { |id, attrs| attrs.merge(id: id) }
+    end
   end
 end

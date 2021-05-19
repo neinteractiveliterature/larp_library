@@ -14,7 +14,6 @@ const REACT_CLASSES: { [className: string]: React.ComponentType<any> } = {
   ColorPickerInput: AppWrapper(React.lazy(() => import('../ColorPickerInput'))),
   HomePage: AppWrapper(React.lazy(() => import('../HomePage/HomePage'))),
   MarkdownEditorInput: AppWrapper(React.lazy(() => import('../MarkdownEditorInput'))),
-  ProjectFilesSection: AppWrapper(React.lazy(() => import('../ProjectPage/ProjectFilesSection'))),
   TagSelectorInput: AppWrapper(React.lazy(() => import('../Tags/TagSelectorInput'))),
 };
 

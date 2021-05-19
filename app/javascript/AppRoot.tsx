@@ -8,7 +8,7 @@ const PageComponentImports: {
   [pageName: string]: () => Promise<{ default: React.ComponentType<any> }>;
 } = {
   HomePage: () => import('./HomePage/HomePage'),
-  ProjectPage: () => import('./ProjectPage/ProjectPage'),
+  ProjectRoot: () => import('./Project/ProjectRoot'),
 };
 
 const PageComponents = mapValues(PageComponentImports, (importFunction) =>
@@ -23,14 +23,10 @@ function AppRoot({ s3Configuration }: AppRootProps): JSX.Element {
   return (
     <S3ConfigurationContext.Provider value={s3Configuration}>
       <Routes>
-        <Route path="/brands/:brandId">
-          <Route path="/projects/:projectId">
-            <PageComponents.ProjectPage />
-          </Route>
+        <Route path="brands/:brandId/*">
+          <Route path="projects/:projectId/*" element={<PageComponents.ProjectRoot />} />
         </Route>
-        <Route path="/">
-          <PageComponents.HomePage />
-        </Route>
+        <Route path="/" element={<PageComponents.HomePage />} />
       </Routes>
     </S3ConfigurationContext.Provider>
   );

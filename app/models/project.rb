@@ -111,6 +111,10 @@ class Project < ActiveRecord::Base
     OpenStruct.new(LICENSES[license.to_sym]) if license.present?
   end
 
+  def license_id=(license_id)
+    self.license = license_id
+  end
+
   # Remove leading "A", "An", and "The" from titles
   def title_for_search
     title.strip.sub(/\Athe\s+/i, '').sub(/\Aan?\s+/i, '')

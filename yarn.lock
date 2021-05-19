@@ -1047,10 +1047,12 @@
   resolved "https://registry.yarnpkg.com/@microsoft/fetch-event-source/-/fetch-event-source-2.0.1.tgz#9ceecc94b49fbaa15666e38ae8587f64acce007d"
   integrity sha512-W6CLUJ2eBMw3Rec70qrsEW0jOm/3twwJv21mrmj2yORiaVmVYGS4sSS5yUwvQc1ZlDLYGPnClVWmUUMagKNsfA==
 
-"@neinteractiveliterature/litform@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@neinteractiveliterature/litform/-/litform-0.3.0.tgz#759e87c3eccb1f1fdf372da8e79e9df3c9deebdd"
-  integrity sha512-LkgCo8UhmTwy4ihC6tborZ1qvUHWqaHcT+o4ggtU63Ec30Ts+UmT490pMkMfhX4kEyOiK/rhujeX7ABcRGs+XQ==
+"@neinteractiveliterature/litform@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@neinteractiveliterature/litform/-/litform-0.4.0.tgz#85f9dd740466277d6eeac4094a1118d29a11a87d"
+  integrity sha512-W/fEb9TK/IP1J0QJYiizfu8DbDw+ObYrLa2MQSTvw1hxSddbr0im3AXk9eiP/qS7KSDvo2YG1mmP/tawXaoCdQ==
+  dependencies:
+    lodash "^4.17.21"
 
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"

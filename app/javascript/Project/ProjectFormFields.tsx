@@ -23,7 +23,7 @@ type ProjectFormProject = Pick<
   | 'lengthUnits'
 > & {
   tags: TagFragment[];
-  license: Pick<License, 'id' | 'name'> | null | undefined;
+  license?: Pick<License, 'id' | 'name' | 'discouraged' | 'discouragedReason'> | null;
 };
 
 export type ProjectFormProps = {
@@ -134,6 +134,7 @@ export default function ProjectFormFields({
         {licenseOptions.map((license) => (
           <option key={license.id} value={license.id}>
             {license.name}
+            {license.discouraged && ` (${license.discouragedReason})`}
           </option>
         ))}
       </BootstrapFormSelect>
