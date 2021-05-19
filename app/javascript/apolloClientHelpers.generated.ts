@@ -29,6 +29,11 @@ export type CompleteProjectFileUploadPayloadFieldPolicy = {
 	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
 	projectFile?: FieldPolicy<any> | FieldReadFunction<any>
 };
+export type CreateProjectPayloadKeySpecifier = ('clientMutationId' | 'project' | CreateProjectPayloadKeySpecifier)[];
+export type CreateProjectPayloadFieldPolicy = {
+	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
+	project?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type DeleteProjectFilePayloadKeySpecifier = ('clientMutationId' | 'projectFile' | DeleteProjectFilePayloadKeySpecifier)[];
 export type DeleteProjectFilePayloadFieldPolicy = {
 	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -49,9 +54,10 @@ export type LicenseFieldPolicy = {
 	name?: FieldPolicy<any> | FieldReadFunction<any>,
 	url?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('completeProjectFileUpload' | 'deleteProject' | 'deleteProjectFile' | 'updateProject' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('completeProjectFileUpload' | 'createProject' | 'deleteProject' | 'deleteProjectFile' | 'updateProject' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	completeProjectFileUpload?: FieldPolicy<any> | FieldReadFunction<any>,
+	createProject?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteProject?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteProjectFile?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateProject?: FieldPolicy<any> | FieldReadFunction<any>
@@ -202,6 +208,10 @@ export type TypedTypePolicies = TypePolicies & {
 	CompleteProjectFileUploadPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | CompleteProjectFileUploadPayloadKeySpecifier | (() => undefined | CompleteProjectFileUploadPayloadKeySpecifier),
 		fields?: CompleteProjectFileUploadPayloadFieldPolicy,
+	},
+	CreateProjectPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | CreateProjectPayloadKeySpecifier | (() => undefined | CreateProjectPayloadKeySpecifier),
+		fields?: CreateProjectPayloadFieldPolicy,
 	},
 	DeleteProjectFilePayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | DeleteProjectFilePayloadKeySpecifier | (() => undefined | DeleteProjectFilePayloadKeySpecifier),

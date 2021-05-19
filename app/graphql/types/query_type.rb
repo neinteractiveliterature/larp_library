@@ -25,11 +25,18 @@ module Types
     end
 
     field :brand, Types::BrandType, null: false do
-      argument :id, ID, required: true
+      argument :id, ID, required: false
+      argument :slug, String, required: false
     end
 
-    def brand(id:)
-      Brand.find(id)
+    def brand(id: nil, slug: nil)
+      if id
+        Brand.find(id)
+      elsif slug
+        Brand.find_by!(slug: slug)
+      else
+        raise GraphQL::ExecutionError, 'Either id or slug must be specified to find a Brand'
+      end
     end
 
     field :brands, Types::BrandType.connection_type, null: false

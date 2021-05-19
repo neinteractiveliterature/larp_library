@@ -9,6 +9,9 @@ export function generateProjectPath(
 ): string {
   return `${generateBrandPath(project.brand)}/projects/${project.id}-${project.title
     ?.replace(/[^0-9A-Za-z]/g, '-')
+    .replace(/--+/, '-')
+    .replace(/^-/, '')
+    .replace(/-$/, '')
     .toLowerCase()}`;
 }
 

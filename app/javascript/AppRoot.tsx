@@ -23,8 +23,8 @@ function AppRoot({ s3Configuration }: AppRootProps): JSX.Element {
   return (
     <S3ConfigurationContext.Provider value={s3Configuration}>
       <Routes>
-        <Route path="brands/:brandId/*">
-          <Route path="projects/:projectId/*" element={<PageComponents.ProjectRoot />} />
+        <Route path="brands/:brandSlug/*">
+          <Route path="projects/*" element={<PageComponents.ProjectRoot />} />
         </Route>
         <Route path="/" element={<PageComponents.HomePage />} />
       </Routes>

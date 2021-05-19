@@ -4,7 +4,7 @@
 - hide_authors ||= false
 
 = content_tag title_tag, style: "margin: 0" do
-  = link_to project.title, [project.brand, project], class: 'link-unstyled'
+  = link_to project.title, "/brands/#{project.brand.to_param}/projects/#{project.to_param}", class: 'link-unstyled'
   - unless hide_brand_and_year
     - parenthesized = [project.publication_year, project.brand && link_to(project.brand.name, project.brand, class: 'link-unstyled')].compact
     - if parenthesized.present?

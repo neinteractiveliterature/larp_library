@@ -6,6 +6,23 @@ import { gql } from '@apollo/client';
 import { ProjectFieldsFragmentDoc, ProjectFileFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
+export type CreateProjectMutationVariables = Types.Exact<{
+  brandId: Types.Scalars['ID'];
+  projectAttributes: Types.ProjectAttributes;
+}>;
+
+
+export type CreateProjectMutationData = (
+  { __typename: 'Mutation' }
+  & { createProject?: Types.Maybe<(
+    { __typename: 'CreateProjectPayload' }
+    & { project: (
+      { __typename: 'Project' }
+      & ProjectFieldsFragment
+    ) }
+  )> }
+);
+
 export type UpdateProjectMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   projectAttributes: Types.ProjectAttributes;
@@ -72,6 +89,42 @@ export type DeleteProjectFileMutationData = (
 );
 
 
+export const CreateProjectDocument = gql`
+    mutation CreateProject($brandId: ID!, $projectAttributes: ProjectAttributes!) {
+  createProject(input: {brandId: $brandId, projectAttributes: $projectAttributes}) {
+    project {
+      ...ProjectFieldsFragment
+    }
+  }
+}
+    ${ProjectFieldsFragmentDoc}`;
+export type CreateProjectMutationFn = Apollo.MutationFunction<CreateProjectMutationData, CreateProjectMutationVariables>;
+
+/**
+ * __useCreateProjectMutation__
+ *
+ * To run a mutation, you first call `useCreateProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateProjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createProjectMutation, { data, loading, error }] = useCreateProjectMutation({
+ *   variables: {
+ *      brandId: // value for 'brandId'
+ *      projectAttributes: // value for 'projectAttributes'
+ *   },
+ * });
+ */
+export function useCreateProjectMutation(baseOptions?: Apollo.MutationHookOptions<CreateProjectMutationData, CreateProjectMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateProjectMutationData, CreateProjectMutationVariables>(CreateProjectDocument, options);
+      }
+export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProjectMutation>;
+export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutationData>;
+export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutationData, CreateProjectMutationVariables>;
 export const UpdateProjectDocument = gql`
     mutation UpdateProject($id: ID!, $projectAttributes: ProjectAttributes!) {
   updateProject(input: {id: $id, projectAttributes: $projectAttributes}) {

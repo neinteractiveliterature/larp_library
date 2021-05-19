@@ -3,7 +3,7 @@
     .flex-grow-1.me-1
       = render 'projects/project_headers', project: project
     %div
-      = link_to "View", [project.brand, project], class: "btn btn-secondary"
+      = link_to "View", "/brands/#{project.brand.to_param}/projects/#{project.to_param}", class: "btn btn-secondary"
 
   .card-body
-    = truncate_html markdown(project.description), length: 500, omission: "... ".html_safe + link_to("(read more)", [project.brand, project], class: "expand")
+    = truncate_html markdown(project.description), length: 500, omission: "... ".html_safe + link_to("(read more)", "/brands/#{project.brand.to_param}/projects/#{project.to_param}", class: "expand")

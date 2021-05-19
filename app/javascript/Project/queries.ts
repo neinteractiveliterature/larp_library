@@ -23,6 +23,20 @@ export const LicenseFieldsFragment = gql`
   }
 `;
 
+export const NewProjectFormQuery = gql`
+  query NewProjectFormQuery($slug: String!) {
+    brand(slug: $slug) {
+      id
+    }
+
+    licenses {
+      ...LicenseFieldsFragment
+    }
+
+    ${LicenseFieldsFragment}
+  }
+`;
+
 export const ProjectFieldsFragment = gql`
   fragment ProjectFieldsFragment on Project {
     id

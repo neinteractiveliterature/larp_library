@@ -1,7 +1,7 @@
 import { ProjectAttributes } from '../graphqlTypes.generated';
-import { ProjectFieldsFragment } from './queries.generated';
+import { ProjectFormProps } from './ProjectFormFields';
 
-export function buildProjectAttributes(project: ProjectFieldsFragment): ProjectAttributes {
+export function buildProjectAttributes(project: ProjectFormProps['project']): ProjectAttributes {
   return {
     authors: project.authors,
     description: project.description,

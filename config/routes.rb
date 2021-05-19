@@ -18,13 +18,9 @@ Rails.application.routes.draw do
       patch :approve
     end
 
-    resources :projects, except: [:index] do
-      resources :project_files, only: [:create, :show, :destroy] do
-        collection do
-          get :auth_upload
-        end
-      end
-    end
+    get 'projects/:project_id/project_files/auth_upload' => 'project_files#auth_upload'
+    get 'projects/:project_id' => 'single_page_app#show'
+    get 'projects/:project_id/*extra' => 'single_page_app#show'
   end
 
   get "/brands/:brand_id/invitations/:id" => 'brand_memberships#pre_accept', as: 'pre_accept_brand_membership'
@@ -33,5 +29,5 @@ Rails.application.routes.draw do
   resources :tags, except: [:show]
   resources :tag_categories, except: [:show]
 
-  root 'home#index'
+  root 'single_page_app#show'
 end
