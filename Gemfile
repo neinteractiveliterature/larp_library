@@ -4,11 +4,8 @@ source 'https://rubygems.org'
 
 gem 'dotenv-rails', groups: [:development, :test]
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '= 6.1.3.2'
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3', groups: [:development, :test]
-gem 'pg', group: :production
+gem 'pg'
 
 gem 'minipack'
 
@@ -40,23 +37,13 @@ gem 'rollbar'
 
 gem 'aws-sdk-rails'
 
-# gem 'rails_12factor', group: :production
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use Unicorn as the app server
-# gem 'unicorn'
+gem 'graphiql-rails', group: :development
+gem 'solargraph', group: :development
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-
   gem 'pry-rails'
-
   gem 'factory_bot_rails'
   gem 'database_cleaner'
 end
@@ -64,4 +51,3 @@ end
 group :production do
   gem 'puma'
 end
-gem 'graphiql-rails', group: :development
