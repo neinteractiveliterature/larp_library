@@ -75,6 +75,42 @@
               ]
             },
             {
+              "name": "currentUserCanCreateProjects",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+
+              ]
+            },
+            {
+              "name": "currentUserCanEdit",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+
+              ]
+            },
+            {
               "name": "description",
               "description": null,
               "type": {
@@ -291,32 +327,6 @@
               ]
             },
             {
-              "name": "nodes",
-              "description": "A list of nodes.",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "Brand",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": [
-
-              ]
-            },
-            {
               "name": "pageInfo",
               "description": "Information to aid in pagination.",
               "type": {
@@ -387,9 +397,13 @@
               "name": "node",
               "description": "The item at the end of the edge.",
               "type": {
-                "kind": "OBJECT",
-                "name": "Brand",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Brand",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -1731,32 +1745,6 @@
               ]
             },
             {
-              "name": "nodes",
-              "description": "A list of nodes.",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "Project",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": [
-
-              ]
-            },
-            {
               "name": "pageInfo",
               "description": "Information to aid in pagination.",
               "type": {
@@ -1827,9 +1815,13 @@
               "name": "node",
               "description": "The item at the end of the edge.",
               "type": {
-                "kind": "OBJECT",
-                "name": "Project",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Project",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -2921,32 +2913,6 @@
               ]
             },
             {
-              "name": "nodes",
-              "description": "A list of nodes.",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "TagCategory",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": [
-
-              ]
-            },
-            {
               "name": "pageInfo",
               "description": "Information to aid in pagination.",
               "type": {
@@ -3017,9 +2983,13 @@
               "name": "node",
               "description": "The item at the end of the edge.",
               "type": {
-                "kind": "OBJECT",
-                "name": "TagCategory",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "TagCategory",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -3055,32 +3025,6 @@
                     "ofType": {
                       "kind": "OBJECT",
                       "name": "TagEdge",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": [
-
-              ]
-            },
-            {
-              "name": "nodes",
-              "description": "A list of nodes.",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "Tag",
                       "ofType": null
                     }
                   }
@@ -3163,9 +3107,13 @@
               "name": "node",
               "description": "The item at the end of the edge.",
               "type": {
-                "kind": "OBJECT",
-                "name": "Tag",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Tag",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null,

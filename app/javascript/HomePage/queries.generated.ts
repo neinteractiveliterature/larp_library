@@ -22,20 +22,26 @@ export type HomePageQueryData = (
     ) }
   )>, tags: (
     { __typename: 'TagConnection' }
-    & { nodes: Array<(
-      { __typename: 'Tag' }
-      & Pick<Types.Tag, 'id'>
-      & { projects: (
-        { __typename: 'ProjectConnection' }
-        & Pick<Types.ProjectConnection, 'totalCount'>
+    & { edges: Array<(
+      { __typename: 'TagEdge' }
+      & { node: (
+        { __typename: 'Tag' }
+        & Pick<Types.Tag, 'id'>
+        & { projects: (
+          { __typename: 'ProjectConnection' }
+          & Pick<Types.ProjectConnection, 'totalCount'>
+        ) }
+        & TagFragment
       ) }
-      & TagFragment
     )> }
   ), tagCategories: (
     { __typename: 'TagCategoryConnection' }
-    & { nodes: Array<(
-      { __typename: 'TagCategory' }
-      & Pick<Types.TagCategory, 'id' | 'name'>
+    & { edges: Array<(
+      { __typename: 'TagCategoryEdge' }
+      & { node: (
+        { __typename: 'TagCategory' }
+        & Pick<Types.TagCategory, 'id' | 'name'>
+      ) }
     )> }
   ) }
 );
@@ -50,18 +56,22 @@ export const HomePageQueryDocument = gql`
     }
   }
   tags {
-    nodes {
-      id
-      ...TagFragment
-      projects {
-        totalCount
+    edges {
+      node {
+        id
+        ...TagFragment
+        projects {
+          totalCount
+        }
       }
     }
   }
   tagCategories {
-    nodes {
-      id
-      name
+    edges {
+      node {
+        id
+        name
+      }
     }
   }
 }

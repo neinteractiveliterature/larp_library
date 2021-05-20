@@ -1,9 +1,11 @@
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
-export type BrandKeySpecifier = ('approved' | 'createdAt' | 'creator' | 'description' | 'id' | 'name' | 'projects' | 'slug' | 'updatedAt' | 'users' | BrandKeySpecifier)[];
+export type BrandKeySpecifier = ('approved' | 'createdAt' | 'creator' | 'currentUserCanCreateProjects' | 'currentUserCanEdit' | 'description' | 'id' | 'name' | 'projects' | 'slug' | 'updatedAt' | 'users' | BrandKeySpecifier)[];
 export type BrandFieldPolicy = {
 	approved?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	creator?: FieldPolicy<any> | FieldReadFunction<any>,
+	currentUserCanCreateProjects?: FieldPolicy<any> | FieldReadFunction<any>,
+	currentUserCanEdit?: FieldPolicy<any> | FieldReadFunction<any>,
 	description?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	name?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -12,10 +14,9 @@ export type BrandFieldPolicy = {
 	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	users?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type BrandConnectionKeySpecifier = ('edges' | 'nodes' | 'pageInfo' | 'totalCount' | BrandConnectionKeySpecifier)[];
+export type BrandConnectionKeySpecifier = ('edges' | 'pageInfo' | 'totalCount' | BrandConnectionKeySpecifier)[];
 export type BrandConnectionFieldPolicy = {
 	edges?: FieldPolicy<any> | FieldReadFunction<any>,
-	nodes?: FieldPolicy<any> | FieldReadFunction<any>,
 	pageInfo?: FieldPolicy<any> | FieldReadFunction<any>,
 	totalCount?: FieldPolicy<any> | FieldReadFunction<any>
 };
@@ -91,10 +92,9 @@ export type ProjectFieldPolicy = {
 	title?: FieldPolicy<any> | FieldReadFunction<any>,
 	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type ProjectConnectionKeySpecifier = ('edges' | 'nodes' | 'pageInfo' | 'totalCount' | ProjectConnectionKeySpecifier)[];
+export type ProjectConnectionKeySpecifier = ('edges' | 'pageInfo' | 'totalCount' | ProjectConnectionKeySpecifier)[];
 export type ProjectConnectionFieldPolicy = {
 	edges?: FieldPolicy<any> | FieldReadFunction<any>,
-	nodes?: FieldPolicy<any> | FieldReadFunction<any>,
 	pageInfo?: FieldPolicy<any> | FieldReadFunction<any>,
 	totalCount?: FieldPolicy<any> | FieldReadFunction<any>
 };
@@ -154,10 +154,9 @@ export type TagCategoryFieldPolicy = {
 	textColor?: FieldPolicy<any> | FieldReadFunction<any>,
 	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type TagCategoryConnectionKeySpecifier = ('edges' | 'nodes' | 'pageInfo' | 'totalCount' | TagCategoryConnectionKeySpecifier)[];
+export type TagCategoryConnectionKeySpecifier = ('edges' | 'pageInfo' | 'totalCount' | TagCategoryConnectionKeySpecifier)[];
 export type TagCategoryConnectionFieldPolicy = {
 	edges?: FieldPolicy<any> | FieldReadFunction<any>,
-	nodes?: FieldPolicy<any> | FieldReadFunction<any>,
 	pageInfo?: FieldPolicy<any> | FieldReadFunction<any>,
 	totalCount?: FieldPolicy<any> | FieldReadFunction<any>
 };
@@ -166,10 +165,9 @@ export type TagCategoryEdgeFieldPolicy = {
 	cursor?: FieldPolicy<any> | FieldReadFunction<any>,
 	node?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type TagConnectionKeySpecifier = ('edges' | 'nodes' | 'pageInfo' | 'totalCount' | TagConnectionKeySpecifier)[];
+export type TagConnectionKeySpecifier = ('edges' | 'pageInfo' | 'totalCount' | TagConnectionKeySpecifier)[];
 export type TagConnectionFieldPolicy = {
 	edges?: FieldPolicy<any> | FieldReadFunction<any>,
-	nodes?: FieldPolicy<any> | FieldReadFunction<any>,
 	pageInfo?: FieldPolicy<any> | FieldReadFunction<any>,
 	totalCount?: FieldPolicy<any> | FieldReadFunction<any>
 };

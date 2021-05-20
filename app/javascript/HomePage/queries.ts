@@ -13,20 +13,24 @@ export const HomePageQuery = gql`
     }
 
     tags {
-      nodes {
-        id
-        ...TagFragment
+      edges {
+        node {
+          id
+          ...TagFragment
 
-        projects {
-          totalCount
+          projects {
+            totalCount
+          }
         }
       }
     }
 
     tagCategories {
-      nodes {
-        id
-        name
+      edges {
+        node {
+          id
+          name
+        }
       }
     }
   }

@@ -18,9 +18,11 @@ export const TagFragment = gql`
 export const TagAutocompleteQuery = gql`
   query TagAutocompleteQuery($queryString: String) {
     tags(queryString: $queryString) {
-      nodes {
-        id
-        ...TagFragment
+      edges {
+        node {
+          id
+          ...TagFragment
+        }
       }
     }
   }

@@ -27,7 +27,7 @@ function TagSelector({ value, onChange, id }: TagSelectorProps): JSX.Element {
       variables: { queryString },
     });
 
-    return result.data.tags.nodes;
+    return result.data.tags.edges.map((edge) => edge.node);
   };
 
   return (

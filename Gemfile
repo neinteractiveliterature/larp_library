@@ -22,8 +22,6 @@ gem 'graphql'
 gem 'haml'
 gem 'redcarpet'
 gem 'truncate_html'
-gem 'will_paginate'
-gem 'will_paginate-bootstrap4'
 gem 'color'
 
 gem 'elasticsearch-rails', '~> 6.1.1'

@@ -22,10 +22,13 @@ export type TagAutocompleteQueryData = (
   { __typename: 'Query' }
   & { tags: (
     { __typename: 'TagConnection' }
-    & { nodes: Array<(
-      { __typename: 'Tag' }
-      & Pick<Types.Tag, 'id'>
-      & TagFragment
+    & { edges: Array<(
+      { __typename: 'TagEdge' }
+      & { node: (
+        { __typename: 'Tag' }
+        & Pick<Types.Tag, 'id'>
+        & TagFragment
+      ) }
     )> }
   ) }
 );
@@ -46,9 +49,11 @@ export const TagFragmentDoc = gql`
 export const TagAutocompleteQueryDocument = gql`
     query TagAutocompleteQuery($queryString: String) {
   tags(queryString: $queryString) {
-    nodes {
-      id
-      ...TagFragment
+    edges {
+      node {
+        id
+        ...TagFragment
+      }
     }
   }
 }

@@ -2,18 +2,6 @@ class BrandsController < ApplicationController
   load_and_authorize_resource find_by: :slug
   respond_to :html
 
-  def index
-    @brands = Brand.select("brands.*, count(projects.id) as project_count").
-      joins("left join projects on projects.brand_id = brands.id").
-      group("projects.brand_id, brands.id").
-      order("project_count desc")
-  end
-
-  def show
-    search = ProjectSearch.new(brand_id: @brand.id)
-    @projects = Project.search(search).page(params[:page]).records
-  end
-
   def new
   end
 

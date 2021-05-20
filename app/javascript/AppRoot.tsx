@@ -7,8 +7,11 @@ const PageComponentImports: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [pageName: string]: () => Promise<{ default: React.ComponentType<any> }>;
 } = {
+  BrandPage: () => import('./Brands/BrandPage'),
+  BrandListPage: () => import('./Brands/BrandListPage'),
   HomePage: () => import('./HomePage/HomePage'),
   ProjectRoot: () => import('./Project/ProjectRoot'),
+  ProjectSearchPage: () => import('./ProjectSearch/ProjectSearchPage'),
 };
 
 const PageComponents = mapValues(PageComponentImports, (importFunction) =>
@@ -23,8 +26,11 @@ function AppRoot({ s3Configuration }: AppRootProps): JSX.Element {
   return (
     <S3ConfigurationContext.Provider value={s3Configuration}>
       <Routes>
+        <Route path="projects" element={<PageComponents.ProjectSearchPage />} />
+        <Route path="brands" element={<PageComponents.BrandListPage />} />
         <Route path="brands/:brandSlug/*">
           <Route path="projects/*" element={<PageComponents.ProjectRoot />} />
+          <Route path="/" element={<PageComponents.BrandPage />} />
         </Route>
         <Route path="/" element={<PageComponents.HomePage />} />
       </Routes>

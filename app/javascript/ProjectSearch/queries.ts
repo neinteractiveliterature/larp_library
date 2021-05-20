@@ -26,3 +26,25 @@ export const ProjectHeadersFragment = gql`
 
   ${TagFragment}
 `;
+
+export const ProjectSearchQuery = gql`
+  query ProjectSearchQuery($queryString: String, $after: String) {
+    projects(queryString: $queryString, after: $after) {
+      pageInfo {
+        endCursor
+      }
+
+      totalCount
+
+      edges {
+        node {
+          id
+          description
+          ...ProjectHeadersFragment
+        }
+      }
+    }
+  }
+
+  ${ProjectHeadersFragment}
+`;

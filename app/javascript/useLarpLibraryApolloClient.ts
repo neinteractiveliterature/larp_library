@@ -8,6 +8,7 @@ import {
 } from '@apollo/client';
 import { TypedTypePolicies } from './apolloClientHelpers.generated';
 import { useAuthHeadersLink, useErrorHandlerLink } from '@neinteractiveliterature/litform';
+import { relayStylePagination } from '@apollo/client/utilities';
 
 export function useLarpLibraryApolloLink(
   authenticityToken: string,
@@ -25,8 +26,19 @@ export function useLarpLibraryApolloLink(
 }
 
 const typePolicies: TypedTypePolicies = {
+  Brand: {
+    fields: {
+      projects: relayStylePagination(),
+    },
+  },
   ProjectFile: {
     keyFields: ['id'],
+  },
+  Query: {
+    fields: {
+      brands: relayStylePagination(),
+      projects: relayStylePagination(),
+    },
   },
 };
 

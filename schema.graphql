@@ -2,6 +2,8 @@ type Brand {
   approved: Boolean
   createdAt: ISO8601DateTime!
   creator: User
+  currentUserCanCreateProjects: Boolean!
+  currentUserCanEdit: Boolean!
   description: String
   id: ID!
   name: String!
@@ -41,11 +43,6 @@ type BrandConnection {
   edges: [BrandEdge!]!
 
   """
-  A list of nodes.
-  """
-  nodes: [Brand!]!
-
-  """
   Information to aid in pagination.
   """
   pageInfo: PageInfo!
@@ -64,7 +61,7 @@ type BrandEdge {
   """
   The item at the end of the edge.
   """
-  node: Brand
+  node: Brand!
 }
 
 """
@@ -280,11 +277,6 @@ type ProjectConnection {
   edges: [ProjectEdge!]!
 
   """
-  A list of nodes.
-  """
-  nodes: [Project!]!
-
-  """
   Information to aid in pagination.
   """
   pageInfo: PageInfo!
@@ -303,7 +295,7 @@ type ProjectEdge {
   """
   The item at the end of the edge.
   """
-  node: Project
+  node: Project!
 }
 
 type ProjectFile {
@@ -471,11 +463,6 @@ type TagCategoryConnection {
   edges: [TagCategoryEdge!]!
 
   """
-  A list of nodes.
-  """
-  nodes: [TagCategory!]!
-
-  """
   Information to aid in pagination.
   """
   pageInfo: PageInfo!
@@ -494,7 +481,7 @@ type TagCategoryEdge {
   """
   The item at the end of the edge.
   """
-  node: TagCategory
+  node: TagCategory!
 }
 
 """
@@ -505,11 +492,6 @@ type TagConnection {
   A list of edges.
   """
   edges: [TagEdge!]!
-
-  """
-  A list of nodes.
-  """
-  nodes: [Tag!]!
 
   """
   Information to aid in pagination.
@@ -530,7 +512,7 @@ type TagEdge {
   """
   The item at the end of the edge.
   """
-  node: Tag
+  node: Tag!
 }
 
 """

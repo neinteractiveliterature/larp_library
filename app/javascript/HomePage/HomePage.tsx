@@ -9,11 +9,19 @@ import { useHomePageQuery } from './queries.generated';
 
 export default LoadQueryWrapper(useHomePageQuery, function HomePage({ data }) {
   const tagsByCategoryId = useMemo(
-    () => groupBy(data.tags.nodes, (tag) => tag.tagCategory?.id ?? 'uncategorized'),
+    () =>
+      groupBy(
+        data.tags.edges.map((edge) => edge.node),
+        (tag) => tag.tagCategory?.id ?? 'uncategorized',
+      ),
     [data.tags],
   );
   const tagCategoriesSorted = useMemo(
-    () => sortBy(data.tagCategories.nodes, (tagCategory) => tagCategory.name),
+    () =>
+      sortBy(
+        data.tagCategories.edges.map((edge) => edge.node),
+        (tagCategory) => tagCategory.name,
+      ),
     [data.tagCategories],
   );
 

@@ -1,9 +1,0 @@
-.d-flex.flex-direction-column.flex-direction-lg-row
-  .flex-grow-1
-    %h1 Larps
-  %div{style: "min-width: 150px; width: 33%"}
-    = form_tag projects_path, method: 'GET', class: 'form' do
-      = text_field_tag 'q', params[:q], class: 'form-control rounded-pill', placeholder: "Search"
-
-= render partial: @projects
-= will_paginate @projects, renderer: WillPaginate::ActionView::BootstrapLinkRenderer

@@ -6,6 +6,7 @@ module Types
     node_nullable false
     edge_nullable false
     edges_nullable false
+    has_nodes_field false
 
     field :total_count, Integer, null: false
 
@@ -13,8 +14,14 @@ module Types
       case object
       when GraphQL::Pagination::ActiveRecordRelationConnection
         model = object.items.klass
-        scoped_query = object.items.select(:id).to_sql
-        model.where("id IN (SELECT scoped_query.id FROM (#{scoped_query}) scoped_query)").count
+        scope = object.items
+        scope_has_id = scope.select_values.any? do |select_value|
+          select_value.split(',').map(&:strip).any? do |column_spec|
+            ["#{model.table_name}.*", "#{model.table_name}.id"].include?(column_spec)
+          end
+        end
+        scope = scope.select(:id) unless scope_has_id
+        model.where("#{model.table_name}.id IN (SELECT scoped_query.id FROM (#{scope.to_sql}) scoped_query)").count
       when Connections::SearchRequestConnection
         object.total_count
       else

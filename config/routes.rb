@@ -5,9 +5,13 @@ Rails.application.routes.draw do
   post "/graphql", to: "graphql#execute"
   devise_for :users
 
-  get "/projects" => 'search_projects#index', as: :projects
-  resources :projects, only: [:index]
+  get '/projects' => 'single_page_app#show'
+  # get "/projects" => 'search_projects#index', as: :projects
+  # resources :projects, only: [:index]
   resources :project_promotions, only: [:index, :create, :destroy]
+
+  get '/brands' => 'single_page_app#show'
+  get '/brands/:brand_id' => 'single_page_app#show'
 
   resources :brands do
     collection do
