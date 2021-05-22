@@ -14,8 +14,10 @@ module Types
     field :users, [Types::UserType], null: false
     field :current_user_can_edit, Boolean, null: false
     field :current_user_can_create_projects, Boolean, null: false
+    field :current_user_can_manage_memberships, Boolean, null: false
+    field :brand_memberships, [Types::BrandMembershipType], null: false
 
-    association_loaders Brand, :projects, :creator, :users
+    association_loaders Brand, :projects, :creator, :users, :brand_memberships
 
     def current_user_can_edit
       context[:current_ability].can?(:edit, object)
@@ -23,6 +25,10 @@ module Types
 
     def current_user_can_create_projects
       context[:current_ability].can?(:create, Project.new(brand: object))
+    end
+
+    def current_user_can_manage_memberships
+      context[:current_ability].can?(:manage, BrandMembership.new(brand: object))
     end
   end
 end

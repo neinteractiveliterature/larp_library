@@ -13,7 +13,7 @@ export function addNewObjectToReferenceArrayModifier<Q, T extends { id: string }
   fragment: DocumentNode,
 ): Modifier<(Reference | undefined)[]> {
   const modifier: Modifier<(Reference | undefined)[]> = (existingObjectRefs, { readField }) => {
-    const newProjectFileRef = cache.writeFragment({
+    const newObjectRef = cache.writeFragment({
       data: newObject,
       fragment: fragment,
     });
@@ -22,7 +22,7 @@ export function addNewObjectToReferenceArrayModifier<Q, T extends { id: string }
       return existingObjectRefs;
     }
 
-    return [...existingObjectRefs, newProjectFileRef];
+    return [...existingObjectRefs, newObjectRef];
   };
 
   return modifier;

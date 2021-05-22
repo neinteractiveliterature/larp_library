@@ -7,6 +7,7 @@ import { Waypoint } from 'react-waypoint';
 import ProjectCard from '../ProjectSearch/ProjectCard';
 import { generateBrandPath } from '../URLGenerators';
 import { useBrandPageQuery } from './queries.generated';
+import UnapprovedBrandAlert from './UnapprovedBrandAlert';
 
 export default function BrandPage(): JSX.Element {
   const { brandSlug } = useParams();
@@ -29,6 +30,7 @@ export default function BrandPage(): JSX.Element {
 
   return (
     <>
+      <UnapprovedBrandAlert brand={brand} />
       <div className="d-flex">
         <div className="flex-grow-1">
           <h1>{brand.name}</h1>

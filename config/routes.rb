@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
   get '/brands' => 'single_page_app#show'
   get '/brands/:brand_id' => 'single_page_app#show'
+  get '/brands/:brand_id/edit' => 'single_page_app#show'
 
   resources :brands do
     collection do

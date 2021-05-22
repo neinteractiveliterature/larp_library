@@ -165,6 +165,11 @@ GEM
       railties
       sprockets-rails
     graphql (1.12.10)
+    graphql-rails_logger (1.2.3)
+      actionpack (> 5.0)
+      activesupport (> 5.0)
+      railties (> 5.0)
+      rouge (~> 3.0)
     haml (5.2.1)
       temple (>= 0.8.0)
       tilt
@@ -256,6 +261,7 @@ GEM
       nokogiri
     rexml (3.2.5)
     rollbar (3.1.2)
+    rouge (3.26.0)
     rubocop (1.15.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
@@ -267,6 +273,13 @@ GEM
       unicode-display_width (>= 1.4.0, < 3.0)
     rubocop-ast (1.5.0)
       parser (>= 3.0.1.1)
+    rubocop-performance (1.11.3)
+      rubocop (>= 1.7.0, < 2.0)
+      rubocop-ast (>= 0.4.0)
+    rubocop-rails (2.10.1)
+      activesupport (>= 4.2.0)
+      rack (>= 1.1)
+      rubocop (>= 1.7.0, < 2.0)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.4)
     rubycas-client (2.3.9)
@@ -327,6 +340,7 @@ DEPENDENCIES
   figaro
   graphiql-rails
   graphql
+  graphql-rails_logger
   haml
   high_voltage
   listen
@@ -337,6 +351,9 @@ DEPENDENCIES
   rails (= 6.1.3.2)
   redcarpet
   rollbar
+  rubocop
+  rubocop-performance
+  rubocop-rails
   solargraph
   spring
   truncate_html

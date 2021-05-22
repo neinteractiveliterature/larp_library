@@ -17,6 +17,7 @@ class ProjectPromotionsController < ApplicationController
   end
 
   private
+
   def project_promotion_params
     params.require(:project_promotion).permit(:project_id)
   end

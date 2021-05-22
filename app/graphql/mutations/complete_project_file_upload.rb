@@ -23,7 +23,7 @@ module Mutations
       true
     end
 
-    def resolve(project_id:, url:, filename:, filesize:, filepath:, filetype: nil)
+    def resolve(**_args)
       @project_file.save!
       { project_file: @project_file }
     end

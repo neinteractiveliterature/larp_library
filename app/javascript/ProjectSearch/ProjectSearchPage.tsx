@@ -8,10 +8,15 @@ import ProjectCard from './ProjectCard';
 
 export default function ProjectSearchPage(): JSX.Element {
   const [queryString, setQueryString] = useState('');
-  const [transientQueryString, setTransientQueryString] = useDebouncedState('', (newValue) =>
-    setQueryString(newValue),
+  const [transientQueryString, setTransientQueryString] = useDebouncedState(
+    '',
+    (newValue) => setQueryString(newValue),
+    250,
   );
-  const { data, loading, error, fetchMore } = useProjectSearchQuery({ variables: { queryString } });
+  const { data, loading, error, fetchMore } = useProjectSearchQuery({
+    variables: { queryString },
+    fetchPolicy: 'network-only',
+  });
 
   return (
     <>

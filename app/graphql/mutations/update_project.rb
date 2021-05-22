@@ -5,13 +5,13 @@ module Mutations
 
     field :project, Types::ProjectType, null: false
 
-    def authorized?(id:, project_attributes:)
+    def authorized?(id:, **_args)
       @project = Project.find(id)
       context[:current_ability].authorize! :update, @project
       true
     end
 
-    def resolve(id:, project_attributes:)
+    def resolve(project_attributes:, **_args)
       @project.update!(project_attributes.to_h)
       { project: @project }
     end

@@ -7,8 +7,8 @@ class Tag < ActiveRecord::Base
   delegate :name, to: :tag_category, prefix: 'category', allow_nil: true
 
   mapping do
-    indexes :name, :type => 'text'
-    indexes :category_name, :type => 'text'
+    indexes :name, type: 'text'
+    indexes :category_name, type: 'text'
   end
 
   def color
@@ -23,7 +23,7 @@ class Tag < ActiveRecord::Base
     tag_category.try(:icon) || TagCategory.new.icon
   end
 
-  def as_indexed_json(options={})
-    self.as_json(methods: [:category_name])
+  def as_indexed_json(_options = {})
+    as_json(methods: [:category_name])
   end
 end

@@ -4,7 +4,7 @@ module ProjectsHelper
       [
         [
           license[:name],
-          (license[:discouraged] ? " (#{discouraged_reason(license)})" : "")
+          (license[:discouraged] ? " (#{discouraged_reason(license)})" : '')
         ].join(''),
         key
       ]
@@ -32,7 +32,7 @@ module ProjectsHelper
     end
 
     react_component(
-      "TagSelectorInput",
+      'TagSelectorInput',
       name: 'project[tag_names][]',
       initialValue: initial_value
     )

@@ -12,7 +12,7 @@ class TagsController < ApplicationController
         }
       }).records
     else
-      Tag.order("upper(name)")
+      Tag.order('upper(name)')
     end
 
     respond_with @tags.as_json(methods: [:color, :text_color, :icon, :category_name])

@@ -4,18 +4,18 @@ class TagCategory < ActiveRecord::Base
   validates :color, { format: { with: /\A\#[0-9a-z]{6}\z/ } }
 
   def color
-    read_attribute(:color) || "#777777"
+    self[:color] || '#777777'
   end
 
   def text_color
     if Color::RGB.by_hex(color).brightness > 0.5
-      "#000000"
+      '#000000'
     else
-      "#ffffff"
+      '#ffffff'
     end
   end
 
   def icon
-    read_attribute(:icon) || "tag"
+    self[:icon] || 'tag'
   end
 end

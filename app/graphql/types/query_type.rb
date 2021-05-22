@@ -39,15 +39,20 @@ module Types
       end
     end
 
-    field :brands, Types::BrandType.connection_type, null: false
+    field :brands, Types::BrandType.connection_type, null: false do
+      argument :unapproved, Boolean, required: false
+    end
 
-    def brands
-      Brand.
-        select("brands.*, count(projects.id) as project_count").
-        joins("left join projects on projects.brand_id = brands.id").
-        group("projects.brand_id, brands.id").
-        order("project_count desc").
-        accessible_by(context[:current_ability])
+    def brands(unapproved: false)
+      scope = Brand
+        .select('brands.*, count(projects.id) as project_count')
+        .joins('left join projects on projects.brand_id = brands.id')
+        .group('projects.brand_id, brands.id')
+        .order('project_count desc')
+        .accessible_by(context[:current_ability])
+
+      scope = scope.where(approved: false) if unapproved
+      scope
     end
 
     field :tags, Types::TagType.connection_type, null: false do
@@ -69,7 +74,7 @@ module Types
           }
         )
       else
-        Tag.order("upper(name)")
+        Tag.order('upper(name)')
       end
     end
 
@@ -89,6 +94,12 @@ module Types
 
     def licenses
       Project::LICENSES.map { |id, attrs| attrs.merge(id: id) }
+    end
+
+    field :current_user, Types::UserType, null: true
+
+    def current_user
+      context[:current_user]
     end
   end
 end

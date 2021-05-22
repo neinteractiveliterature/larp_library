@@ -12,7 +12,7 @@ module Mutations
       true
     end
 
-    def resolve(brand_id:, project_attributes:)
+    def resolve(**_args)
       @project.save!
       { project: @project }
     end

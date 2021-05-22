@@ -4,9 +4,7 @@ module ElasticsearchModel
   included do
     include Elasticsearch::Model
 
-    if Rails.env.test?
-      index_name "#{self.model_name.collection.gsub(/\//, '-')}-test"
-    end
+    index_name "#{model_name.collection.tr('/', '-')}-test" if Rails.env.test?
 
     after_commit(on: [:create, :update]) { __elasticsearch__.index_document }
     after_commit(on: [:destroy]) { __elasticsearch__.delete_document }

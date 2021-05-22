@@ -5,10 +5,6 @@ class BrandsController < ApplicationController
   def new
   end
 
-  def edit
-    @brand.brand_memberships.new
-  end
-
   def create
     @brand.creator = current_user
 
@@ -17,11 +13,6 @@ class BrandsController < ApplicationController
       BrandMailer.brand_pending(@brand).deliver_later
     end
 
-    respond_with @brand
-  end
-
-  def update
-    @brand.update(brand_params)
     respond_with @brand
   end
 
@@ -41,7 +32,8 @@ class BrandsController < ApplicationController
     permitted_attrs = [:name, :description]
 
     if @brand.try(:approved?)
-      permitted_attrs << { brand_memberships_attributes: [:id, :email, :inviting_user_id, :admin, :_destroy] }
+      permitted_attrs << { brand_memberships_attributes: [:id, :email, :inviting_user_id, :admin,
+                                                          :_destroy] }
     end
 
     params.require(:brand).permit(permitted_attrs)

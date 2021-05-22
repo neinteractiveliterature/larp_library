@@ -9,6 +9,8 @@ const PageComponentImports: {
 } = {
   BrandPage: () => import('./Brands/BrandPage'),
   BrandListPage: () => import('./Brands/BrandListPage'),
+  EditBrandPage: () => import('./Brands/EditBrandPage'),
+  NewBrandPage: () => import('./Brands/NewBrandPage'),
   HomePage: () => import('./HomePage/HomePage'),
   ProjectRoot: () => import('./Project/ProjectRoot'),
   ProjectSearchPage: () => import('./ProjectSearch/ProjectSearchPage'),
@@ -27,10 +29,14 @@ function AppRoot({ s3Configuration }: AppRootProps): JSX.Element {
     <S3ConfigurationContext.Provider value={s3Configuration}>
       <Routes>
         <Route path="projects" element={<PageComponents.ProjectSearchPage />} />
-        <Route path="brands" element={<PageComponents.BrandListPage />} />
-        <Route path="brands/:brandSlug/*">
-          <Route path="projects/*" element={<PageComponents.ProjectRoot />} />
-          <Route path="/" element={<PageComponents.BrandPage />} />
+        <Route path="brands/*">
+          <Route path="new" element={<PageComponents.NewBrandPage />} />
+          <Route path=":brandSlug/*">
+            <Route path="edit" element={<PageComponents.EditBrandPage />} />
+            <Route path="projects/*" element={<PageComponents.ProjectRoot />} />
+            <Route path="/" element={<PageComponents.BrandPage />} />
+          </Route>
+          <Route path="/" element={<PageComponents.BrandListPage />} />
         </Route>
         <Route path="/" element={<PageComponents.HomePage />} />
       </Routes>

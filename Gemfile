@@ -35,8 +35,13 @@ gem 'rollbar'
 
 gem 'aws-sdk-rails'
 
-gem 'graphiql-rails', group: :development
-gem 'solargraph', group: :development
+group :development do
+  gem 'graphiql-rails'
+  gem 'rubocop'
+  gem 'rubocop-rails'
+  gem 'rubocop-performance'
+  gem 'solargraph'
+end
 
 group :development, :test do
   gem 'byebug'
@@ -44,6 +49,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'factory_bot_rails'
   gem 'database_cleaner'
+  gem 'graphql-rails_logger'
 end
 
 group :production do
