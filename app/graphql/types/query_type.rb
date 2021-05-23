@@ -114,5 +114,11 @@ module Types
     def current_user
       context[:current_user]
     end
+
+    field :current_ability, Types::AbilityType, null: false
+
+    def current_ability
+      context[:current_ability]
+    end
   end
 end

@@ -98,6 +98,13 @@ $fa-font-path: '~font-awesome/fonts/';
       color: white;
     }
   }
+
+  .btn-link {
+    color: white;
+    font-size: inherit;
+    padding: 0;
+    vertical-align: inherit;
+  }
 }
 
 .CodeMirror {

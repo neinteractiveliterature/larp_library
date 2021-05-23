@@ -1,4 +1,10 @@
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
+export type AbilityKeySpecifier = ('canCreateProjectPromotions' | 'canUpdateTagCategories' | 'canUpdateTags' | AbilityKeySpecifier)[];
+export type AbilityFieldPolicy = {
+	canCreateProjectPromotions?: FieldPolicy<any> | FieldReadFunction<any>,
+	canUpdateTagCategories?: FieldPolicy<any> | FieldReadFunction<any>,
+	canUpdateTags?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type AcceptBrandMembershipInvitationPayloadKeySpecifier = ('brandMembership' | 'clientMutationId' | AcceptBrandMembershipInvitationPayloadKeySpecifier)[];
 export type AcceptBrandMembershipInvitationPayloadFieldPolicy = {
 	brandMembership?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -173,11 +179,12 @@ export type PromoteProjectPayloadFieldPolicy = {
 	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
 	projectPromotion?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('brand' | 'brandMembership' | 'brands' | 'currentUser' | 'licenses' | 'project' | 'projectPromotions' | 'projects' | 'tagCategories' | 'tags' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('brand' | 'brandMembership' | 'brands' | 'currentAbility' | 'currentUser' | 'licenses' | 'project' | 'projectPromotions' | 'projects' | 'tagCategories' | 'tags' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	brand?: FieldPolicy<any> | FieldReadFunction<any>,
 	brandMembership?: FieldPolicy<any> | FieldReadFunction<any>,
 	brands?: FieldPolicy<any> | FieldReadFunction<any>,
+	currentAbility?: FieldPolicy<any> | FieldReadFunction<any>,
 	currentUser?: FieldPolicy<any> | FieldReadFunction<any>,
 	licenses?: FieldPolicy<any> | FieldReadFunction<any>,
 	project?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -256,6 +263,10 @@ export type UserFieldPolicy = {
 	username?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type TypedTypePolicies = TypePolicies & {
+	Ability?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | AbilityKeySpecifier | (() => undefined | AbilityKeySpecifier),
+		fields?: AbilityFieldPolicy,
+	},
 	AcceptBrandMembershipInvitationPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | AcceptBrandMembershipInvitationPayloadKeySpecifier | (() => undefined | AcceptBrandMembershipInvitationPayloadKeySpecifier),
 		fields?: AcceptBrandMembershipInvitationPayloadFieldPolicy,

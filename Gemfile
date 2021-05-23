@@ -27,8 +27,6 @@ gem 'color'
 gem 'elasticsearch-rails', '~> 6.1.1'
 gem 'elasticsearch-model', '~> 6.1.1'
 
-gem 'high_voltage'
-
 gem 'figaro'
 
 gem 'rollbar'

@@ -7,6 +7,11 @@ Rails.application.routes.draw do
     cas_sessions: 'sessions'
   }
 
+  # Working around Illyan's lack of CORS; we can get rid of this when we switch to Intercode OAuth2
+  devise_scope :user do
+    get '/users/sign_out' => 'sessions#destroy'
+  end
+
   resources :tags, except: [:show]
   resources :tag_categories, except: [:show]
 

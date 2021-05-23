@@ -174,7 +174,6 @@ GEM
       temple (>= 0.8.0)
       tilt
     hashie (4.1.0)
-    high_voltage (3.1.2)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.4)
@@ -342,7 +341,6 @@ DEPENDENCIES
   graphql
   graphql-rails_logger
   haml
-  high_voltage
   listen
   minipack
   pg
