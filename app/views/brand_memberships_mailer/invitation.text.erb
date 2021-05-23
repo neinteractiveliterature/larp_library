@@ -24,6 +24,6 @@ This membership allows you to:
 * Edit the public description and branding for #{brand_name}
 <% end -%>
 
-To accept this invitation, go to: <%= pre_accept_brand_membership_url(@brand_membership.brand, @brand_membership) %>
+To accept this invitation, go to: <%= absolute_url("/brands/#{@brand_membership.brand.to_param}/invitations/#{@brand_membership.to_param}") %>
 
 If you don't want to join <%= @brand_membership.brand.name %>, please just ignore this email (and possibly let <%= @inviting_user.name %> know).

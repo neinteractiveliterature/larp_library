@@ -21,4 +21,8 @@ class Ability
       can [:update, :destroy], Brand, brand_memberships: { user: { id: user.id }, admin: true }
     end
   end
+
+  def user_provided_invitation_token(invitation_token)
+    can :read, BrandMembership, invitation_token: invitation_token
+  end
 end

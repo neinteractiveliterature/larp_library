@@ -1,6 +1,0 @@
-= render partial: 'brand_memberships/description', locals: { brand_membership: @brand_membership }
-
-- if user_signed_in?
-  = button_to "Accept invitation", accept_brand_membership_path(@brand, @brand_membership), class: 'btn btn-primary'
-- else
-  = link_to "Sign in to accept this invitation", new_user_session_path, class: 'btn btn-primary'

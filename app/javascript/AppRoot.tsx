@@ -12,8 +12,11 @@ const PageComponentImports: {
   EditBrandPage: () => import('./Brands/EditBrandPage'),
   NewBrandPage: () => import('./Brands/NewBrandPage'),
   HomePage: () => import('./HomePage/HomePage'),
+  InvitationPage: () => import('./Invitations/InvitationPage'),
+  ProjectPromotionsPage: () => import('./ProjectPromotions/ProjectPromotionsPage'),
   ProjectRoot: () => import('./Project/ProjectRoot'),
   ProjectSearchPage: () => import('./ProjectSearch/ProjectSearchPage'),
+  UnapprovedBrandsListPage: () => import('./Brands/UnapprovedBrandsListPage'),
 };
 
 const PageComponents = mapValues(PageComponentImports, (importFunction) =>
@@ -30,14 +33,20 @@ function AppRoot({ s3Configuration }: AppRootProps): JSX.Element {
       <Routes>
         <Route path="projects" element={<PageComponents.ProjectSearchPage />} />
         <Route path="brands/*">
+          <Route path="unapproved" element={<PageComponents.UnapprovedBrandsListPage />} />
           <Route path="new" element={<PageComponents.NewBrandPage />} />
           <Route path=":brandSlug/*">
+            <Route
+              path="invitations/:invitationToken"
+              element={<PageComponents.InvitationPage />}
+            />
             <Route path="edit" element={<PageComponents.EditBrandPage />} />
             <Route path="projects/*" element={<PageComponents.ProjectRoot />} />
             <Route path="/" element={<PageComponents.BrandPage />} />
           </Route>
           <Route path="/" element={<PageComponents.BrandListPage />} />
         </Route>
+        <Route path="project_promotions" element={<PageComponents.ProjectPromotionsPage />} />
         <Route path="/" element={<PageComponents.HomePage />} />
       </Routes>
     </S3ConfigurationContext.Provider>

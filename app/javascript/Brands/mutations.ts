@@ -27,6 +27,19 @@ export const UpdateBrand = gql`
   ${BrandPageBrandFields}
 `;
 
+export const ApproveBrand = gql`
+  mutation ApproveBrand($id: ID!) {
+    approveBrand(input: { id: $id }) {
+      brand {
+        id
+        ...BrandPageBrandFields
+      }
+    }
+  }
+
+  ${BrandPageBrandFields}
+`;
+
 export const InviteBrandMember = gql`
   mutation InviteBrandMember($brandId: ID!, $email: String!, $admin: Boolean!) {
     inviteBrandMember(input: { brandId: $brandId, email: $email, admin: $admin }) {

@@ -1,4 +1,14 @@
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
+export type AcceptBrandMembershipInvitationPayloadKeySpecifier = ('brandMembership' | 'clientMutationId' | AcceptBrandMembershipInvitationPayloadKeySpecifier)[];
+export type AcceptBrandMembershipInvitationPayloadFieldPolicy = {
+	brandMembership?: FieldPolicy<any> | FieldReadFunction<any>,
+	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type ApproveBrandPayloadKeySpecifier = ('brand' | 'clientMutationId' | ApproveBrandPayloadKeySpecifier)[];
+export type ApproveBrandPayloadFieldPolicy = {
+	brand?: FieldPolicy<any> | FieldReadFunction<any>,
+	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type BrandKeySpecifier = ('approved' | 'brandMemberships' | 'createdAt' | 'creator' | 'currentUserCanCreateProjects' | 'currentUserCanEdit' | 'currentUserCanManageMemberships' | 'description' | 'id' | 'name' | 'projects' | 'slug' | 'updatedAt' | 'users' | BrandKeySpecifier)[];
 export type BrandFieldPolicy = {
 	approved?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -82,8 +92,10 @@ export type LicenseFieldPolicy = {
 	name?: FieldPolicy<any> | FieldReadFunction<any>,
 	url?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('completeProjectFileUpload' | 'createBrand' | 'createProject' | 'deleteBrandMembership' | 'deleteProject' | 'deleteProjectFile' | 'inviteBrandMember' | 'updateBrand' | 'updateProject' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('acceptBrandMembershipInvitation' | 'approveBrand' | 'completeProjectFileUpload' | 'createBrand' | 'createProject' | 'deleteBrandMembership' | 'deleteProject' | 'deleteProjectFile' | 'inviteBrandMember' | 'promoteProject' | 'unpromoteProject' | 'updateBrand' | 'updateProject' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
+	acceptBrandMembershipInvitation?: FieldPolicy<any> | FieldReadFunction<any>,
+	approveBrand?: FieldPolicy<any> | FieldReadFunction<any>,
 	completeProjectFileUpload?: FieldPolicy<any> | FieldReadFunction<any>,
 	createBrand?: FieldPolicy<any> | FieldReadFunction<any>,
 	createProject?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -91,6 +103,8 @@ export type MutationFieldPolicy = {
 	deleteProject?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteProjectFile?: FieldPolicy<any> | FieldReadFunction<any>,
 	inviteBrandMember?: FieldPolicy<any> | FieldReadFunction<any>,
+	promoteProject?: FieldPolicy<any> | FieldReadFunction<any>,
+	unpromoteProject?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateBrand?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateProject?: FieldPolicy<any> | FieldReadFunction<any>
 };
@@ -154,9 +168,15 @@ export type ProjectPromotionFieldPolicy = {
 	project?: FieldPolicy<any> | FieldReadFunction<any>,
 	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('brand' | 'brands' | 'currentUser' | 'licenses' | 'project' | 'projectPromotions' | 'projects' | 'tagCategories' | 'tags' | QueryKeySpecifier)[];
+export type PromoteProjectPayloadKeySpecifier = ('clientMutationId' | 'projectPromotion' | PromoteProjectPayloadKeySpecifier)[];
+export type PromoteProjectPayloadFieldPolicy = {
+	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
+	projectPromotion?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type QueryKeySpecifier = ('brand' | 'brandMembership' | 'brands' | 'currentUser' | 'licenses' | 'project' | 'projectPromotions' | 'projects' | 'tagCategories' | 'tags' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	brand?: FieldPolicy<any> | FieldReadFunction<any>,
+	brandMembership?: FieldPolicy<any> | FieldReadFunction<any>,
 	brands?: FieldPolicy<any> | FieldReadFunction<any>,
 	currentUser?: FieldPolicy<any> | FieldReadFunction<any>,
 	licenses?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -208,6 +228,11 @@ export type TagEdgeFieldPolicy = {
 	cursor?: FieldPolicy<any> | FieldReadFunction<any>,
 	node?: FieldPolicy<any> | FieldReadFunction<any>
 };
+export type UnpromoteProjectPayloadKeySpecifier = ('clientMutationId' | 'projectPromotion' | UnpromoteProjectPayloadKeySpecifier)[];
+export type UnpromoteProjectPayloadFieldPolicy = {
+	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
+	projectPromotion?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type UpdateBrandPayloadKeySpecifier = ('brand' | 'clientMutationId' | UpdateBrandPayloadKeySpecifier)[];
 export type UpdateBrandPayloadFieldPolicy = {
 	brand?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -231,6 +256,14 @@ export type UserFieldPolicy = {
 	username?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type TypedTypePolicies = TypePolicies & {
+	AcceptBrandMembershipInvitationPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | AcceptBrandMembershipInvitationPayloadKeySpecifier | (() => undefined | AcceptBrandMembershipInvitationPayloadKeySpecifier),
+		fields?: AcceptBrandMembershipInvitationPayloadFieldPolicy,
+	},
+	ApproveBrandPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | ApproveBrandPayloadKeySpecifier | (() => undefined | ApproveBrandPayloadKeySpecifier),
+		fields?: ApproveBrandPayloadFieldPolicy,
+	},
 	Brand?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | BrandKeySpecifier | (() => undefined | BrandKeySpecifier),
 		fields?: BrandFieldPolicy,
@@ -307,6 +340,10 @@ export type TypedTypePolicies = TypePolicies & {
 		keyFields?: false | ProjectPromotionKeySpecifier | (() => undefined | ProjectPromotionKeySpecifier),
 		fields?: ProjectPromotionFieldPolicy,
 	},
+	PromoteProjectPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | PromoteProjectPayloadKeySpecifier | (() => undefined | PromoteProjectPayloadKeySpecifier),
+		fields?: PromoteProjectPayloadFieldPolicy,
+	},
 	Query?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | QueryKeySpecifier | (() => undefined | QueryKeySpecifier),
 		fields?: QueryFieldPolicy,
@@ -334,6 +371,10 @@ export type TypedTypePolicies = TypePolicies & {
 	TagEdge?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | TagEdgeKeySpecifier | (() => undefined | TagEdgeKeySpecifier),
 		fields?: TagEdgeFieldPolicy,
+	},
+	UnpromoteProjectPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | UnpromoteProjectPayloadKeySpecifier | (() => undefined | UnpromoteProjectPayloadKeySpecifier),
+		fields?: UnpromoteProjectPayloadFieldPolicy,
 	},
 	UpdateBrandPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | UpdateBrandPayloadKeySpecifier | (() => undefined | UpdateBrandPayloadKeySpecifier),

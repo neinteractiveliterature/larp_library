@@ -5,6 +5,8 @@ class BrandMembership < ActiveRecord::Base
   delegate :email, to: :user, allow_nil: true
   after_save :send_invitation_email_if_necessary
 
+  # validates :user_id, uniqueness: { unless: :invitation_token, message: "is already a member of this brand" }
+
   def email=(email)
     self.invitation_email = email
     self.invitation_token ||= Devise.friendly_token

@@ -43,6 +43,19 @@ module Types
       argument :unapproved, Boolean, required: false
     end
 
+    field :brand_membership, Types::BrandMembershipType, null: false do
+      argument :brand_id, ID, required: false
+      argument :brand_slug, String, required: false
+      argument :invitation_token, String, required: true
+    end
+
+    def brand_membership(brand_id: nil, brand_slug: nil, invitation_token: nil)
+      invitation_brand = brand(id: brand_id, slug: brand_slug)
+
+      context[:current_ability].user_provided_invitation_token(invitation_token)
+      invitation_brand.brand_memberships.find_by!(invitation_token: invitation_token)
+    end
+
     def brands(unapproved: false)
       scope = Brand
         .select('brands.*, count(projects.id) as project_count')

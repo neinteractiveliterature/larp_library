@@ -118,3 +118,24 @@ export const EditBrandQuery = gql`
 
   ${BrandMembershipFields}
 `;
+
+export const UnapprovedBrandsListPageQuery = gql`
+  query UnapprovedBrandsListPageQuery {
+    brands(unapproved: true) {
+      edges {
+        node {
+          id
+          name
+          slug
+          createdAt
+
+          creator {
+            id
+            email
+            name
+          }
+        }
+      }
+    }
+  }
+`;

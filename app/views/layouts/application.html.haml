@@ -15,8 +15,8 @@
             = link_to "Larp Library", root_path
           %li.col-md-8.col-sm-6
             %ul#globalnav
-              %li= link_to "Larps", projects_path
-              %li= link_to "Creators", brands_path
+              %li= link_to "Larps", '/projects'
+              %li= link_to "Creators", '/brands'
               - if current_user.try(:admin?)
                 %li.dropdown
                   %a.dropdown-toggle{href: "#", "data-bs-toggle" => "dropdown", role: "button", "aria-haspopup" => true, "aria-expanded" => false}
@@ -24,12 +24,12 @@
                     %span.caret
                   %ul.dropdown-menu
                     - if can? :create, ProjectPromotion
-                      %li= link_to "Promotions", project_promotions_path, class: 'dropdown-item'
+                      %li= link_to "Promotions", '/project_promotions', class: 'dropdown-item'
                     - if can? :update, Tag
                       %li= link_to "Tags", tags_path, class: 'dropdown-item'
                     - if can? :update, TagCategory
                       %li= link_to "Tag Categories", tag_categories_path, class: 'dropdown-item'
-              %li= link_to "Publish your larp", new_brand_path
+              %li= link_to "Publish your larp", '/brands/new'
               %li
                 - if user_signed_in?
                   = link_to "Sign out", destroy_user_session_path, method: "delete"

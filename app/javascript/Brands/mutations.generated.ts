@@ -41,6 +41,23 @@ export type UpdateBrandMutationData = (
   )> }
 );
 
+export type ApproveBrandMutationVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+}>;
+
+
+export type ApproveBrandMutationData = (
+  { __typename: 'Mutation' }
+  & { approveBrand?: Types.Maybe<(
+    { __typename: 'ApproveBrandPayload' }
+    & { brand: (
+      { __typename: 'Brand' }
+      & Pick<Types.Brand, 'id'>
+      & BrandPageBrandFieldsFragment
+    ) }
+  )> }
+);
+
 export type InviteBrandMemberMutationVariables = Types.Exact<{
   brandId: Types.Scalars['ID'];
   email: Types.Scalars['String'];
@@ -146,6 +163,42 @@ export function useUpdateBrandMutation(baseOptions?: Apollo.MutationHookOptions<
 export type UpdateBrandMutationHookResult = ReturnType<typeof useUpdateBrandMutation>;
 export type UpdateBrandMutationResult = Apollo.MutationResult<UpdateBrandMutationData>;
 export type UpdateBrandMutationOptions = Apollo.BaseMutationOptions<UpdateBrandMutationData, UpdateBrandMutationVariables>;
+export const ApproveBrandDocument = gql`
+    mutation ApproveBrand($id: ID!) {
+  approveBrand(input: {id: $id}) {
+    brand {
+      id
+      ...BrandPageBrandFields
+    }
+  }
+}
+    ${BrandPageBrandFieldsFragmentDoc}`;
+export type ApproveBrandMutationFn = Apollo.MutationFunction<ApproveBrandMutationData, ApproveBrandMutationVariables>;
+
+/**
+ * __useApproveBrandMutation__
+ *
+ * To run a mutation, you first call `useApproveBrandMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useApproveBrandMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [approveBrandMutation, { data, loading, error }] = useApproveBrandMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useApproveBrandMutation(baseOptions?: Apollo.MutationHookOptions<ApproveBrandMutationData, ApproveBrandMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ApproveBrandMutationData, ApproveBrandMutationVariables>(ApproveBrandDocument, options);
+      }
+export type ApproveBrandMutationHookResult = ReturnType<typeof useApproveBrandMutation>;
+export type ApproveBrandMutationResult = Apollo.MutationResult<ApproveBrandMutationData>;
+export type ApproveBrandMutationOptions = Apollo.BaseMutationOptions<ApproveBrandMutationData, ApproveBrandMutationVariables>;
 export const InviteBrandMemberDocument = gql`
     mutation InviteBrandMember($brandId: ID!, $email: String!, $admin: Boolean!) {
   inviteBrandMember(input: {brandId: $brandId, email: $email, admin: $admin}) {

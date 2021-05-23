@@ -1,0 +1,32 @@
+<% brand_name = @brand_membership.brand.name -%>
+
+<h1>Welcome to Larp Library!</h1>
+
+<p>
+  Larp Library is a site for larp authors to publish their work under free-to-use licenses.
+
+  <% if @inviting_user -%>
+    <%= @inviting_user.name %> has invited you to join <%= brand_name %> on Larp Library.
+  <% else -%>
+    You've been invited to join <%= brand_name %> on Larp Library.
+  <% end -%>
+</p>
+
+<p>This membership allows you to:</p>
+
+<ul>
+  <li>Publish larps as <%= brand_name %></li>
+  <li>Edit existing <%= brand_name %> larps</li>
+  <% if @brand_membership.admin? -%>
+    <li>Add and remove members from <%= brand_name %></li>
+    <li>Edit the public description and branding for <%= brand_name %></li>
+  <% end -%>
+</ul>
+
+<p>
+  <strong>
+    <%= link_to "To accept this invitation, follow this link.", absolute_url("/brands/#{@brand_membership.brand.to_param}/invitations/#{@brand_membership.to_param}") %>
+    <br>
+    If you don't want to join <%= @brand_membership.brand.name %>, please just ignore this email (and possibly let <%= @inviting_user.name %> know).
+  </strong>
+</p>

@@ -113,6 +113,27 @@ export type EditBrandQueryData = (
   )> }
 );
 
+export type UnapprovedBrandsListPageQueryVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type UnapprovedBrandsListPageQueryData = (
+  { __typename: 'Query' }
+  & { brands: (
+    { __typename: 'BrandConnection' }
+    & { edges: Array<(
+      { __typename: 'BrandEdge' }
+      & { node: (
+        { __typename: 'Brand' }
+        & Pick<Types.Brand, 'id' | 'name' | 'slug' | 'createdAt'>
+        & { creator?: Types.Maybe<(
+          { __typename: 'User' }
+          & Pick<Types.User, 'id' | 'email' | 'name'>
+        )> }
+      ) }
+    )> }
+  ) }
+);
+
 export const BrandPageBrandFieldsFragmentDoc = gql`
     fragment BrandPageBrandFields on Brand {
   id
@@ -323,3 +344,49 @@ export function useEditBrandQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type EditBrandQueryHookResult = ReturnType<typeof useEditBrandQuery>;
 export type EditBrandQueryLazyQueryHookResult = ReturnType<typeof useEditBrandQueryLazyQuery>;
 export type EditBrandQueryQueryResult = Apollo.QueryResult<EditBrandQueryData, EditBrandQueryVariables>;
+export const UnapprovedBrandsListPageQueryDocument = gql`
+    query UnapprovedBrandsListPageQuery {
+  brands(unapproved: true) {
+    edges {
+      node {
+        id
+        name
+        slug
+        createdAt
+        creator {
+          id
+          email
+          name
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useUnapprovedBrandsListPageQuery__
+ *
+ * To run a query within a React component, call `useUnapprovedBrandsListPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUnapprovedBrandsListPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUnapprovedBrandsListPageQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUnapprovedBrandsListPageQuery(baseOptions?: Apollo.QueryHookOptions<UnapprovedBrandsListPageQueryData, UnapprovedBrandsListPageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UnapprovedBrandsListPageQueryData, UnapprovedBrandsListPageQueryVariables>(UnapprovedBrandsListPageQueryDocument, options);
+      }
+export function useUnapprovedBrandsListPageQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UnapprovedBrandsListPageQueryData, UnapprovedBrandsListPageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UnapprovedBrandsListPageQueryData, UnapprovedBrandsListPageQueryVariables>(UnapprovedBrandsListPageQueryDocument, options);
+        }
+export type UnapprovedBrandsListPageQueryHookResult = ReturnType<typeof useUnapprovedBrandsListPageQuery>;
+export type UnapprovedBrandsListPageQueryLazyQueryHookResult = ReturnType<typeof useUnapprovedBrandsListPageQueryLazyQuery>;
+export type UnapprovedBrandsListPageQueryQueryResult = Apollo.QueryResult<UnapprovedBrandsListPageQueryData, UnapprovedBrandsListPageQueryVariables>;

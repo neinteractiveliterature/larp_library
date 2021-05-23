@@ -3,7 +3,7 @@ module Types
     perform_authorization
 
     field :id, ID, null: false
-    field :brand, Types::BrandType, null: true
+    field :brand, Types::BrandType, null: false
     field :user, Types::UserType, null: true
     field :admin, Boolean, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
