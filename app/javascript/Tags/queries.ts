@@ -29,3 +29,22 @@ export const TagAutocompleteQuery = gql`
 
   ${TagFragment}
 `;
+
+export const TagListPageQuery = gql`
+  query TagListPageQuery($after: String) {
+    tags(first: 25, after: $after) {
+      pageInfo {
+        endCursor
+      }
+
+      totalCount
+
+      edges {
+        node {
+          id
+          ...TagFragment
+        }
+      }
+    }
+  }
+`;

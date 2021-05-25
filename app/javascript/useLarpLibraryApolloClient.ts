@@ -38,6 +38,7 @@ const typePolicies: TypedTypePolicies = {
     fields: {
       brands: relayStylePagination(),
       projects: relayStylePagination(),
+      tags: relayStylePagination(),
     },
   },
 };
