@@ -20,5 +20,9 @@ module Types
     field :create_tag, mutation: Mutations::CreateTag
     field :update_tag, mutation: Mutations::UpdateTag
     field :delete_tag, mutation: Mutations::DeleteTag
+
+    field :create_tag_category, mutation: Mutations::CreateTagCategory
+    field :update_tag_category, mutation: Mutations::UpdateTagCategory
+    field :delete_tag_category, mutation: Mutations::DeleteTagCategory
   end
 end

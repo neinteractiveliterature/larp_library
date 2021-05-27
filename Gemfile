@@ -20,7 +20,6 @@ gem 'aws-sdk-s3'
 
 gem 'graphql'
 
-gem 'haml'
 gem 'redcarpet'
 gem 'truncate_html'
 gem 'color'

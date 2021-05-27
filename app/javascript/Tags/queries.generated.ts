@@ -1,9 +1,9 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { TagCategoryFragment } from '../TagCategories/queries.generated';
+import { TagCategoryFragment } from '../TagCategories/TagCategoryFragment.generated';
 import { gql } from '@apollo/client';
-import { TagCategoryFragmentDoc } from '../TagCategories/queries.generated';
+import { TagCategoryFragmentDoc } from '../TagCategories/TagCategoryFragment.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {};
 export type TagFragment = { __typename: 'Tag' } & Pick<Types.Tag, 'id' | 'name'> & {

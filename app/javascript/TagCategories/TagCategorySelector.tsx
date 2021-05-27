@@ -5,9 +5,9 @@ import {
   TagCategoryAutocompleteQueryData,
   TagCategoryAutocompleteQueryDocument,
   TagCategoryAutocompleteQueryVariables,
-  TagCategoryFragment,
 } from './queries.generated';
-import Tag from '../Tags/Tag';
+import TagCategory from './TagCategory';
+import { TagCategoryFragment } from './TagCategoryFragment.generated';
 
 export type TagCategorySelectorProps = {
   value: TagCategoryFragment | null | undefined;
@@ -40,20 +40,12 @@ function TagCategorySelector({ value, onChange, id }: TagCategorySelectorProps):
       onChange={(newValue) => onChange(newValue)}
       getOptionValue={(option) => option.name ?? ''}
       getOptionLabel={(option) => option.name ?? ''}
-      formatOptionLabel={(option) => (
-        <Tag tag={{ __typename: 'Tag', id: option.id, name: option.name, tagCategory: option }} />
-      )}
+      formatOptionLabel={(option) => <TagCategory tagCategory={option} />}
       styles={{
         container: (provided) => ({
           ...provided,
           zIndex: 1100,
         }),
-        // multiValueLabel: (provided) => ({
-        //   ...provided,
-        //   padding: 0,
-        //   paddingLeft: 0,
-        //   fontSize: undefined,
-        // }),
         singleValue: (provided, state) => {
           return {
             ...provided,

@@ -11,10 +11,6 @@ import AppRoot from '../AppRoot';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const REACT_CLASSES: { [className: string]: React.ComponentType<any> } = {
   AppRoot: AppWrapper(AppRoot),
-  ColorPickerInput: AppWrapper(React.lazy(() => import('../ColorPickerInput'))),
-  HomePage: AppWrapper(React.lazy(() => import('../HomePage/HomePage'))),
-  MarkdownEditorInput: AppWrapper(React.lazy(() => import('../MarkdownEditorInput'))),
-  TagSelectorInput: AppWrapper(React.lazy(() => import('../Tags/TagSelectorInput'))),
 };
 
 window.addEventListener('load', () => {

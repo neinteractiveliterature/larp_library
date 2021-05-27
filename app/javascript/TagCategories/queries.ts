@@ -1,14 +1,6 @@
 import { gql } from '@apollo/client';
-
-export const TagCategoryFragment = gql`
-  fragment TagCategoryFragment on TagCategory {
-    id
-    name
-    color
-    textColor
-    icon
-  }
-`;
+import { TagFragment } from '../Tags/queries';
+import { TagCategoryFragment } from './tagCategoryFragment';
 
 export const TagCategoryAutocompleteQuery = gql`
   query TagCategoryAutocompleteQuery($queryString: String) {
@@ -23,4 +15,41 @@ export const TagCategoryAutocompleteQuery = gql`
   }
 
   ${TagCategoryFragment}
+`;
+
+export const TagCategoryListPageQuery = gql`
+  query TagCategoryListPageQuery($after: String) {
+    tagCategories(first: 25, after: $after) {
+      pageInfo {
+        endCursor
+      }
+
+      totalCount
+
+      edges {
+        node {
+          id
+          ...TagCategoryFragment
+        }
+      }
+    }
+  }
+
+  ${TagCategoryFragment}
+`;
+
+export const EditTagCategoryQuery = gql`
+  query EditTagCategoryQuery($id: ID!) {
+    tagCategory(id: $id) {
+      id
+      ...TagCategoryFragment
+
+      tags {
+        ...TagFragment
+      }
+    }
+  }
+
+  ${TagCategoryFragment}
+  ${TagFragment}
 `;

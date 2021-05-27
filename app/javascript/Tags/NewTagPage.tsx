@@ -5,7 +5,7 @@ import buildTagAttributes from './buildTagAttributes';
 import { useCreateTagMutation } from './mutations.generated';
 import TagFormFields, { TagFormFieldsProps } from './TagFormFields';
 
-export default function NewTag(): JSX.Element {
+export default function NewTagPage(): JSX.Element {
   const [tag, setTag] = useState<TagFormFieldsProps['tag']>({
     name: '',
   });

@@ -16,7 +16,7 @@ function useEditTagQueryFromParams() {
   return useEditTagQuery({ variables: { id: tagId } });
 }
 
-export default LoadQueryWrapper(useEditTagQueryFromParams, function EditTag({ data }) {
+export default LoadQueryWrapper(useEditTagQueryFromParams, function EditTagPage({ data }) {
   const [tag, setTag] = useState(data.tag);
   const [updateTag, { loading: updatingTag, error: updateTagError }] = useUpdateTagMutation();
   const [deleteTag, { loading: deletingTag, error: deleteTagError }] = useDeleteTagMutation();

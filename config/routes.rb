@@ -12,8 +12,6 @@ Rails.application.routes.draw do
     get '/users/sign_out' => 'sessions#destroy'
   end
 
-  # resources :tag_categories, except: [:show]
-
   get '/(*extra)' => 'single_page_app#show', as: 'root', constraints: {
     extra: %r{(?!(uploads|packs|assets)/).*}
   }

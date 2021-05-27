@@ -1,8 +1,0 @@
-%h1 Tag categories
-
-%ul
-  - @tag_categories.each do |tag_category|
-    %li
-      = link_to tag_category.name, edit_tag_category_path(tag_category)
-
-= link_to "New tag category", new_tag_category_path, class: 'btn btn-primary'

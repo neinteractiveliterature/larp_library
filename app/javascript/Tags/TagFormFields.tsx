@@ -5,7 +5,7 @@ import {
 } from '@neinteractiveliterature/litform';
 import React from 'react';
 import { Tag } from '../graphqlTypes.generated';
-import { TagCategoryFragment } from '../TagCategories/queries.generated';
+import { TagCategoryFragment } from '../TagCategories/TagCategoryFragment.generated';
 import TagCategorySelector from '../TagCategories/TagCategorySelector';
 
 type TagFormTag = Pick<Tag, 'name'> & {
@@ -17,7 +17,7 @@ export type TagFormFieldsProps = {
   onChange: React.Dispatch<React.SetStateAction<TagFormTag>>;
 };
 
-export default function TagFormFields({ tag, onChange }: TagFormFieldsProps) {
+export default function TagFormFields({ tag, onChange }: TagFormFieldsProps): JSX.Element {
   const [setName, setTagCategory] = usePropertySetters(onChange, 'name', 'tagCategory');
 
   return (

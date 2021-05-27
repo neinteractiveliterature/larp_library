@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { TagCategoryFragment } from '../TagCategories/queries';
+import { TagCategoryFragment } from '../TagCategories/TagCategoryFragment';
 
 export const TagFragment = gql`
   fragment TagFragment on Tag {
@@ -47,6 +47,8 @@ export const TagListPageQuery = gql`
       }
     }
   }
+
+  ${TagFragment}
 `;
 
 export const EditTagQuery = gql`

@@ -119,6 +119,14 @@ module Types
       scope
     end
 
+    field :tag_category, Types::TagCategoryType, null: false do
+      argument :id, ID, required: true
+    end
+
+    def tag_category(id:)
+      TagCategory.find(id)
+    end
+
     field :project_promotions, [Types::ProjectPromotionType], null: false
 
     def project_promotions

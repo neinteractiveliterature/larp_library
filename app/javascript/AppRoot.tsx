@@ -12,16 +12,19 @@ const PageComponentImports: {
   BrandPage: () => import('./Brands/BrandPage'),
   BrandListPage: () => import('./Brands/BrandListPage'),
   EditBrandPage: () => import('./Brands/EditBrandPage'),
-  EditTagPage: () => import('./Tags/EditTag'),
+  EditTagPage: () => import('./Tags/EditTagPage'),
+  EditTagCategoryPage: () => import('./TagCategories/EditTagCategoryPage'),
   LicensingPage: () => import('./StaticPages/LicensingPage'),
   NewBrandPage: () => import('./Brands/NewBrandPage'),
-  NewTagPage: () => import('./Tags/NewTag'),
+  NewTagPage: () => import('./Tags/NewTagPage'),
+  NewTagCategoryPage: () => import('./TagCategories/NewTagCategoryPage'),
   HomePage: () => import('./HomePage/HomePage'),
   InvitationPage: () => import('./Invitations/InvitationPage'),
   ProjectPromotionsPage: () => import('./ProjectPromotions/ProjectPromotionsPage'),
   ProjectRoot: () => import('./Project/ProjectRoot'),
   ProjectSearchPage: () => import('./ProjectSearch/ProjectSearchPage'),
   TagListPage: () => import('./Tags/TagListPage'),
+  TagCategoryListPage: () => import('./TagCategories/TagCategoryListPage'),
   UnapprovedBrandsListPage: () => import('./Brands/UnapprovedBrandsListPage'),
 };
 
@@ -63,6 +66,12 @@ function AppRoot({ s3Configuration }: AppRootProps): JSX.Element {
             <Route path="new" element={<PageComponents.NewTagPage />} />
             <Route path=":tagId/edit" element={<PageComponents.EditTagPage />} />
             <Route path="/" element={<PageComponents.TagListPage />} />
+          </Route>
+
+          <Route path="tag_categories/*">
+            <Route path="new" element={<PageComponents.NewTagCategoryPage />} />
+            <Route path=":tagCategoryId/edit" element={<PageComponents.EditTagCategoryPage />} />
+            <Route path="/" element={<PageComponents.TagCategoryListPage />} />
           </Route>
 
           <Route path="pages/about" element={<PageComponents.AboutPage />} />
