@@ -7,7 +7,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="<%= image_url "apple-touch-icon.png" %>">
     <link rel="icon" type="image/png" sizes="32x32" href="<%= image_url "favicon-32x32.png" %>">
     <link rel="icon" type="image/png" sizes="16x16" href="<%= image_url "favicon-16x16.png" %>">
-    <link rel="manifest" href="/site.webmanifest">
+    <link rel="manifest" href="<%= ENV['ASSETS_HOST'].present? ? "//#{ENV['ASSETS_HOST']}" : '' %>/site.webmanifest">
     <% if ENV['ASSETS_HOST'].present? -%>
       <script type="application/javascript">
         window.larpLibraryAssetsHost = <%=raw ENV['ASSETS_HOST'].to_json %>;
