@@ -12,8 +12,10 @@ const PageComponentImports: {
   BrandPage: () => import('./Brands/BrandPage'),
   BrandListPage: () => import('./Brands/BrandListPage'),
   EditBrandPage: () => import('./Brands/EditBrandPage'),
+  EditTagPage: () => import('./Tags/EditTag'),
   LicensingPage: () => import('./StaticPages/LicensingPage'),
   NewBrandPage: () => import('./Brands/NewBrandPage'),
+  NewTagPage: () => import('./Tags/NewTag'),
   HomePage: () => import('./HomePage/HomePage'),
   InvitationPage: () => import('./Invitations/InvitationPage'),
   ProjectPromotionsPage: () => import('./ProjectPromotions/ProjectPromotionsPage'),
@@ -58,6 +60,8 @@ function AppRoot({ s3Configuration }: AppRootProps): JSX.Element {
           <Route path="project_promotions" element={<PageComponents.ProjectPromotionsPage />} />
 
           <Route path="tags/*">
+            <Route path="new" element={<PageComponents.NewTagPage />} />
+            <Route path=":tagId/edit" element={<PageComponents.EditTagPage />} />
             <Route path="/" element={<PageComponents.TagListPage />} />
           </Route>
 

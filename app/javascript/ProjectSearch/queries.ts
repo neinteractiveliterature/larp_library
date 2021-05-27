@@ -28,8 +28,8 @@ export const ProjectHeadersFragment = gql`
 `;
 
 export const ProjectSearchQuery = gql`
-  query ProjectSearchQuery($queryString: String, $after: String) {
-    projects(queryString: $queryString, after: $after) {
+  query ProjectSearchQuery($queryString: String, $tag: String, $after: String) {
+    projects(queryString: $queryString, tag: $tag, after: $after) {
       pageInfo {
         endCursor
       }
@@ -44,7 +44,13 @@ export const ProjectSearchQuery = gql`
         }
       }
     }
+
+    tagByName(name: $tag) {
+      id
+      ...TagFragment
+    }
   }
 
   ${ProjectHeadersFragment}
+  ${TagFragment}
 `;

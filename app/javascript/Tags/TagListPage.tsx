@@ -4,7 +4,7 @@ import { useTagListPageQuery } from './queries.generated';
 import Tag from './Tag';
 
 export default function TagListPage(): JSX.Element {
-  const { data, loading, error, fetchMore } = useTagListPageQuery();
+  const { data, loading, error, fetchMore } = useTagListPageQuery({ fetchPolicy: 'network-only' });
 
   const tags = loading || error || !data ? [] : data.tags.edges.map((edge) => edge.node);
 

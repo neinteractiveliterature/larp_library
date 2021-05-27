@@ -16,5 +16,9 @@ module Types
 
     field :complete_project_file_upload, mutation: Mutations::CompleteProjectFileUpload
     field :delete_project_file, mutation: Mutations::DeleteProjectFile
+
+    field :create_tag, mutation: Mutations::CreateTag
+    field :update_tag, mutation: Mutations::UpdateTag
+    field :delete_tag, mutation: Mutations::DeleteTag
   end
 end

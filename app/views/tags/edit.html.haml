@@ -1,8 +1,0 @@
-%h1
-  Editing tag: #{@tag.name}
-
-%p
-  = link_to projects_path(tag: @tag.name) do
-    = pluralize @tag.projects.count, "project"
-
-= render partial: 'form', locals: { tag: @tag }

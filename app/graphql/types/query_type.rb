@@ -91,10 +91,32 @@ module Types
       end
     end
 
-    field :tag_categories, Types::TagCategoryType.connection_type, null: false
+    field :tag, Types::TagType, null: false do
+      argument :id, ID, required: true
+    end
 
-    def tag_categories
-      TagCategory.order(:name)
+    def tag(id:)
+      Tag.find(id)
+    end
+
+    field :tag_by_name, Types::TagType, null: true do
+      argument :name, String, required: false
+    end
+
+    def tag_by_name(name: nil)
+      return nil unless name
+
+      Tag.find_by(name: name)
+    end
+
+    field :tag_categories, Types::TagCategoryType.connection_type, null: false do
+      argument :query_string, String, required: false
+    end
+
+    def tag_categories(query_string: nil)
+      scope = TagCategory.order('upper(name)')
+      scope = scope.where('upper(name) like ?', "#{query_string.upcase}%") if query_string.present?
+      scope
     end
 
     field :project_promotions, [Types::ProjectPromotionType], null: false
