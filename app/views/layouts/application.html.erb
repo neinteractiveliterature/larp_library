@@ -14,8 +14,20 @@
       </script>
     <% end -%>
     <%= stylesheet_bundle_tag 'application' %>
-    <%= javascript_bundle_tag 'application' %>
+    <%= javascript_bundle_tag 'application', defer: true %>
+    <script type="application/javascript">
+      if (typeof(Rollbar) !== 'undefined') {
+        Rollbar.configure({
+          payload: {
+            person: {
+              id: <%= current_user&.id.to_json.html_safe %>
+            }
+          }
+        });
+      }
+    </script>
     <%= csrf_meta_tags %>
+
   </head>
   <body>
     <%= yield %>
