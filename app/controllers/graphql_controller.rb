@@ -12,7 +12,8 @@ class GraphqlController < ApplicationController
       current_user: current_user,
       current_ability: current_ability
     }
-    result = LarpLibrarySchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+    result = LarpLibrarySchema.execute(query, variables: variables, context: context,
+                                              operation_name: operation_name)
     render json: result
   rescue StandardError => e
     raise e unless Rails.env.development?
@@ -33,7 +34,7 @@ class GraphqlController < ApplicationController
     when Hash
       variables_param
     when ActionController::Parameters
-      variables_param.to_unsafe_hash # GraphQL-Ruby will validate name and type of incoming variables.
+      variables_param.to_unsafe_hash
     when nil
       {}
     else

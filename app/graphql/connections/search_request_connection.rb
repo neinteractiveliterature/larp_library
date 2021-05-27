@@ -1,3 +1,4 @@
+# rubocop:disable Naming/PredicateName
 class Connections::SearchRequestConnection < GraphQL::Pagination::Connection
   def nodes
     records

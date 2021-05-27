@@ -1,37 +1,18 @@
 Rails.application.routes.draw do
-  if Rails.env.development?
-    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
-  end
-  post "/graphql", to: "graphql#execute"
-  devise_for :users
+  mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql' if Rails.env.development?
+  post '/graphql', to: 'graphql#execute'
 
-  get "/projects" => 'search_projects#index', as: :projects
-  resources :projects, only: [:index]
-  resources :project_promotions, only: [:index, :create, :destroy]
+  devise_for :users, controllers: {
+    sessions: 'sessions',
+    cas_sessions: 'sessions'
+  }
 
-  resources :brands do
-    collection do
-      get :unapproved
-    end
-
-    member do
-      patch :approve
-    end
-
-    resources :projects, except: [:index] do
-      resources :project_files, only: [:create, :show, :destroy] do
-        collection do
-          get :auth_upload
-        end
-      end
-    end
+  # Working around Illyan's lack of CORS; we can get rid of this when we switch to Intercode OAuth2
+  devise_scope :user do
+    get '/users/sign_out' => 'sessions#destroy'
   end
 
-  get "/brands/:brand_id/invitations/:id" => 'brand_memberships#pre_accept', as: 'pre_accept_brand_membership'
-  post "/brands/:brand_id/invitations/:id" => 'brand_memberships#accept', as: 'accept_brand_membership'
-
-  resources :tags, except: [:show]
-  resources :tag_categories, except: [:show]
-
-  root 'home#index'
+  get '/(*extra)' => 'single_page_app#show', as: 'root', constraints: {
+    extra: %r{(?!(uploads|packs|assets)/).*}
+  }
 end

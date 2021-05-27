@@ -17,7 +17,7 @@ const config = {
     filename: 'js/[name]-[contenthash].js',
     chunkFilename: 'js/[name]-[contenthash].chunk.js',
     hotUpdateChunkFilename: 'js/[id]-[fullhash].hot-update.js',
-    assetModuleFilename: 'static/[contenthash][ext][query]',
+    assetModuleFilename: 'static/[name]-[contenthash][ext][query]',
     path: path.resolve(__dirname, './public/packs'),
     publicPath: ASSET_PATH,
   },
@@ -33,7 +33,7 @@ const config = {
     static: false,
   },
   resolve: {
-    extensions: ['.js', '.mjs', '.ts', '.tsx', '.coffee'],
+    extensions: ['.js', '.mjs', '.ts', '.tsx'],
     modules: [path.resolve(__dirname, './app/javascript'), 'node_modules'],
   },
   devtool: 'cheap-module-source-map',
@@ -54,13 +54,15 @@ const config = {
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf|svg)$/i,
-        type: 'asset/resource',
+        type: 'asset',
       },
     ],
   },
   plugins: [
     new WebpackManifestPlugin(),
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name]-[contenthash].css',
+    }),
     new DefinePlugin({
       'process.env.ASSET_PATH': JSON.stringify(ASSET_PATH),
     }),

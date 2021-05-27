@@ -2,6 +2,7 @@ import { ApolloProvider } from '@apollo/client';
 import { Suspense, useRef } from 'react';
 import { Confirm, ErrorBoundary, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import useLarpLibraryApolloClient from './useLarpLibraryApolloClient';
+import { BrowserRouter } from 'react-router-dom';
 
 function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.ComponentType<P> {
   type WrapperProps = P & { graphqlCSRFToken: string };
@@ -21,9 +22,11 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.Componen
       <ErrorBoundary>
         <Confirm>
           <ApolloProvider client={apolloClient}>
-            <Suspense fallback={<PageLoadingIndicator visible />}>
-              <WrappedComponent {...(props as unknown as P)} />
-            </Suspense>
+            <BrowserRouter>
+              <Suspense fallback={<PageLoadingIndicator visible />}>
+                <WrappedComponent {...(props as unknown as P)} />
+              </Suspense>
+            </BrowserRouter>
           </ApolloProvider>
         </Confirm>
       </ErrorBoundary>

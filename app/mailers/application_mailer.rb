@@ -1,4 +1,7 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "noreply@larplibrary.org"
+  include AbsoluteUrls
+  helper_method :absolute_url
+
+  default from: 'noreply@larplibrary.org'
   layout 'mailer'
 end

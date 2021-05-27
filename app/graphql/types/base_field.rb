@@ -5,7 +5,9 @@ module Types
     def initialize(*args, required_permission: nil, **kwargs, &block)
       @required_permission = required_permission
       if required_permission && !kwargs[:null]
-        raise ArgumentError, "Field #{kwargs[:owner].graphql_name}.#{kwargs[:name]} specified required_permission but is not nullable"
+        raise ArgumentError,
+"Field #{kwargs[:owner].graphql_name}.#{kwargs[:name]} specified required_permission but is \
+not nullable"
       end
 
       # Pass on the default args:

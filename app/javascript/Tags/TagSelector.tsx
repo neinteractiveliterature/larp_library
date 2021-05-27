@@ -12,9 +12,10 @@ import Tag from './Tag';
 export type TagSelectorProps = {
   value: TagFragment[];
   onChange: React.Dispatch<React.SetStateAction<TagFragment[]>>;
+  id?: string;
 };
 
-function TagSelector({ value, onChange }: TagSelectorProps): JSX.Element {
+function TagSelector({ value, onChange, id }: TagSelectorProps): JSX.Element {
   const apolloClient = useApolloClient();
 
   const queryTags = async (queryString: string) => {
@@ -26,11 +27,12 @@ function TagSelector({ value, onChange }: TagSelectorProps): JSX.Element {
       variables: { queryString },
     });
 
-    return result.data.tags.nodes;
+    return result.data.tags.edges.map((edge) => edge.node);
   };
 
   return (
     <AsyncSelect<TagFragment, true>
+      id={id}
       isMulti
       loadOptions={(inputValue) => queryTags(inputValue)}
       value={value}

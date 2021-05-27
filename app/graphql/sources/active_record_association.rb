@@ -3,6 +3,7 @@ class Sources::ActiveRecordAssociation < GraphQL::Dataloader::Source
     @model_class = model_class
     @association_name = association_name
 
+    # rubocop:disable Style/GuardClause
     unless @model_class.reflect_on_association(@association_name)
       raise ArgumentError, "#{@model_class} has no association called #{@association_name}"
     end

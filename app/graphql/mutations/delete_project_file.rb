@@ -10,7 +10,7 @@ module Mutations
       true
     end
 
-    def resolve(id:)
+    def resolve(**_args)
       @project_file.destroy!
       { project_file: @project_file }
     end

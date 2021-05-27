@@ -98,6 +98,13 @@ $fa-font-path: '~font-awesome/fonts/';
       color: white;
     }
   }
+
+  .btn-link {
+    color: white;
+    font-size: inherit;
+    padding: 0;
+    vertical-align: inherit;
+  }
 }
 
 .CodeMirror {
@@ -116,5 +123,27 @@ $fa-font-path: '~font-awesome/fonts/';
     .CodeMirror-scroll {
       min-height: #{$i}rem !important;
     }
+  }
+}
+
+.search-input-control {
+  border-top-left-radius: $border-radius-pill;
+  border-bottom-left-radius: $border-radius-pill;
+  border-right: 0;
+}
+
+.search-input-addon.input-group-text {
+  border-top-right-radius: $border-radius-pill;
+  border-bottom-right-radius: $border-radius-pill;
+  background-color: white;
+  border-left: 0;
+}
+
+.tag-dismiss-button {
+  border: 0;
+  background: transparent;
+
+  :hover {
+    background-color: rgba(255, 255, 255, 0.5);
   }
 }

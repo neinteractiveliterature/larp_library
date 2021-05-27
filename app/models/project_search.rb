@@ -10,7 +10,7 @@ class ProjectSearch
   def to_hash
     {
       query: query,
-      sort: ["_score", "title.raw"]
+      sort: query_string.present? ? ['_score', 'title.raw'] : ['title.raw']
     }
   end
 
@@ -31,7 +31,7 @@ class ProjectSearch
   private
 
   def must_queries
-    @must_queries ||= [query_string_query, tag_query, brand_query].compact
+    @must_queries ||= [brand_approved_query, query_string_query, tag_query, brand_query].compact
   end
 
   def query_string_query
@@ -62,6 +62,14 @@ class ProjectSearch
     {
       term: {
         brand_id: brand_id
+      }
+    }
+  end
+
+  def brand_approved_query
+    {
+      term: {
+        brand_approved: true
       }
     }
   end

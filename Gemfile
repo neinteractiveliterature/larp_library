@@ -4,35 +4,28 @@ source 'https://rubygems.org'
 
 gem 'dotenv-rails', groups: [:development, :test]
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '= 6.1.3.2'
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3', groups: [:development, :test]
-gem 'pg', group: :production
+gem 'pg'
 
 gem 'minipack'
 
 gem 'listen'
 
 gem 'devise', '~> 4.8.0'
-gem 'devise_cas_authenticatable'
+gem 'devise_cas_authenticatable', '~> 2.0.0.alpha1'
+gem 'rack-cas'
 gem 'cancancan'
 
 gem 'aws-sdk-s3'
 
 gem 'graphql'
 
-gem 'haml'
 gem 'redcarpet'
 gem 'truncate_html'
-gem 'will_paginate'
-gem 'will_paginate-bootstrap4'
 gem 'color'
 
 gem 'elasticsearch-rails', '~> 6.1.1'
 gem 'elasticsearch-model', '~> 6.1.1'
-
-gem 'high_voltage'
 
 gem 'figaro'
 
@@ -40,28 +33,23 @@ gem 'rollbar'
 
 gem 'aws-sdk-rails'
 
-# gem 'rails_12factor', group: :production
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use Unicorn as the app server
-# gem 'unicorn'
+group :development do
+  gem 'graphiql-rails'
+  gem 'rubocop'
+  gem 'rubocop-rails'
+  gem 'rubocop-performance'
+  gem 'solargraph'
+end
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-
   gem 'pry-rails'
-
   gem 'factory_bot_rails'
   gem 'database_cleaner'
+  gem 'graphql-rails_logger'
 end
 
 group :production do
   gem 'puma'
 end
-gem 'graphiql-rails', group: :development
