@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 import { TagFragment } from '../Tags/queries';
-import { TagCategoryFragment } from './tagCategoryFragment';
+import { TagCategoryFragment } from './TagCategoryFragment';
 
 export const TagCategoryAutocompleteQuery = gql`
   query TagCategoryAutocompleteQuery($queryString: String) {
