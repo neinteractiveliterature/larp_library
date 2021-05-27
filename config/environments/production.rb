@@ -22,6 +22,12 @@ Rails.application.configure do
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
+  config.public_file_server.headers = {
+    'Access-Control-Allow-Origin' => '*',
+    'Cache-Control' => 'public, max-age=15552000',
+    'Expires' => "#{1.year.from_now.to_formatted_s(:rfc822)}"
+  }
+
   # Compress CSS using a preprocessor.
   # config.assets.css_compressor = :sass
 
