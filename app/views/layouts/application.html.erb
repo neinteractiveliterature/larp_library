@@ -8,6 +8,11 @@
     <link rel="icon" type="image/png" sizes="32x32" href="<%= image_url "favicon-32x32.png" %>">
     <link rel="icon" type="image/png" sizes="16x16" href="<%= image_url "favicon-16x16.png" %>">
     <link rel="manifest" href="/site.webmanifest">
+    <% if ENV['ASSETS_HOST'].present? -%>
+      <script type="application/javascript">
+        window.larpLibraryAssetsHost = <%=raw ENV['ASSETS_HOST'].to_json %>;
+      </script>
+    <% end -%>
     <%= stylesheet_bundle_tag 'application' %>
     <%= javascript_bundle_tag 'application' %>
     <%= csrf_meta_tags %>
