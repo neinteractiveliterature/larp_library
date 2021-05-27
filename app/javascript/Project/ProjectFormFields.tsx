@@ -114,7 +114,7 @@ export default function ProjectFormFields({
         <div className="col-xs-6 col-md-4 col-lg-3">
           <BootstrapFormSelect
             label="Length units"
-            value={project.lengthUnits ?? undefined}
+            value={project.lengthUnits ?? 'hours'}
             onValueChange={setLengthUnits}
           >
             <option value="minutes">minute(s)</option>
