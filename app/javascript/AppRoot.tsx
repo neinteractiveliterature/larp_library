@@ -1,4 +1,4 @@
-import { mapValues } from 'lodash';
+import mapValues from 'lodash/mapValues';
 import React from 'react';
 import { Route, Routes } from 'react-router';
 import AppLayout from './AppLayout';
@@ -8,24 +8,37 @@ const PageComponentImports: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [pageName: string]: () => Promise<{ default: React.ComponentType<any> }>;
 } = {
-  AboutPage: () => import('./StaticPages/AboutPage'),
-  BrandPage: () => import('./Brands/BrandPage'),
-  BrandListPage: () => import('./Brands/BrandListPage'),
-  EditBrandPage: () => import('./Brands/EditBrandPage'),
-  EditTagPage: () => import('./Tags/EditTagPage'),
-  EditTagCategoryPage: () => import('./TagCategories/EditTagCategoryPage'),
-  LicensingPage: () => import('./StaticPages/LicensingPage'),
-  NewBrandPage: () => import('./Brands/NewBrandPage'),
-  NewTagPage: () => import('./Tags/NewTagPage'),
-  NewTagCategoryPage: () => import('./TagCategories/NewTagCategoryPage'),
-  HomePage: () => import('./HomePage/HomePage'),
-  InvitationPage: () => import('./Invitations/InvitationPage'),
-  ProjectPromotionsPage: () => import('./ProjectPromotions/ProjectPromotionsPage'),
-  ProjectRoot: () => import('./Project/ProjectRoot'),
-  ProjectSearchPage: () => import('./ProjectSearch/ProjectSearchPage'),
-  TagListPage: () => import('./Tags/TagListPage'),
-  TagCategoryListPage: () => import('./TagCategories/TagCategoryListPage'),
-  UnapprovedBrandsListPage: () => import('./Brands/UnapprovedBrandsListPage'),
+  AboutPage: () => import(/* webpackChunkName: "AboutPage" */ './StaticPages/AboutPage'),
+  BrandPage: () => import(/* webpackChunkName: "BrandPage" */ './Brands/BrandPage'),
+  BrandListPage: () => import(/* webpackChunkName: "BrandListPage" */ './Brands/BrandListPage'),
+  EditBrandPage: () => import(/* webpackChunkName: "EditBrandPage" */ './Brands/EditBrandPage'),
+  EditProjectPage: () =>
+    import(/* webpackChunkName: "EditProjectPage" */ './Project/EditProjectPage'),
+  EditTagPage: () => import(/* webpackChunkName: "EditTagPage" */ './Tags/EditTagPage'),
+  EditTagCategoryPage: () =>
+    import(/* webpackChunkName: "EditTagCategoryPage" */ './TagCategories/EditTagCategoryPage'),
+  LicensingPage: () =>
+    import(/* webpackChunkName: "LicensingPage" */ './StaticPages/LicensingPage'),
+  NewBrandPage: () => import(/* webpackChunkName: "NewBrandPage" */ './Brands/NewBrandPage'),
+  NewProjectPage: () => import(/* webpackChunkName: "NewProjectPage" */ './Project/NewProjectPage'),
+  NewTagPage: () => import(/* webpackChunkName: "NewTagPage" */ './Tags/NewTagPage'),
+  NewTagCategoryPage: () =>
+    import(/* webpackChunkName: "NewTagCategoryPage" */ './TagCategories/NewTagCategoryPage'),
+  HomePage: () => import(/* webpackChunkName: "HomePage" */ './HomePage/HomePage'),
+  InvitationPage: () =>
+    import(/* webpackChunkName: "InvitationPage" */ './Invitations/InvitationPage'),
+  ProjectPromotionsPage: () =>
+    import(
+      /* webpackChunkName: "ProjectPromotionsPage" */ './ProjectPromotions/ProjectPromotionsPage'
+    ),
+  ProjectPage: () => import(/* webpackChunkName: "ProjectPage" */ './Project/ProjectPage'),
+  ProjectSearchPage: () =>
+    import(/* webpackChunkName: "ProjectSearchPage" */ './ProjectSearch/ProjectSearchPage'),
+  TagListPage: () => import(/* webpackChunkName: "TagListPage" */ './Tags/TagListPage'),
+  TagCategoryListPage: () =>
+    import(/* webpackChunkName: "TagCategoryListPage" */ './TagCategories/TagCategoryListPage'),
+  UnapprovedBrandsListPage: () =>
+    import(/* webpackChunkName: "UnapprovedBrandsListPage" */ './Brands/UnapprovedBrandsListPage'),
 };
 
 const PageComponents = mapValues(PageComponentImports, (importFunction) =>
@@ -53,7 +66,11 @@ function AppRoot({ s3Configuration }: AppRootProps): JSX.Element {
                 element={<PageComponents.InvitationPage />}
               />
               <Route path="edit" element={<PageComponents.EditBrandPage />} />
-              <Route path="projects/*" element={<PageComponents.ProjectRoot />} />
+              <Route path="projects/*">
+                <Route path="/:projectId/edit" element={<PageComponents.EditProjectPage />} />
+                <Route path="/:projectId" element={<PageComponents.ProjectPage />} />
+                <Route path="new" element={<PageComponents.NewProjectPage />} />
+              </Route>
               <Route path="/" element={<PageComponents.BrandPage />} />
             </Route>
 

@@ -1,5 +1,5 @@
 import { LoadQueryWrapper, useGraphQLConfirm } from '@neinteractiveliterature/litform';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { generateBrandPath } from '../URLGenerators';

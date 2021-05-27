@@ -1,5 +1,3 @@
-// @ts-expect-error no types for rails/ujs
-import Rails from '@rails/ujs';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -14,8 +12,6 @@ const REACT_CLASSES: { [className: string]: React.ComponentType<any> } = {
 };
 
 window.addEventListener('load', () => {
-  Rails.start();
-
   document.querySelectorAll('[data-react-class]').forEach((element) => {
     const className = element.getAttribute('data-react-class');
     const reactClass = REACT_CLASSES[className ?? ''];

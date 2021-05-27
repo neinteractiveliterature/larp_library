@@ -3,34 +3,28 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { generateProjectPath } from '../URLGenerators';
 import { buildProjectAttributes } from './buildProjectAttributes';
-import { useCreateProjectMutation } from './mutations.generated';
-import ProjectFormFields, { ProjectFormProps } from './ProjectFormFields';
-import { useNewProjectFormQuery } from './queries.generated';
+import { useUpdateProjectMutation } from './mutations.generated';
+import ProjectFormFields from './ProjectFormFields';
+import { useProjectPageQuery } from './queries.generated';
 
 function useLoadProject() {
-  const { brandSlug } = useParams();
-  return useNewProjectFormQuery({ variables: { slug: brandSlug } });
+  const { projectId } = useParams();
+  return useProjectPageQuery({ variables: { projectId } });
 }
 
-export default LoadQueryWrapper(useLoadProject, function NewProject({ data }) {
-  const [project, setProject] = useState<ProjectFormProps['project']>({
-    tags: [],
-    license: data.licenses[0],
-  });
-  const [createProject, { error }] = useCreateProjectMutation();
+export default LoadQueryWrapper(useLoadProject, function EditProjectPage({ data }) {
+  const [project, setProject] = useState(data.project);
+  const [updateProject, { error }] = useUpdateProjectMutation();
   const navigate = useNavigate();
 
   const saveProject = async () => {
-    const result = await createProject({
+    await updateProject({
       variables: {
-        brandId: data.brand.id,
+        id: project.id,
         projectAttributes: buildProjectAttributes(project),
       },
     });
-    const newProject = result.data?.createProject?.project;
-    if (newProject) {
-      navigate(generateProjectPath(newProject));
-    }
+    navigate(generateProjectPath(project));
   };
 
   return (

@@ -1,5 +1,6 @@
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform/lib';
-import { groupBy, sortBy } from 'lodash';
+import groupBy from 'lodash/groupBy';
+import sortBy from 'lodash/sortBy';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import ProjectHeaders from '../ProjectSearch/ProjectHeaders';

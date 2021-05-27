@@ -1,5 +1,5 @@
 import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform/lib';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';

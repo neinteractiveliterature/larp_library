@@ -1,4 +1,5 @@
-import { sortBy, uniq } from 'lodash';
+import sortBy from 'lodash/sortBy';
+import uniq from 'lodash/uniq';
 import { ReactNode, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Brand, Project } from '../graphqlTypes.generated';
