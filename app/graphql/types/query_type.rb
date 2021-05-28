@@ -15,12 +15,32 @@ module Types
       argument :query_string, String, required: false
       argument :tag, String, required: false
       argument :brand_id, Integer, required: false
+      argument :title, String, required: false
+      argument :authors, String, required: false
+      argument :supports_at_least_players, Int, required: false
+      argument :supports_at_most_players, Int, required: false
     end
 
-    def projects(query_string: nil, tag: nil, brand_id: nil)
+    def projects(
+      query_string: nil,
+      tag: nil,
+      brand_id: nil,
+      title: nil,
+      authors: nil,
+      supports_at_least_players: nil,
+      supports_at_most_players: nil
+    )
       SearchRequest.new(
         Project,
-        ProjectSearch.new(query_string: query_string, tag: tag, brand_id: brand_id).to_hash
+        ProjectSearch.new(
+          query_string: query_string,
+          tag: tag,
+          brand_id: brand_id,
+          title: title,
+          authors: authors,
+          supports_at_least_players: supports_at_least_players,
+          supports_at_most_players: supports_at_most_players
+        ).to_hash
       )
     end
 

@@ -691,6 +691,7 @@ type Query {
     Returns the elements in the list that come after the specified cursor.
     """
     after: String
+    authors: String
 
     """
     Returns the elements in the list that come before the specified cursor.
@@ -708,7 +709,10 @@ type Query {
     """
     last: Int
     queryString: String
+    supportsAtLeastPlayers: Int
+    supportsAtMostPlayers: Int
     tag: String
+    title: String
   ): ProjectConnection!
   tag(id: ID!): Tag!
   tagByName(name: String): Tag

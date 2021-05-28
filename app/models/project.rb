@@ -82,6 +82,8 @@ MIT License</a>."
     indexes :brand_name, type: 'text'
     indexes :brand_id, type: 'integer'
     indexes :brand_approved, type: 'boolean'
+    indexes :min_players, type: 'integer'
+    indexes :max_players, type: 'integer'
   end
 
   has_many :project_files, dependent: :destroy
@@ -130,7 +132,9 @@ MIT License</a>."
       tag_names: tag_names,
       brand_name: brand&.name,
       brand_id: brand&.id,
-      brand_approved: brand&.approved
+      brand_approved: brand&.approved,
+      min_players: min_players,
+      max_players: max_players
     }.as_json
   end
 

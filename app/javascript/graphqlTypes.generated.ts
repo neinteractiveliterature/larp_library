@@ -543,12 +543,16 @@ export type QueryProjectArgs = {
 
 export type QueryProjectsArgs = {
   after?: Maybe<Scalars['String']>;
+  authors?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   brandId?: Maybe<Scalars['Int']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   queryString?: Maybe<Scalars['String']>;
+  supportsAtLeastPlayers?: Maybe<Scalars['Int']>;
+  supportsAtMostPlayers?: Maybe<Scalars['Int']>;
   tag?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
 };
 
 export type QueryTagArgs = {
