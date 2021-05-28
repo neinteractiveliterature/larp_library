@@ -1,5 +1,5 @@
 class ProjectSearch
-  attr_reader :query_string, :tag, :brand_id, :title, :authors, :supports_at_least_players, :supports_at_most_players, :search_after
+  attr_reader :query_string, :tag, :brand_id, :title, :authors, :player_count_upper_bound, :player_count_lower_bound, :search_after
 
   def initialize(
     query_string: nil,
@@ -7,16 +7,16 @@ class ProjectSearch
     brand_id: nil,
     title: nil,
     authors: nil,
-    supports_at_least_players: nil,
-    supports_at_most_players: nil
+    player_count_upper_bound: nil,
+    player_count_lower_bound: nil
   )
     @query_string = query_string
     @tag = tag
     @brand_id = brand_id
     @title = title
     @authors = authors
-    @supports_at_least_players = supports_at_least_players
-    @supports_at_most_players = supports_at_most_players
+    @player_count_upper_bound = player_count_upper_bound
+    @player_count_lower_bound = player_count_lower_bound
   end
 
   def to_hash
@@ -50,8 +50,8 @@ class ProjectSearch
       brand_query,
       title_query,
       authors_query,
-      supports_at_least_players_query,
-      supports_at_most_players_query
+      player_count_upper_bound_query,
+      player_count_lower_bound_query
     ].compact
   end
 
@@ -87,19 +87,19 @@ class ProjectSearch
     }
   end
 
-  def supports_at_least_players_query
-    return unless supports_at_least_players.present?
+  def player_count_upper_bound_query
+    return unless player_count_upper_bound.present?
 
     {
-      range: { max_players: { gte: supports_at_least_players } }
+      range: { max_players: { gte: player_count_upper_bound } }
     }
   end
 
-  def supports_at_most_players_query
-    return unless supports_at_most_players.present?
+  def player_count_lower_bound_query
+    return unless player_count_lower_bound.present?
 
     {
-      range: { min_players: { lte: supports_at_most_players } }
+      range: { min_players: { lte: player_count_lower_bound } }
     }
   end
 

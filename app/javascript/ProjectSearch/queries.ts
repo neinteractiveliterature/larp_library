@@ -33,8 +33,8 @@ export const ProjectSearchQuery = gql`
     $tag: String
     $title: String
     $authors: String
-    $supportsAtLeastPlayers: Int
-    $supportsAtMostPlayers: Int
+    $playerCountUpperBound: Int
+    $playerCountLowerBound: Int
     $after: String
   ) {
     projects(
@@ -42,8 +42,8 @@ export const ProjectSearchQuery = gql`
       tag: $tag
       title: $title
       authors: $authors
-      supportsAtLeastPlayers: $supportsAtLeastPlayers
-      supportsAtMostPlayers: $supportsAtMostPlayers
+      playerCountUpperBound: $playerCountUpperBound
+      playerCountLowerBound: $playerCountLowerBound
       after: $after
     ) {
       pageInfo {

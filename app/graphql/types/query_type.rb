@@ -17,8 +17,8 @@ module Types
       argument :brand_id, Integer, required: false
       argument :title, String, required: false
       argument :authors, String, required: false
-      argument :supports_at_least_players, Int, required: false
-      argument :supports_at_most_players, Int, required: false
+      argument :player_count_upper_bound, Int, required: false
+      argument :player_count_lower_bound, Int, required: false
     end
 
     def projects(
@@ -27,8 +27,8 @@ module Types
       brand_id: nil,
       title: nil,
       authors: nil,
-      supports_at_least_players: nil,
-      supports_at_most_players: nil
+      player_count_upper_bound: nil,
+      player_count_lower_bound: nil
     )
       SearchRequest.new(
         Project,
@@ -38,8 +38,8 @@ module Types
           brand_id: brand_id,
           title: title,
           authors: authors,
-          supports_at_least_players: supports_at_least_players,
-          supports_at_most_players: supports_at_most_players
+          player_count_upper_bound: player_count_upper_bound,
+          player_count_lower_bound: player_count_lower_bound
         ).to_hash
       )
     end

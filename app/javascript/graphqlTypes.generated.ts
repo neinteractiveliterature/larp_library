@@ -548,9 +548,9 @@ export type QueryProjectsArgs = {
   brandId?: Maybe<Scalars['Int']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
+  playerCountLowerBound?: Maybe<Scalars['Int']>;
+  playerCountUpperBound?: Maybe<Scalars['Int']>;
   queryString?: Maybe<Scalars['String']>;
-  supportsAtLeastPlayers?: Maybe<Scalars['Int']>;
-  supportsAtMostPlayers?: Maybe<Scalars['Int']>;
   tag?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
 };

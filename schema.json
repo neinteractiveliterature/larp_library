@@ -4099,7 +4099,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "supportsAtLeastPlayers",
+                  "name": "playerCountUpperBound",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -4111,7 +4111,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "supportsAtMostPlayers",
+                  "name": "playerCountLowerBound",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",

@@ -26,8 +26,8 @@ export type ProjectSearchQueryVariables = Types.Exact<{
   tag?: Types.Maybe<Types.Scalars['String']>;
   title?: Types.Maybe<Types.Scalars['String']>;
   authors?: Types.Maybe<Types.Scalars['String']>;
-  supportsAtLeastPlayers?: Types.Maybe<Types.Scalars['Int']>;
-  supportsAtMostPlayers?: Types.Maybe<Types.Scalars['Int']>;
+  playerCountUpperBound?: Types.Maybe<Types.Scalars['Int']>;
+  playerCountLowerBound?: Types.Maybe<Types.Scalars['Int']>;
   after?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
@@ -72,8 +72,8 @@ export const ProjectSearchQueryDocument = gql`
     $tag: String
     $title: String
     $authors: String
-    $supportsAtLeastPlayers: Int
-    $supportsAtMostPlayers: Int
+    $playerCountUpperBound: Int
+    $playerCountLowerBound: Int
     $after: String
   ) {
     projects(
@@ -81,8 +81,8 @@ export const ProjectSearchQueryDocument = gql`
       tag: $tag
       title: $title
       authors: $authors
-      supportsAtLeastPlayers: $supportsAtLeastPlayers
-      supportsAtMostPlayers: $supportsAtMostPlayers
+      playerCountUpperBound: $playerCountUpperBound
+      playerCountLowerBound: $playerCountLowerBound
       after: $after
     ) {
       pageInfo {
@@ -122,8 +122,8 @@ export const ProjectSearchQueryDocument = gql`
  *      tag: // value for 'tag'
  *      title: // value for 'title'
  *      authors: // value for 'authors'
- *      supportsAtLeastPlayers: // value for 'supportsAtLeastPlayers'
- *      supportsAtMostPlayers: // value for 'supportsAtMostPlayers'
+ *      playerCountUpperBound: // value for 'playerCountUpperBound'
+ *      playerCountLowerBound: // value for 'playerCountLowerBound'
  *      after: // value for 'after'
  *   },
  * });

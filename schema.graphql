@@ -708,9 +708,9 @@ type Query {
     Returns the last _n_ elements from the list.
     """
     last: Int
+    playerCountLowerBound: Int
+    playerCountUpperBound: Int
     queryString: String
-    supportsAtLeastPlayers: Int
-    supportsAtMostPlayers: Int
     tag: String
     title: String
   ): ProjectConnection!
