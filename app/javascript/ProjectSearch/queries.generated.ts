@@ -13,6 +13,8 @@ export type ProjectHeadersFragment = { __typename: 'Project' } & Pick<
   | 'authors'
   | 'minPlayers'
   | 'maxPlayers'
+  | 'minFacilitators'
+  | 'maxFacilitators'
   | 'publicationYear'
   | 'lengthQuantity'
   | 'lengthUnits'
@@ -28,6 +30,8 @@ export type ProjectSearchQueryVariables = Types.Exact<{
   authors?: Types.Maybe<Types.Scalars['String']>;
   playerCountUpperBound?: Types.Maybe<Types.Scalars['Int']>;
   playerCountLowerBound?: Types.Maybe<Types.Scalars['Int']>;
+  facilitatorCountUpperBound?: Types.Maybe<Types.Scalars['Int']>;
+  facilitatorCountLowerBound?: Types.Maybe<Types.Scalars['Int']>;
   after?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
@@ -51,6 +55,8 @@ export const ProjectHeadersFragmentDoc = gql`
     authors
     minPlayers
     maxPlayers
+    minFacilitators
+    maxFacilitators
     publicationYear
     lengthQuantity
     lengthUnits
@@ -74,6 +80,8 @@ export const ProjectSearchQueryDocument = gql`
     $authors: String
     $playerCountUpperBound: Int
     $playerCountLowerBound: Int
+    $facilitatorCountUpperBound: Int
+    $facilitatorCountLowerBound: Int
     $after: String
   ) {
     projects(
@@ -83,6 +91,8 @@ export const ProjectSearchQueryDocument = gql`
       authors: $authors
       playerCountUpperBound: $playerCountUpperBound
       playerCountLowerBound: $playerCountLowerBound
+      facilitatorCountUpperBound: $facilitatorCountUpperBound
+      facilitatorCountLowerBound: $facilitatorCountLowerBound
       after: $after
     ) {
       pageInfo {
@@ -124,6 +134,8 @@ export const ProjectSearchQueryDocument = gql`
  *      authors: // value for 'authors'
  *      playerCountUpperBound: // value for 'playerCountUpperBound'
  *      playerCountLowerBound: // value for 'playerCountLowerBound'
+ *      facilitatorCountUpperBound: // value for 'facilitatorCountUpperBound'
+ *      facilitatorCountLowerBound: // value for 'facilitatorCountLowerBound'
  *      after: // value for 'after'
  *   },
  * });

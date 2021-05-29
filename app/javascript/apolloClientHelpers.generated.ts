@@ -283,7 +283,9 @@ export type ProjectKeySpecifier = (
   | 'lengthQuantity'
   | 'lengthUnits'
   | 'license'
+  | 'maxFacilitators'
   | 'maxPlayers'
+  | 'minFacilitators'
   | 'minPlayers'
   | 'projectFiles'
   | 'publicationYear'
@@ -305,7 +307,9 @@ export type ProjectFieldPolicy = {
   lengthQuantity?: FieldPolicy<any> | FieldReadFunction<any>;
   lengthUnits?: FieldPolicy<any> | FieldReadFunction<any>;
   license?: FieldPolicy<any> | FieldReadFunction<any>;
+  maxFacilitators?: FieldPolicy<any> | FieldReadFunction<any>;
   maxPlayers?: FieldPolicy<any> | FieldReadFunction<any>;
+  minFacilitators?: FieldPolicy<any> | FieldReadFunction<any>;
   minPlayers?: FieldPolicy<any> | FieldReadFunction<any>;
   projectFiles?: FieldPolicy<any> | FieldReadFunction<any>;
   publicationYear?: FieldPolicy<any> | FieldReadFunction<any>;

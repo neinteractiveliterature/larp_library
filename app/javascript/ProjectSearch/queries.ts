@@ -8,6 +8,8 @@ export const ProjectHeadersFragment = gql`
     authors
     minPlayers
     maxPlayers
+    minFacilitators
+    maxFacilitators
     publicationYear
     lengthQuantity
     lengthUnits
@@ -35,6 +37,8 @@ export const ProjectSearchQuery = gql`
     $authors: String
     $playerCountUpperBound: Int
     $playerCountLowerBound: Int
+    $facilitatorCountUpperBound: Int
+    $facilitatorCountLowerBound: Int
     $after: String
   ) {
     projects(
@@ -44,6 +48,8 @@ export const ProjectSearchQuery = gql`
       authors: $authors
       playerCountUpperBound: $playerCountUpperBound
       playerCountLowerBound: $playerCountLowerBound
+      facilitatorCountUpperBound: $facilitatorCountUpperBound
+      facilitatorCountLowerBound: $facilitatorCountLowerBound
       after: $after
     ) {
       pageInfo {

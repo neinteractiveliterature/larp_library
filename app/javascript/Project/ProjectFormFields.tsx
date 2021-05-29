@@ -19,6 +19,8 @@ type ProjectFormProject = Pick<
   | 'description'
   | 'minPlayers'
   | 'maxPlayers'
+  | 'minFacilitators'
+  | 'maxFacilitators'
   | 'lengthQuantity'
   | 'lengthUnits'
 > & {
@@ -44,6 +46,8 @@ export default function ProjectFormFields({
     setDescription,
     setMinPlayers,
     setMaxPlayers,
+    setMinFacilitators,
+    setMaxFacilitators,
     setLengthQuantity,
     setLengthUnits,
     setLicense,
@@ -56,6 +60,8 @@ export default function ProjectFormFields({
     'description',
     'minPlayers',
     'maxPlayers',
+    'minFacilitators',
+    'maxFacilitators',
     'lengthQuantity',
     'lengthUnits',
     'license',
@@ -98,6 +104,25 @@ export default function ProjectFormFields({
             label="Maximum player count"
             value={project.maxPlayers ?? ''}
             onTextChange={(text) => setMaxPlayers(parseIntOrNull(text))}
+          />
+        </div>
+        <div className="col-md-4 col-lg-6"></div>
+      </div>
+      <div className="row">
+        <div className="col-sm-6 col-md-4 col-lg-3">
+          <BootstrapFormInput
+            type="number"
+            label="Minimum facilitator/GM count"
+            value={project.minFacilitators ?? ''}
+            onTextChange={(text) => setMinFacilitators(parseIntOrNull(text))}
+          />
+        </div>
+        <div className="col-sm-6 col-md-4 col-lg-3">
+          <BootstrapFormInput
+            type="number"
+            label="Maximum facilitator/GM count"
+            value={project.maxFacilitators ?? ''}
+            onTextChange={(text) => setMaxFacilitators(parseIntOrNull(text))}
           />
         </div>
         <div className="col-md-4 col-lg-6"></div>

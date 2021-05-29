@@ -422,7 +422,9 @@ export type Project = {
   lengthQuantity?: Maybe<Scalars['Int']>;
   lengthUnits?: Maybe<Scalars['String']>;
   license?: Maybe<License>;
+  maxFacilitators?: Maybe<Scalars['Int']>;
   maxPlayers?: Maybe<Scalars['Int']>;
+  minFacilitators?: Maybe<Scalars['Int']>;
   minPlayers?: Maybe<Scalars['Int']>;
   projectFiles: Array<ProjectFile>;
   publicationYear?: Maybe<Scalars['Int']>;
@@ -437,7 +439,9 @@ export type ProjectAttributes = {
   lengthQuantity?: Maybe<Scalars['Int']>;
   lengthUnits?: Maybe<Scalars['String']>;
   licenseId?: Maybe<Scalars['ID']>;
+  maxFacilitators?: Maybe<Scalars['Int']>;
   maxPlayers?: Maybe<Scalars['Int']>;
+  minFacilitators?: Maybe<Scalars['Int']>;
   minPlayers?: Maybe<Scalars['Int']>;
   publicationYear?: Maybe<Scalars['Int']>;
   tagNames?: Maybe<Array<Scalars['String']>>;
@@ -546,6 +550,8 @@ export type QueryProjectsArgs = {
   authors?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   brandId?: Maybe<Scalars['Int']>;
+  facilitatorCountLowerBound?: Maybe<Scalars['Int']>;
+  facilitatorCountUpperBound?: Maybe<Scalars['Int']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   playerCountLowerBound?: Maybe<Scalars['Int']>;
