@@ -28,7 +28,7 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
     <>
       <div className="row">
         <div className="col-md-8">
-          <header>
+          <header className="mb-4">
             <ProjectHeaders project={project} />
           </header>
           <ReactMarkdown>{project.description ?? ''}</ReactMarkdown>

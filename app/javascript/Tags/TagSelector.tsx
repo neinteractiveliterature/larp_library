@@ -1,6 +1,10 @@
 import { useApolloClient } from '@apollo/client';
 import React from 'react';
 import AsyncSelect, { Props as AsyncSelectProps } from 'react-select/async';
+import AsyncCreatableSelect, {
+  Props as AsyncCreatableSelectProps,
+} from 'react-select/async-creatable';
+import { v4 as uuidv4 } from 'uuid';
 import {
   TagAutocompleteQueryData,
   TagAutocompleteQueryDocument,
@@ -9,21 +13,23 @@ import {
 } from './queries.generated';
 import Tag from './Tag';
 
-export type TagSelectorProps<IsMulti extends boolean> = {
+export type TagSelectorProps<IsMulti extends boolean, IsCreatable extends boolean> = {
   value: IsMulti extends true ? TagFragment[] : TagFragment | null | undefined;
   onChange: IsMulti extends true
     ? React.Dispatch<React.SetStateAction<TagFragment[]>>
     : React.Dispatch<React.SetStateAction<TagFragment | null>>;
   isMulti: IsMulti;
+  isCreatable: IsCreatable;
   id?: string;
 };
 
-function TagSelector<IsMulti extends boolean>({
+function TagSelector<IsMulti extends boolean, IsCreatable extends boolean>({
   value,
   onChange,
   id,
   isMulti,
-}: TagSelectorProps<IsMulti>): JSX.Element {
+  isCreatable,
+}: TagSelectorProps<IsMulti, IsCreatable>): JSX.Element {
   const apolloClient = useApolloClient();
 
   const queryTags = async (queryString: string) => {
@@ -33,6 +39,7 @@ function TagSelector<IsMulti extends boolean>({
     >({
       query: TagAutocompleteQueryDocument,
       variables: { queryString },
+      fetchPolicy: 'network-only',
     });
 
     return result.data.tags.edges.map((edge) => edge.node);
@@ -46,6 +53,8 @@ function TagSelector<IsMulti extends boolean>({
     getOptionLabel: (option: TagFragment) => option.name ?? '',
     // eslint-disable-next-line react/display-name
     formatOptionLabel: (option: TagFragment) => <Tag tag={option} />,
+    filterOption: (option, rawInput) =>
+      option.data.name.toUpperCase().startsWith(rawInput.toUpperCase()),
     styles: {
       container: (provided) => ({
         ...provided,
@@ -77,11 +86,42 @@ function TagSelector<IsMulti extends boolean>({
   if (isMulti) {
     const onChangeMulti = (newValue: TagFragment[]) =>
       (onChange as React.Dispatch<React.SetStateAction<TagFragment[]>>)([...newValue]);
+
+    if (isCreatable) {
+      return (
+        <AsyncCreatableSelect<TagFragment, true>
+          isMulti
+          onChange={onChangeMulti}
+          getNewOptionData={(inputValue) => ({
+            __typename: 'Tag',
+            id: uuidv4(),
+            name: inputValue,
+          })}
+          {...(commonProps as AsyncCreatableSelectProps<TagFragment, true>)}
+        />
+      );
+    }
+
     return (
       <AsyncSelect<TagFragment, true>
         isMulti
         onChange={onChangeMulti}
         {...(commonProps as AsyncSelectProps<TagFragment, true>)}
+      />
+    );
+  }
+
+  if (isCreatable) {
+    return (
+      <AsyncCreatableSelect<TagFragment, false>
+        isClearable
+        onChange={onChange as React.Dispatch<React.SetStateAction<TagFragment | null>>}
+        getNewOptionData={(inputValue) => ({
+          __typename: 'Tag',
+          id: uuidv4(),
+          name: inputValue,
+        })}
+        {...(commonProps as AsyncCreatableSelectProps<TagFragment, false>)}
       />
     );
   }
