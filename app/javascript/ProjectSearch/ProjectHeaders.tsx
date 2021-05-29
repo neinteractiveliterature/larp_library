@@ -16,6 +16,8 @@ export type ProjectHeadersProps = {
     | 'authors'
     | 'minPlayers'
     | 'maxPlayers'
+    | 'minFacilitators'
+    | 'maxFacilitators'
     | 'lengthQuantity'
     | 'lengthUnits'
   > & {
@@ -82,6 +84,17 @@ function ProjectHeaders({
                     .filter((count) => count != null)
                     .join(' - ')}{' '}
                   {(project.maxPlayers ?? project.minPlayers) == 1 ? 'player' : 'players'}
+                </li>
+              )}
+              {(project.minFacilitators || project.maxFacilitators) && (
+                <li className="list-inline-item">
+                  <i className="fa fa-gavel"></i>{' '}
+                  {uniq([project.minFacilitators, project.maxFacilitators])
+                    .filter((count) => count != null)
+                    .join(' - ')}{' '}
+                  {(project.maxFacilitators ?? project.minFacilitators) == 1
+                    ? 'facilitator/GM'
+                    : 'facilitators/GMs'}
                 </li>
               )}
               {project.lengthQuantity && project.lengthUnits && (

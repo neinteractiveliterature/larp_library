@@ -48,6 +48,10 @@ function decodeProjectSearchParams(urlSearchParams: URLSearchParams): ProjectSea
       parseIntOrNull(urlSearchParams.get('player_count_lower') ?? '') ?? undefined,
     playerCountUpperBound:
       parseIntOrNull(urlSearchParams.get('player_count_upper') ?? '') ?? undefined,
+    facilitatorCountLowerBound:
+      parseIntOrNull(urlSearchParams.get('facilitator_count_lower') ?? '') ?? undefined,
+    facilitatorCountUpperBound:
+      parseIntOrNull(urlSearchParams.get('facilitator_count_upper') ?? '') ?? undefined,
   };
 }
 
@@ -59,6 +63,8 @@ function encodeProjectSearchParams(params: ProjectSearchParams) {
     authors: params.authors,
     player_count_lower: params.playerCountLowerBound?.toString(),
     player_count_upper: params.playerCountUpperBound?.toString(),
+    facilitator_count_lower: params.facilitatorCountLowerBound?.toString(),
+    facilitator_count_upper: params.facilitatorCountUpperBound?.toString(),
   };
 }
 

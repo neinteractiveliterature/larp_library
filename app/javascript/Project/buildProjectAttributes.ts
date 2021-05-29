@@ -10,6 +10,8 @@ export function buildProjectAttributes(project: ProjectFormProps['project']): Pr
     licenseId: project.license?.id,
     maxPlayers: project.maxPlayers,
     minPlayers: project.minPlayers,
+    maxFacilitators: project.maxFacilitators,
+    minFacilitators: project.minFacilitators,
     publicationYear: project.publicationYear,
     tagNames: project.tags.map((tag) => tag.name),
     title: project.title,

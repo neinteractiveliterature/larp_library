@@ -11,6 +11,8 @@ module Types
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
     field :min_players, Integer, null: true
     field :max_players, Integer, null: true
+    field :min_facilitators, Integer, null: true
+    field :max_facilitators, Integer, null: true
     field :length_quantity, Integer, null: true
     field :length_units, String, null: true
     field :publication_year, Integer, null: true

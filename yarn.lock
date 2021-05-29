@@ -1656,10 +1656,10 @@
   resolved "https://registry.yarnpkg.com/@microsoft/fetch-event-source/-/fetch-event-source-2.0.1.tgz#9ceecc94b49fbaa15666e38ae8587f64acce007d"
   integrity sha512-W6CLUJ2eBMw3Rec70qrsEW0jOm/3twwJv21mrmj2yORiaVmVYGS4sSS5yUwvQc1ZlDLYGPnClVWmUUMagKNsfA==
 
-"@neinteractiveliterature/litform@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@neinteractiveliterature/litform/-/litform-0.7.0.tgz#952d0edc9427a44d859337d1cab777f02bcb5f5a"
-  integrity sha512-qf/PeRVymG3aDsvfvSliCUmVDV2IFIQRFC8WLs6SWbJ6CN3LyK3Q7fqIZsL6qN3sIypffMrCnKJ9zUXxdXtvHw==
+"@neinteractiveliterature/litform@^0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@neinteractiveliterature/litform/-/litform-0.7.1.tgz#077fd7de978c8538d213a08518837cf37a40cd0a"
+  integrity sha512-qnEaDOMc4MF1BaD+84fOQApB2A/PCDSAtS3qo1Ujuj3/B1TAdGI/9/+9gubi/00mLyMhvhr31lAlAiwBkQQcqw==
   dependencies:
     lodash "^4.17.21"
     uuid "^8.3.2"

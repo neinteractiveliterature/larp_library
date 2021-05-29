@@ -20,7 +20,9 @@ export default function ProjectSearchPage(): JSX.Element {
       projectSearchParams.title ||
       projectSearchParams.authors ||
       projectSearchParams.playerCountLowerBound ||
-      projectSearchParams.playerCountUpperBound
+      projectSearchParams.playerCountUpperBound ||
+      projectSearchParams.facilitatorCountLowerBound ||
+      projectSearchParams.facilitatorCountUpperBound
     ) {
       return ProjectSearchMode.ADVANCED;
     }
@@ -34,6 +36,8 @@ export default function ProjectSearchPage(): JSX.Element {
       authors: undefined,
       playerCountLowerBound: undefined,
       playerCountUpperBound: undefined,
+      facilitatorCountLowerBound: undefined,
+      facilitatorCountUpperBound: undefined,
     });
     setSearchMode(ProjectSearchMode.SIMPLE);
   };

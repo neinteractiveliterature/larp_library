@@ -1,6 +1,7 @@
 import {
   BootstrapFormInput,
   FormGroupWithLabel,
+  HelpPopover,
   parseIntOrNull,
   useDebouncedState,
   useUniqueId,
@@ -44,8 +45,22 @@ export default function AdvancedProjectSearchControls({
     (newValue) => setProjectSearchParams({ playerCountUpperBound: newValue }),
     250,
   );
+  const [transientFacilitatorCountLowerBound, setTransientFacilitatorCountLowerBound] =
+    useDebouncedState(
+      projectSearchParams.facilitatorCountLowerBound,
+      (newValue) => setProjectSearchParams({ facilitatorCountLowerBound: newValue }),
+      250,
+    );
+  const [transientFacilitatorCountUpperBound, setTransientFacilitatorCountUpperBound] =
+    useDebouncedState(
+      projectSearchParams.facilitatorCountUpperBound,
+      (newValue) => setProjectSearchParams({ facilitatorCountUpperBound: newValue }),
+      250,
+    );
   const minPlayerCountId = useUniqueId('min-player-count-');
   const maxPlayerCountId = useUniqueId('max-player-count-');
+  const minFacilitatorCountId = useUniqueId('min-facilitator-count-');
+  const maxFacilitatorCountId = useUniqueId('max-facilitator-count-');
 
   return (
     <div className="card mb-2">
@@ -97,39 +112,99 @@ export default function AdvancedProjectSearchControls({
           </div>
         </div>
 
-        <fieldset>
-          <div className="d-flex align-items-center">
-            <label className="form-label mb-0" htmlFor={minPlayerCountId}>
-              Supports between
-            </label>
-            <input
-              id={minPlayerCountId}
-              type="number"
-              className="mx-1 form-control d-inline-block"
-              style={{ maxWidth: '5rem' }}
-              value={transientPlayerCountLowerBound ?? ''}
-              min={0}
-              onChange={(event) =>
-                setTransientPlayerCountLowerBound(parseIntOrNull(event.target.value))
-              }
-            />
-            <label className="form-label mb-0" htmlFor={maxPlayerCountId}>
-              and
-            </label>
-            <input
-              id={maxPlayerCountId}
-              type="number"
-              className="mx-1 form-control d-inline-block"
-              style={{ maxWidth: '5rem' }}
-              value={transientPlayerCountUpperBound ?? ''}
-              min={0}
-              onChange={(event) =>
-                setTransientPlayerCountUpperBound(parseIntOrNull(event.target.value))
-              }
-            />
-            <div>players</div>
-          </div>
-        </fieldset>
+        <div className="row">
+          <fieldset className="col-12 col-lg-6">
+            <div className="d-flex align-items-center">
+              <label className="form-label mb-0" htmlFor={minPlayerCountId}>
+                Supports between
+              </label>
+              <input
+                id={minPlayerCountId}
+                type="number"
+                className="mx-1 form-control d-inline-block"
+                style={{ maxWidth: '5rem' }}
+                value={transientPlayerCountLowerBound ?? ''}
+                min={0}
+                onChange={(event) =>
+                  setTransientPlayerCountLowerBound(parseIntOrNull(event.target.value))
+                }
+              />
+              <label className="form-label mb-0" htmlFor={maxPlayerCountId}>
+                and
+              </label>
+              <input
+                id={maxPlayerCountId}
+                type="number"
+                className="mx-1 form-control d-inline-block"
+                style={{ maxWidth: '5rem' }}
+                value={transientPlayerCountUpperBound ?? ''}
+                min={0}
+                onChange={(event) =>
+                  setTransientPlayerCountUpperBound(parseIntOrNull(event.target.value))
+                }
+              />
+              <div>player(s)</div>
+              <HelpPopover>
+                <p>
+                  This will find larps that accommodate your requested player count range. It’s
+                  inclusive, so if you search for larps that support between 8 and 10 players, larps
+                  that support between 5 and 12 players will also come up.
+                </p>
+
+                <p className="mb-0">
+                  Larps that don’t specify a supported player count won’t come up if you enter
+                  numbers in these fields.
+                </p>
+              </HelpPopover>
+            </div>
+          </fieldset>
+
+          <fieldset className="col-12 col-lg-6">
+            <div className="d-flex align-items-center">
+              <label className="form-label mb-0" htmlFor={minFacilitatorCountId}>
+                Requires between
+              </label>
+              <input
+                id={minFacilitatorCountId}
+                type="number"
+                className="mx-1 form-control d-inline-block"
+                style={{ maxWidth: '5rem' }}
+                value={transientFacilitatorCountLowerBound ?? ''}
+                min={0}
+                onChange={(event) =>
+                  setTransientFacilitatorCountLowerBound(parseIntOrNull(event.target.value))
+                }
+              />
+              <label className="form-label mb-0" htmlFor={maxFacilitatorCountId}>
+                and
+              </label>
+              <input
+                id={maxFacilitatorCountId}
+                type="number"
+                className="mx-1 form-control d-inline-block"
+                style={{ maxWidth: '5rem' }}
+                value={transientFacilitatorCountUpperBound ?? ''}
+                min={0}
+                onChange={(event) =>
+                  setTransientFacilitatorCountUpperBound(parseIntOrNull(event.target.value))
+                }
+              />
+              <div>facilitator(s)</div>
+              <HelpPopover>
+                <p>
+                  This will find larps that work with your requested facilitator/GM count range.
+                  It’s inclusive, so if you search for larps that require between 3 and 4
+                  facilitators, larps that require between 2 and 5 faciliators will also come up.
+                </p>
+
+                <p className="mb-0">
+                  Larps that don’t specify a required facilitator count won’t come up if you enter
+                  numbers in these fields.
+                </p>
+              </HelpPopover>
+            </div>
+          </fieldset>
+        </div>
       </div>
     </div>
   );

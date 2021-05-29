@@ -84,6 +84,8 @@ MIT License</a>."
     indexes :brand_approved, type: 'boolean'
     indexes :min_players, type: 'integer'
     indexes :max_players, type: 'integer'
+    indexes :min_facilitators, type: 'integer'
+    indexes :max_facilitators, type: 'integer'
   end
 
   has_many :project_files, dependent: :destroy
@@ -134,7 +136,9 @@ MIT License</a>."
       brand_id: brand&.id,
       brand_approved: brand&.approved,
       min_players: min_players,
-      max_players: max_players
+      max_players: max_players,
+      min_facilitators: min_facilitators,
+      max_facilitators: max_facilitators
     }.as_json
   end
 
