@@ -106,6 +106,7 @@ export default function AdvancedProjectSearchControls({
                   value={data?.tagByName}
                   onChange={(newTag) => setProjectSearchParams({ tag: newTag?.name })}
                   isMulti={false}
+                  isCreatable={false}
                 />
               )}
             </FormGroupWithLabel>
