@@ -1,5 +1,7 @@
 class ProjectSearch
-  attr_reader :query_string, :tag, :brand_id, :title, :authors, :player_count_upper_bound, :player_count_lower_bound, :search_after
+  attr_reader :query_string, :tag, :brand_id, :title, :authors,
+    :player_count_upper_bound, :player_count_lower_bound,
+    :facilitator_count_upper_bound, :facilitator_count_lower_bound
 
   def initialize(
     query_string: nil,
@@ -8,7 +10,9 @@ class ProjectSearch
     title: nil,
     authors: nil,
     player_count_upper_bound: nil,
-    player_count_lower_bound: nil
+    player_count_lower_bound: nil,
+    facilitator_count_upper_bound: nil,
+    facilitator_count_lower_bound: nil
   )
     @query_string = query_string
     @tag = tag
@@ -17,6 +21,8 @@ class ProjectSearch
     @authors = authors
     @player_count_upper_bound = player_count_upper_bound
     @player_count_lower_bound = player_count_lower_bound
+    @facilitator_count_upper_bound = facilitator_count_upper_bound
+    @facilitator_count_lower_bound = facilitator_count_lower_bound
   end
 
   def to_hash
@@ -52,7 +58,10 @@ class ProjectSearch
       authors_query,
       player_count_upper_bound_query,
       player_count_lower_bound_query,
-      player_count_single_bound_query
+      player_count_single_bound_query,
+      facilitator_count_upper_bound_query,
+      facilitator_count_lower_bound_query,
+      facilitator_count_single_bound_query
     ].compact
   end
 
@@ -109,6 +118,30 @@ class ProjectSearch
       { range: { max_players: { gte: player_count_lower_bound } } }
     elsif player_count_lower_bound.blank? && player_count_upper_bound.present?
       { range: { min_players: { lte: player_count_upper_bound } } }
+    end
+  end
+
+  def facilitator_count_upper_bound_query
+    return unless facilitator_count_upper_bound.present?
+
+    {
+      range: { max_facilitators: { gte: facilitator_count_upper_bound } }
+    }
+  end
+
+  def facilitator_count_lower_bound_query
+    return unless facilitator_count_lower_bound.present?
+
+    {
+      range: { min_facilitators: { lte: facilitator_count_lower_bound } }
+    }
+  end
+
+  def facilitator_count_single_bound_query
+    if facilitator_count_lower_bound.present? && facilitator_count_upper_bound.blank?
+      { range: { max_facilitators: { gte: facilitator_count_lower_bound } } }
+    elsif facilitator_count_lower_bound.blank? && facilitator_count_upper_bound.present?
+      { range: { min_facilitators: { lte: facilitator_count_upper_bound } } }
     end
   end
 

@@ -19,6 +19,8 @@ module Types
       argument :authors, String, required: false
       argument :player_count_upper_bound, Int, required: false
       argument :player_count_lower_bound, Int, required: false
+      argument :facilitator_count_upper_bound, Int, required: false
+      argument :facilitator_count_lower_bound, Int, required: false
     end
 
     def projects(
@@ -28,7 +30,9 @@ module Types
       title: nil,
       authors: nil,
       player_count_upper_bound: nil,
-      player_count_lower_bound: nil
+      player_count_lower_bound: nil,
+      facilitator_count_upper_bound: nil,
+      facilitator_count_lower_bound: nil
     )
       SearchRequest.new(
         Project,
@@ -39,7 +43,9 @@ module Types
           title: title,
           authors: authors,
           player_count_upper_bound: player_count_upper_bound,
-          player_count_lower_bound: player_count_lower_bound
+          player_count_lower_bound: player_count_lower_bound,
+          facilitator_count_upper_bound: facilitator_count_upper_bound,
+          facilitator_count_lower_bound: facilitator_count_lower_bound
         ).to_hash
       )
     end

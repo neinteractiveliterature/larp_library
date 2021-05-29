@@ -7,6 +7,8 @@ module Types
     argument :publication_year, Int, required: false
     argument :min_players, Int, required: false
     argument :max_players, Int, required: false
+    argument :min_facilitators, Int, required: false
+    argument :max_facilitators, Int, required: false
     argument :length_quantity, Int, required: false
     argument :length_units, String, required: false
     argument :tag_names, [String], required: false

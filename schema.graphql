@@ -561,7 +561,9 @@ type Project {
   lengthQuantity: Int
   lengthUnits: String
   license: License
+  maxFacilitators: Int
   maxPlayers: Int
+  minFacilitators: Int
   minPlayers: Int
   projectFiles: [ProjectFile!]!
   publicationYear: Int
@@ -576,7 +578,9 @@ input ProjectAttributes {
   lengthQuantity: Int
   lengthUnits: String
   licenseId: ID
+  maxFacilitators: Int
   maxPlayers: Int
+  minFacilitators: Int
   minPlayers: Int
   publicationYear: Int
   tagNames: [String!]
@@ -698,6 +702,8 @@ type Query {
     """
     before: String
     brandId: Int
+    facilitatorCountLowerBound: Int
+    facilitatorCountUpperBound: Int
 
     """
     Returns the first _n_ elements from the list.
