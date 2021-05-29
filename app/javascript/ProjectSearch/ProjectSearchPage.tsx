@@ -1,65 +1,45 @@
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform/lib';
 import { ErrorDisplay } from '@neinteractiveliterature/litform/lib';
-import { SearchInput, useDebouncedState } from '@neinteractiveliterature/litform/lib';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Waypoint } from 'react-waypoint';
 import { useProjectSearchQuery } from './queries.generated';
 import ProjectCard from './ProjectCard';
-import { useLocation, useNavigate } from 'react-router';
-import Tag from '../Tags/Tag';
+import SimpleProjectSearchControls from './SimpleProjectSearchControls';
+import useProjectSearchParams from './useProjectSearchParams';
+import AdvancedProjectSearchControls from './AdvancedProjectSearchControls';
 
-function stringPresence(string: string | undefined | null) {
-  if (string == null) {
-    return undefined;
-  }
-
-  if (string.trim().length === 0) {
-    return undefined;
-  }
-
-  return string;
+enum ProjectSearchMode {
+  SIMPLE = 'SIMPLE',
+  ADVANCED = 'ADVANCED',
 }
 
 export default function ProjectSearchPage(): JSX.Element {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
-  const tag = useMemo(() => stringPresence(searchParams.get('tag')), [searchParams]);
-  const queryStringFromParams = useMemo(
-    () => stringPresence(searchParams.get('q')) ?? '',
-    [searchParams],
-  );
-  const [queryString, setQueryString] = useState(queryStringFromParams);
-  const [transientQueryString, setTransientQueryString] = useDebouncedState(
-    queryStringFromParams,
-    (newValue) => setQueryString(newValue),
-    250,
-  );
-  const searchQueryVariables = useMemo(
-    () => ({ queryString, ...(tag ? { tag } : {}) }),
-    [queryString, tag],
-  );
-  const removeTag = () => {
-    const newSearch = new URLSearchParams();
-    if (stringPresence(queryString)) {
-      newSearch.set('q', queryString);
+  const [projectSearchParams, setProjectSearchParams] = useProjectSearchParams();
+  const [searchMode, setSearchMode] = useState<ProjectSearchMode>(() => {
+    if (
+      projectSearchParams.title ||
+      projectSearchParams.authors ||
+      projectSearchParams.playerCountLowerBound ||
+      projectSearchParams.playerCountUpperBound
+    ) {
+      return ProjectSearchMode.ADVANCED;
     }
-    navigate(`/projects?${newSearch.toString()}`);
+
+    return ProjectSearchMode.SIMPLE;
+  });
+
+  const switchToSimpleSearch = () => {
+    setProjectSearchParams({
+      title: undefined,
+      authors: undefined,
+      playerCountLowerBound: undefined,
+      playerCountUpperBound: undefined,
+    });
+    setSearchMode(ProjectSearchMode.SIMPLE);
   };
-  useEffect(() => {
-    const newSearch = new URLSearchParams();
-    if (stringPresence(queryString)) {
-      newSearch.set('q', queryString);
-    }
-    const tagPresence = stringPresence(tag);
-    if (tagPresence) {
-      newSearch.set('tag', tagPresence);
-    }
-    navigate(`/projects?${newSearch.toString()}`, { replace: true });
-  }, [navigate, queryString, tag]);
 
   const { data, loading, error, fetchMore } = useProjectSearchQuery({
-    variables: searchQueryVariables,
+    variables: projectSearchParams,
     fetchPolicy: 'network-only',
   });
 
@@ -69,19 +49,22 @@ export default function ProjectSearchPage(): JSX.Element {
         <div className="flex-grow-1">
           <h1>Larps</h1>
         </div>
-        {data?.tagByName && (
-          <div className="me-0 me-lg-2 mb-2 mb-lg-0">
-            <Tag tag={data.tagByName} onDismiss={removeTag} />
-          </div>
-        )}
-        <div style={{ minWidth: '150px', width: '33%' }}>
-          <SearchInput
-            label="Search"
-            value={transientQueryString}
-            onChange={setTransientQueryString}
-          />
-        </div>
+        {searchMode === ProjectSearchMode.SIMPLE && <SimpleProjectSearchControls data={data} />}
       </div>
+      {searchMode === ProjectSearchMode.SIMPLE && (
+        <div className="text-start text-lg-end my-2 mt-lg-0">
+          <button
+            type="button"
+            className="btn btn-sm btn-secondary"
+            onClick={() => setSearchMode(ProjectSearchMode.ADVANCED)}
+          >
+            Switch to advanced search
+          </button>
+        </div>
+      )}
+      {searchMode === ProjectSearchMode.ADVANCED && (
+        <AdvancedProjectSearchControls data={data} switchToSimpleSearch={switchToSimpleSearch} />
+      )}
 
       <ErrorDisplay graphQLError={error} />
       <div className="position-absolute">
@@ -100,7 +83,7 @@ export default function ProjectSearchPage(): JSX.Element {
                   if (data.projects.edges.length < data.projects.totalCount) {
                     fetchMore({
                       variables: {
-                        ...searchQueryVariables,
+                        ...projectSearchParams,
                         after: data.projects.pageInfo.endCursor,
                       },
                     });

@@ -51,7 +51,8 @@ class ProjectSearch
       title_query,
       authors_query,
       player_count_upper_bound_query,
-      player_count_lower_bound_query
+      player_count_lower_bound_query,
+      player_count_single_bound_query
     ].compact
   end
 
@@ -72,7 +73,7 @@ class ProjectSearch
 
     {
       match: {
-        title: title
+        title: { query: title, fuzziness: 'AUTO' }
       }
     }
   end
@@ -82,7 +83,7 @@ class ProjectSearch
 
     {
       match: {
-        authors: authors
+        authors: { query: authors, fuzziness: 'AUTO' }
       }
     }
   end
@@ -101,6 +102,14 @@ class ProjectSearch
     {
       range: { min_players: { lte: player_count_lower_bound } }
     }
+  end
+
+  def player_count_single_bound_query
+    if player_count_lower_bound.present? && player_count_upper_bound.blank?
+      { range: { max_players: { gte: player_count_lower_bound } } }
+    elsif player_count_lower_bound.blank? && player_count_upper_bound.present?
+      { range: { min_players: { lte: player_count_upper_bound } } }
+    end
   end
 
   def tag_query
