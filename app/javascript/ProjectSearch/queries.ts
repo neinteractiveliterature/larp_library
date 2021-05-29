@@ -28,8 +28,24 @@ export const ProjectHeadersFragment = gql`
 `;
 
 export const ProjectSearchQuery = gql`
-  query ProjectSearchQuery($queryString: String, $tag: String, $after: String) {
-    projects(queryString: $queryString, tag: $tag, after: $after) {
+  query ProjectSearchQuery(
+    $queryString: String
+    $tag: String
+    $title: String
+    $authors: String
+    $playerCountUpperBound: Int
+    $playerCountLowerBound: Int
+    $after: String
+  ) {
+    projects(
+      queryString: $queryString
+      tag: $tag
+      title: $title
+      authors: $authors
+      playerCountUpperBound: $playerCountUpperBound
+      playerCountLowerBound: $playerCountLowerBound
+      after: $after
+    ) {
       pageInfo {
         endCursor
       }

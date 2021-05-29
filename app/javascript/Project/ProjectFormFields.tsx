@@ -72,7 +72,7 @@ export default function ProjectFormFields({
         onTextChange={(text) => setPublicationYear(parseIntOrNull(text))}
       />
       <FormGroupWithLabel label="Tags">
-        {(id) => <TagSelector value={project.tags} onChange={setTags} id={id} />}
+        {(id) => <TagSelector isMulti value={project.tags} onChange={setTags} id={id} />}
       </FormGroupWithLabel>
       <FormGroupWithLabel
         label={

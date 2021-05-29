@@ -24,6 +24,10 @@ export type ProjectHeadersFragment = { __typename: 'Project' } & Pick<
 export type ProjectSearchQueryVariables = Types.Exact<{
   queryString?: Types.Maybe<Types.Scalars['String']>;
   tag?: Types.Maybe<Types.Scalars['String']>;
+  title?: Types.Maybe<Types.Scalars['String']>;
+  authors?: Types.Maybe<Types.Scalars['String']>;
+  playerCountUpperBound?: Types.Maybe<Types.Scalars['Int']>;
+  playerCountLowerBound?: Types.Maybe<Types.Scalars['Int']>;
   after?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
@@ -63,8 +67,24 @@ export const ProjectHeadersFragmentDoc = gql`
   ${TagFragmentDoc}
 `;
 export const ProjectSearchQueryDocument = gql`
-  query ProjectSearchQuery($queryString: String, $tag: String, $after: String) {
-    projects(queryString: $queryString, tag: $tag, after: $after) {
+  query ProjectSearchQuery(
+    $queryString: String
+    $tag: String
+    $title: String
+    $authors: String
+    $playerCountUpperBound: Int
+    $playerCountLowerBound: Int
+    $after: String
+  ) {
+    projects(
+      queryString: $queryString
+      tag: $tag
+      title: $title
+      authors: $authors
+      playerCountUpperBound: $playerCountUpperBound
+      playerCountLowerBound: $playerCountLowerBound
+      after: $after
+    ) {
       pageInfo {
         endCursor
       }
@@ -100,6 +120,10 @@ export const ProjectSearchQueryDocument = gql`
  *   variables: {
  *      queryString: // value for 'queryString'
  *      tag: // value for 'tag'
+ *      title: // value for 'title'
+ *      authors: // value for 'authors'
+ *      playerCountUpperBound: // value for 'playerCountUpperBound'
+ *      playerCountLowerBound: // value for 'playerCountLowerBound'
  *      after: // value for 'after'
  *   },
  * });

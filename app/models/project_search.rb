@@ -1,10 +1,22 @@
 class ProjectSearch
-  attr_reader :query_string, :tag, :brand_id, :search_after
+  attr_reader :query_string, :tag, :brand_id, :title, :authors, :player_count_upper_bound, :player_count_lower_bound, :search_after
 
-  def initialize(query_string: nil, tag: nil, brand_id: nil)
+  def initialize(
+    query_string: nil,
+    tag: nil,
+    brand_id: nil,
+    title: nil,
+    authors: nil,
+    player_count_upper_bound: nil,
+    player_count_lower_bound: nil
+  )
     @query_string = query_string
     @tag = tag
     @brand_id = brand_id
+    @title = title
+    @authors = authors
+    @player_count_upper_bound = player_count_upper_bound
+    @player_count_lower_bound = player_count_lower_bound
   end
 
   def to_hash
@@ -31,7 +43,17 @@ class ProjectSearch
   private
 
   def must_queries
-    @must_queries ||= [brand_approved_query, query_string_query, tag_query, brand_query].compact
+    @must_queries ||= [
+      brand_approved_query,
+      query_string_query,
+      tag_query,
+      brand_query,
+      title_query,
+      authors_query,
+      player_count_upper_bound_query,
+      player_count_lower_bound_query,
+      player_count_single_bound_query
+    ].compact
   end
 
   def query_string_query
@@ -44,6 +66,50 @@ class ProjectSearch
         fuzziness: 'AUTO'
       }
     }
+  end
+
+  def title_query
+    return unless title.present?
+
+    {
+      match: {
+        title: { query: title, fuzziness: 'AUTO' }
+      }
+    }
+  end
+
+  def authors_query
+    return unless authors.present?
+
+    {
+      match: {
+        authors: { query: authors, fuzziness: 'AUTO' }
+      }
+    }
+  end
+
+  def player_count_upper_bound_query
+    return unless player_count_upper_bound.present?
+
+    {
+      range: { max_players: { gte: player_count_upper_bound } }
+    }
+  end
+
+  def player_count_lower_bound_query
+    return unless player_count_lower_bound.present?
+
+    {
+      range: { min_players: { lte: player_count_lower_bound } }
+    }
+  end
+
+  def player_count_single_bound_query
+    if player_count_lower_bound.present? && player_count_upper_bound.blank?
+      { range: { max_players: { gte: player_count_lower_bound } } }
+    elsif player_count_lower_bound.blank? && player_count_upper_bound.present?
+      { range: { min_players: { lte: player_count_upper_bound } } }
+    end
   end
 
   def tag_query

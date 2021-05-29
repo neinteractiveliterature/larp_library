@@ -15,7 +15,7 @@ function TagSelectorInput({ name, initialValue }: TagSelectorInputProps): JSX.El
       {value.map((tag) => (
         <input name={name} type="hidden" key={tag.name} value={tag.name} />
       ))}
-      <TagSelector value={value} onChange={setValue} />
+      <TagSelector isMulti value={value} onChange={setValue} />
     </>
   );
 }

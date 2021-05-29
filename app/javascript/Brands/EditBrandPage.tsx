@@ -160,7 +160,7 @@ export default LoadQueryWrapper(useEditBrandQueryFromParams, function EditBrandP
                   value={inviteUserEmail}
                   onTextChange={setInviteUserEmail}
                   label="Email to invite"
-                  hideLabel
+                  labelClassName="form-label visually-hidden"
                   type="email"
                 />
               </td>
