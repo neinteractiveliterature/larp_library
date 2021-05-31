@@ -263,7 +263,7 @@ GEM
     reverse_markdown (2.0.0)
       nokogiri
     rexml (3.2.5)
-    rollbar (3.1.2)
+    rollbar (3.2.0)
     rouge (3.26.0)
     rubocop (1.15.0)
       parallel (~> 1.10)
