@@ -566,6 +566,7 @@ type Project {
   minFacilitators: Int
   minPlayers: Int
   projectFiles: [ProjectFile!]!
+  projectLinks: [ProjectLink!]!
   publicationYear: Int
   tags: [Tag!]!
   title: String
@@ -628,6 +629,15 @@ type ProjectFile {
   project: Project!
   updatedAt: ISO8601DateTime!
   uploaderId: Int
+  url: String!
+}
+
+type ProjectLink {
+  icon: String
+  id: ID!
+  position: Int!
+  project: Project!
+  title: String!
   url: String!
 }
 

@@ -288,6 +288,7 @@ export type ProjectKeySpecifier = (
   | 'minFacilitators'
   | 'minPlayers'
   | 'projectFiles'
+  | 'projectLinks'
   | 'publicationYear'
   | 'tags'
   | 'title'
@@ -312,6 +313,7 @@ export type ProjectFieldPolicy = {
   minFacilitators?: FieldPolicy<any> | FieldReadFunction<any>;
   minPlayers?: FieldPolicy<any> | FieldReadFunction<any>;
   projectFiles?: FieldPolicy<any> | FieldReadFunction<any>;
+  projectLinks?: FieldPolicy<any> | FieldReadFunction<any>;
   publicationYear?: FieldPolicy<any> | FieldReadFunction<any>;
   tags?: FieldPolicy<any> | FieldReadFunction<any>;
   title?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -356,6 +358,23 @@ export type ProjectFileFieldPolicy = {
   project?: FieldPolicy<any> | FieldReadFunction<any>;
   updatedAt?: FieldPolicy<any> | FieldReadFunction<any>;
   uploaderId?: FieldPolicy<any> | FieldReadFunction<any>;
+  url?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type ProjectLinkKeySpecifier = (
+  | 'icon'
+  | 'id'
+  | 'position'
+  | 'project'
+  | 'title'
+  | 'url'
+  | ProjectLinkKeySpecifier
+)[];
+export type ProjectLinkFieldPolicy = {
+  icon?: FieldPolicy<any> | FieldReadFunction<any>;
+  id?: FieldPolicy<any> | FieldReadFunction<any>;
+  position?: FieldPolicy<any> | FieldReadFunction<any>;
+  project?: FieldPolicy<any> | FieldReadFunction<any>;
+  title?: FieldPolicy<any> | FieldReadFunction<any>;
   url?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type ProjectPromotionKeySpecifier = (
@@ -699,6 +718,10 @@ export type TypedTypePolicies = TypePolicies & {
   ProjectFile?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?: false | ProjectFileKeySpecifier | (() => undefined | ProjectFileKeySpecifier);
     fields?: ProjectFileFieldPolicy;
+  };
+  ProjectLink?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?: false | ProjectLinkKeySpecifier | (() => undefined | ProjectLinkKeySpecifier);
+    fields?: ProjectLinkFieldPolicy;
   };
   ProjectPromotion?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?:

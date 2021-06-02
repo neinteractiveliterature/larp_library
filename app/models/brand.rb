@@ -1,4 +1,4 @@
-class Brand < ActiveRecord::Base
+class Brand < ApplicationRecord
   has_many :brand_memberships, dependent: :destroy
   has_many :users, through: :brand_memberships
   has_many :projects

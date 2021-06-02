@@ -1,4 +1,4 @@
-class Tag < ActiveRecord::Base
+class Tag < ApplicationRecord
   include ElasticsearchModel
 
   has_and_belongs_to_many :projects
