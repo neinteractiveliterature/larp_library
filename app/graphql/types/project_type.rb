@@ -18,13 +18,14 @@ module Types
     field :publication_year, Integer, null: true
     field :brand, Types::BrandType, null: false
     field :project_files, [Types::ProjectFileType], null: false
+    field :project_links, [Types::ProjectLinkType], null: false
     field :tags, [Types::TagType], null: false
     field :current_user_can_edit, Boolean, null: false
     field :current_user_can_delete, Boolean, null: false
     field :current_user_can_upload_files, Boolean, null: false
     field :current_user_can_delete_files, Boolean, null: false
 
-    association_loaders Project, :brand, :project_files, :tags
+    association_loaders Project, :brand, :project_files, :project_links, :tags
 
     def license
       Project::LICENSES[object.license.to_sym]&.merge(id: object.license)

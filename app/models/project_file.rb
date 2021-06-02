@@ -1,4 +1,4 @@
-class ProjectFile < ActiveRecord::Base
+class ProjectFile < ApplicationRecord
   belongs_to :project
   belongs_to :uploader, class_name: 'User'
 

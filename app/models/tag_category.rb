@@ -1,4 +1,4 @@
-class TagCategory < ActiveRecord::Base
+class TagCategory < ApplicationRecord
   has_many :tags
   validates :name, { presence: true, uniqueness: true }
   validates :color, { format: { with: /\A\#[0-9a-z]{6}\z/ } }

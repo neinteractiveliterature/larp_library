@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   devise :cas_authenticatable, :trackable
 
   has_many :brand_memberships

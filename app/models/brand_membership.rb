@@ -1,11 +1,14 @@
-class BrandMembership < ActiveRecord::Base
+class BrandMembership < ApplicationRecord
   belongs_to :brand
   belongs_to :user, optional: true
 
   delegate :email, to: :user, allow_nil: true
   after_save :send_invitation_email_if_necessary
 
-  # validates :user_id, uniqueness: { unless: :invitation_token, message: "is already a member of this brand" }
+  validates :user_id, uniqueness: {
+    unless: :invitation_token,
+    message: 'is already a member of this brand'
+  }
 
   def email=(email)
     self.invitation_email = email

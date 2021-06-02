@@ -427,6 +427,7 @@ export type Project = {
   minFacilitators?: Maybe<Scalars['Int']>;
   minPlayers?: Maybe<Scalars['Int']>;
   projectFiles: Array<ProjectFile>;
+  projectLinks: Array<ProjectLink>;
   publicationYear?: Maybe<Scalars['Int']>;
   tags: Array<Tag>;
   title?: Maybe<Scalars['String']>;
@@ -478,6 +479,16 @@ export type ProjectFile = {
   project: Project;
   updatedAt: Scalars['ISO8601DateTime'];
   uploaderId?: Maybe<Scalars['Int']>;
+  url: Scalars['String'];
+};
+
+export type ProjectLink = {
+  __typename: 'ProjectLink';
+  icon?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  position: Scalars['Int'];
+  project: Project;
+  title: Scalars['String'];
   url: Scalars['String'];
 };
 
