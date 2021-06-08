@@ -1,13 +1,17 @@
 import { LoadQueryWrapper, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { ReactNode, Suspense } from 'react';
 import { Link } from 'react-router-dom';
-import { AppLayoutQueryData, useAppLayoutQuery } from './queries.generated';
+import {
+  AppLayoutQueryData,
+  AppLayoutQueryVariables,
+  useAppLayoutQuery,
+} from './queries.generated';
 
 export type AppLayoutProps = {
   children: ReactNode;
 };
 
-export default LoadQueryWrapper<AppLayoutQueryData, AppLayoutProps>(
+export default LoadQueryWrapper<AppLayoutQueryData, AppLayoutQueryVariables, AppLayoutProps>(
   useAppLayoutQuery,
   function AppLayout({ data, children }) {
     return (
