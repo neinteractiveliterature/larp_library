@@ -1656,12 +1656,18 @@
   resolved "https://registry.yarnpkg.com/@microsoft/fetch-event-source/-/fetch-event-source-2.0.1.tgz#9ceecc94b49fbaa15666e38ae8587f64acce007d"
   integrity sha512-W6CLUJ2eBMw3Rec70qrsEW0jOm/3twwJv21mrmj2yORiaVmVYGS4sSS5yUwvQc1ZlDLYGPnClVWmUUMagKNsfA==
 
-"@neinteractiveliterature/litform@^0.7.9":
-  version "0.7.9"
-  resolved "https://registry.yarnpkg.com/@neinteractiveliterature/litform/-/litform-0.7.9.tgz#7eba89d8631391dc17b7980926bb987131493903"
-  integrity sha512-uyNqatdVCYoVRYghOOA7U0mwdU9IPgUN+xEE22grfYajrw4iKlz0sUm22mXZLf1tLL8HSNDloW4oIwQadwbCzg==
+"@neinteractiveliterature/litform@^0.9.1":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@neinteractiveliterature/litform/-/litform-0.9.1.tgz#3e8966bbc84a6b1cd31929ce3f5ffeac7469548d"
+  integrity sha512-MJT1KV01NgB4tDytBi2nAnx9lIDG6Jt9a92h/j+qKSaSIHESQPm9J4bWOLXbjStCOPV6TXmNR2vdH03Le7duxw==
   dependencies:
+    codemirror "^5.61.0"
+    copy-to-clipboard "^3.3.1"
     lodash "^4.17.21"
+    luxon "^1.27.0"
+    react-bootstrap4-modal "^2.0.0"
+    react-codemirror2 "^7.2.1"
+    react-cool-onclickoutside "^1.6.2"
     uuid "^8.3.2"
 
 "@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents":
@@ -1908,6 +1914,15 @@
   version "16.14.6"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.6.tgz#d933a2a6bc1bfe320a5eea480e8f45ba8126d6ee"
   integrity sha512-Ol/aFKune+P0FSFKIgf+XbhGzYGyz0p7g5befSt4rmbzfGLaZR0q7jPew9k7d3bvrcuaL8dPy9Oz3XGZmf9n+w==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
+
+"@types/react@^17.0":
+  version "17.0.9"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.9.tgz#1147fb520024a62c9b3841f5cb4db89b73ddb87f"
+  integrity sha512-2Cw7FvevpJxQrCb+k5t6GH1KIvmadj5uBbjPaLlJB/nZWUj56e1ZqcD6zsoMFB47MsJUTFl9RJ132A7hb3QFJA==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -3234,6 +3249,13 @@ copy-descriptor@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
   integrity sha1-Z29us8OZl8LuGsOpJP1hJHSPV40=
+
+copy-to-clipboard@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/copy-to-clipboard/-/copy-to-clipboard-3.3.1.tgz#115aa1a9998ffab6196f93076ad6da3b913662ae"
+  integrity sha512-i13qo6kIHTTpCm8/Wup+0b1mVWETvu2kIMzKoK8FpkLkFxlt0znUAHcMzox+T8sPlqtZXq3CulEjQHsYiGFJUw==
+  dependencies:
+    toggle-selection "^1.0.6"
 
 core-js-compat@^3.9.0, core-js-compat@^3.9.1:
   version "3.13.0"
@@ -7047,6 +7069,14 @@ react-bootstrap4-modal@^1.7.5:
     classnames "^2.2.5"
     prop-types "^15.5.10"
 
+react-bootstrap4-modal@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-bootstrap4-modal/-/react-bootstrap4-modal-2.0.0.tgz#0d846464c101c3806e638e3eed7047fd3bd7a7cd"
+  integrity sha512-m7N6UncW8QJjvGzVFsqj/LwS/tbsRdwpNIWMBLX5avI5SRzX5zr8r3ksfIgEBjNm3UcS1uEiuiaFChnE4KJMEA==
+  dependencies:
+    "@types/react" "^17.0"
+    classnames "^2.3.1"
+
 react-clipboard.js@^2.0.16:
   version "2.0.16"
   resolved "https://registry.yarnpkg.com/react-clipboard.js/-/react-clipboard.js-2.0.16.tgz#45a60684dd6a36ff97e40c53069a27e97a4b6c9c"
@@ -8320,6 +8350,11 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     extend-shallow "^3.0.2"
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
+
+toggle-selection@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/toggle-selection/-/toggle-selection-1.0.6.tgz#6e45b1263f2017fa0acc7d89d78b15b8bf77da32"
+  integrity sha1-bkWxJj8gF/oKzH2J14sVuL932jI=
 
 toidentifier@1.0.0:
   version "1.0.0"

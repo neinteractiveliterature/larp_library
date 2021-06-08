@@ -35,6 +35,10 @@ const config = {
   resolve: {
     extensions: ['.js', '.mjs', '.ts', '.tsx'],
     modules: [path.resolve(__dirname, './app/javascript'), 'node_modules'],
+    alias: {
+      'react/jsx-dev-runtime': 'react/jsx-dev-runtime.js',
+      'react/jsx-runtime': 'react/jsx-runtime.js',
+    },
   },
   devtool: 'cheap-module-source-map',
   module: {
