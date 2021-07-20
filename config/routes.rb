@@ -12,6 +12,9 @@ Rails.application.routes.draw do
     get '/users/sign_out' => 'sessions#destroy'
   end
 
+  get '/brands/:brand_id/projects/:project_id/project_files/auth_upload' =>
+    'project_files#auth_upload'
+
   get '/(*extra)' => 'single_page_app#show', as: 'root', constraints: {
     extra: %r{(?!(uploads|packs|assets)/).*}
   }
