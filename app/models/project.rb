@@ -89,6 +89,7 @@ MIT License</a>."
   end
 
   has_many :project_files, dependent: :destroy
+  has_many :project_links, dependent: :destroy
   has_and_belongs_to_many :tags
   belongs_to :brand
 

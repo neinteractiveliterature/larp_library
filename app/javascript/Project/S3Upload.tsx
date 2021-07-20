@@ -60,6 +60,9 @@ function S3Upload({ signerURL, project }: S3UploadProps): JSX.Element {
         xAmzHeadersAtInitiate: {
           'x-amz-acl': 'public-read',
         },
+        notSignedHeadersAtInitiate: {
+          'Content-Disposition': 'attachment',
+        },
       });
 
       await completeProjectFileUpload({
@@ -105,8 +108,17 @@ function S3Upload({ signerURL, project }: S3UploadProps): JSX.Element {
   return (
     <div className="card bg-light">
       <div className="card-body">
-        <label htmlFor="file">Upload files</label>
-        <input type="file" id="file" multiple onChange={fileChanged} disabled={uploading} />
+        <label className="form-label" htmlFor="file">
+          Upload files
+        </label>
+        <input
+          type="file"
+          id="file"
+          className="form-control"
+          multiple
+          onChange={fileChanged}
+          disabled={uploading}
+        />
 
         {uploading && (
           <div style={{ marginTop: '10px', marginBottom: '10px' }}>

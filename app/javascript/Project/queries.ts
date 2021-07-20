@@ -11,6 +11,16 @@ export const ProjectFileFieldsFragment = gql`
   }
 `;
 
+export const ProjectLinkFieldsFragment = gql`
+  fragment ProjectLinkFieldsFragment on ProjectLink {
+    id
+    url
+    title
+    icon
+    position
+  }
+`;
+
 export const LicenseFieldsFragment = gql`
   fragment LicenseFieldsFragment on License {
     id
@@ -57,11 +67,17 @@ export const ProjectFieldsFragment = gql`
       id
       ...ProjectFileFieldsFragment
     }
+
+    projectLinks {
+      id
+      ...ProjectLinkFieldsFragment
+    }
   }
 
   ${ProjectHeadersFragment}
   ${LicenseFieldsFragment}
   ${ProjectFileFieldsFragment}
+  ${ProjectLinkFieldsFragment}
 `;
 
 export const ProjectPageQuery = gql`

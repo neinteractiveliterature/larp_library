@@ -68,15 +68,18 @@ function ProjectFile({ file, project }: ProjectFileProps): JSX.Element {
   };
 
   return (
-    <li>
-      <a href={file.url}>
-        <i className={`fa ${getIconForMimeType(file.filetype)}`} /> {file.filename}
-      </a>{' '}
-      <small>{numberToHumanSize(file.filesize)}</small>
+    <li className="d-flex">
+      <div className="flex-grow-1">
+        <a href={file.url}>
+          <i className={`fa ${getIconForMimeType(file.filetype)}`} /> {file.filename}
+        </a>{' '}
+        <small>{numberToHumanSize(file.filesize)}</small>
+      </div>
       {project.currentUserCanDeleteFiles && (
-        <div className="pull-right">
-          <button type="button" className="btn btn-link" onClick={deleteClicked}>
-            &times;
+        <div>
+          <button type="button" className="btn btn-outline-danger btn-sm" onClick={deleteClicked}>
+            <i className="fa fa-trash-o" />
+            <span className="visually-hidden">Delete file {file.filename}</span>
           </button>
         </div>
       )}

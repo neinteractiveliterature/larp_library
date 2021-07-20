@@ -1,4 +1,8 @@
 class ProjectFile < ApplicationRecord
+  def self.s3_bucket
+    ENV['AWS_S3_BUCKET'] || "larp-library-#{Rails.env}"
+  end
+
   belongs_to :project
   belongs_to :uploader, class_name: 'User'
 
@@ -23,16 +27,12 @@ class ProjectFile < ApplicationRecord
   def delete_s3_file
     s3 = Aws::S3::Client.new
     s3.delete_object({
-      bucket: s3_bucket,
+      bucket: ProjectFile.s3_bucket,
       key: s3_key
     })
   end
 
   def s3_key
-    CGI.unescape filepath.gsub(%r{\A/#{s3_bucket}/}, '')
-  end
-
-  def s3_bucket
-    ENV['AWS_S3_BUCKET'] || "larp-library-#{Rails.env}"
+    CGI.unescape filepath.gsub(%r{\A/#{ProjectFile.s3_bucket}/}, '')
   end
 end
