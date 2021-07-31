@@ -42,9 +42,9 @@ export const NewProjectFormQuery = gql`
     licenses {
       ...LicenseFieldsFragment
     }
-
-    ${LicenseFieldsFragment}
   }
+
+  ${LicenseFieldsFragment}
 `;
 
 export const ProjectFieldsFragment = gql`

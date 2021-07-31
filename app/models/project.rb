@@ -93,8 +93,9 @@ MIT License</a>."
   has_and_belongs_to_many :tags
   belongs_to :brand
 
-  validates :license, inclusion: { in: LICENSES.keys.map(&:to_s) }
+  validates :license, inclusion: { in: LICENSES.keys.map(&:to_s), allow_nil: true }
   validates :brand, presence: true
+  validate :cannot_have_files_without_license
 
   def tag_names
     tags.map(&:name).map(&:downcase)
@@ -149,5 +150,14 @@ MIT License</a>."
     else
       id
     end
+  end
+
+  private
+
+  def cannot_have_files_without_license
+    return if license.present?
+    return if project_files.none?
+
+    errors.add :license, 'is required because this project has downloadable files'
   end
 end

@@ -107,6 +107,19 @@ export type UpdateProjectLinkMutationData = { __typename: 'Mutation' } & {
   >;
 };
 
+export type MoveProjectLinkMutationVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+  destinationIndex: Types.Scalars['Int'];
+}>;
+
+export type MoveProjectLinkMutationData = { __typename: 'Mutation' } & {
+  moveProjectLink?: Types.Maybe<
+    { __typename: 'MoveProjectLinkPayload' } & {
+      project: { __typename: 'Project' } & ProjectFieldsFragment;
+    }
+  >;
+};
+
 export type DeleteProjectLinkMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
@@ -494,6 +507,57 @@ export type UpdateProjectLinkMutationResult = Apollo.MutationResult<UpdateProjec
 export type UpdateProjectLinkMutationOptions = Apollo.BaseMutationOptions<
   UpdateProjectLinkMutationData,
   UpdateProjectLinkMutationVariables
+>;
+export const MoveProjectLinkDocument = gql`
+  mutation MoveProjectLink($id: ID!, $destinationIndex: Int!) {
+    moveProjectLink(input: { id: $id, destinationIndex: $destinationIndex }) {
+      project {
+        ...ProjectFieldsFragment
+      }
+    }
+  }
+  ${ProjectFieldsFragmentDoc}
+`;
+export type MoveProjectLinkMutationFn = Apollo.MutationFunction<
+  MoveProjectLinkMutationData,
+  MoveProjectLinkMutationVariables
+>;
+
+/**
+ * __useMoveProjectLinkMutation__
+ *
+ * To run a mutation, you first call `useMoveProjectLinkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMoveProjectLinkMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [moveProjectLinkMutation, { data, loading, error }] = useMoveProjectLinkMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      destinationIndex: // value for 'destinationIndex'
+ *   },
+ * });
+ */
+export function useMoveProjectLinkMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    MoveProjectLinkMutationData,
+    MoveProjectLinkMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<MoveProjectLinkMutationData, MoveProjectLinkMutationVariables>(
+    MoveProjectLinkDocument,
+    options,
+  );
+}
+export type MoveProjectLinkMutationHookResult = ReturnType<typeof useMoveProjectLinkMutation>;
+export type MoveProjectLinkMutationResult = Apollo.MutationResult<MoveProjectLinkMutationData>;
+export type MoveProjectLinkMutationOptions = Apollo.BaseMutationOptions<
+  MoveProjectLinkMutationData,
+  MoveProjectLinkMutationVariables
 >;
 export const DeleteProjectLinkDocument = gql`
   mutation DeleteProjectLink($id: ID!) {

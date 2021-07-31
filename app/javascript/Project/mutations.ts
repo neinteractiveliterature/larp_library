@@ -100,6 +100,18 @@ export const UpdateProjectLink = gql`
   ${ProjectLinkFieldsFragment}
 `;
 
+export const MoveProjectLink = gql`
+  mutation MoveProjectLink($id: ID!, $destinationIndex: Int!) {
+    moveProjectLink(input: { id: $id, destinationIndex: $destinationIndex }) {
+      project {
+        ...ProjectFieldsFragment
+      }
+    }
+  }
+
+  ${ProjectFieldsFragment}
+`;
+
 export const DeleteProjectLink = gql`
   mutation DeleteProjectLink($id: ID!) {
     deleteProjectLink(input: { id: $id }) {

@@ -232,6 +232,17 @@ export type LicenseFieldPolicy = {
   name?: FieldPolicy<any> | FieldReadFunction<any>;
   url?: FieldPolicy<any> | FieldReadFunction<any>;
 };
+export type MoveProjectLinkPayloadKeySpecifier = (
+  | 'clientMutationId'
+  | 'project'
+  | 'projectLink'
+  | MoveProjectLinkPayloadKeySpecifier
+)[];
+export type MoveProjectLinkPayloadFieldPolicy = {
+  clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
+  project?: FieldPolicy<any> | FieldReadFunction<any>;
+  projectLink?: FieldPolicy<any> | FieldReadFunction<any>;
+};
 export type MutationKeySpecifier = (
   | 'acceptBrandMembershipInvitation'
   | 'approveBrand'
@@ -248,6 +259,7 @@ export type MutationKeySpecifier = (
   | 'deleteTag'
   | 'deleteTagCategory'
   | 'inviteBrandMember'
+  | 'moveProjectLink'
   | 'promoteProject'
   | 'unpromoteProject'
   | 'updateBrand'
@@ -273,6 +285,7 @@ export type MutationFieldPolicy = {
   deleteTag?: FieldPolicy<any> | FieldReadFunction<any>;
   deleteTagCategory?: FieldPolicy<any> | FieldReadFunction<any>;
   inviteBrandMember?: FieldPolicy<any> | FieldReadFunction<any>;
+  moveProjectLink?: FieldPolicy<any> | FieldReadFunction<any>;
   promoteProject?: FieldPolicy<any> | FieldReadFunction<any>;
   unpromoteProject?: FieldPolicy<any> | FieldReadFunction<any>;
   updateBrand?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -738,6 +751,13 @@ export type TypedTypePolicies = TypePolicies & {
   License?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?: false | LicenseKeySpecifier | (() => undefined | LicenseKeySpecifier);
     fields?: LicenseFieldPolicy;
+  };
+  MoveProjectLinkPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?:
+      | false
+      | MoveProjectLinkPayloadKeySpecifier
+      | (() => undefined | MoveProjectLinkPayloadKeySpecifier);
+    fields?: MoveProjectLinkPayloadFieldPolicy;
   };
   Mutation?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?: false | MutationKeySpecifier | (() => undefined | MutationKeySpecifier);

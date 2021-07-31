@@ -19,6 +19,7 @@ module Types
 
     field :create_project_link, mutation: Mutations::CreateProjectLink
     field :update_project_link, mutation: Mutations::UpdateProjectLink
+    field :move_project_link, mutation: Mutations::MoveProjectLink
     field :delete_project_link, mutation: Mutations::DeleteProjectLink
 
     field :create_tag, mutation: Mutations::CreateTag

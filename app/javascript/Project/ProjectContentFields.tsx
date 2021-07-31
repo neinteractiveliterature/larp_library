@@ -1,36 +1,17 @@
-import { useGraphQLConfirm, useModal } from '@neinteractiveliterature/litform';
-import { useMemo } from 'react';
-import { Project } from '../graphqlTypes.generated';
-import { deleteObjectFromReferenceArrayUpdater } from '../MutationModifierHelpers';
-import AddProjectLinkModal from './AddProjectLinkModal';
-import EditProjectLinkModal, { EditProjectLinkModalProps } from './EditProjectLinkModal';
-import { useDeleteProjectLinkMutation } from './mutations.generated';
+import { DndWrapper } from '@neinteractiveliterature/litform';
+import EditProjectLinksCard from './EditProjectLinksCard';
 import ProjectFile from './ProjectFile';
-import { ProjectLinkDisplay } from './ProjectLinkDisplay';
-import { ProjectFileFieldsFragment, ProjectLinkFieldsFragment } from './queries.generated';
+import { ProjectFieldsFragment } from './queries.generated';
 import S3Upload, { S3UploadProps } from './S3Upload';
 
 export type ProjectContentFieldsProps = Omit<S3UploadProps, 'projectId'> & {
-  project: Pick<Project, 'id' | 'currentUserCanUploadFiles' | 'currentUserCanDeleteFiles'> & {
-    projectFiles: ProjectFileFieldsFragment[];
-    projectLinks: ProjectLinkFieldsFragment[];
-  };
+  project: ProjectFieldsFragment;
 };
 
-export default function ProjectContentFields({
+export default DndWrapper(function ProjectContentFields({
   project,
   ...s3UploadProps
 }: ProjectContentFieldsProps): JSX.Element {
-  const addProjectLinkModal = useModal();
-  const editProjectLinkModal = useModal<Pick<EditProjectLinkModalProps, 'initialProjectLink'>>();
-  const [deleteProjectLink] = useDeleteProjectLinkMutation();
-  const confirm = useGraphQLConfirm();
-
-  const sortedLinks = useMemo(
-    () => project.projectLinks.sort((a, b) => a.position - b.position),
-    [project.projectLinks],
-  );
-
   return (
     <>
       <div className="alert alert-info">
@@ -72,74 +53,18 @@ export default function ProjectContentFields({
               ))}
             </ul>
 
-            {project.currentUserCanUploadFiles && <S3Upload project={project} {...s3UploadProps} />}
+            {project.license != null && project.currentUserCanUploadFiles ? (
+              <S3Upload project={project} {...s3UploadProps} />
+            ) : (
+              <div>
+                Attaching files is disabled for this project because it does not specify a license.
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="card col-md-4 me-md-2 mb-2 mb-md-0">
-          <div className="card-header">Links</div>
-          <div className="card-body">
-            <ul className="list-unstyled">
-              {sortedLinks.map((link) => (
-                <li key={link.id} className="d-flex">
-                  <div className="flex-grow-1">
-                    <ProjectLinkDisplay link={link} />
-                  </div>
-                  <div>
-                    <button
-                      className="btn btn-outline-primary btn-sm"
-                      type="button"
-                      onClick={() => editProjectLinkModal.open({ initialProjectLink: link })}
-                    >
-                      <i className="fa fa-pencil" /> Edit
-                    </button>{' '}
-                    <button
-                      className="btn btn-outline-danger btn-sm"
-                      type="button"
-                      onClick={() =>
-                        confirm({
-                          prompt: `Are you sure you want to delete the “${link.title}” link?`,
-                          action: () =>
-                            deleteProjectLink({
-                              variables: { id: link.id },
-                              update: deleteObjectFromReferenceArrayUpdater(
-                                project,
-                                'projectLinks',
-                                link,
-                              ),
-                            }),
-                        })
-                      }
-                      aria-label="Delete link"
-                    >
-                      <i className="fa fa-trash-o" />
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-
-            <button
-              type="button"
-              className="btn btn-outline-success"
-              onClick={() => addProjectLinkModal.open()}
-            >
-              Add link
-            </button>
-          </div>
-        </div>
+        <EditProjectLinksCard project={project} />
       </div>
-
-      <AddProjectLinkModal
-        visible={addProjectLinkModal.visible}
-        close={addProjectLinkModal.close}
-        project={project}
-      />
-      <EditProjectLinkModal
-        visible={editProjectLinkModal.visible}
-        close={editProjectLinkModal.close}
-        initialProjectLink={editProjectLinkModal.state?.initialProjectLink}
-      />
     </>
   );
-}
+});

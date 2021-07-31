@@ -5,6 +5,7 @@ class ProjectFile < ApplicationRecord
 
   belongs_to :project
   belongs_to :uploader, class_name: 'User'
+  validate :project_must_have_license, on: :create
 
   after_destroy :delete_s3_file
 
@@ -34,5 +35,10 @@ class ProjectFile < ApplicationRecord
 
   def s3_key
     CGI.unescape filepath.gsub(%r{\A/#{ProjectFile.s3_bucket}/}, '')
+  end
+
+  def project_must_have_license
+    return if project&.license.present?
+    errors.add(:base, 'Attaching files is only allowed for projects that specify a license')
   end
 end
