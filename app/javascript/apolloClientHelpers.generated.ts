@@ -114,6 +114,15 @@ export type CreateBrandPayloadFieldPolicy = {
   brand?: FieldPolicy<any> | FieldReadFunction<any>;
   clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
 };
+export type CreateProjectLinkPayloadKeySpecifier = (
+  | 'clientMutationId'
+  | 'projectLink'
+  | CreateProjectLinkPayloadKeySpecifier
+)[];
+export type CreateProjectLinkPayloadFieldPolicy = {
+  clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
+  projectLink?: FieldPolicy<any> | FieldReadFunction<any>;
+};
 export type CreateProjectPayloadKeySpecifier = (
   | 'clientMutationId'
   | 'project'
@@ -158,6 +167,15 @@ export type DeleteProjectFilePayloadKeySpecifier = (
 export type DeleteProjectFilePayloadFieldPolicy = {
   clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
   projectFile?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type DeleteProjectLinkPayloadKeySpecifier = (
+  | 'clientMutationId'
+  | 'projectLink'
+  | DeleteProjectLinkPayloadKeySpecifier
+)[];
+export type DeleteProjectLinkPayloadFieldPolicy = {
+  clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
+  projectLink?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type DeleteProjectPayloadKeySpecifier = (
   | 'clientMutationId'
@@ -220,11 +238,13 @@ export type MutationKeySpecifier = (
   | 'completeProjectFileUpload'
   | 'createBrand'
   | 'createProject'
+  | 'createProjectLink'
   | 'createTag'
   | 'createTagCategory'
   | 'deleteBrandMembership'
   | 'deleteProject'
   | 'deleteProjectFile'
+  | 'deleteProjectLink'
   | 'deleteTag'
   | 'deleteTagCategory'
   | 'inviteBrandMember'
@@ -232,6 +252,7 @@ export type MutationKeySpecifier = (
   | 'unpromoteProject'
   | 'updateBrand'
   | 'updateProject'
+  | 'updateProjectLink'
   | 'updateTag'
   | 'updateTagCategory'
   | MutationKeySpecifier
@@ -242,11 +263,13 @@ export type MutationFieldPolicy = {
   completeProjectFileUpload?: FieldPolicy<any> | FieldReadFunction<any>;
   createBrand?: FieldPolicy<any> | FieldReadFunction<any>;
   createProject?: FieldPolicy<any> | FieldReadFunction<any>;
+  createProjectLink?: FieldPolicy<any> | FieldReadFunction<any>;
   createTag?: FieldPolicy<any> | FieldReadFunction<any>;
   createTagCategory?: FieldPolicy<any> | FieldReadFunction<any>;
   deleteBrandMembership?: FieldPolicy<any> | FieldReadFunction<any>;
   deleteProject?: FieldPolicy<any> | FieldReadFunction<any>;
   deleteProjectFile?: FieldPolicy<any> | FieldReadFunction<any>;
+  deleteProjectLink?: FieldPolicy<any> | FieldReadFunction<any>;
   deleteTag?: FieldPolicy<any> | FieldReadFunction<any>;
   deleteTagCategory?: FieldPolicy<any> | FieldReadFunction<any>;
   inviteBrandMember?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -254,6 +277,7 @@ export type MutationFieldPolicy = {
   unpromoteProject?: FieldPolicy<any> | FieldReadFunction<any>;
   updateBrand?: FieldPolicy<any> | FieldReadFunction<any>;
   updateProject?: FieldPolicy<any> | FieldReadFunction<any>;
+  updateProjectLink?: FieldPolicy<any> | FieldReadFunction<any>;
   updateTag?: FieldPolicy<any> | FieldReadFunction<any>;
   updateTagCategory?: FieldPolicy<any> | FieldReadFunction<any>;
 };
@@ -520,6 +544,15 @@ export type UpdateBrandPayloadFieldPolicy = {
   brand?: FieldPolicy<any> | FieldReadFunction<any>;
   clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
 };
+export type UpdateProjectLinkPayloadKeySpecifier = (
+  | 'clientMutationId'
+  | 'projectLink'
+  | UpdateProjectLinkPayloadKeySpecifier
+)[];
+export type UpdateProjectLinkPayloadFieldPolicy = {
+  clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
+  projectLink?: FieldPolicy<any> | FieldReadFunction<any>;
+};
 export type UpdateProjectPayloadKeySpecifier = (
   | 'clientMutationId'
   | 'project'
@@ -625,6 +658,13 @@ export type TypedTypePolicies = TypePolicies & {
       | (() => undefined | CreateBrandPayloadKeySpecifier);
     fields?: CreateBrandPayloadFieldPolicy;
   };
+  CreateProjectLinkPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?:
+      | false
+      | CreateProjectLinkPayloadKeySpecifier
+      | (() => undefined | CreateProjectLinkPayloadKeySpecifier);
+    fields?: CreateProjectLinkPayloadFieldPolicy;
+  };
   CreateProjectPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?:
       | false
@@ -659,6 +699,13 @@ export type TypedTypePolicies = TypePolicies & {
       | DeleteProjectFilePayloadKeySpecifier
       | (() => undefined | DeleteProjectFilePayloadKeySpecifier);
     fields?: DeleteProjectFilePayloadFieldPolicy;
+  };
+  DeleteProjectLinkPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?:
+      | false
+      | DeleteProjectLinkPayloadKeySpecifier
+      | (() => undefined | DeleteProjectLinkPayloadKeySpecifier);
+    fields?: DeleteProjectLinkPayloadFieldPolicy;
   };
   DeleteProjectPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?:
@@ -784,6 +831,13 @@ export type TypedTypePolicies = TypePolicies & {
       | UpdateBrandPayloadKeySpecifier
       | (() => undefined | UpdateBrandPayloadKeySpecifier);
     fields?: UpdateBrandPayloadFieldPolicy;
+  };
+  UpdateProjectLinkPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?:
+      | false
+      | UpdateProjectLinkPayloadKeySpecifier
+      | (() => undefined | UpdateProjectLinkPayloadKeySpecifier);
+    fields?: UpdateProjectLinkPayloadFieldPolicy;
   };
   UpdateProjectPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?:

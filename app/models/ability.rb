@@ -13,6 +13,7 @@ class Ability
       can :read, User, id: user.id
       can :manage, Project, project_conditions
       can :manage, ProjectFile, project: project_conditions
+      can :manage, ProjectLink, project: project_conditions
       can :read, Brand, brand_memberships: { user: { id: user.id } }
       can :read, BrandMembership, { brand: { brand_memberships: { user: { id: user.id } } } }
       can :manage, BrandMembership,

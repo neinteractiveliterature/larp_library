@@ -77,7 +77,7 @@ function ProjectHeaders({
           (project.lengthQuantity && project.lengthUnits)) && (
           <li>
             <ul className="list-inline">
-              {(project.minPlayers || project.maxPlayers) && (
+              {(project.minPlayers != null || project.maxPlayers != null) && (
                 <li className="list-inline-item">
                   <i className="fa fa-users"></i>{' '}
                   {uniq([project.minPlayers, project.maxPlayers])
@@ -86,7 +86,7 @@ function ProjectHeaders({
                   {(project.maxPlayers ?? project.minPlayers) == 1 ? 'player' : 'players'}
                 </li>
               )}
-              {(project.minFacilitators || project.maxFacilitators) && (
+              {(project.minFacilitators != null || project.maxFacilitators != null) && (
                 <li className="list-inline-item">
                   <i className="fa fa-gavel"></i>{' '}
                   {uniq([project.minFacilitators, project.maxFacilitators])
