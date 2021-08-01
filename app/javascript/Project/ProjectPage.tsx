@@ -38,7 +38,10 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
           <ul className="list-inline">
             {project.currentUserCanEdit && (
               <li className="list-inline-item">
-                <Link to={`${generateProjectPath(project)}/edit`} className="btn btn-primary">
+                <Link
+                  to={`${generateProjectPath(project)}/edit#properties`}
+                  className="btn btn-primary"
+                >
                   Edit project
                 </Link>
               </li>
@@ -64,13 +67,30 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
         <div className="col-md-4">
           <div className="card">
             <div className="card-header">
-              <h2 className="m-0">
-                {project.projectFiles.length > 0 && !hasLinksAndFiles ? 'Downloads' : 'Content'}
-              </h2>
+              <div className="d-flex">
+                <h2 className="m-0 flex-grow-1">
+                  {project.projectFiles.length > 0 && !hasLinksAndFiles ? 'Downloads' : 'Content'}
+                </h2>
+                {project.currentUserCanEdit && (
+                  <Link
+                    to={`${generateProjectPath(project)}/edit#content`}
+                    className="btn btn-primary ms-3"
+                  >
+                    Edit
+                  </Link>
+                )}
+              </div>
             </div>
             <div className="card-body">
               <div className="mb-4">
-                {hasLinksAndFiles && <h3 className="h4">Links</h3>}
+                {hasLinksAndFiles && <h3 className="h4">Downloads</h3>}
+                <ProjectFilesSection project={project} />
+                {hasLinksAndFiles && (
+                  <>
+                    <hr />
+                    <h3 className="h4">Links</h3>
+                  </>
+                )}
                 <ul className="list-unstyled m-0">
                   {project.projectLinks.map((link) => (
                     <li key={link.id}>
@@ -78,13 +98,6 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
                     </li>
                   ))}
                 </ul>
-                {hasLinksAndFiles && (
-                  <>
-                    <hr />
-                    <h3 className="h4">Downloads</h3>
-                  </>
-                )}
-                <ProjectFilesSection project={project} />
               </div>
 
               {project.license && (

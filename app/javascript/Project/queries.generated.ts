@@ -8,7 +8,7 @@ import * as Apollo from '@apollo/client';
 const defaultOptions = {};
 export type ProjectFileFieldsFragment = { __typename: 'ProjectFile' } & Pick<
   Types.ProjectFile,
-  'id' | 'url' | 'filename' | 'filesize' | 'filetype'
+  'id' | 'url' | 'filename' | 'filesize' | 'filetype' | 'position'
 >;
 
 export type ProjectLinkFieldsFragment = { __typename: 'ProjectLink' } & Pick<
@@ -77,6 +77,7 @@ export const ProjectFileFieldsFragmentDoc = gql`
     filename
     filesize
     filetype
+    position
   }
 `;
 export const ProjectLinkFieldsFragmentDoc = gql`

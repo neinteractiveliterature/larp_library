@@ -84,7 +84,7 @@ export type EditProjectLinksCardProps = {
   project: ProjectFieldsFragment;
 };
 
-function EditProjectLinksCard({ project }: EditProjectLinksCardProps) {
+function EditProjectLinksCard({ project }: EditProjectLinksCardProps): JSX.Element {
   const addProjectLinkModal = useModal();
   const editProjectLinkModal = useModal<Pick<EditProjectLinkModalProps, 'initialProjectLink'>>();
   const [moveProjectLink] = useMoveProjectLinkMutation();

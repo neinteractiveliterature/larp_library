@@ -232,6 +232,17 @@ export type LicenseFieldPolicy = {
   name?: FieldPolicy<any> | FieldReadFunction<any>;
   url?: FieldPolicy<any> | FieldReadFunction<any>;
 };
+export type MoveProjectFilePayloadKeySpecifier = (
+  | 'clientMutationId'
+  | 'project'
+  | 'projectFile'
+  | MoveProjectFilePayloadKeySpecifier
+)[];
+export type MoveProjectFilePayloadFieldPolicy = {
+  clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
+  project?: FieldPolicy<any> | FieldReadFunction<any>;
+  projectFile?: FieldPolicy<any> | FieldReadFunction<any>;
+};
 export type MoveProjectLinkPayloadKeySpecifier = (
   | 'clientMutationId'
   | 'project'
@@ -259,6 +270,7 @@ export type MutationKeySpecifier = (
   | 'deleteTag'
   | 'deleteTagCategory'
   | 'inviteBrandMember'
+  | 'moveProjectFile'
   | 'moveProjectLink'
   | 'promoteProject'
   | 'unpromoteProject'
@@ -285,6 +297,7 @@ export type MutationFieldPolicy = {
   deleteTag?: FieldPolicy<any> | FieldReadFunction<any>;
   deleteTagCategory?: FieldPolicy<any> | FieldReadFunction<any>;
   inviteBrandMember?: FieldPolicy<any> | FieldReadFunction<any>;
+  moveProjectFile?: FieldPolicy<any> | FieldReadFunction<any>;
   moveProjectLink?: FieldPolicy<any> | FieldReadFunction<any>;
   promoteProject?: FieldPolicy<any> | FieldReadFunction<any>;
   unpromoteProject?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -379,6 +392,7 @@ export type ProjectFileKeySpecifier = (
   | 'filesize'
   | 'filetype'
   | 'id'
+  | 'position'
   | 'project'
   | 'updatedAt'
   | 'uploaderId'
@@ -392,6 +406,7 @@ export type ProjectFileFieldPolicy = {
   filesize?: FieldPolicy<any> | FieldReadFunction<any>;
   filetype?: FieldPolicy<any> | FieldReadFunction<any>;
   id?: FieldPolicy<any> | FieldReadFunction<any>;
+  position?: FieldPolicy<any> | FieldReadFunction<any>;
   project?: FieldPolicy<any> | FieldReadFunction<any>;
   updatedAt?: FieldPolicy<any> | FieldReadFunction<any>;
   uploaderId?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -751,6 +766,13 @@ export type TypedTypePolicies = TypePolicies & {
   License?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?: false | LicenseKeySpecifier | (() => undefined | LicenseKeySpecifier);
     fields?: LicenseFieldPolicy;
+  };
+  MoveProjectFilePayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?:
+      | false
+      | MoveProjectFilePayloadKeySpecifier
+      | (() => undefined | MoveProjectFilePayloadKeySpecifier);
+    fields?: MoveProjectFilePayloadFieldPolicy;
   };
   MoveProjectLinkPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?:

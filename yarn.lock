@@ -1585,10 +1585,10 @@
   resolved "https://registry.yarnpkg.com/@microsoft/fetch-event-source/-/fetch-event-source-2.0.1.tgz#9ceecc94b49fbaa15666e38ae8587f64acce007d"
   integrity sha512-W6CLUJ2eBMw3Rec70qrsEW0jOm/3twwJv21mrmj2yORiaVmVYGS4sSS5yUwvQc1ZlDLYGPnClVWmUUMagKNsfA==
 
-"@neinteractiveliterature/litform@^0.10.2":
-  version "0.10.2"
-  resolved "https://registry.yarnpkg.com/@neinteractiveliterature/litform/-/litform-0.10.2.tgz#ad50112386d87c7408892a948239a8a1c0edbedb"
-  integrity sha512-BFgkgiB7l3QJZy0aHCNINoam1X+ixqLE9VcJRDtumNRghFappDy83cal6e0R64T8aeeOzppahvGNWaFoxTsRPA==
+"@neinteractiveliterature/litform@^0.10.3":
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/@neinteractiveliterature/litform/-/litform-0.10.3.tgz#983d91ad0b690889bb230b81a6b721d5fbbc245e"
+  integrity sha512-pxgaK+CSPsFqiFjamAMRs02a0eafNuujKQ5IYBNYJYRPXR37LbdfGMZPiqKGiY8aqr0bfrwtEj4PPdf3/wWRWA==
   dependencies:
     codemirror "^5.61.0"
     copy-to-clipboard "^3.3.1"

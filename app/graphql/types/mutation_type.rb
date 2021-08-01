@@ -15,6 +15,7 @@ module Types
     field :unpromote_project, mutation: Mutations::UnpromoteProject
 
     field :complete_project_file_upload, mutation: Mutations::CompleteProjectFileUpload
+    field :move_project_file, mutation: Mutations::MoveProjectFile
     field :delete_project_file, mutation: Mutations::DeleteProjectFile
 
     field :create_project_link, mutation: Mutations::CreateProjectLink

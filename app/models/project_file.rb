@@ -6,6 +6,7 @@ class ProjectFile < ApplicationRecord
   belongs_to :project
   belongs_to :uploader, class_name: 'User'
   validate :project_must_have_license, on: :create
+  acts_as_list scope: :project
 
   after_destroy :delete_s3_file
 

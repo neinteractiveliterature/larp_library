@@ -126,6 +126,10 @@ $fa-font-path: '~font-awesome/fonts/';
   }
 }
 
+.border-bottom-light {
+  border-bottom-color: map-get($map: $theme-colors, $key: 'light') !important;
+}
+
 .search-input-control {
   border-top-left-radius: $border-radius-pill;
   border-bottom-left-radius: $border-radius-pill;

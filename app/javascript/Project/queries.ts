@@ -8,6 +8,7 @@ export const ProjectFileFieldsFragment = gql`
     filename
     filesize
     filetype
+    position
   }
 `;
 

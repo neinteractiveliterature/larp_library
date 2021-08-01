@@ -66,6 +66,18 @@ export const CompleteProjectFileUpload = gql`
   ${ProjectFileFieldsFragment}
 `;
 
+export const MoveProjectFile = gql`
+  mutation MoveProjectFile($id: ID!, $destinationIndex: Int!) {
+    moveProjectFile(input: { id: $id, destinationIndex: $destinationIndex }) {
+      project {
+        ...ProjectFieldsFragment
+      }
+    }
+  }
+
+  ${ProjectFieldsFragment}
+`;
+
 export const DeleteProjectFile = gql`
   mutation DeleteProjectFile($id: ID!) {
     deleteProjectFile(input: { id: $id }) {

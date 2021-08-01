@@ -1,7 +1,7 @@
+import { Tabs, useTabsWithRouter } from '@neinteractiveliterature/litform/dist';
 import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform/lib';
-import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
-import { Link } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { generateProjectPath } from '../URLGenerators';
 import { buildProjectAttributes } from './buildProjectAttributes';
 import { useUpdateProjectMutation } from './mutations.generated';
@@ -16,8 +16,11 @@ function useLoadProject() {
 
 export default LoadQueryWrapper(useLoadProject, function EditProjectPage({ data }) {
   const [project, setProject] = useState(data.project);
-  const [updateProject, { error }] = useUpdateProjectMutation();
+  const [updateProject, { loading, error }] = useUpdateProjectMutation();
+  const location = useLocation();
   const navigate = useNavigate();
+  const history = useMemo(() => ({ replace: navigate }), [navigate]);
+  const [saved, setSaved] = useState(false);
 
   const saveProject = async () => {
     await updateProject({
@@ -26,35 +29,78 @@ export default LoadQueryWrapper(useLoadProject, function EditProjectPage({ data 
         projectAttributes: buildProjectAttributes(project),
       },
     });
-    navigate(generateProjectPath(project));
+    setSaved(true);
+    window.setTimeout(() => setSaved(false), 5000);
   };
+
+  const { selectedTab, setSelectedTab, tabs } = useTabsWithRouter(
+    [
+      {
+        id: 'properties',
+        name: 'Project properties',
+        renderContent: function ProjectPropertiesTab() {
+          return (
+            <section className="p-2 bg-light border border-color-light border-top-0">
+              <ProjectFormFields
+                licenseOptions={data.licenses}
+                onChange={setProject}
+                project={project}
+              />
+              <button
+                className="btn btn-primary"
+                type="button"
+                onClick={saveProject}
+                disabled={loading}
+              >
+                {saved ? (
+                  <>
+                    Saved! <i className="fa fa-check" />
+                  </>
+                ) : (
+                  'Save changes'
+                )}
+              </button>
+              <ErrorDisplay graphQLError={error} />
+            </section>
+          );
+        },
+      },
+      {
+        id: 'content',
+        name: 'Project content',
+        renderContent: function ProjectContentTab() {
+          return (
+            <section className="p-2 bg-light border border-color-light border-top-0">
+              <ProjectContentFields
+                project={data.project}
+                signerURL={`${generateProjectPath(project)}/project_files/auth_upload`}
+              />
+            </section>
+          );
+        },
+      },
+    ],
+    `${generateProjectPath(data.project)}/edit`,
+    location,
+    history,
+    'properties',
+  );
 
   return (
     <>
       <h1>Editing project “{data.project.title}”</h1>
-      <Link to={generateProjectPath(project)}>
-        <i className="fa fa-arrow-left" /> Back to project page
-      </Link>
+      <div className="my-3">
+        <Link to={generateProjectPath(project)}>
+          <i className="fa fa-arrow-left" /> Back to project page
+        </Link>
+      </div>
 
-      <section className="mt-4">
-        <h2>Project properties</h2>
-        <ProjectFormFields licenseOptions={data.licenses} onChange={setProject} project={project} />
-        <button className="btn btn-primary" type="button" onClick={saveProject}>
-          Save changes
-        </button>
-        <ErrorDisplay graphQLError={error} />
-      </section>
-
-      <hr />
-
-      <section>
-        <h2>Project content</h2>
-
-        <ProjectContentFields
-          project={data.project}
-          signerURL={`${generateProjectPath(project)}/project_files/auth_upload`}
-        />
-      </section>
+      <Tabs
+        setSelectedTab={setSelectedTab}
+        tabs={tabs}
+        selectedTab={selectedTab}
+        selectedTabClassName="bg-light border-bottom-light"
+      />
     </>
   );
 });

@@ -68,6 +68,19 @@ export type CompleteProjectFileUploadMutationData = { __typename: 'Mutation' } &
   >;
 };
 
+export type MoveProjectFileMutationVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+  destinationIndex: Types.Scalars['Int'];
+}>;
+
+export type MoveProjectFileMutationData = { __typename: 'Mutation' } & {
+  moveProjectFile?: Types.Maybe<
+    { __typename: 'MoveProjectFilePayload' } & {
+      project: { __typename: 'Project' } & ProjectFieldsFragment;
+    }
+  >;
+};
+
 export type DeleteProjectFileMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
@@ -356,6 +369,57 @@ export type CompleteProjectFileUploadMutationResult =
 export type CompleteProjectFileUploadMutationOptions = Apollo.BaseMutationOptions<
   CompleteProjectFileUploadMutationData,
   CompleteProjectFileUploadMutationVariables
+>;
+export const MoveProjectFileDocument = gql`
+  mutation MoveProjectFile($id: ID!, $destinationIndex: Int!) {
+    moveProjectFile(input: { id: $id, destinationIndex: $destinationIndex }) {
+      project {
+        ...ProjectFieldsFragment
+      }
+    }
+  }
+  ${ProjectFieldsFragmentDoc}
+`;
+export type MoveProjectFileMutationFn = Apollo.MutationFunction<
+  MoveProjectFileMutationData,
+  MoveProjectFileMutationVariables
+>;
+
+/**
+ * __useMoveProjectFileMutation__
+ *
+ * To run a mutation, you first call `useMoveProjectFileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMoveProjectFileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [moveProjectFileMutation, { data, loading, error }] = useMoveProjectFileMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      destinationIndex: // value for 'destinationIndex'
+ *   },
+ * });
+ */
+export function useMoveProjectFileMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    MoveProjectFileMutationData,
+    MoveProjectFileMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<MoveProjectFileMutationData, MoveProjectFileMutationVariables>(
+    MoveProjectFileDocument,
+    options,
+  );
+}
+export type MoveProjectFileMutationHookResult = ReturnType<typeof useMoveProjectFileMutation>;
+export type MoveProjectFileMutationResult = Apollo.MutationResult<MoveProjectFileMutationData>;
+export type MoveProjectFileMutationOptions = Apollo.BaseMutationOptions<
+  MoveProjectFileMutationData,
+  MoveProjectFileMutationVariables
 >;
 export const DeleteProjectFileDocument = gql`
   mutation DeleteProjectFile($id: ID!) {

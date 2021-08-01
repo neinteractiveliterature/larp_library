@@ -1,6 +1,6 @@
 import { DndWrapper } from '@neinteractiveliterature/litform';
 import EditProjectLinksCard from './EditProjectLinksCard';
-import ProjectFile from './ProjectFile';
+import EditProjectFilesCard from './EditProjectFilesCard';
 import { ProjectFieldsFragment } from './queries.generated';
 import S3Upload, { S3UploadProps } from './S3Upload';
 
@@ -44,25 +44,7 @@ export default DndWrapper(function ProjectContentFields({
       </div>
 
       <div className="d-flex flex-wrap">
-        <div className="card col-md-4 me-md-2 mb-2 mb-md-0">
-          <div className="card-header">Files</div>
-          <div className="card-body">
-            <ul className="list-unstyled">
-              {project.projectFiles.map((file) => (
-                <ProjectFile file={file} project={project} key={file.id} />
-              ))}
-            </ul>
-
-            {project.license != null && project.currentUserCanUploadFiles ? (
-              <S3Upload project={project} {...s3UploadProps} />
-            ) : (
-              <div>
-                Attaching files is disabled for this project because it does not specify a license.
-              </div>
-            )}
-          </div>
-        </div>
-
+        <EditProjectFilesCard project={project} {...s3UploadProps} />
         <EditProjectLinksCard project={project} />
       </div>
     </>

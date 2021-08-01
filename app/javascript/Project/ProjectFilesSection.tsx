@@ -1,5 +1,5 @@
 import { Project } from '../graphqlTypes.generated';
-import ProjectFile from './ProjectFile';
+import ProjectFileDisplay from './ProjectFileDisplay';
 import { ProjectFileFieldsFragment } from './queries.generated';
 
 export type ProjectFilesSectionProps = {
@@ -8,14 +8,12 @@ export type ProjectFilesSectionProps = {
   };
 };
 
-function ProjectFilesSection(props: ProjectFilesSectionProps): JSX.Element {
-  const { project } = props;
-
+function ProjectFilesSection({ project }: ProjectFilesSectionProps): JSX.Element {
   return (
     <>
       <ul className="list-unstyled">
-        {props.project.projectFiles.map((file) => (
-          <ProjectFile file={file} project={project} key={file.id} />
+        {project.projectFiles.map((file) => (
+          <ProjectFileDisplay file={file} key={file.id} />
         ))}
       </ul>
     </>
