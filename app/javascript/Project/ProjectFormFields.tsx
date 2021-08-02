@@ -153,7 +153,7 @@ export default function ProjectFormFields({
       </div>
       <BootstrapFormSelect
         label="License"
-        value={project.license?.id}
+        value={project.license?.id ?? '_unspecified'}
         onValueChange={(licenseId) =>
           setLicense(licenseOptions.find((license) => license.id === licenseId))
         }
@@ -164,6 +164,11 @@ export default function ProjectFormFields({
             {license.discouraged && ` (${license.discouragedReason})`}
           </option>
         ))}
+        <option disabled>---</option>
+        <option value="_unspecified">
+          Other license/prefer not to specify (you won’t be able to upload files, only link out to
+          somewhere else on the web)
+        </option>
       </BootstrapFormSelect>
     </>
   );

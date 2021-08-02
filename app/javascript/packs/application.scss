@@ -8,9 +8,8 @@ To reference this file, add <%= stylesheet_pack_tag 'application' %> to the appr
 layout file, like app/views/layouts/application.html.erb
 */
 
-$fa-font-path: '~font-awesome/fonts/';
-@import 'font-awesome/scss/font-awesome';
 @import 'styles/bootstrap_custom';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
 
 #topbar {
   width: 100%;
@@ -126,6 +125,10 @@ $fa-font-path: '~font-awesome/fonts/';
   }
 }
 
+.border-bottom-light {
+  border-bottom-color: map-get($map: $theme-colors, $key: 'light') !important;
+}
+
 .search-input-control {
   border-top-left-radius: $border-radius-pill;
   border-bottom-left-radius: $border-radius-pill;
@@ -137,6 +140,21 @@ $fa-font-path: '~font-awesome/fonts/';
   border-bottom-right-radius: $border-radius-pill;
   background-color: white;
   border-left: 0;
+}
+
+.custom-loading-indicator {
+  position: absolute;
+  left: 50%;
+  color: #aaa;
+  margin-left: -15vh;
+  transition: all 250ms ease-in-out;
+  z-index: 5000;
+
+  .spinner-border {
+    width: 30vh;
+    height: 30vh;
+    border-width: 3vh;
+  }
 }
 
 .tag-dismiss-button {

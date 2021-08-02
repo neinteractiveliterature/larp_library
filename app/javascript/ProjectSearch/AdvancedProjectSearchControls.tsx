@@ -145,7 +145,7 @@ export default function AdvancedProjectSearchControls({
                 }
               />
               <div>player(s)</div>
-              <HelpPopover>
+              <HelpPopover iconSet="bootstrap-icons">
                 <p>
                   This will find larps that accommodate your requested player count range. It’s
                   inclusive, so if you search for larps that support between 8 and 10 players, larps
@@ -191,7 +191,7 @@ export default function AdvancedProjectSearchControls({
                 }
               />
               <div>facilitator(s)</div>
-              <HelpPopover>
+              <HelpPopover iconSet="bootstrap-icons">
                 <p>
                   This will find larps that work with your requested facilitator/GM count range.
                   It’s inclusive, so if you search for larps that require between 3 and 4

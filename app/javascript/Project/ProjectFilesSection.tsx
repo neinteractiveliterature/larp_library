@@ -1,26 +1,21 @@
 import { Project } from '../graphqlTypes.generated';
-import ProjectFile from './ProjectFile';
+import ProjectFileDisplay from './ProjectFileDisplay';
 import { ProjectFileFieldsFragment } from './queries.generated';
-import S3Upload, { S3UploadProps } from './S3Upload';
 
-export type ProjectFilesSectionProps = Omit<S3UploadProps, 'projectId'> & {
+export type ProjectFilesSectionProps = {
   project: Pick<Project, 'id' | 'currentUserCanUploadFiles' | 'currentUserCanDeleteFiles'> & {
     projectFiles: ProjectFileFieldsFragment[];
   };
 };
 
-function ProjectFilesSection(props: ProjectFilesSectionProps): JSX.Element {
-  const { project, ...s3UploadProps } = props;
-
+function ProjectFilesSection({ project }: ProjectFilesSectionProps): JSX.Element {
   return (
     <>
       <ul className="list-unstyled">
-        {props.project.projectFiles.map((file) => (
-          <ProjectFile file={file} project={project} key={file.id} />
+        {project.projectFiles.map((file) => (
+          <ProjectFileDisplay file={file} key={file.id} />
         ))}
       </ul>
-
-      {project.currentUserCanUploadFiles && <S3Upload project={project} {...s3UploadProps} />}
     </>
   );
 }

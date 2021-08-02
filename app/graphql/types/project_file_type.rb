@@ -1,6 +1,7 @@
 module Types
   class ProjectFileType < Types::BaseObject
     field :id, ID, null: false
+    field :position, Int, null: false
     field :project, Types::ProjectType, null: false
     field :url, String, null: false
     field :filename, String, null: false

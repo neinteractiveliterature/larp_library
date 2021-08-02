@@ -1,5 +1,9 @@
 import { gql } from '@apollo/client';
-import { ProjectFieldsFragment, ProjectFileFieldsFragment } from './queries';
+import {
+  ProjectFieldsFragment,
+  ProjectFileFieldsFragment,
+  ProjectLinkFieldsFragment,
+} from './queries';
 
 export const CreateProject = gql`
   mutation CreateProject($brandId: ID!, $projectAttributes: ProjectAttributes!) {
@@ -62,9 +66,67 @@ export const CompleteProjectFileUpload = gql`
   ${ProjectFileFieldsFragment}
 `;
 
+export const MoveProjectFile = gql`
+  mutation MoveProjectFile($id: ID!, $destinationIndex: Int!) {
+    moveProjectFile(input: { id: $id, destinationIndex: $destinationIndex }) {
+      project {
+        ...ProjectFieldsFragment
+      }
+    }
+  }
+
+  ${ProjectFieldsFragment}
+`;
+
 export const DeleteProjectFile = gql`
   mutation DeleteProjectFile($id: ID!) {
     deleteProjectFile(input: { id: $id }) {
+      clientMutationId
+    }
+  }
+`;
+
+export const CreateProjectLink = gql`
+  mutation CreateProjectLink($projectId: ID!, $projectLinkAttributes: ProjectLinkAttributes!) {
+    createProjectLink(
+      input: { projectId: $projectId, projectLinkAttributes: $projectLinkAttributes }
+    ) {
+      projectLink {
+        ...ProjectLinkFieldsFragment
+      }
+    }
+  }
+
+  ${ProjectLinkFieldsFragment}
+`;
+
+export const UpdateProjectLink = gql`
+  mutation UpdateProjectLink($id: ID!, $projectLinkAttributes: ProjectLinkAttributes!) {
+    updateProjectLink(input: { id: $id, projectLinkAttributes: $projectLinkAttributes }) {
+      projectLink {
+        ...ProjectLinkFieldsFragment
+      }
+    }
+  }
+
+  ${ProjectLinkFieldsFragment}
+`;
+
+export const MoveProjectLink = gql`
+  mutation MoveProjectLink($id: ID!, $destinationIndex: Int!) {
+    moveProjectLink(input: { id: $id, destinationIndex: $destinationIndex }) {
+      project {
+        ...ProjectFieldsFragment
+      }
+    }
+  }
+
+  ${ProjectFieldsFragment}
+`;
+
+export const DeleteProjectLink = gql`
+  mutation DeleteProjectLink($id: ID!) {
+    deleteProjectLink(input: { id: $id }) {
       clientMutationId
     }
   }

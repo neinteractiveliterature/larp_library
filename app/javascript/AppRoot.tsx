@@ -27,6 +27,10 @@ const PageComponentImports: {
   HomePage: () => import(/* webpackChunkName: "HomePage" */ './HomePage/HomePage'),
   InvitationPage: () =>
     import(/* webpackChunkName: "InvitationPage" */ './Invitations/InvitationPage'),
+  ProjectInitialContentPage: () =>
+    import(
+      /* webpackChunkName: "ProjectInitialContentPage" */ './Project/ProjectInitialContentPage'
+    ),
   ProjectPromotionsPage: () =>
     import(
       /* webpackChunkName: "ProjectPromotionsPage" */ './ProjectPromotions/ProjectPromotionsPage'
@@ -68,6 +72,10 @@ function AppRoot({ s3Configuration }: AppRootProps): JSX.Element {
               <Route path="edit" element={<PageComponents.EditBrandPage />} />
               <Route path="projects/*">
                 <Route path="/:projectId/edit" element={<PageComponents.EditProjectPage />} />
+                <Route
+                  path="/:projectId/initial_content"
+                  element={<PageComponents.ProjectInitialContentPage />}
+                />
                 <Route path="/:projectId" element={<PageComponents.ProjectPage />} />
                 <Route path="new" element={<PageComponents.NewProjectPage />} />
               </Route>

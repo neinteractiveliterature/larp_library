@@ -114,6 +114,15 @@ export type CreateBrandPayloadFieldPolicy = {
   brand?: FieldPolicy<any> | FieldReadFunction<any>;
   clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
 };
+export type CreateProjectLinkPayloadKeySpecifier = (
+  | 'clientMutationId'
+  | 'projectLink'
+  | CreateProjectLinkPayloadKeySpecifier
+)[];
+export type CreateProjectLinkPayloadFieldPolicy = {
+  clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
+  projectLink?: FieldPolicy<any> | FieldReadFunction<any>;
+};
 export type CreateProjectPayloadKeySpecifier = (
   | 'clientMutationId'
   | 'project'
@@ -158,6 +167,15 @@ export type DeleteProjectFilePayloadKeySpecifier = (
 export type DeleteProjectFilePayloadFieldPolicy = {
   clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
   projectFile?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type DeleteProjectLinkPayloadKeySpecifier = (
+  | 'clientMutationId'
+  | 'projectLink'
+  | DeleteProjectLinkPayloadKeySpecifier
+)[];
+export type DeleteProjectLinkPayloadFieldPolicy = {
+  clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
+  projectLink?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type DeleteProjectPayloadKeySpecifier = (
   | 'clientMutationId'
@@ -214,24 +232,51 @@ export type LicenseFieldPolicy = {
   name?: FieldPolicy<any> | FieldReadFunction<any>;
   url?: FieldPolicy<any> | FieldReadFunction<any>;
 };
+export type MoveProjectFilePayloadKeySpecifier = (
+  | 'clientMutationId'
+  | 'project'
+  | 'projectFile'
+  | MoveProjectFilePayloadKeySpecifier
+)[];
+export type MoveProjectFilePayloadFieldPolicy = {
+  clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
+  project?: FieldPolicy<any> | FieldReadFunction<any>;
+  projectFile?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type MoveProjectLinkPayloadKeySpecifier = (
+  | 'clientMutationId'
+  | 'project'
+  | 'projectLink'
+  | MoveProjectLinkPayloadKeySpecifier
+)[];
+export type MoveProjectLinkPayloadFieldPolicy = {
+  clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
+  project?: FieldPolicy<any> | FieldReadFunction<any>;
+  projectLink?: FieldPolicy<any> | FieldReadFunction<any>;
+};
 export type MutationKeySpecifier = (
   | 'acceptBrandMembershipInvitation'
   | 'approveBrand'
   | 'completeProjectFileUpload'
   | 'createBrand'
   | 'createProject'
+  | 'createProjectLink'
   | 'createTag'
   | 'createTagCategory'
   | 'deleteBrandMembership'
   | 'deleteProject'
   | 'deleteProjectFile'
+  | 'deleteProjectLink'
   | 'deleteTag'
   | 'deleteTagCategory'
   | 'inviteBrandMember'
+  | 'moveProjectFile'
+  | 'moveProjectLink'
   | 'promoteProject'
   | 'unpromoteProject'
   | 'updateBrand'
   | 'updateProject'
+  | 'updateProjectLink'
   | 'updateTag'
   | 'updateTagCategory'
   | MutationKeySpecifier
@@ -242,18 +287,23 @@ export type MutationFieldPolicy = {
   completeProjectFileUpload?: FieldPolicy<any> | FieldReadFunction<any>;
   createBrand?: FieldPolicy<any> | FieldReadFunction<any>;
   createProject?: FieldPolicy<any> | FieldReadFunction<any>;
+  createProjectLink?: FieldPolicy<any> | FieldReadFunction<any>;
   createTag?: FieldPolicy<any> | FieldReadFunction<any>;
   createTagCategory?: FieldPolicy<any> | FieldReadFunction<any>;
   deleteBrandMembership?: FieldPolicy<any> | FieldReadFunction<any>;
   deleteProject?: FieldPolicy<any> | FieldReadFunction<any>;
   deleteProjectFile?: FieldPolicy<any> | FieldReadFunction<any>;
+  deleteProjectLink?: FieldPolicy<any> | FieldReadFunction<any>;
   deleteTag?: FieldPolicy<any> | FieldReadFunction<any>;
   deleteTagCategory?: FieldPolicy<any> | FieldReadFunction<any>;
   inviteBrandMember?: FieldPolicy<any> | FieldReadFunction<any>;
+  moveProjectFile?: FieldPolicy<any> | FieldReadFunction<any>;
+  moveProjectLink?: FieldPolicy<any> | FieldReadFunction<any>;
   promoteProject?: FieldPolicy<any> | FieldReadFunction<any>;
   unpromoteProject?: FieldPolicy<any> | FieldReadFunction<any>;
   updateBrand?: FieldPolicy<any> | FieldReadFunction<any>;
   updateProject?: FieldPolicy<any> | FieldReadFunction<any>;
+  updateProjectLink?: FieldPolicy<any> | FieldReadFunction<any>;
   updateTag?: FieldPolicy<any> | FieldReadFunction<any>;
   updateTagCategory?: FieldPolicy<any> | FieldReadFunction<any>;
 };
@@ -288,6 +338,7 @@ export type ProjectKeySpecifier = (
   | 'minFacilitators'
   | 'minPlayers'
   | 'projectFiles'
+  | 'projectLinks'
   | 'publicationYear'
   | 'tags'
   | 'title'
@@ -312,6 +363,7 @@ export type ProjectFieldPolicy = {
   minFacilitators?: FieldPolicy<any> | FieldReadFunction<any>;
   minPlayers?: FieldPolicy<any> | FieldReadFunction<any>;
   projectFiles?: FieldPolicy<any> | FieldReadFunction<any>;
+  projectLinks?: FieldPolicy<any> | FieldReadFunction<any>;
   publicationYear?: FieldPolicy<any> | FieldReadFunction<any>;
   tags?: FieldPolicy<any> | FieldReadFunction<any>;
   title?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -340,6 +392,7 @@ export type ProjectFileKeySpecifier = (
   | 'filesize'
   | 'filetype'
   | 'id'
+  | 'position'
   | 'project'
   | 'updatedAt'
   | 'uploaderId'
@@ -353,9 +406,27 @@ export type ProjectFileFieldPolicy = {
   filesize?: FieldPolicy<any> | FieldReadFunction<any>;
   filetype?: FieldPolicy<any> | FieldReadFunction<any>;
   id?: FieldPolicy<any> | FieldReadFunction<any>;
+  position?: FieldPolicy<any> | FieldReadFunction<any>;
   project?: FieldPolicy<any> | FieldReadFunction<any>;
   updatedAt?: FieldPolicy<any> | FieldReadFunction<any>;
   uploaderId?: FieldPolicy<any> | FieldReadFunction<any>;
+  url?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type ProjectLinkKeySpecifier = (
+  | 'icon'
+  | 'id'
+  | 'position'
+  | 'project'
+  | 'title'
+  | 'url'
+  | ProjectLinkKeySpecifier
+)[];
+export type ProjectLinkFieldPolicy = {
+  icon?: FieldPolicy<any> | FieldReadFunction<any>;
+  id?: FieldPolicy<any> | FieldReadFunction<any>;
+  position?: FieldPolicy<any> | FieldReadFunction<any>;
+  project?: FieldPolicy<any> | FieldReadFunction<any>;
+  title?: FieldPolicy<any> | FieldReadFunction<any>;
   url?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type ProjectPromotionKeySpecifier = (
@@ -501,6 +572,15 @@ export type UpdateBrandPayloadFieldPolicy = {
   brand?: FieldPolicy<any> | FieldReadFunction<any>;
   clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
 };
+export type UpdateProjectLinkPayloadKeySpecifier = (
+  | 'clientMutationId'
+  | 'projectLink'
+  | UpdateProjectLinkPayloadKeySpecifier
+)[];
+export type UpdateProjectLinkPayloadFieldPolicy = {
+  clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
+  projectLink?: FieldPolicy<any> | FieldReadFunction<any>;
+};
 export type UpdateProjectPayloadKeySpecifier = (
   | 'clientMutationId'
   | 'project'
@@ -606,6 +686,13 @@ export type TypedTypePolicies = TypePolicies & {
       | (() => undefined | CreateBrandPayloadKeySpecifier);
     fields?: CreateBrandPayloadFieldPolicy;
   };
+  CreateProjectLinkPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?:
+      | false
+      | CreateProjectLinkPayloadKeySpecifier
+      | (() => undefined | CreateProjectLinkPayloadKeySpecifier);
+    fields?: CreateProjectLinkPayloadFieldPolicy;
+  };
   CreateProjectPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?:
       | false
@@ -641,6 +728,13 @@ export type TypedTypePolicies = TypePolicies & {
       | (() => undefined | DeleteProjectFilePayloadKeySpecifier);
     fields?: DeleteProjectFilePayloadFieldPolicy;
   };
+  DeleteProjectLinkPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?:
+      | false
+      | DeleteProjectLinkPayloadKeySpecifier
+      | (() => undefined | DeleteProjectLinkPayloadKeySpecifier);
+    fields?: DeleteProjectLinkPayloadFieldPolicy;
+  };
   DeleteProjectPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?:
       | false
@@ -673,6 +767,20 @@ export type TypedTypePolicies = TypePolicies & {
     keyFields?: false | LicenseKeySpecifier | (() => undefined | LicenseKeySpecifier);
     fields?: LicenseFieldPolicy;
   };
+  MoveProjectFilePayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?:
+      | false
+      | MoveProjectFilePayloadKeySpecifier
+      | (() => undefined | MoveProjectFilePayloadKeySpecifier);
+    fields?: MoveProjectFilePayloadFieldPolicy;
+  };
+  MoveProjectLinkPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?:
+      | false
+      | MoveProjectLinkPayloadKeySpecifier
+      | (() => undefined | MoveProjectLinkPayloadKeySpecifier);
+    fields?: MoveProjectLinkPayloadFieldPolicy;
+  };
   Mutation?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?: false | MutationKeySpecifier | (() => undefined | MutationKeySpecifier);
     fields?: MutationFieldPolicy;
@@ -699,6 +807,10 @@ export type TypedTypePolicies = TypePolicies & {
   ProjectFile?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?: false | ProjectFileKeySpecifier | (() => undefined | ProjectFileKeySpecifier);
     fields?: ProjectFileFieldPolicy;
+  };
+  ProjectLink?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?: false | ProjectLinkKeySpecifier | (() => undefined | ProjectLinkKeySpecifier);
+    fields?: ProjectLinkFieldPolicy;
   };
   ProjectPromotion?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?:
@@ -761,6 +873,13 @@ export type TypedTypePolicies = TypePolicies & {
       | UpdateBrandPayloadKeySpecifier
       | (() => undefined | UpdateBrandPayloadKeySpecifier);
     fields?: UpdateBrandPayloadFieldPolicy;
+  };
+  UpdateProjectLinkPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?:
+      | false
+      | UpdateProjectLinkPayloadKeySpecifier
+      | (() => undefined | UpdateProjectLinkPayloadKeySpecifier);
+    fields?: UpdateProjectLinkPayloadFieldPolicy;
   };
   UpdateProjectPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?:

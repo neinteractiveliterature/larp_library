@@ -1,0 +1,2 @@
+formation: release=0,web=1,webpack=1
+port: 4000

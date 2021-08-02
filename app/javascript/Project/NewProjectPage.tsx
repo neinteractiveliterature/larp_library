@@ -15,7 +15,6 @@ function useLoadProject() {
 export default LoadQueryWrapper(useLoadProject, function NewProjectPage({ data }) {
   const [project, setProject] = useState<ProjectFormProps['project']>({
     tags: [],
-    license: data.licenses[0],
   });
   const [createProject, { error }] = useCreateProjectMutation();
   const navigate = useNavigate();
@@ -29,7 +28,7 @@ export default LoadQueryWrapper(useLoadProject, function NewProjectPage({ data }
     });
     const newProject = result.data?.createProject?.project;
     if (newProject) {
-      navigate(generateProjectPath(newProject));
+      navigate(`${generateProjectPath(newProject)}/initial_content`);
     }
   };
 

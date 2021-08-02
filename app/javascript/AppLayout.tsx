@@ -83,7 +83,9 @@ export default LoadQueryWrapper<AppLayoutQueryData, AppLayoutQueryVariables, App
             </ul>
           </nav>
 
-          <Suspense fallback={<PageLoadingIndicator visible />}>{children}</Suspense>
+          <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+            {children}
+          </Suspense>
 
           <nav>
             <ul className="list-inline" style={{ textAlign: 'center' }}>

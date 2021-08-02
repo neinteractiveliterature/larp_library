@@ -6,6 +6,7 @@ import ProjectHeaders from '../ProjectSearch/ProjectHeaders';
 import { generateProjectPath } from '../URLGenerators';
 import { useDeleteProjectMutation } from './mutations.generated';
 import ProjectFilesSection from './ProjectFilesSection';
+import { ProjectLinkDisplay } from './ProjectLinkDisplay';
 import { useProjectPageQuery } from './queries.generated';
 
 function useProjectPageQueryFromParam() {
@@ -18,6 +19,8 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
   const confirm = useGraphQLConfirm();
   const [deleteProject] = useDeleteProjectMutation();
   const navigate = useNavigate();
+
+  const hasLinksAndFiles = project.projectLinks.length > 0 && project.projectFiles.length > 0;
 
   const deleteProjectConfirmed = async () => {
     await deleteProject({ variables: { id: project.id } });
@@ -35,7 +38,10 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
           <ul className="list-inline">
             {project.currentUserCanEdit && (
               <li className="list-inline-item">
-                <Link to={`${generateProjectPath(project)}/edit`} className="btn btn-primary">
+                <Link
+                  to={`${generateProjectPath(project)}/edit#properties`}
+                  className="btn btn-primary"
+                >
                   Edit project
                 </Link>
               </li>
@@ -61,14 +67,37 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
         <div className="col-md-4">
           <div className="card">
             <div className="card-header">
-              <h2 className="m-0">Downloads</h2>
+              <div className="d-flex">
+                <h2 className="m-0 flex-grow-1">
+                  {project.projectFiles.length > 0 && !hasLinksAndFiles ? 'Downloads' : 'Content'}
+                </h2>
+                {project.currentUserCanEdit && (
+                  <Link
+                    to={`${generateProjectPath(project)}/edit#content`}
+                    className="btn btn-primary ms-3"
+                  >
+                    Edit
+                  </Link>
+                )}
+              </div>
             </div>
             <div className="card-body">
               <div className="mb-4">
-                <ProjectFilesSection
-                  signerURL={`${generateProjectPath(project)}/project_files/auth_upload`}
-                  project={project}
-                />
+                {hasLinksAndFiles && <h3 className="h4">Downloads</h3>}
+                <ProjectFilesSection project={project} />
+                {hasLinksAndFiles && (
+                  <>
+                    <hr />
+                    <h3 className="h4">Links</h3>
+                  </>
+                )}
+                <ul className="list-unstyled m-0">
+                  {project.projectLinks.map((link) => (
+                    <li key={link.id}>
+                      <ProjectLinkDisplay link={link} />
+                    </li>
+                  ))}
+                </ul>
               </div>
 
               {project.license && (

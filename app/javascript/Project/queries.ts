@@ -8,6 +8,17 @@ export const ProjectFileFieldsFragment = gql`
     filename
     filesize
     filetype
+    position
+  }
+`;
+
+export const ProjectLinkFieldsFragment = gql`
+  fragment ProjectLinkFieldsFragment on ProjectLink {
+    id
+    url
+    title
+    icon
+    position
   }
 `;
 
@@ -32,9 +43,9 @@ export const NewProjectFormQuery = gql`
     licenses {
       ...LicenseFieldsFragment
     }
-
-    ${LicenseFieldsFragment}
   }
+
+  ${LicenseFieldsFragment}
 `;
 
 export const ProjectFieldsFragment = gql`
@@ -57,11 +68,17 @@ export const ProjectFieldsFragment = gql`
       id
       ...ProjectFileFieldsFragment
     }
+
+    projectLinks {
+      id
+      ...ProjectLinkFieldsFragment
+    }
   }
 
   ${ProjectHeadersFragment}
   ${LicenseFieldsFragment}
   ${ProjectFileFieldsFragment}
+  ${ProjectLinkFieldsFragment}
 `;
 
 export const ProjectPageQuery = gql`

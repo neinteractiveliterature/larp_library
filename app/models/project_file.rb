@@ -1,6 +1,12 @@
-class ProjectFile < ActiveRecord::Base
+class ProjectFile < ApplicationRecord
+  def self.s3_bucket
+    ENV['AWS_S3_BUCKET'] || "larp-library-#{Rails.env}"
+  end
+
   belongs_to :project
   belongs_to :uploader, class_name: 'User'
+  validate :project_must_have_license, on: :create
+  acts_as_list scope: :project
 
   after_destroy :delete_s3_file
 
@@ -23,16 +29,17 @@ class ProjectFile < ActiveRecord::Base
   def delete_s3_file
     s3 = Aws::S3::Client.new
     s3.delete_object({
-      bucket: s3_bucket,
+      bucket: ProjectFile.s3_bucket,
       key: s3_key
     })
   end
 
   def s3_key
-    CGI.unescape filepath.gsub(%r{\A/#{s3_bucket}/}, '')
+    CGI.unescape filepath.gsub(%r{\A/#{ProjectFile.s3_bucket}/}, '')
   end
 
-  def s3_bucket
-    ENV['AWS_S3_BUCKET'] || "larp-library-#{Rails.env}"
+  def project_must_have_license
+    return if project&.license.present?
+    errors.add(:base, 'Attaching files is only allowed for projects that specify a license')
   end
 end

@@ -33,6 +33,8 @@ gem 'rollbar'
 
 gem 'aws-sdk-rails'
 
+gem 'acts_as_list'
+
 group :development do
   gem 'graphiql-rails'
   gem 'rubocop'

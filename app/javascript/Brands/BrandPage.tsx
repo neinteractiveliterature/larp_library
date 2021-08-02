@@ -18,7 +18,7 @@ export default function BrandPage(): JSX.Element {
   });
 
   if (loading) {
-    return <LoadingIndicator />;
+    return <LoadingIndicator iconSet="bootstrap-icons" />;
   }
 
   if (error) {

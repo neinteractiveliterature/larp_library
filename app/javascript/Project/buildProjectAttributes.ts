@@ -7,7 +7,7 @@ export function buildProjectAttributes(project: ProjectFormProps['project']): Pr
     description: project.description,
     lengthQuantity: project.lengthQuantity,
     lengthUnits: project.lengthUnits,
-    licenseId: project.license?.id,
+    licenseId: project.license?.id ?? null,
     maxPlayers: project.maxPlayers,
     minPlayers: project.minPlayers,
     maxFacilitators: project.maxFacilitators,
