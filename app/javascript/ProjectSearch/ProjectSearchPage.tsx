@@ -71,9 +71,7 @@ export default function ProjectSearchPage(): JSX.Element {
       )}
 
       <ErrorDisplay graphQLError={error} />
-      <div className="position-absolute">
-        <PageLoadingIndicator visible={loading} />
-      </div>
+      <PageLoadingIndicator visible={loading} iconSet="bootstrap-icons" />
 
       {!error &&
         !loading &&

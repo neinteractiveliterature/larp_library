@@ -142,6 +142,21 @@ layout file, like app/views/layouts/application.html.erb
   border-left: 0;
 }
 
+.custom-loading-indicator {
+  position: absolute;
+  left: 50%;
+  color: #aaa;
+  margin-left: -15vh;
+  transition: all 250ms ease-in-out;
+  z-index: 5000;
+
+  .spinner-border {
+    width: 30vh;
+    height: 30vh;
+    border-width: 3vh;
+  }
+}
+
 .tag-dismiss-button {
   border: 0;
   background: transparent;

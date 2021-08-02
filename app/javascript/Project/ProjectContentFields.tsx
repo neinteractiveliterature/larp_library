@@ -2,7 +2,7 @@ import { DndWrapper } from '@neinteractiveliterature/litform';
 import EditProjectLinksCard from './EditProjectLinksCard';
 import EditProjectFilesCard from './EditProjectFilesCard';
 import { ProjectFieldsFragment } from './queries.generated';
-import S3Upload, { S3UploadProps } from './S3Upload';
+import { S3UploadProps } from './S3Upload';
 
 export type ProjectContentFieldsProps = Omit<S3UploadProps, 'projectId'> & {
   project: ProjectFieldsFragment;

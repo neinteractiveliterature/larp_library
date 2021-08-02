@@ -33,6 +33,7 @@ export default function SimpleProjectSearchControls({
           label="Search"
           value={transientQueryString ?? ''}
           onChange={setTransientQueryString}
+          iconSet="bootstrap-icons"
         />
       </div>
     </>

@@ -23,7 +23,7 @@ function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.Componen
         <Confirm>
           <ApolloProvider client={apolloClient}>
             <BrowserRouter>
-              <Suspense fallback={<PageLoadingIndicator visible />}>
+              <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
                 <WrappedComponent {...(props as unknown as P)} />
               </Suspense>
             </BrowserRouter>

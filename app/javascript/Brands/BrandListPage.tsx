@@ -12,9 +12,7 @@ export default function BrandListPage(): JSX.Element {
       <h1>Larp creators</h1>
 
       <ErrorDisplay graphQLError={error} />
-      <div className="position-absolute">
-        <PageLoadingIndicator visible={loading} />
-      </div>
+      <PageLoadingIndicator visible={loading} iconSet="bootstrap-icons" />
 
       {!error && !loading && data && (
         <>
