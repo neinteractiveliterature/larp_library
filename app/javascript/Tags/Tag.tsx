@@ -11,7 +11,7 @@ function Tag({ tag, linkTo, onDismiss }: TagProps): JSX.Element {
   const innerContent = (
     <>
       <i
-        className={`fa fa-${tag.tagCategory?.icon ?? 'tag'}`}
+        className={`bi-${tag.tagCategory?.icon ?? 'tag-fill'}`}
         style={{
           display: 'inline-block',
           verticalAlign: 'middle',
@@ -52,7 +52,7 @@ function Tag({ tag, linkTo, onDismiss }: TagProps): JSX.Element {
             onDismiss();
           }}
         >
-          <i className="fa fa-times" />
+          <i className="bi-x" />
         </button>
       )}
     </div>

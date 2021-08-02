@@ -1,5 +1,10 @@
-import { BootstrapFormInput, usePropertySetters } from '@neinteractiveliterature/litform';
+import {
+  BootstrapFormInput,
+  FormGroupWithLabel,
+  usePropertySetters,
+} from '@neinteractiveliterature/litform';
 import { ProjectLink } from '../graphqlTypes.generated';
+import IconSelect from '../IconSelect';
 
 export type ProjectLinkFormProjectLink = Pick<ProjectLink, 'title' | 'url' | 'icon'>;
 
@@ -15,23 +20,23 @@ function ProjectLinkFormFields({ projectLink, onChange }: ProjectLinkFormProps):
     <>
       <BootstrapFormInput label="Title" value={projectLink.title} onTextChange={setTitle} />
       <BootstrapFormInput label="URL" value={projectLink.url} onTextChange={setUrl} />
-      <BootstrapFormInput
-        label={
-          <>
-            Icon <i className={`fa fa-${projectLink.icon}`} />
-          </>
-        }
+      <FormGroupWithLabel
+        label="Icon"
         helpText={
           <>
             Use{' '}
-            <a href="https://fontawesome.com/v4.7/icons/" target="_blank" rel="noreferrer noopener">
-              Font Awesome 4 icon names
+            <a
+              href="https://icons.getbootstrap.com/#icons"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              Bootstrap Icons icon names
             </a>
           </>
         }
-        value={projectLink.icon ?? ''}
-        onTextChange={setIcon}
-      />
+      >
+        {(id) => <IconSelect id={id} value={projectLink.icon ?? undefined} onChange={setIcon} />}
+      </FormGroupWithLabel>
     </>
   );
 }

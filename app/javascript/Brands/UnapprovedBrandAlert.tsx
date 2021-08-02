@@ -15,7 +15,7 @@ export default function UnapprovedBrandAlert({ brand }: UnapprovedBrandAlertProp
     <div className="alert alert-warning">
       <div className="d-flex align-items-center">
         <div className="h1 me-3 mb-0">
-          <i className="fa fa-exclamation-triangle" />
+          <i className="bi-exclamation-triangle-fill" />
         </div>
         <div>
           {brand.name} is pending approval by a Larp Library admin. You can create projects and add

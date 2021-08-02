@@ -54,7 +54,7 @@ export default LoadQueryWrapper(useLoadProject, function EditProjectPage({ data 
               >
                 {saved ? (
                   <>
-                    Saved! <i className="fa fa-check" />
+                    Saved! <i className="bi-check" />
                   </>
                 ) : (
                   'Save changes'
@@ -91,7 +91,7 @@ export default LoadQueryWrapper(useLoadProject, function EditProjectPage({ data 
       <h1>Editing project “{data.project.title}”</h1>
       <div className="my-3">
         <Link to={generateProjectPath(project)}>
-          <i className="fa fa-arrow-left" /> Back to project page
+          <i className="bi-arrow-left" /> Back to project page
         </Link>
       </div>
 

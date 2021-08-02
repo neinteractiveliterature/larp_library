@@ -6,6 +6,7 @@ import {
 import React from 'react';
 import ColorPicker from '../ColorPicker';
 import { TagCategory } from '../graphqlTypes.generated';
+import IconSelect from '../IconSelect';
 
 type TagCategoryFormTagCategory = Pick<TagCategory, 'name' | 'color' | 'icon'>;
 
@@ -26,23 +27,23 @@ export default function TagCategoryFormFields({
       <FormGroupWithLabel label="Color">
         {() => <ColorPicker value={tagCategory.color} onChange={setColor} />}
       </FormGroupWithLabel>
-      <BootstrapFormInput
-        label={
-          <>
-            Icon <i className={`fa fa-${tagCategory.icon}`} />
-          </>
-        }
+      <FormGroupWithLabel
+        label="Icon"
         helpText={
           <>
             Use{' '}
-            <a href="https://fontawesome.com/v4.7/icons/" target="_blank" rel="noreferrer noopener">
-              Font Awesome 4 icon names
+            <a
+              href="https://icons.getbootstrap.com/#icons"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              Bootstrap Icons icon names
             </a>
           </>
         }
-        value={tagCategory.icon ?? ''}
-        onTextChange={setIcon}
-      />
+      >
+        {(id) => <IconSelect id={id} value={tagCategory.icon ?? undefined} onChange={setIcon} />}
+      </FormGroupWithLabel>
     </>
   );
 }

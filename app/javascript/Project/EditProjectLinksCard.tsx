@@ -1,7 +1,6 @@
 import {
   useConfirm,
   useSortable,
-  DndWrapper,
   useModal,
   buildOptimisticArrayForMove,
 } from '@neinteractiveliterature/litform';
@@ -45,7 +44,7 @@ function EditProjectLink({
     <li key={link.id} className="d-flex" ref={ref}>
       <div className="me-2">
         <span className="visually-hidden">Drag to reorder</span>
-        <i style={{ cursor: isDragging ? 'grabbing' : 'grab' }} className="fa fa-bars" ref={drag} />
+        <i style={{ cursor: isDragging ? 'grabbing' : 'grab' }} className="bi-list" ref={drag} />
       </div>
       <div className="flex-grow-1">
         <ProjectLinkDisplay link={link} />
@@ -56,7 +55,7 @@ function EditProjectLink({
           type="button"
           onClick={() => editProjectLinkModal.open({ initialProjectLink: link })}
         >
-          <i className="fa fa-pencil" /> Edit
+          <i className="bi-pencil-fill" /> Edit
         </button>{' '}
         <button
           className="btn btn-outline-danger btn-sm"
@@ -73,7 +72,7 @@ function EditProjectLink({
           }
           aria-label="Delete link"
         >
-          <i className="fa fa-trash-o" />
+          <i className="bi-trash" />
         </button>
       </div>
     </li>

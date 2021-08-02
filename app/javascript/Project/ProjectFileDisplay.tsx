@@ -2,26 +2,26 @@ import { ProjectPageQueryData } from './queries.generated';
 
 function getIconForMimeType(mimeType: string | null | undefined): string {
   if (mimeType == null) {
-    return 'fa-file-o';
+    return 'bi-file-earmark';
   }
 
   if (mimeType.startsWith('image/')) {
-    return 'fa-file-image-o';
+    return 'bi-file-earmark-image';
   }
 
   if (mimeType.startsWith('text/')) {
-    return 'fa-file-text-o';
+    return 'bi-file-earmark-text';
   }
 
   if (mimeType === 'application/pdf') {
-    return 'fa-file-pdf-o';
+    return 'bi-file-earmark-pdf';
   }
 
   if (mimeType === 'application/zip' || mimeType === 'application/gzip') {
-    return 'fa-file-zip-o';
+    return 'bi-file-earmark-zip';
   }
 
-  return 'fa-file-o';
+  return 'bi-file-earmark';
 }
 
 // from https://gist.github.com/233053/f401f59c344ab2d42a341513c6caaa2bb3b2da2d
@@ -45,7 +45,7 @@ export default function ProjectFileDisplay({ file }: ProjectFileDisplayProps): J
   return (
     <div className="flex-grow-1">
       <a href={file.url}>
-        <i className={`fa ${getIconForMimeType(file.filetype)}`} /> {file.filename}
+        <i className={getIconForMimeType(file.filetype)} /> {file.filename}
       </a>{' '}
       <small>{numberToHumanSize(file.filesize)}</small>
     </div>

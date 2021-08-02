@@ -50,13 +50,13 @@ export function EditProjectFile({
     <li className="d-flex" ref={ref}>
       <div className="me-2">
         <span className="visually-hidden">Drag to reorder</span>
-        <i style={{ cursor: isDragging ? 'grabbing' : 'grab' }} className="fa fa-bars" ref={drag} />
+        <i style={{ cursor: isDragging ? 'grabbing' : 'grab' }} className="bi-list" ref={drag} />
       </div>
       <ProjectFileDisplay file={file} />
       {project.currentUserCanDeleteFiles && (
         <div>
           <button type="button" className="btn btn-outline-danger btn-sm" onClick={deleteClicked}>
-            <i className="fa fa-trash-o" />
+            <i className="bi-trash" />
             <span className="visually-hidden">Delete file {file.filename}</span>
           </button>
         </div>

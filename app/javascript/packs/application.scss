@@ -8,9 +8,8 @@ To reference this file, add <%= stylesheet_pack_tag 'application' %> to the appr
 layout file, like app/views/layouts/application.html.erb
 */
 
-$fa-font-path: '~font-awesome/fonts/';
-@import 'font-awesome/scss/font-awesome';
 @import 'styles/bootstrap_custom';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
 
 #topbar {
   width: 100%;

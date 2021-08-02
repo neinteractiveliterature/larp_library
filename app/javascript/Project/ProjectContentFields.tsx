@@ -17,7 +17,7 @@ export default DndWrapper(function ProjectContentFields({
       <div className="alert alert-info">
         <div className="d-flex align-items-top">
           <div className="me-3">
-            <i className="fa fa-info-circle fs-1" />
+            <i className="bi-info-circle-fill fs-1" />
           </div>
           <div>
             <p>

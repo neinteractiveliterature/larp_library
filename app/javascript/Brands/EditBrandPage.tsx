@@ -115,7 +115,7 @@ export default LoadQueryWrapper(useEditBrandQueryFromParams, function EditBrandP
                     <>{membership.user?.email}</>
                   ) : (
                     <>
-                      <i className="fa fa-envelope" /> Invitation sent to{' '}
+                      <i className="bi-envelope-fill" /> Invitation sent to{' '}
                       {membership.invitationEmail}
                     </>
                   )}
@@ -123,11 +123,11 @@ export default LoadQueryWrapper(useEditBrandQueryFromParams, function EditBrandP
                 <td>
                   {membership.admin ? (
                     <>
-                      <i className="fa fa-check" /> Admin
+                      <i className="bi-check" /> Admin
                     </>
                   ) : (
                     <>
-                      <i className="fa fa-times" /> Not admin
+                      <i className="bi-x" /> Not admin
                     </>
                   )}
                 </td>

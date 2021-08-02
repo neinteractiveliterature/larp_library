@@ -9,7 +9,7 @@ export function ProjectLinkDisplay({ link }: ProjectLinkDisplayProps): JSX.Eleme
     <a href={link.url} target="_blank" rel="noreferrer noopener">
       {link.icon && (
         <>
-          <i className={`fa fa-${link.icon}`} />{' '}
+          <i className={`bi-${link.icon}`} />{' '}
         </>
       )}
       {link.title}

@@ -79,7 +79,7 @@ function ProjectHeaders({
             <ul className="list-inline">
               {(project.minPlayers != null || project.maxPlayers != null) && (
                 <li className="list-inline-item">
-                  <i className="fa fa-users"></i>{' '}
+                  <i className="bi-people-fill"></i>{' '}
                   {uniq([project.minPlayers, project.maxPlayers])
                     .filter((count) => count != null)
                     .join(' - ')}{' '}
@@ -88,7 +88,7 @@ function ProjectHeaders({
               )}
               {(project.minFacilitators != null || project.maxFacilitators != null) && (
                 <li className="list-inline-item">
-                  <i className="fa fa-gavel"></i>{' '}
+                  <i className="bi-person-badge"></i>{' '}
                   {uniq([project.minFacilitators, project.maxFacilitators])
                     .filter((count) => count != null)
                     .join(' - ')}{' '}
@@ -99,7 +99,7 @@ function ProjectHeaders({
               )}
               {project.lengthQuantity && project.lengthUnits && (
                 <li className="list-inline-item">
-                  <i className="fa fa-clock-o"></i> {project.lengthQuantity}{' '}
+                  <i className="bi-clock"></i> {project.lengthQuantity}{' '}
                   {project.lengthQuantity === 1
                     ? project.lengthUnits.replace(/s$/, '')
                     : project.lengthUnits}
