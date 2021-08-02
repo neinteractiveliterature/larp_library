@@ -28,7 +28,7 @@ export default DndWrapper(function ProjectContentFields({
             </p>
 
             <p className="mb-0">
-              Please note that if you upload files,{' '}
+              Please note that if you want to upload files,{' '}
               <strong>
                 you must choose{' '}
                 <a href="/pages/licensing" target="_blank">

@@ -28,7 +28,7 @@ export default LoadQueryWrapper(useLoadProject, function NewProjectPage({ data }
     });
     const newProject = result.data?.createProject?.project;
     if (newProject) {
-      navigate(generateProjectPath(newProject));
+      navigate(`${generateProjectPath(newProject)}/initial_content`);
     }
   };
 

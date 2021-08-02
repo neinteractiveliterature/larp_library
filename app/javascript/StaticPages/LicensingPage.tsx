@@ -5,11 +5,37 @@ export default LoadQueryWrapper(useLicensingPageQuery, function LicensingPage({ 
   return (
     <>
       <h1>Licensing</h1>
+
       <p>
-        Larp Library is designed to provide a set of freely-available larps for anyone to run. Our
-        philosophy is that we don’t want GMs to be surprised by strange licensing requirements on
-        the larps they would like to run. Therefore, we’ve chosen a set of licenses that we think
-        balance authors’ control over their work with GMs’ ability to run a free game unencumbered:
+        Larps are copyrighted material. Larp Library is a project of New England Interactive
+        Literature, a nonprofit based in the United States. Under US copyright law, the creator of a
+        work owns the copyright to their work by default, regardless of whether they register it
+        with the US Patent &amp; Trademark Office or not.
+      </p>
+
+      <p>
+        This means that in order for someone else to legally run your larp, you must grant them a
+        license to do so. (In practice, this often doesn’t happen, and larps are run by handshake
+        agreement, and as long as nobody actually takes anybody to court, this can work out fine.)
+      </p>
+
+      <p>
+        If you upload files to Larp Library, New England Interactive Literature pays for hosting
+        them and the associated bandwidth costs, which legally means NEIL is redistributing your
+        copyrighted work. Therefore, we offer two options for licensing your larps on Larp Library:
+      </p>
+
+      <ul>
+        <li>You can choose an allowed license, and we’ll host your files for people to download</li>
+        <li>You can host your files elsewhere and link to them from your Larp Library page</li>
+      </ul>
+
+      <h2>Licenses allowed for Larp Library-hosted content</h2>
+      <p>
+        Larp Library hosts a set of freely-available larps for anyone to run. Our philosophy is that
+        we don’t want GMs to be surprised by strange licensing requirements on the larps they would
+        like to run. Therefore, we’ve chosen a set of licenses that we think balance authors’
+        control over their work with GMs’ ability to run a free game unencumbered:
       </p>
       <ul>
         {data.licenses.map((license) => (
@@ -37,12 +63,27 @@ export default LoadQueryWrapper(useLicensingPageQuery, function LicensingPage({ 
         authors). The other choices have no attribution requirement and allow relicensing.
       </p>
       <p>
-        If you want to publish a larp on Larp Library,{' '}
-        <strong>you must do so under one of our approved licenses.</strong> This means you must be
-        the copyright holder of the entirety of your larp, including any media distributed with it,
-        or you must have the copyright holder’s permission to release the work under the license you
-        choose.
+        If you want to use oen of these licenses, you must be the copyright holder of the entirety
+        of your larp, including any media distributed with it, or you must have the copyright
+        holder’s permission to release the work under the license you choose.
       </p>
+
+      <h2>Using a different license (or not specifying a license)</h2>
+      <p>
+        You can publish larps on Larp Library without a license (or under a license we don’t
+        support), with one restriction:{' '}
+        <strong>Larp Library will not host files for people to download.</strong> Larp Library
+        allows you to specify links instead of, or in addition to, uploading files, so you can host
+        your larp content elsewhere on the web and link to it from Larp Library.
+      </p>
+      <p>
+        If your larp writing team already has a web site, that’s a good option for where to host
+        content that you don’t want to upload here. You can also use file hosting services like
+        Google Drive, Dropbox, etc. and link to them from Larp Library. Or, if you want to make your
+        larp available but only by request, you could link to a Google Form or some other similar
+        tool.
+      </p>
+
       <h2>Licenses we discourage</h2>
       <p>
         <strong>Creative Commons Non-Commercial variants</strong> are good licenses, but probably
