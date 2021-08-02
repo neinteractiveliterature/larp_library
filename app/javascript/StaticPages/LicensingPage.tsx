@@ -63,7 +63,7 @@ export default LoadQueryWrapper(useLicensingPageQuery, function LicensingPage({ 
         authors). The other choices have no attribution requirement and allow relicensing.
       </p>
       <p>
-        If you want to use oen of these licenses, you must be the copyright holder of the entirety
+        If you want to use one of these licenses, you must be the copyright holder of the entirety
         of your larp, including any media distributed with it, or you must have the copyright
         holder’s permission to release the work under the license you choose.
       </p>
