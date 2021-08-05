@@ -26,9 +26,6 @@ module LarpLibrary
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
 
-    config.rack_cas.server_url = 'https://accounts.sugarpond.net/cas'
-    config.rack_cas.service = '/users/service'
-
     config.middleware.use Rack::Deflater
 
     # Settings in config/environments/* take precedence over those specified here.
