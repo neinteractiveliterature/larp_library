@@ -45,16 +45,20 @@ const config = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'babel-loader',
+        use: require.resolve('babel-loader'),
         exclude: /node_modules/,
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+        use: [
+          MiniCssExtractPlugin.loader,
+          require.resolve('css-loader'),
+          require.resolve('sass-loader'),
+        ],
       },
       {
         test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        use: [MiniCssExtractPlugin.loader, require.resolve('css-loader')],
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf|svg)$/i,

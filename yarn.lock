@@ -6904,7 +6904,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:15.5.2":
+"graphql@npm:^15.5.2":
   version: 15.5.2
   resolution: "graphql@npm:15.5.2"
   checksum: 0e26592c61815661d7ea25cef3d8ce781736fb36b2c80be30898bdfaca0f3cbd0c5fa3a2c001e399b62b2f23f6370f04f384171e033e90a9b820ca908e464105
@@ -10812,6 +10812,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"regenerator-runtime@npm:^0.13.9":
+  version: 0.13.9
+  resolution: "regenerator-runtime@npm:0.13.9"
+  checksum: 65ed455fe5afd799e2897baf691ca21c2772e1a969d19bb0c4695757c2d96249eb74ee3553ea34a91062b2a676beedf630b4c1551cc6299afb937be1426ec55e
+  languageName: node
+  linkType: hard
+
 "regenerator-transform@npm:^0.14.2":
   version: 0.14.5
   resolution: "regenerator-transform@npm:0.14.5"
@@ -11202,7 +11209,7 @@ resolve@^2.0.0-next.3:
     eslint-plugin-react: 7.25.1
     eslint-plugin-react-hooks: 4.2.0
     evaporate: 2.1.4
-    graphql: 15.5.2
+    graphql: ^15.5.2
     graphql-tag: 2.12.5
     history: 5.0.1
     husky: 7.0.2
@@ -11213,13 +11220,16 @@ resolve@^2.0.0-next.3:
     mini-css-extract-plugin: 2.2.2
     prettier: 2.3.2
     react: 17.0.2
+    react-bootstrap4-modal: ^2.0.0
     react-color: 2.19.3
     react-dom: 17.0.2
     react-markdown: 6.0.3
     react-popper: 2.2.5
+    react-router: 6.0.0-beta.2
     react-router-dom: 6.0.0-beta.2
     react-select: 4.3.1
     react-waypoint: 10.1.0
+    regenerator-runtime: ^0.13.9
     sass: 1.39.0
     sass-loader: 12.1.0
     style-loader: 3.2.1
