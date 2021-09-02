@@ -31,6 +31,15 @@
 !/log/.keep
 /tmp
 
+# Yarn stuff for non-zeroinstall setup
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
 /public/packs
 /public/packs-test
 /node_modules
