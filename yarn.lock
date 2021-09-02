@@ -2004,10 +2004,10 @@
   resolved "https://registry.yarnpkg.com/@n1ru4l/graphql-live-query/-/graphql-live-query-0.7.1.tgz#c020d017c3ed6bcfdde49a7106ba035e4d0774f5"
   integrity sha512-5kJPe2FkPNsCGu9tocKIzUSNO986qAqdnbk8hIFqWlpVPBAmEAOYb1mr6PA18FYAlu7ojWm9Hm13k29aj2GGlQ==
 
-"@neinteractiveliterature/litform@0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@neinteractiveliterature/litform/-/litform-0.11.0.tgz#7c9352526c3cb4328bed6691d177e262288756c5"
-  integrity sha512-/0gELi0xc3N2GxEU8hCqW2d3a+MPLgDdCQs2e7byLlV/6fYoRUqQsua3ljptES4Oa8yhDqPTfrGcUnYw0MXALw==
+"@neinteractiveliterature/litform@0.11.1":
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/@neinteractiveliterature/litform/-/litform-0.11.1.tgz#5f0f3816317fb40c6201e6c831bbe4df203a69a7"
+  integrity sha512-qPXlevWfcEsrrvi0BGwrAOz2C4lajiDXZotqNsS9OpAVnUNQlMWzqzYaUqTRBRBkNuyOT0xEeJmgW1bXIjTxFQ==
   dependencies:
     codemirror "^5.61.0"
     copy-to-clipboard "^3.3.1"
