@@ -1,62 +1,194 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { ProjectHeadersFragment } from '../ProjectSearch/queries.generated';
 import { gql } from '@apollo/client';
 import { ProjectHeadersFragmentDoc } from '../ProjectSearch/queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {};
-export type ProjectFileFieldsFragment = { __typename: 'ProjectFile' } & Pick<
-  Types.ProjectFile,
-  'id' | 'url' | 'filename' | 'filesize' | 'filetype' | 'position'
->;
+export type ProjectFileFieldsFragment = {
+  __typename: 'ProjectFile';
+  id: string;
+  url: string;
+  filename: string;
+  filesize: number;
+  filetype?: Types.Maybe<string>;
+  position: number;
+};
 
-export type ProjectLinkFieldsFragment = { __typename: 'ProjectLink' } & Pick<
-  Types.ProjectLink,
-  'id' | 'url' | 'title' | 'icon' | 'position'
->;
+export type ProjectLinkFieldsFragment = {
+  __typename: 'ProjectLink';
+  id: string;
+  url: string;
+  title: string;
+  icon?: Types.Maybe<string>;
+  position: number;
+};
 
-export type LicenseFieldsFragment = { __typename: 'License' } & Pick<
-  Types.License,
-  'id' | 'name' | 'url' | 'logoUrl' | 'dedicationHtml' | 'discouraged' | 'discouragedReason'
->;
+export type LicenseFieldsFragment = {
+  __typename: 'License';
+  id: string;
+  name: string;
+  url: string;
+  logoUrl?: Types.Maybe<string>;
+  dedicationHtml?: Types.Maybe<string>;
+  discouraged: boolean;
+  discouragedReason?: Types.Maybe<string>;
+};
 
 export type NewProjectFormQueryVariables = Types.Exact<{
   slug: Types.Scalars['String'];
 }>;
 
-export type NewProjectFormQueryData = { __typename: 'Query' } & {
-  brand: { __typename: 'Brand' } & Pick<Types.Brand, 'id'>;
-  licenses: Array<{ __typename: 'License' } & LicenseFieldsFragment>;
+export type NewProjectFormQueryData = {
+  __typename: 'Query';
+  brand: { __typename: 'Brand'; id: string };
+  licenses: Array<{
+    __typename: 'License';
+    id: string;
+    name: string;
+    url: string;
+    logoUrl?: Types.Maybe<string>;
+    dedicationHtml?: Types.Maybe<string>;
+    discouraged: boolean;
+    discouragedReason?: Types.Maybe<string>;
+  }>;
 };
 
-export type ProjectFieldsFragment = { __typename: 'Project' } & Pick<
-  Types.Project,
-  | 'id'
-  | 'description'
-  | 'currentUserCanEdit'
-  | 'currentUserCanDelete'
-  | 'currentUserCanUploadFiles'
-  | 'currentUserCanDeleteFiles'
-> & {
-    license?: Types.Maybe<
-      { __typename: 'License' } & Pick<Types.License, 'id'> & LicenseFieldsFragment
-    >;
-    projectFiles: Array<
-      { __typename: 'ProjectFile' } & Pick<Types.ProjectFile, 'id'> & ProjectFileFieldsFragment
-    >;
-    projectLinks: Array<
-      { __typename: 'ProjectLink' } & Pick<Types.ProjectLink, 'id'> & ProjectLinkFieldsFragment
-    >;
-  } & ProjectHeadersFragment;
+export type ProjectFieldsFragment = {
+  __typename: 'Project';
+  id: string;
+  description?: Types.Maybe<string>;
+  currentUserCanEdit: boolean;
+  currentUserCanDelete: boolean;
+  currentUserCanUploadFiles: boolean;
+  currentUserCanDeleteFiles: boolean;
+  title?: Types.Maybe<string>;
+  authors?: Types.Maybe<string>;
+  minPlayers?: Types.Maybe<number>;
+  maxPlayers?: Types.Maybe<number>;
+  minFacilitators?: Types.Maybe<number>;
+  maxFacilitators?: Types.Maybe<number>;
+  publicationYear?: Types.Maybe<number>;
+  lengthQuantity?: Types.Maybe<number>;
+  lengthUnits?: Types.Maybe<string>;
+  license?: Types.Maybe<{
+    __typename: 'License';
+    id: string;
+    name: string;
+    url: string;
+    logoUrl?: Types.Maybe<string>;
+    dedicationHtml?: Types.Maybe<string>;
+    discouraged: boolean;
+    discouragedReason?: Types.Maybe<string>;
+  }>;
+  projectFiles: Array<{
+    __typename: 'ProjectFile';
+    id: string;
+    url: string;
+    filename: string;
+    filesize: number;
+    filetype?: Types.Maybe<string>;
+    position: number;
+  }>;
+  projectLinks: Array<{
+    __typename: 'ProjectLink';
+    id: string;
+    url: string;
+    title: string;
+    icon?: Types.Maybe<string>;
+    position: number;
+  }>;
+  brand: { __typename: 'Brand'; id: string; name: string; slug: string };
+  tags: Array<{
+    __typename: 'Tag';
+    id: string;
+    name: string;
+    tagCategory?: Types.Maybe<{
+      __typename: 'TagCategory';
+      id: string;
+      name: string;
+      color?: Types.Maybe<string>;
+      textColor?: Types.Maybe<string>;
+      icon?: Types.Maybe<string>;
+    }>;
+  }>;
+};
 
 export type ProjectPageQueryVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
 }>;
 
-export type ProjectPageQueryData = { __typename: 'Query' } & {
-  project: { __typename: 'Project' } & ProjectFieldsFragment;
-  licenses: Array<{ __typename: 'License' } & Pick<Types.License, 'id'> & LicenseFieldsFragment>;
+export type ProjectPageQueryData = {
+  __typename: 'Query';
+  project: {
+    __typename: 'Project';
+    id: string;
+    description?: Types.Maybe<string>;
+    currentUserCanEdit: boolean;
+    currentUserCanDelete: boolean;
+    currentUserCanUploadFiles: boolean;
+    currentUserCanDeleteFiles: boolean;
+    title?: Types.Maybe<string>;
+    authors?: Types.Maybe<string>;
+    minPlayers?: Types.Maybe<number>;
+    maxPlayers?: Types.Maybe<number>;
+    minFacilitators?: Types.Maybe<number>;
+    maxFacilitators?: Types.Maybe<number>;
+    publicationYear?: Types.Maybe<number>;
+    lengthQuantity?: Types.Maybe<number>;
+    lengthUnits?: Types.Maybe<string>;
+    license?: Types.Maybe<{
+      __typename: 'License';
+      id: string;
+      name: string;
+      url: string;
+      logoUrl?: Types.Maybe<string>;
+      dedicationHtml?: Types.Maybe<string>;
+      discouraged: boolean;
+      discouragedReason?: Types.Maybe<string>;
+    }>;
+    projectFiles: Array<{
+      __typename: 'ProjectFile';
+      id: string;
+      url: string;
+      filename: string;
+      filesize: number;
+      filetype?: Types.Maybe<string>;
+      position: number;
+    }>;
+    projectLinks: Array<{
+      __typename: 'ProjectLink';
+      id: string;
+      url: string;
+      title: string;
+      icon?: Types.Maybe<string>;
+      position: number;
+    }>;
+    brand: { __typename: 'Brand'; id: string; name: string; slug: string };
+    tags: Array<{
+      __typename: 'Tag';
+      id: string;
+      name: string;
+      tagCategory?: Types.Maybe<{
+        __typename: 'TagCategory';
+        id: string;
+        name: string;
+        color?: Types.Maybe<string>;
+        textColor?: Types.Maybe<string>;
+        icon?: Types.Maybe<string>;
+      }>;
+    }>;
+  };
+  licenses: Array<{
+    __typename: 'License';
+    id: string;
+    name: string;
+    url: string;
+    logoUrl?: Types.Maybe<string>;
+    dedicationHtml?: Types.Maybe<string>;
+    discouraged: boolean;
+    discouragedReason?: Types.Maybe<string>;
+  }>;
 };
 
 export const LicenseFieldsFragmentDoc = gql`

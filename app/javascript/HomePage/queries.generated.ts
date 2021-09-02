@@ -1,82 +1,106 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { ProjectHeadersFragment } from '../ProjectSearch/queries.generated';
-import { TagFragment } from '../Tags/queries.generated';
 import { gql } from '@apollo/client';
 import { ProjectHeadersFragmentDoc } from '../ProjectSearch/queries.generated';
 import { TagFragmentDoc } from '../Tags/queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
-export type HomePageQueryVariables = Types.Exact<{ [key: string]: never; }>;
+const defaultOptions = {};
+export type HomePageQueryVariables = Types.Exact<{ [key: string]: never }>;
 
-
-export type HomePageQueryData = (
-  { __typename: 'Query' }
-  & { projectPromotions: Array<(
-    { __typename: 'ProjectPromotion' }
-    & Pick<Types.ProjectPromotion, 'id'>
-    & { project: (
-      { __typename: 'Project' }
-      & ProjectHeadersFragment
-    ) }
-  )>, tags: (
-    { __typename: 'TagConnection' }
-    & { edges: Array<(
-      { __typename: 'TagEdge' }
-      & { node: (
-        { __typename: 'Tag' }
-        & Pick<Types.Tag, 'id'>
-        & { projects: (
-          { __typename: 'ProjectConnection' }
-          & Pick<Types.ProjectConnection, 'totalCount'>
-        ) }
-        & TagFragment
-      ) }
-    )> }
-  ), tagCategories: (
-    { __typename: 'TagCategoryConnection' }
-    & { edges: Array<(
-      { __typename: 'TagCategoryEdge' }
-      & { node: (
-        { __typename: 'TagCategory' }
-        & Pick<Types.TagCategory, 'id' | 'name'>
-      ) }
-    )> }
-  ) }
-);
-
+export type HomePageQueryData = {
+  __typename: 'Query';
+  projectPromotions: Array<{
+    __typename: 'ProjectPromotion';
+    id: string;
+    project: {
+      __typename: 'Project';
+      id: string;
+      title?: Types.Maybe<string>;
+      authors?: Types.Maybe<string>;
+      minPlayers?: Types.Maybe<number>;
+      maxPlayers?: Types.Maybe<number>;
+      minFacilitators?: Types.Maybe<number>;
+      maxFacilitators?: Types.Maybe<number>;
+      publicationYear?: Types.Maybe<number>;
+      lengthQuantity?: Types.Maybe<number>;
+      lengthUnits?: Types.Maybe<string>;
+      brand: { __typename: 'Brand'; id: string; name: string; slug: string };
+      tags: Array<{
+        __typename: 'Tag';
+        id: string;
+        name: string;
+        tagCategory?: Types.Maybe<{
+          __typename: 'TagCategory';
+          id: string;
+          name: string;
+          color?: Types.Maybe<string>;
+          textColor?: Types.Maybe<string>;
+          icon?: Types.Maybe<string>;
+        }>;
+      }>;
+    };
+  }>;
+  tags: {
+    __typename: 'TagConnection';
+    edges: Array<{
+      __typename: 'TagEdge';
+      node: {
+        __typename: 'Tag';
+        id: string;
+        name: string;
+        projects: { __typename: 'ProjectConnection'; totalCount: number };
+        tagCategory?: Types.Maybe<{
+          __typename: 'TagCategory';
+          id: string;
+          name: string;
+          color?: Types.Maybe<string>;
+          textColor?: Types.Maybe<string>;
+          icon?: Types.Maybe<string>;
+        }>;
+      };
+    }>;
+  };
+  tagCategories: {
+    __typename: 'TagCategoryConnection';
+    edges: Array<{
+      __typename: 'TagCategoryEdge';
+      node: { __typename: 'TagCategory'; id: string; name: string };
+    }>;
+  };
+};
 
 export const HomePageQueryDocument = gql`
-    query HomePageQuery {
-  projectPromotions {
-    id
-    project {
-      ...ProjectHeadersFragment
+  query HomePageQuery {
+    projectPromotions {
+      id
+      project {
+        ...ProjectHeadersFragment
+      }
     }
-  }
-  tags {
-    edges {
-      node {
-        id
-        ...TagFragment
-        projects {
-          totalCount
+    tags {
+      edges {
+        node {
+          id
+          ...TagFragment
+          projects {
+            totalCount
+          }
+        }
+      }
+    }
+    tagCategories {
+      edges {
+        node {
+          id
+          name
         }
       }
     }
   }
-  tagCategories {
-    edges {
-      node {
-        id
-        name
-      }
-    }
-  }
-}
-    ${ProjectHeadersFragmentDoc}
-${TagFragmentDoc}`;
+  ${ProjectHeadersFragmentDoc}
+  ${TagFragmentDoc}
+`;
 
 /**
  * __useHomePageQuery__
@@ -93,14 +117,24 @@ ${TagFragmentDoc}`;
  *   },
  * });
  */
-export function useHomePageQuery(baseOptions?: Apollo.QueryHookOptions<HomePageQueryData, HomePageQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<HomePageQueryData, HomePageQueryVariables>(HomePageQueryDocument, options);
-      }
-export function useHomePageQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HomePageQueryData, HomePageQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<HomePageQueryData, HomePageQueryVariables>(HomePageQueryDocument, options);
-        }
+export function useHomePageQuery(
+  baseOptions?: Apollo.QueryHookOptions<HomePageQueryData, HomePageQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<HomePageQueryData, HomePageQueryVariables>(HomePageQueryDocument, options);
+}
+export function useHomePageQueryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<HomePageQueryData, HomePageQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<HomePageQueryData, HomePageQueryVariables>(
+    HomePageQueryDocument,
+    options,
+  );
+}
 export type HomePageQueryHookResult = ReturnType<typeof useHomePageQuery>;
 export type HomePageQueryLazyQueryHookResult = ReturnType<typeof useHomePageQueryLazyQuery>;
-export type HomePageQueryQueryResult = Apollo.QueryResult<HomePageQueryData, HomePageQueryVariables>;
+export type HomePageQueryQueryResult = Apollo.QueryResult<
+  HomePageQueryData,
+  HomePageQueryVariables
+>;

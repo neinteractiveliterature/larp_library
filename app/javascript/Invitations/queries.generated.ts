@@ -3,45 +3,39 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {};
 export type InvitationPageQueryVariables = Types.Exact<{
   brandSlug: Types.Scalars['String'];
   invitationToken: Types.Scalars['String'];
 }>;
 
-
-export type InvitationPageQueryData = (
-  { __typename: 'Query' }
-  & { brandMembership: (
-    { __typename: 'BrandMembership' }
-    & Pick<Types.BrandMembership, 'id' | 'admin'>
-    & { brand: (
-      { __typename: 'Brand' }
-      & Pick<Types.Brand, 'id' | 'name' | 'slug'>
-    ) }
-  ), currentUser?: Types.Maybe<(
-    { __typename: 'User' }
-    & Pick<Types.User, 'id'>
-  )> }
-);
-
+export type InvitationPageQueryData = {
+  __typename: 'Query';
+  brandMembership: {
+    __typename: 'BrandMembership';
+    id: string;
+    admin: boolean;
+    brand: { __typename: 'Brand'; id: string; name: string; slug: string };
+  };
+  currentUser?: Types.Maybe<{ __typename: 'User'; id: string }>;
+};
 
 export const InvitationPageQueryDocument = gql`
-    query InvitationPageQuery($brandSlug: String!, $invitationToken: String!) {
-  brandMembership(brandSlug: $brandSlug, invitationToken: $invitationToken) {
-    id
-    admin
-    brand {
+  query InvitationPageQuery($brandSlug: String!, $invitationToken: String!) {
+    brandMembership(brandSlug: $brandSlug, invitationToken: $invitationToken) {
       id
-      name
-      slug
+      admin
+      brand {
+        id
+        name
+        slug
+      }
+    }
+    currentUser {
+      id
     }
   }
-  currentUser {
-    id
-  }
-}
-    `;
+`;
 
 /**
  * __useInvitationPageQuery__
@@ -60,14 +54,29 @@ export const InvitationPageQueryDocument = gql`
  *   },
  * });
  */
-export function useInvitationPageQuery(baseOptions: Apollo.QueryHookOptions<InvitationPageQueryData, InvitationPageQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<InvitationPageQueryData, InvitationPageQueryVariables>(InvitationPageQueryDocument, options);
-      }
-export function useInvitationPageQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InvitationPageQueryData, InvitationPageQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<InvitationPageQueryData, InvitationPageQueryVariables>(InvitationPageQueryDocument, options);
-        }
+export function useInvitationPageQuery(
+  baseOptions: Apollo.QueryHookOptions<InvitationPageQueryData, InvitationPageQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<InvitationPageQueryData, InvitationPageQueryVariables>(
+    InvitationPageQueryDocument,
+    options,
+  );
+}
+export function useInvitationPageQueryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<InvitationPageQueryData, InvitationPageQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<InvitationPageQueryData, InvitationPageQueryVariables>(
+    InvitationPageQueryDocument,
+    options,
+  );
+}
 export type InvitationPageQueryHookResult = ReturnType<typeof useInvitationPageQuery>;
-export type InvitationPageQueryLazyQueryHookResult = ReturnType<typeof useInvitationPageQueryLazyQuery>;
-export type InvitationPageQueryQueryResult = Apollo.QueryResult<InvitationPageQueryData, InvitationPageQueryVariables>;
+export type InvitationPageQueryLazyQueryHookResult = ReturnType<
+  typeof useInvitationPageQueryLazyQuery
+>;
+export type InvitationPageQueryQueryResult = Apollo.QueryResult<
+  InvitationPageQueryData,
+  InvitationPageQueryVariables
+>;

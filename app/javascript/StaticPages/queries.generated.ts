@@ -1,32 +1,39 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { LicenseFieldsFragment } from '../Project/queries.generated';
 import { gql } from '@apollo/client';
-import { LicenseFieldsFragmentDoc } from '../Project/queries.generated';
+import {
+  LicenseFieldsFragmentDoc,
+  ProjectFileFieldsFragmentDoc,
+  ProjectLinkFieldsFragmentDoc,
+} from '../Project/queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
-export type LicensingPageQueryVariables = Types.Exact<{ [key: string]: never; }>;
+const defaultOptions = {};
+export type LicensingPageQueryVariables = Types.Exact<{ [key: string]: never }>;
 
-
-export type LicensingPageQueryData = (
-  { __typename: 'Query' }
-  & { licenses: Array<(
-    { __typename: 'License' }
-    & Pick<Types.License, 'id'>
-    & LicenseFieldsFragment
-  )> }
-);
-
+export type LicensingPageQueryData = {
+  __typename: 'Query';
+  licenses: Array<{
+    __typename: 'License';
+    id: string;
+    name: string;
+    url: string;
+    logoUrl?: Types.Maybe<string>;
+    dedicationHtml?: Types.Maybe<string>;
+    discouraged: boolean;
+    discouragedReason?: Types.Maybe<string>;
+  }>;
+};
 
 export const LicensingPageQueryDocument = gql`
-    query LicensingPageQuery {
-  licenses {
-    id
-    ...LicenseFieldsFragment
+  query LicensingPageQuery {
+    licenses {
+      id
+      ...LicenseFieldsFragment
+    }
   }
-}
-    ${LicenseFieldsFragmentDoc}`;
+  ${LicenseFieldsFragmentDoc}
+`;
 
 /**
  * __useLicensingPageQuery__
@@ -43,14 +50,29 @@ export const LicensingPageQueryDocument = gql`
  *   },
  * });
  */
-export function useLicensingPageQuery(baseOptions?: Apollo.QueryHookOptions<LicensingPageQueryData, LicensingPageQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<LicensingPageQueryData, LicensingPageQueryVariables>(LicensingPageQueryDocument, options);
-      }
-export function useLicensingPageQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LicensingPageQueryData, LicensingPageQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<LicensingPageQueryData, LicensingPageQueryVariables>(LicensingPageQueryDocument, options);
-        }
+export function useLicensingPageQuery(
+  baseOptions?: Apollo.QueryHookOptions<LicensingPageQueryData, LicensingPageQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<LicensingPageQueryData, LicensingPageQueryVariables>(
+    LicensingPageQueryDocument,
+    options,
+  );
+}
+export function useLicensingPageQueryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<LicensingPageQueryData, LicensingPageQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<LicensingPageQueryData, LicensingPageQueryVariables>(
+    LicensingPageQueryDocument,
+    options,
+  );
+}
 export type LicensingPageQueryHookResult = ReturnType<typeof useLicensingPageQuery>;
-export type LicensingPageQueryLazyQueryHookResult = ReturnType<typeof useLicensingPageQueryLazyQuery>;
-export type LicensingPageQueryQueryResult = Apollo.QueryResult<LicensingPageQueryData, LicensingPageQueryVariables>;
+export type LicensingPageQueryLazyQueryHookResult = ReturnType<
+  typeof useLicensingPageQueryLazyQuery
+>;
+export type LicensingPageQueryQueryResult = Apollo.QueryResult<
+  LicensingPageQueryData,
+  LicensingPageQueryVariables
+>;

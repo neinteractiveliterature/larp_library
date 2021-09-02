@@ -631,7 +631,7 @@ export type UserFieldPolicy = {
   name?: FieldPolicy<any> | FieldReadFunction<any>;
   username?: FieldPolicy<any> | FieldReadFunction<any>;
 };
-export type TypedTypePolicies = TypePolicies & {
+export type StrictTypedTypePolicies = {
   Ability?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?: false | AbilityKeySpecifier | (() => undefined | AbilityKeySpecifier);
     fields?: AbilityFieldPolicy;
@@ -907,3 +907,4 @@ export type TypedTypePolicies = TypePolicies & {
     fields?: UserFieldPolicy;
   };
 };
+export type TypedTypePolicies = StrictTypedTypePolicies & TypePolicies;

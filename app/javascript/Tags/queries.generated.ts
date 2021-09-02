@@ -1,28 +1,48 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { TagCategoryFragment } from '../TagCategories/TagCategoryFragment.generated';
 import { gql } from '@apollo/client';
 import { TagCategoryFragmentDoc } from '../TagCategories/TagCategoryFragment.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {};
-export type TagFragment = { __typename: 'Tag' } & Pick<Types.Tag, 'id' | 'name'> & {
-    tagCategory?: Types.Maybe<
-      { __typename: 'TagCategory' } & Pick<Types.TagCategory, 'id'> & TagCategoryFragment
-    >;
-  };
+export type TagFragment = {
+  __typename: 'Tag';
+  id: string;
+  name: string;
+  tagCategory?: Types.Maybe<{
+    __typename: 'TagCategory';
+    id: string;
+    name: string;
+    color?: Types.Maybe<string>;
+    textColor?: Types.Maybe<string>;
+    icon?: Types.Maybe<string>;
+  }>;
+};
 
 export type TagAutocompleteQueryVariables = Types.Exact<{
   queryString?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
-export type TagAutocompleteQueryData = { __typename: 'Query' } & {
-  tags: { __typename: 'TagConnection' } & {
-    edges: Array<
-      { __typename: 'TagEdge' } & {
-        node: { __typename: 'Tag' } & Pick<Types.Tag, 'id'> & TagFragment;
-      }
-    >;
+export type TagAutocompleteQueryData = {
+  __typename: 'Query';
+  tags: {
+    __typename: 'TagConnection';
+    edges: Array<{
+      __typename: 'TagEdge';
+      node: {
+        __typename: 'Tag';
+        id: string;
+        name: string;
+        tagCategory?: Types.Maybe<{
+          __typename: 'TagCategory';
+          id: string;
+          name: string;
+          color?: Types.Maybe<string>;
+          textColor?: Types.Maybe<string>;
+          icon?: Types.Maybe<string>;
+        }>;
+      };
+    }>;
   };
 };
 
@@ -30,25 +50,51 @@ export type TagListPageQueryVariables = Types.Exact<{
   after?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
-export type TagListPageQueryData = { __typename: 'Query' } & {
-  tags: { __typename: 'TagConnection' } & Pick<Types.TagConnection, 'totalCount'> & {
-      pageInfo: { __typename: 'PageInfo' } & Pick<Types.PageInfo, 'endCursor'>;
-      edges: Array<
-        { __typename: 'TagEdge' } & {
-          node: { __typename: 'Tag' } & Pick<Types.Tag, 'id'> & TagFragment;
-        }
-      >;
-    };
+export type TagListPageQueryData = {
+  __typename: 'Query';
+  tags: {
+    __typename: 'TagConnection';
+    totalCount: number;
+    pageInfo: { __typename: 'PageInfo'; endCursor?: Types.Maybe<string> };
+    edges: Array<{
+      __typename: 'TagEdge';
+      node: {
+        __typename: 'Tag';
+        id: string;
+        name: string;
+        tagCategory?: Types.Maybe<{
+          __typename: 'TagCategory';
+          id: string;
+          name: string;
+          color?: Types.Maybe<string>;
+          textColor?: Types.Maybe<string>;
+          icon?: Types.Maybe<string>;
+        }>;
+      };
+    }>;
+  };
 };
 
 export type EditTagQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
-export type EditTagQueryData = { __typename: 'Query' } & {
-  tag: { __typename: 'Tag' } & Pick<Types.Tag, 'id'> & {
-      projects: { __typename: 'ProjectConnection' } & Pick<Types.ProjectConnection, 'totalCount'>;
-    } & TagFragment;
+export type EditTagQueryData = {
+  __typename: 'Query';
+  tag: {
+    __typename: 'Tag';
+    id: string;
+    name: string;
+    projects: { __typename: 'ProjectConnection'; totalCount: number };
+    tagCategory?: Types.Maybe<{
+      __typename: 'TagCategory';
+      id: string;
+      name: string;
+      color?: Types.Maybe<string>;
+      textColor?: Types.Maybe<string>;
+      icon?: Types.Maybe<string>;
+    }>;
+  };
 };
 
 export const TagFragmentDoc = gql`

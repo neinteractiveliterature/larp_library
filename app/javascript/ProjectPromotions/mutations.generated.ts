@@ -1,57 +1,69 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { ProjectPromotionFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { ProjectPromotionFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {};
 export type PromoteProjectMutationVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
 }>;
 
-
-export type PromoteProjectMutationData = (
-  { __typename: 'Mutation' }
-  & { promoteProject?: Types.Maybe<(
-    { __typename: 'PromoteProjectPayload' }
-    & { projectPromotion: (
-      { __typename: 'ProjectPromotion' }
-      & Pick<Types.ProjectPromotion, 'id'>
-      & ProjectPromotionFieldsFragment
-    ) }
-  )> }
-);
+export type PromoteProjectMutationData = {
+  __typename: 'Mutation';
+  promoteProject?: Types.Maybe<{
+    __typename: 'PromoteProjectPayload';
+    projectPromotion: {
+      __typename: 'ProjectPromotion';
+      id: string;
+      createdAt: any;
+      project: {
+        __typename: 'Project';
+        id: string;
+        title?: Types.Maybe<string>;
+        brand: { __typename: 'Brand'; id: string; slug: string };
+      };
+    };
+  }>;
+};
 
 export type UnpromoteProjectMutationVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
 }>;
 
-
-export type UnpromoteProjectMutationData = (
-  { __typename: 'Mutation' }
-  & { unpromoteProject?: Types.Maybe<(
-    { __typename: 'UnpromoteProjectPayload' }
-    & { projectPromotion: (
-      { __typename: 'ProjectPromotion' }
-      & Pick<Types.ProjectPromotion, 'id'>
-      & ProjectPromotionFieldsFragment
-    ) }
-  )> }
-);
-
+export type UnpromoteProjectMutationData = {
+  __typename: 'Mutation';
+  unpromoteProject?: Types.Maybe<{
+    __typename: 'UnpromoteProjectPayload';
+    projectPromotion: {
+      __typename: 'ProjectPromotion';
+      id: string;
+      createdAt: any;
+      project: {
+        __typename: 'Project';
+        id: string;
+        title?: Types.Maybe<string>;
+        brand: { __typename: 'Brand'; id: string; slug: string };
+      };
+    };
+  }>;
+};
 
 export const PromoteProjectMutationDocument = gql`
-    mutation PromoteProjectMutation($projectId: ID!) {
-  promoteProject(input: {projectId: $projectId}) {
-    projectPromotion {
-      id
-      ...ProjectPromotionFields
+  mutation PromoteProjectMutation($projectId: ID!) {
+    promoteProject(input: { projectId: $projectId }) {
+      projectPromotion {
+        id
+        ...ProjectPromotionFields
+      }
     }
   }
-}
-    ${ProjectPromotionFieldsFragmentDoc}`;
-export type PromoteProjectMutationMutationFn = Apollo.MutationFunction<PromoteProjectMutationData, PromoteProjectMutationVariables>;
+  ${ProjectPromotionFieldsFragmentDoc}
+`;
+export type PromoteProjectMutationMutationFn = Apollo.MutationFunction<
+  PromoteProjectMutationData,
+  PromoteProjectMutationVariables
+>;
 
 /**
  * __usePromoteProjectMutation__
@@ -70,24 +82,40 @@ export type PromoteProjectMutationMutationFn = Apollo.MutationFunction<PromotePr
  *   },
  * });
  */
-export function usePromoteProjectMutation(baseOptions?: Apollo.MutationHookOptions<PromoteProjectMutationData, PromoteProjectMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<PromoteProjectMutationData, PromoteProjectMutationVariables>(PromoteProjectMutationDocument, options);
-      }
+export function usePromoteProjectMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    PromoteProjectMutationData,
+    PromoteProjectMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<PromoteProjectMutationData, PromoteProjectMutationVariables>(
+    PromoteProjectMutationDocument,
+    options,
+  );
+}
 export type PromoteProjectMutationHookResult = ReturnType<typeof usePromoteProjectMutation>;
-export type PromoteProjectMutationMutationResult = Apollo.MutationResult<PromoteProjectMutationData>;
-export type PromoteProjectMutationMutationOptions = Apollo.BaseMutationOptions<PromoteProjectMutationData, PromoteProjectMutationVariables>;
+export type PromoteProjectMutationMutationResult =
+  Apollo.MutationResult<PromoteProjectMutationData>;
+export type PromoteProjectMutationMutationOptions = Apollo.BaseMutationOptions<
+  PromoteProjectMutationData,
+  PromoteProjectMutationVariables
+>;
 export const UnpromoteProjectMutationDocument = gql`
-    mutation UnpromoteProjectMutation($projectId: ID!) {
-  unpromoteProject(input: {projectId: $projectId}) {
-    projectPromotion {
-      id
-      ...ProjectPromotionFields
+  mutation UnpromoteProjectMutation($projectId: ID!) {
+    unpromoteProject(input: { projectId: $projectId }) {
+      projectPromotion {
+        id
+        ...ProjectPromotionFields
+      }
     }
   }
-}
-    ${ProjectPromotionFieldsFragmentDoc}`;
-export type UnpromoteProjectMutationMutationFn = Apollo.MutationFunction<UnpromoteProjectMutationData, UnpromoteProjectMutationVariables>;
+  ${ProjectPromotionFieldsFragmentDoc}
+`;
+export type UnpromoteProjectMutationMutationFn = Apollo.MutationFunction<
+  UnpromoteProjectMutationData,
+  UnpromoteProjectMutationVariables
+>;
 
 /**
  * __useUnpromoteProjectMutation__
@@ -106,10 +134,22 @@ export type UnpromoteProjectMutationMutationFn = Apollo.MutationFunction<Unpromo
  *   },
  * });
  */
-export function useUnpromoteProjectMutation(baseOptions?: Apollo.MutationHookOptions<UnpromoteProjectMutationData, UnpromoteProjectMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UnpromoteProjectMutationData, UnpromoteProjectMutationVariables>(UnpromoteProjectMutationDocument, options);
-      }
+export function useUnpromoteProjectMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UnpromoteProjectMutationData,
+    UnpromoteProjectMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UnpromoteProjectMutationData, UnpromoteProjectMutationVariables>(
+    UnpromoteProjectMutationDocument,
+    options,
+  );
+}
 export type UnpromoteProjectMutationHookResult = ReturnType<typeof useUnpromoteProjectMutation>;
-export type UnpromoteProjectMutationMutationResult = Apollo.MutationResult<UnpromoteProjectMutationData>;
-export type UnpromoteProjectMutationMutationOptions = Apollo.BaseMutationOptions<UnpromoteProjectMutationData, UnpromoteProjectMutationVariables>;
+export type UnpromoteProjectMutationMutationResult =
+  Apollo.MutationResult<UnpromoteProjectMutationData>;
+export type UnpromoteProjectMutationMutationOptions = Apollo.BaseMutationOptions<
+  UnpromoteProjectMutationData,
+  UnpromoteProjectMutationVariables
+>;

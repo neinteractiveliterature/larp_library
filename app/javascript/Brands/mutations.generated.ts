@@ -1,62 +1,74 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { BrandPageBrandFieldsFragment, BrandMembershipFieldsFragment } from './queries.generated';
 import { gql } from '@apollo/client';
-import { BrandPageBrandFieldsFragmentDoc, BrandMembershipFieldsFragmentDoc } from './queries.generated';
+import { BrandPageBrandFieldsFragmentDoc } from './queries.generated';
+import { BrandMembershipFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {};
 export type CreateBrandMutationVariables = Types.Exact<{
   brandAttributes: Types.BrandAttributes;
 }>;
 
-
-export type CreateBrandMutationData = (
-  { __typename: 'Mutation' }
-  & { createBrand?: Types.Maybe<(
-    { __typename: 'CreateBrandPayload' }
-    & { brand: (
-      { __typename: 'Brand' }
-      & Pick<Types.Brand, 'id'>
-      & BrandPageBrandFieldsFragment
-    ) }
-  )> }
-);
+export type CreateBrandMutationData = {
+  __typename: 'Mutation';
+  createBrand?: Types.Maybe<{
+    __typename: 'CreateBrandPayload';
+    brand: {
+      __typename: 'Brand';
+      id: string;
+      approved?: Types.Maybe<boolean>;
+      name: string;
+      description?: Types.Maybe<string>;
+      slug: string;
+      currentUserCanEdit: boolean;
+      currentUserCanCreateProjects: boolean;
+    };
+  }>;
+};
 
 export type UpdateBrandMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   brandAttributes: Types.BrandAttributes;
 }>;
 
-
-export type UpdateBrandMutationData = (
-  { __typename: 'Mutation' }
-  & { updateBrand?: Types.Maybe<(
-    { __typename: 'UpdateBrandPayload' }
-    & { brand: (
-      { __typename: 'Brand' }
-      & Pick<Types.Brand, 'id'>
-      & BrandPageBrandFieldsFragment
-    ) }
-  )> }
-);
+export type UpdateBrandMutationData = {
+  __typename: 'Mutation';
+  updateBrand?: Types.Maybe<{
+    __typename: 'UpdateBrandPayload';
+    brand: {
+      __typename: 'Brand';
+      id: string;
+      approved?: Types.Maybe<boolean>;
+      name: string;
+      description?: Types.Maybe<string>;
+      slug: string;
+      currentUserCanEdit: boolean;
+      currentUserCanCreateProjects: boolean;
+    };
+  }>;
+};
 
 export type ApproveBrandMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
-
-export type ApproveBrandMutationData = (
-  { __typename: 'Mutation' }
-  & { approveBrand?: Types.Maybe<(
-    { __typename: 'ApproveBrandPayload' }
-    & { brand: (
-      { __typename: 'Brand' }
-      & Pick<Types.Brand, 'id'>
-      & BrandPageBrandFieldsFragment
-    ) }
-  )> }
-);
+export type ApproveBrandMutationData = {
+  __typename: 'Mutation';
+  approveBrand?: Types.Maybe<{
+    __typename: 'ApproveBrandPayload';
+    brand: {
+      __typename: 'Brand';
+      id: string;
+      approved?: Types.Maybe<boolean>;
+      name: string;
+      description?: Types.Maybe<string>;
+      slug: string;
+      currentUserCanEdit: boolean;
+      currentUserCanCreateProjects: boolean;
+    };
+  }>;
+};
 
 export type InviteBrandMemberMutationVariables = Types.Exact<{
   brandId: Types.Scalars['ID'];
@@ -64,43 +76,52 @@ export type InviteBrandMemberMutationVariables = Types.Exact<{
   admin: Types.Scalars['Boolean'];
 }>;
 
-
-export type InviteBrandMemberMutationData = (
-  { __typename: 'Mutation' }
-  & { inviteBrandMember?: Types.Maybe<(
-    { __typename: 'InviteBrandMemberPayload' }
-    & { brandMembership: (
-      { __typename: 'BrandMembership' }
-      & BrandMembershipFieldsFragment
-    ) }
-  )> }
-);
+export type InviteBrandMemberMutationData = {
+  __typename: 'Mutation';
+  inviteBrandMember?: Types.Maybe<{
+    __typename: 'InviteBrandMemberPayload';
+    brandMembership: {
+      __typename: 'BrandMembership';
+      id: string;
+      admin: boolean;
+      invitationEmail?: Types.Maybe<string>;
+      user?: Types.Maybe<{
+        __typename: 'User';
+        id: string;
+        name: string;
+        email?: Types.Maybe<string>;
+      }>;
+    };
+  }>;
+};
 
 export type DeleteBrandMembershipMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
-
-export type DeleteBrandMembershipMutationData = (
-  { __typename: 'Mutation' }
-  & { deleteBrandMembership?: Types.Maybe<(
-    { __typename: 'DeleteBrandMembershipPayload' }
-    & Pick<Types.DeleteBrandMembershipPayload, 'clientMutationId'>
-  )> }
-);
-
+export type DeleteBrandMembershipMutationData = {
+  __typename: 'Mutation';
+  deleteBrandMembership?: Types.Maybe<{
+    __typename: 'DeleteBrandMembershipPayload';
+    clientMutationId?: Types.Maybe<string>;
+  }>;
+};
 
 export const CreateBrandDocument = gql`
-    mutation CreateBrand($brandAttributes: BrandAttributes!) {
-  createBrand(input: {brandAttributes: $brandAttributes}) {
-    brand {
-      id
-      ...BrandPageBrandFields
+  mutation CreateBrand($brandAttributes: BrandAttributes!) {
+    createBrand(input: { brandAttributes: $brandAttributes }) {
+      brand {
+        id
+        ...BrandPageBrandFields
+      }
     }
   }
-}
-    ${BrandPageBrandFieldsFragmentDoc}`;
-export type CreateBrandMutationFn = Apollo.MutationFunction<CreateBrandMutationData, CreateBrandMutationVariables>;
+  ${BrandPageBrandFieldsFragmentDoc}
+`;
+export type CreateBrandMutationFn = Apollo.MutationFunction<
+  CreateBrandMutationData,
+  CreateBrandMutationVariables
+>;
 
 /**
  * __useCreateBrandMutation__
@@ -119,24 +140,36 @@ export type CreateBrandMutationFn = Apollo.MutationFunction<CreateBrandMutationD
  *   },
  * });
  */
-export function useCreateBrandMutation(baseOptions?: Apollo.MutationHookOptions<CreateBrandMutationData, CreateBrandMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateBrandMutationData, CreateBrandMutationVariables>(CreateBrandDocument, options);
-      }
+export function useCreateBrandMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateBrandMutationData, CreateBrandMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateBrandMutationData, CreateBrandMutationVariables>(
+    CreateBrandDocument,
+    options,
+  );
+}
 export type CreateBrandMutationHookResult = ReturnType<typeof useCreateBrandMutation>;
 export type CreateBrandMutationResult = Apollo.MutationResult<CreateBrandMutationData>;
-export type CreateBrandMutationOptions = Apollo.BaseMutationOptions<CreateBrandMutationData, CreateBrandMutationVariables>;
+export type CreateBrandMutationOptions = Apollo.BaseMutationOptions<
+  CreateBrandMutationData,
+  CreateBrandMutationVariables
+>;
 export const UpdateBrandDocument = gql`
-    mutation UpdateBrand($id: ID!, $brandAttributes: BrandAttributes!) {
-  updateBrand(input: {id: $id, brandAttributes: $brandAttributes}) {
-    brand {
-      id
-      ...BrandPageBrandFields
+  mutation UpdateBrand($id: ID!, $brandAttributes: BrandAttributes!) {
+    updateBrand(input: { id: $id, brandAttributes: $brandAttributes }) {
+      brand {
+        id
+        ...BrandPageBrandFields
+      }
     }
   }
-}
-    ${BrandPageBrandFieldsFragmentDoc}`;
-export type UpdateBrandMutationFn = Apollo.MutationFunction<UpdateBrandMutationData, UpdateBrandMutationVariables>;
+  ${BrandPageBrandFieldsFragmentDoc}
+`;
+export type UpdateBrandMutationFn = Apollo.MutationFunction<
+  UpdateBrandMutationData,
+  UpdateBrandMutationVariables
+>;
 
 /**
  * __useUpdateBrandMutation__
@@ -156,24 +189,36 @@ export type UpdateBrandMutationFn = Apollo.MutationFunction<UpdateBrandMutationD
  *   },
  * });
  */
-export function useUpdateBrandMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBrandMutationData, UpdateBrandMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateBrandMutationData, UpdateBrandMutationVariables>(UpdateBrandDocument, options);
-      }
+export function useUpdateBrandMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateBrandMutationData, UpdateBrandMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateBrandMutationData, UpdateBrandMutationVariables>(
+    UpdateBrandDocument,
+    options,
+  );
+}
 export type UpdateBrandMutationHookResult = ReturnType<typeof useUpdateBrandMutation>;
 export type UpdateBrandMutationResult = Apollo.MutationResult<UpdateBrandMutationData>;
-export type UpdateBrandMutationOptions = Apollo.BaseMutationOptions<UpdateBrandMutationData, UpdateBrandMutationVariables>;
+export type UpdateBrandMutationOptions = Apollo.BaseMutationOptions<
+  UpdateBrandMutationData,
+  UpdateBrandMutationVariables
+>;
 export const ApproveBrandDocument = gql`
-    mutation ApproveBrand($id: ID!) {
-  approveBrand(input: {id: $id}) {
-    brand {
-      id
-      ...BrandPageBrandFields
+  mutation ApproveBrand($id: ID!) {
+    approveBrand(input: { id: $id }) {
+      brand {
+        id
+        ...BrandPageBrandFields
+      }
     }
   }
-}
-    ${BrandPageBrandFieldsFragmentDoc}`;
-export type ApproveBrandMutationFn = Apollo.MutationFunction<ApproveBrandMutationData, ApproveBrandMutationVariables>;
+  ${BrandPageBrandFieldsFragmentDoc}
+`;
+export type ApproveBrandMutationFn = Apollo.MutationFunction<
+  ApproveBrandMutationData,
+  ApproveBrandMutationVariables
+>;
 
 /**
  * __useApproveBrandMutation__
@@ -192,23 +237,35 @@ export type ApproveBrandMutationFn = Apollo.MutationFunction<ApproveBrandMutatio
  *   },
  * });
  */
-export function useApproveBrandMutation(baseOptions?: Apollo.MutationHookOptions<ApproveBrandMutationData, ApproveBrandMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ApproveBrandMutationData, ApproveBrandMutationVariables>(ApproveBrandDocument, options);
-      }
+export function useApproveBrandMutation(
+  baseOptions?: Apollo.MutationHookOptions<ApproveBrandMutationData, ApproveBrandMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<ApproveBrandMutationData, ApproveBrandMutationVariables>(
+    ApproveBrandDocument,
+    options,
+  );
+}
 export type ApproveBrandMutationHookResult = ReturnType<typeof useApproveBrandMutation>;
 export type ApproveBrandMutationResult = Apollo.MutationResult<ApproveBrandMutationData>;
-export type ApproveBrandMutationOptions = Apollo.BaseMutationOptions<ApproveBrandMutationData, ApproveBrandMutationVariables>;
+export type ApproveBrandMutationOptions = Apollo.BaseMutationOptions<
+  ApproveBrandMutationData,
+  ApproveBrandMutationVariables
+>;
 export const InviteBrandMemberDocument = gql`
-    mutation InviteBrandMember($brandId: ID!, $email: String!, $admin: Boolean!) {
-  inviteBrandMember(input: {brandId: $brandId, email: $email, admin: $admin}) {
-    brandMembership {
-      ...BrandMembershipFields
+  mutation InviteBrandMember($brandId: ID!, $email: String!, $admin: Boolean!) {
+    inviteBrandMember(input: { brandId: $brandId, email: $email, admin: $admin }) {
+      brandMembership {
+        ...BrandMembershipFields
+      }
     }
   }
-}
-    ${BrandMembershipFieldsFragmentDoc}`;
-export type InviteBrandMemberMutationFn = Apollo.MutationFunction<InviteBrandMemberMutationData, InviteBrandMemberMutationVariables>;
+  ${BrandMembershipFieldsFragmentDoc}
+`;
+export type InviteBrandMemberMutationFn = Apollo.MutationFunction<
+  InviteBrandMemberMutationData,
+  InviteBrandMemberMutationVariables
+>;
 
 /**
  * __useInviteBrandMemberMutation__
@@ -229,21 +286,35 @@ export type InviteBrandMemberMutationFn = Apollo.MutationFunction<InviteBrandMem
  *   },
  * });
  */
-export function useInviteBrandMemberMutation(baseOptions?: Apollo.MutationHookOptions<InviteBrandMemberMutationData, InviteBrandMemberMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<InviteBrandMemberMutationData, InviteBrandMemberMutationVariables>(InviteBrandMemberDocument, options);
-      }
+export function useInviteBrandMemberMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    InviteBrandMemberMutationData,
+    InviteBrandMemberMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<InviteBrandMemberMutationData, InviteBrandMemberMutationVariables>(
+    InviteBrandMemberDocument,
+    options,
+  );
+}
 export type InviteBrandMemberMutationHookResult = ReturnType<typeof useInviteBrandMemberMutation>;
 export type InviteBrandMemberMutationResult = Apollo.MutationResult<InviteBrandMemberMutationData>;
-export type InviteBrandMemberMutationOptions = Apollo.BaseMutationOptions<InviteBrandMemberMutationData, InviteBrandMemberMutationVariables>;
+export type InviteBrandMemberMutationOptions = Apollo.BaseMutationOptions<
+  InviteBrandMemberMutationData,
+  InviteBrandMemberMutationVariables
+>;
 export const DeleteBrandMembershipDocument = gql`
-    mutation DeleteBrandMembership($id: ID!) {
-  deleteBrandMembership(input: {id: $id}) {
-    clientMutationId
+  mutation DeleteBrandMembership($id: ID!) {
+    deleteBrandMembership(input: { id: $id }) {
+      clientMutationId
+    }
   }
-}
-    `;
-export type DeleteBrandMembershipMutationFn = Apollo.MutationFunction<DeleteBrandMembershipMutationData, DeleteBrandMembershipMutationVariables>;
+`;
+export type DeleteBrandMembershipMutationFn = Apollo.MutationFunction<
+  DeleteBrandMembershipMutationData,
+  DeleteBrandMembershipMutationVariables
+>;
 
 /**
  * __useDeleteBrandMembershipMutation__
@@ -262,10 +333,24 @@ export type DeleteBrandMembershipMutationFn = Apollo.MutationFunction<DeleteBran
  *   },
  * });
  */
-export function useDeleteBrandMembershipMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBrandMembershipMutationData, DeleteBrandMembershipMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteBrandMembershipMutationData, DeleteBrandMembershipMutationVariables>(DeleteBrandMembershipDocument, options);
-      }
-export type DeleteBrandMembershipMutationHookResult = ReturnType<typeof useDeleteBrandMembershipMutation>;
-export type DeleteBrandMembershipMutationResult = Apollo.MutationResult<DeleteBrandMembershipMutationData>;
-export type DeleteBrandMembershipMutationOptions = Apollo.BaseMutationOptions<DeleteBrandMembershipMutationData, DeleteBrandMembershipMutationVariables>;
+export function useDeleteBrandMembershipMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteBrandMembershipMutationData,
+    DeleteBrandMembershipMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteBrandMembershipMutationData,
+    DeleteBrandMembershipMutationVariables
+  >(DeleteBrandMembershipDocument, options);
+}
+export type DeleteBrandMembershipMutationHookResult = ReturnType<
+  typeof useDeleteBrandMembershipMutation
+>;
+export type DeleteBrandMembershipMutationResult =
+  Apollo.MutationResult<DeleteBrandMembershipMutationData>;
+export type DeleteBrandMembershipMutationOptions = Apollo.BaseMutationOptions<
+  DeleteBrandMembershipMutationData,
+  DeleteBrandMembershipMutationVariables
+>;

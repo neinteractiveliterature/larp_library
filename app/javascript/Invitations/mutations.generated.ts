@@ -3,32 +3,33 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {};
 export type AcceptBrandMembershipInvitationMutationVariables = Types.Exact<{
   brandId: Types.Scalars['ID'];
   invitationToken: Types.Scalars['String'];
 }>;
 
-
-export type AcceptBrandMembershipInvitationMutationData = (
-  { __typename: 'Mutation' }
-  & { acceptBrandMembershipInvitation?: Types.Maybe<(
-    { __typename: 'AcceptBrandMembershipInvitationPayload' }
-    & Pick<Types.AcceptBrandMembershipInvitationPayload, 'clientMutationId'>
-  )> }
-);
-
+export type AcceptBrandMembershipInvitationMutationData = {
+  __typename: 'Mutation';
+  acceptBrandMembershipInvitation?: Types.Maybe<{
+    __typename: 'AcceptBrandMembershipInvitationPayload';
+    clientMutationId?: Types.Maybe<string>;
+  }>;
+};
 
 export const AcceptBrandMembershipInvitationDocument = gql`
-    mutation AcceptBrandMembershipInvitation($brandId: ID!, $invitationToken: String!) {
-  acceptBrandMembershipInvitation(
-    input: {brandId: $brandId, invitationToken: $invitationToken}
-  ) {
-    clientMutationId
+  mutation AcceptBrandMembershipInvitation($brandId: ID!, $invitationToken: String!) {
+    acceptBrandMembershipInvitation(
+      input: { brandId: $brandId, invitationToken: $invitationToken }
+    ) {
+      clientMutationId
+    }
   }
-}
-    `;
-export type AcceptBrandMembershipInvitationMutationFn = Apollo.MutationFunction<AcceptBrandMembershipInvitationMutationData, AcceptBrandMembershipInvitationMutationVariables>;
+`;
+export type AcceptBrandMembershipInvitationMutationFn = Apollo.MutationFunction<
+  AcceptBrandMembershipInvitationMutationData,
+  AcceptBrandMembershipInvitationMutationVariables
+>;
 
 /**
  * __useAcceptBrandMembershipInvitationMutation__
@@ -48,10 +49,24 @@ export type AcceptBrandMembershipInvitationMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useAcceptBrandMembershipInvitationMutation(baseOptions?: Apollo.MutationHookOptions<AcceptBrandMembershipInvitationMutationData, AcceptBrandMembershipInvitationMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AcceptBrandMembershipInvitationMutationData, AcceptBrandMembershipInvitationMutationVariables>(AcceptBrandMembershipInvitationDocument, options);
-      }
-export type AcceptBrandMembershipInvitationMutationHookResult = ReturnType<typeof useAcceptBrandMembershipInvitationMutation>;
-export type AcceptBrandMembershipInvitationMutationResult = Apollo.MutationResult<AcceptBrandMembershipInvitationMutationData>;
-export type AcceptBrandMembershipInvitationMutationOptions = Apollo.BaseMutationOptions<AcceptBrandMembershipInvitationMutationData, AcceptBrandMembershipInvitationMutationVariables>;
+export function useAcceptBrandMembershipInvitationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AcceptBrandMembershipInvitationMutationData,
+    AcceptBrandMembershipInvitationMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AcceptBrandMembershipInvitationMutationData,
+    AcceptBrandMembershipInvitationMutationVariables
+  >(AcceptBrandMembershipInvitationDocument, options);
+}
+export type AcceptBrandMembershipInvitationMutationHookResult = ReturnType<
+  typeof useAcceptBrandMembershipInvitationMutation
+>;
+export type AcceptBrandMembershipInvitationMutationResult =
+  Apollo.MutationResult<AcceptBrandMembershipInvitationMutationData>;
+export type AcceptBrandMembershipInvitationMutationOptions = Apollo.BaseMutationOptions<
+  AcceptBrandMembershipInvitationMutationData,
+  AcceptBrandMembershipInvitationMutationVariables
+>;

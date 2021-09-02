@@ -1,14 +1,10 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import {
-  ProjectFieldsFragment,
-  ProjectFileFieldsFragment,
-  ProjectLinkFieldsFragment,
-} from './queries.generated';
 import { gql } from '@apollo/client';
 import {
   ProjectFieldsFragmentDoc,
+  LicenseFieldsFragmentDoc,
   ProjectFileFieldsFragmentDoc,
   ProjectLinkFieldsFragmentDoc,
 } from './queries.generated';
@@ -19,12 +15,70 @@ export type CreateProjectMutationVariables = Types.Exact<{
   projectAttributes: Types.ProjectAttributes;
 }>;
 
-export type CreateProjectMutationData = { __typename: 'Mutation' } & {
-  createProject?: Types.Maybe<
-    { __typename: 'CreateProjectPayload' } & {
-      project: { __typename: 'Project' } & ProjectFieldsFragment;
-    }
-  >;
+export type CreateProjectMutationData = {
+  __typename: 'Mutation';
+  createProject?: Types.Maybe<{
+    __typename: 'CreateProjectPayload';
+    project: {
+      __typename: 'Project';
+      id: string;
+      description?: Types.Maybe<string>;
+      currentUserCanEdit: boolean;
+      currentUserCanDelete: boolean;
+      currentUserCanUploadFiles: boolean;
+      currentUserCanDeleteFiles: boolean;
+      title?: Types.Maybe<string>;
+      authors?: Types.Maybe<string>;
+      minPlayers?: Types.Maybe<number>;
+      maxPlayers?: Types.Maybe<number>;
+      minFacilitators?: Types.Maybe<number>;
+      maxFacilitators?: Types.Maybe<number>;
+      publicationYear?: Types.Maybe<number>;
+      lengthQuantity?: Types.Maybe<number>;
+      lengthUnits?: Types.Maybe<string>;
+      license?: Types.Maybe<{
+        __typename: 'License';
+        id: string;
+        name: string;
+        url: string;
+        logoUrl?: Types.Maybe<string>;
+        dedicationHtml?: Types.Maybe<string>;
+        discouraged: boolean;
+        discouragedReason?: Types.Maybe<string>;
+      }>;
+      projectFiles: Array<{
+        __typename: 'ProjectFile';
+        id: string;
+        url: string;
+        filename: string;
+        filesize: number;
+        filetype?: Types.Maybe<string>;
+        position: number;
+      }>;
+      projectLinks: Array<{
+        __typename: 'ProjectLink';
+        id: string;
+        url: string;
+        title: string;
+        icon?: Types.Maybe<string>;
+        position: number;
+      }>;
+      brand: { __typename: 'Brand'; id: string; name: string; slug: string };
+      tags: Array<{
+        __typename: 'Tag';
+        id: string;
+        name: string;
+        tagCategory?: Types.Maybe<{
+          __typename: 'TagCategory';
+          id: string;
+          name: string;
+          color?: Types.Maybe<string>;
+          textColor?: Types.Maybe<string>;
+          icon?: Types.Maybe<string>;
+        }>;
+      }>;
+    };
+  }>;
 };
 
 export type UpdateProjectMutationVariables = Types.Exact<{
@@ -32,22 +86,82 @@ export type UpdateProjectMutationVariables = Types.Exact<{
   projectAttributes: Types.ProjectAttributes;
 }>;
 
-export type UpdateProjectMutationData = { __typename: 'Mutation' } & {
-  updateProject?: Types.Maybe<
-    { __typename: 'UpdateProjectPayload' } & {
-      project: { __typename: 'Project' } & ProjectFieldsFragment;
-    }
-  >;
+export type UpdateProjectMutationData = {
+  __typename: 'Mutation';
+  updateProject?: Types.Maybe<{
+    __typename: 'UpdateProjectPayload';
+    project: {
+      __typename: 'Project';
+      id: string;
+      description?: Types.Maybe<string>;
+      currentUserCanEdit: boolean;
+      currentUserCanDelete: boolean;
+      currentUserCanUploadFiles: boolean;
+      currentUserCanDeleteFiles: boolean;
+      title?: Types.Maybe<string>;
+      authors?: Types.Maybe<string>;
+      minPlayers?: Types.Maybe<number>;
+      maxPlayers?: Types.Maybe<number>;
+      minFacilitators?: Types.Maybe<number>;
+      maxFacilitators?: Types.Maybe<number>;
+      publicationYear?: Types.Maybe<number>;
+      lengthQuantity?: Types.Maybe<number>;
+      lengthUnits?: Types.Maybe<string>;
+      license?: Types.Maybe<{
+        __typename: 'License';
+        id: string;
+        name: string;
+        url: string;
+        logoUrl?: Types.Maybe<string>;
+        dedicationHtml?: Types.Maybe<string>;
+        discouraged: boolean;
+        discouragedReason?: Types.Maybe<string>;
+      }>;
+      projectFiles: Array<{
+        __typename: 'ProjectFile';
+        id: string;
+        url: string;
+        filename: string;
+        filesize: number;
+        filetype?: Types.Maybe<string>;
+        position: number;
+      }>;
+      projectLinks: Array<{
+        __typename: 'ProjectLink';
+        id: string;
+        url: string;
+        title: string;
+        icon?: Types.Maybe<string>;
+        position: number;
+      }>;
+      brand: { __typename: 'Brand'; id: string; name: string; slug: string };
+      tags: Array<{
+        __typename: 'Tag';
+        id: string;
+        name: string;
+        tagCategory?: Types.Maybe<{
+          __typename: 'TagCategory';
+          id: string;
+          name: string;
+          color?: Types.Maybe<string>;
+          textColor?: Types.Maybe<string>;
+          icon?: Types.Maybe<string>;
+        }>;
+      }>;
+    };
+  }>;
 };
 
 export type DeleteProjectMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
-export type DeleteProjectMutationData = { __typename: 'Mutation' } & {
-  deleteProject?: Types.Maybe<
-    { __typename: 'DeleteProjectPayload' } & Pick<Types.DeleteProjectPayload, 'clientMutationId'>
-  >;
+export type DeleteProjectMutationData = {
+  __typename: 'Mutation';
+  deleteProject?: Types.Maybe<{
+    __typename: 'DeleteProjectPayload';
+    clientMutationId?: Types.Maybe<string>;
+  }>;
 };
 
 export type CompleteProjectFileUploadMutationVariables = Types.Exact<{
@@ -59,13 +173,20 @@ export type CompleteProjectFileUploadMutationVariables = Types.Exact<{
   filepath: Types.Scalars['String'];
 }>;
 
-export type CompleteProjectFileUploadMutationData = { __typename: 'Mutation' } & {
-  completeProjectFileUpload?: Types.Maybe<
-    { __typename: 'CompleteProjectFileUploadPayload' } & {
-      projectFile: { __typename: 'ProjectFile' } & Pick<Types.ProjectFile, 'id'> &
-        ProjectFileFieldsFragment;
-    }
-  >;
+export type CompleteProjectFileUploadMutationData = {
+  __typename: 'Mutation';
+  completeProjectFileUpload?: Types.Maybe<{
+    __typename: 'CompleteProjectFileUploadPayload';
+    projectFile: {
+      __typename: 'ProjectFile';
+      id: string;
+      url: string;
+      filename: string;
+      filesize: number;
+      filetype?: Types.Maybe<string>;
+      position: number;
+    };
+  }>;
 };
 
 export type MoveProjectFileMutationVariables = Types.Exact<{
@@ -73,25 +194,82 @@ export type MoveProjectFileMutationVariables = Types.Exact<{
   destinationIndex: Types.Scalars['Int'];
 }>;
 
-export type MoveProjectFileMutationData = { __typename: 'Mutation' } & {
-  moveProjectFile?: Types.Maybe<
-    { __typename: 'MoveProjectFilePayload' } & {
-      project: { __typename: 'Project' } & ProjectFieldsFragment;
-    }
-  >;
+export type MoveProjectFileMutationData = {
+  __typename: 'Mutation';
+  moveProjectFile?: Types.Maybe<{
+    __typename: 'MoveProjectFilePayload';
+    project: {
+      __typename: 'Project';
+      id: string;
+      description?: Types.Maybe<string>;
+      currentUserCanEdit: boolean;
+      currentUserCanDelete: boolean;
+      currentUserCanUploadFiles: boolean;
+      currentUserCanDeleteFiles: boolean;
+      title?: Types.Maybe<string>;
+      authors?: Types.Maybe<string>;
+      minPlayers?: Types.Maybe<number>;
+      maxPlayers?: Types.Maybe<number>;
+      minFacilitators?: Types.Maybe<number>;
+      maxFacilitators?: Types.Maybe<number>;
+      publicationYear?: Types.Maybe<number>;
+      lengthQuantity?: Types.Maybe<number>;
+      lengthUnits?: Types.Maybe<string>;
+      license?: Types.Maybe<{
+        __typename: 'License';
+        id: string;
+        name: string;
+        url: string;
+        logoUrl?: Types.Maybe<string>;
+        dedicationHtml?: Types.Maybe<string>;
+        discouraged: boolean;
+        discouragedReason?: Types.Maybe<string>;
+      }>;
+      projectFiles: Array<{
+        __typename: 'ProjectFile';
+        id: string;
+        url: string;
+        filename: string;
+        filesize: number;
+        filetype?: Types.Maybe<string>;
+        position: number;
+      }>;
+      projectLinks: Array<{
+        __typename: 'ProjectLink';
+        id: string;
+        url: string;
+        title: string;
+        icon?: Types.Maybe<string>;
+        position: number;
+      }>;
+      brand: { __typename: 'Brand'; id: string; name: string; slug: string };
+      tags: Array<{
+        __typename: 'Tag';
+        id: string;
+        name: string;
+        tagCategory?: Types.Maybe<{
+          __typename: 'TagCategory';
+          id: string;
+          name: string;
+          color?: Types.Maybe<string>;
+          textColor?: Types.Maybe<string>;
+          icon?: Types.Maybe<string>;
+        }>;
+      }>;
+    };
+  }>;
 };
 
 export type DeleteProjectFileMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
-export type DeleteProjectFileMutationData = { __typename: 'Mutation' } & {
-  deleteProjectFile?: Types.Maybe<
-    { __typename: 'DeleteProjectFilePayload' } & Pick<
-      Types.DeleteProjectFilePayload,
-      'clientMutationId'
-    >
-  >;
+export type DeleteProjectFileMutationData = {
+  __typename: 'Mutation';
+  deleteProjectFile?: Types.Maybe<{
+    __typename: 'DeleteProjectFilePayload';
+    clientMutationId?: Types.Maybe<string>;
+  }>;
 };
 
 export type CreateProjectLinkMutationVariables = Types.Exact<{
@@ -99,12 +277,19 @@ export type CreateProjectLinkMutationVariables = Types.Exact<{
   projectLinkAttributes: Types.ProjectLinkAttributes;
 }>;
 
-export type CreateProjectLinkMutationData = { __typename: 'Mutation' } & {
-  createProjectLink?: Types.Maybe<
-    { __typename: 'CreateProjectLinkPayload' } & {
-      projectLink: { __typename: 'ProjectLink' } & ProjectLinkFieldsFragment;
-    }
-  >;
+export type CreateProjectLinkMutationData = {
+  __typename: 'Mutation';
+  createProjectLink?: Types.Maybe<{
+    __typename: 'CreateProjectLinkPayload';
+    projectLink: {
+      __typename: 'ProjectLink';
+      id: string;
+      url: string;
+      title: string;
+      icon?: Types.Maybe<string>;
+      position: number;
+    };
+  }>;
 };
 
 export type UpdateProjectLinkMutationVariables = Types.Exact<{
@@ -112,12 +297,19 @@ export type UpdateProjectLinkMutationVariables = Types.Exact<{
   projectLinkAttributes: Types.ProjectLinkAttributes;
 }>;
 
-export type UpdateProjectLinkMutationData = { __typename: 'Mutation' } & {
-  updateProjectLink?: Types.Maybe<
-    { __typename: 'UpdateProjectLinkPayload' } & {
-      projectLink: { __typename: 'ProjectLink' } & ProjectLinkFieldsFragment;
-    }
-  >;
+export type UpdateProjectLinkMutationData = {
+  __typename: 'Mutation';
+  updateProjectLink?: Types.Maybe<{
+    __typename: 'UpdateProjectLinkPayload';
+    projectLink: {
+      __typename: 'ProjectLink';
+      id: string;
+      url: string;
+      title: string;
+      icon?: Types.Maybe<string>;
+      position: number;
+    };
+  }>;
 };
 
 export type MoveProjectLinkMutationVariables = Types.Exact<{
@@ -125,25 +317,82 @@ export type MoveProjectLinkMutationVariables = Types.Exact<{
   destinationIndex: Types.Scalars['Int'];
 }>;
 
-export type MoveProjectLinkMutationData = { __typename: 'Mutation' } & {
-  moveProjectLink?: Types.Maybe<
-    { __typename: 'MoveProjectLinkPayload' } & {
-      project: { __typename: 'Project' } & ProjectFieldsFragment;
-    }
-  >;
+export type MoveProjectLinkMutationData = {
+  __typename: 'Mutation';
+  moveProjectLink?: Types.Maybe<{
+    __typename: 'MoveProjectLinkPayload';
+    project: {
+      __typename: 'Project';
+      id: string;
+      description?: Types.Maybe<string>;
+      currentUserCanEdit: boolean;
+      currentUserCanDelete: boolean;
+      currentUserCanUploadFiles: boolean;
+      currentUserCanDeleteFiles: boolean;
+      title?: Types.Maybe<string>;
+      authors?: Types.Maybe<string>;
+      minPlayers?: Types.Maybe<number>;
+      maxPlayers?: Types.Maybe<number>;
+      minFacilitators?: Types.Maybe<number>;
+      maxFacilitators?: Types.Maybe<number>;
+      publicationYear?: Types.Maybe<number>;
+      lengthQuantity?: Types.Maybe<number>;
+      lengthUnits?: Types.Maybe<string>;
+      license?: Types.Maybe<{
+        __typename: 'License';
+        id: string;
+        name: string;
+        url: string;
+        logoUrl?: Types.Maybe<string>;
+        dedicationHtml?: Types.Maybe<string>;
+        discouraged: boolean;
+        discouragedReason?: Types.Maybe<string>;
+      }>;
+      projectFiles: Array<{
+        __typename: 'ProjectFile';
+        id: string;
+        url: string;
+        filename: string;
+        filesize: number;
+        filetype?: Types.Maybe<string>;
+        position: number;
+      }>;
+      projectLinks: Array<{
+        __typename: 'ProjectLink';
+        id: string;
+        url: string;
+        title: string;
+        icon?: Types.Maybe<string>;
+        position: number;
+      }>;
+      brand: { __typename: 'Brand'; id: string; name: string; slug: string };
+      tags: Array<{
+        __typename: 'Tag';
+        id: string;
+        name: string;
+        tagCategory?: Types.Maybe<{
+          __typename: 'TagCategory';
+          id: string;
+          name: string;
+          color?: Types.Maybe<string>;
+          textColor?: Types.Maybe<string>;
+          icon?: Types.Maybe<string>;
+        }>;
+      }>;
+    };
+  }>;
 };
 
 export type DeleteProjectLinkMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
-export type DeleteProjectLinkMutationData = { __typename: 'Mutation' } & {
-  deleteProjectLink?: Types.Maybe<
-    { __typename: 'DeleteProjectLinkPayload' } & Pick<
-      Types.DeleteProjectLinkPayload,
-      'clientMutationId'
-    >
-  >;
+export type DeleteProjectLinkMutationData = {
+  __typename: 'Mutation';
+  deleteProjectLink?: Types.Maybe<{
+    __typename: 'DeleteProjectLinkPayload';
+    clientMutationId?: Types.Maybe<string>;
+  }>;
 };
 
 export const CreateProjectDocument = gql`

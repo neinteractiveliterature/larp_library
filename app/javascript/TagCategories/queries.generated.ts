@@ -1,8 +1,6 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { TagCategoryFragment } from './TagCategoryFragment.generated';
-import { TagFragment } from '../Tags/queries.generated';
 import { gql } from '@apollo/client';
 import { TagCategoryFragmentDoc } from './TagCategoryFragment.generated';
 import { TagFragmentDoc } from '../Tags/queries.generated';
@@ -12,13 +10,21 @@ export type TagCategoryAutocompleteQueryVariables = Types.Exact<{
   queryString?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
-export type TagCategoryAutocompleteQueryData = { __typename: 'Query' } & {
-  tagCategories: { __typename: 'TagCategoryConnection' } & {
-    edges: Array<
-      { __typename: 'TagCategoryEdge' } & {
-        node: { __typename: 'TagCategory' } & Pick<Types.TagCategory, 'id'> & TagCategoryFragment;
-      }
-    >;
+export type TagCategoryAutocompleteQueryData = {
+  __typename: 'Query';
+  tagCategories: {
+    __typename: 'TagCategoryConnection';
+    edges: Array<{
+      __typename: 'TagCategoryEdge';
+      node: {
+        __typename: 'TagCategory';
+        id: string;
+        name: string;
+        color?: Types.Maybe<string>;
+        textColor?: Types.Maybe<string>;
+        icon?: Types.Maybe<string>;
+      };
+    }>;
   };
 };
 
@@ -26,28 +32,53 @@ export type TagCategoryListPageQueryVariables = Types.Exact<{
   after?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
-export type TagCategoryListPageQueryData = { __typename: 'Query' } & {
-  tagCategories: { __typename: 'TagCategoryConnection' } & Pick<
-    Types.TagCategoryConnection,
-    'totalCount'
-  > & {
-      pageInfo: { __typename: 'PageInfo' } & Pick<Types.PageInfo, 'endCursor'>;
-      edges: Array<
-        { __typename: 'TagCategoryEdge' } & {
-          node: { __typename: 'TagCategory' } & Pick<Types.TagCategory, 'id'> & TagCategoryFragment;
-        }
-      >;
-    };
+export type TagCategoryListPageQueryData = {
+  __typename: 'Query';
+  tagCategories: {
+    __typename: 'TagCategoryConnection';
+    totalCount: number;
+    pageInfo: { __typename: 'PageInfo'; endCursor?: Types.Maybe<string> };
+    edges: Array<{
+      __typename: 'TagCategoryEdge';
+      node: {
+        __typename: 'TagCategory';
+        id: string;
+        name: string;
+        color?: Types.Maybe<string>;
+        textColor?: Types.Maybe<string>;
+        icon?: Types.Maybe<string>;
+      };
+    }>;
+  };
 };
 
 export type EditTagCategoryQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
-export type EditTagCategoryQueryData = { __typename: 'Query' } & {
-  tagCategory: { __typename: 'TagCategory' } & Pick<Types.TagCategory, 'id'> & {
-      tags: Array<{ __typename: 'Tag' } & TagFragment>;
-    } & TagCategoryFragment;
+export type EditTagCategoryQueryData = {
+  __typename: 'Query';
+  tagCategory: {
+    __typename: 'TagCategory';
+    id: string;
+    name: string;
+    color?: Types.Maybe<string>;
+    textColor?: Types.Maybe<string>;
+    icon?: Types.Maybe<string>;
+    tags: Array<{
+      __typename: 'Tag';
+      id: string;
+      name: string;
+      tagCategory?: Types.Maybe<{
+        __typename: 'TagCategory';
+        id: string;
+        name: string;
+        color?: Types.Maybe<string>;
+        textColor?: Types.Maybe<string>;
+        icon?: Types.Maybe<string>;
+      }>;
+    }>;
+  };
 };
 
 export const TagCategoryAutocompleteQueryDocument = gql`

@@ -1,27 +1,37 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { TagFragment } from '../Tags/queries.generated';
 import { gql } from '@apollo/client';
 import { TagFragmentDoc } from '../Tags/queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {};
-export type ProjectHeadersFragment = { __typename: 'Project' } & Pick<
-  Types.Project,
-  | 'id'
-  | 'title'
-  | 'authors'
-  | 'minPlayers'
-  | 'maxPlayers'
-  | 'minFacilitators'
-  | 'maxFacilitators'
-  | 'publicationYear'
-  | 'lengthQuantity'
-  | 'lengthUnits'
-> & {
-    brand: { __typename: 'Brand' } & Pick<Types.Brand, 'id' | 'name' | 'slug'>;
-    tags: Array<{ __typename: 'Tag' } & Pick<Types.Tag, 'id'> & TagFragment>;
-  };
+export type ProjectHeadersFragment = {
+  __typename: 'Project';
+  id: string;
+  title?: Types.Maybe<string>;
+  authors?: Types.Maybe<string>;
+  minPlayers?: Types.Maybe<number>;
+  maxPlayers?: Types.Maybe<number>;
+  minFacilitators?: Types.Maybe<number>;
+  maxFacilitators?: Types.Maybe<number>;
+  publicationYear?: Types.Maybe<number>;
+  lengthQuantity?: Types.Maybe<number>;
+  lengthUnits?: Types.Maybe<string>;
+  brand: { __typename: 'Brand'; id: string; name: string; slug: string };
+  tags: Array<{
+    __typename: 'Tag';
+    id: string;
+    name: string;
+    tagCategory?: Types.Maybe<{
+      __typename: 'TagCategory';
+      id: string;
+      name: string;
+      color?: Types.Maybe<string>;
+      textColor?: Types.Maybe<string>;
+      icon?: Types.Maybe<string>;
+    }>;
+  }>;
+};
 
 export type ProjectSearchQueryVariables = Types.Exact<{
   queryString?: Types.Maybe<Types.Scalars['String']>;
@@ -35,17 +45,57 @@ export type ProjectSearchQueryVariables = Types.Exact<{
   after?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
-export type ProjectSearchQueryData = { __typename: 'Query' } & {
-  projects: { __typename: 'ProjectConnection' } & Pick<Types.ProjectConnection, 'totalCount'> & {
-      pageInfo: { __typename: 'PageInfo' } & Pick<Types.PageInfo, 'endCursor'>;
-      edges: Array<
-        { __typename: 'ProjectEdge' } & {
-          node: { __typename: 'Project' } & Pick<Types.Project, 'id' | 'description'> &
-            ProjectHeadersFragment;
-        }
-      >;
-    };
-  tagByName?: Types.Maybe<{ __typename: 'Tag' } & Pick<Types.Tag, 'id'> & TagFragment>;
+export type ProjectSearchQueryData = {
+  __typename: 'Query';
+  projects: {
+    __typename: 'ProjectConnection';
+    totalCount: number;
+    pageInfo: { __typename: 'PageInfo'; endCursor?: Types.Maybe<string> };
+    edges: Array<{
+      __typename: 'ProjectEdge';
+      node: {
+        __typename: 'Project';
+        id: string;
+        description?: Types.Maybe<string>;
+        title?: Types.Maybe<string>;
+        authors?: Types.Maybe<string>;
+        minPlayers?: Types.Maybe<number>;
+        maxPlayers?: Types.Maybe<number>;
+        minFacilitators?: Types.Maybe<number>;
+        maxFacilitators?: Types.Maybe<number>;
+        publicationYear?: Types.Maybe<number>;
+        lengthQuantity?: Types.Maybe<number>;
+        lengthUnits?: Types.Maybe<string>;
+        brand: { __typename: 'Brand'; id: string; name: string; slug: string };
+        tags: Array<{
+          __typename: 'Tag';
+          id: string;
+          name: string;
+          tagCategory?: Types.Maybe<{
+            __typename: 'TagCategory';
+            id: string;
+            name: string;
+            color?: Types.Maybe<string>;
+            textColor?: Types.Maybe<string>;
+            icon?: Types.Maybe<string>;
+          }>;
+        }>;
+      };
+    }>;
+  };
+  tagByName?: Types.Maybe<{
+    __typename: 'Tag';
+    id: string;
+    name: string;
+    tagCategory?: Types.Maybe<{
+      __typename: 'TagCategory';
+      id: string;
+      name: string;
+      color?: Types.Maybe<string>;
+      textColor?: Types.Maybe<string>;
+      icon?: Types.Maybe<string>;
+    }>;
+  }>;
 };
 
 export const ProjectHeadersFragmentDoc = gql`

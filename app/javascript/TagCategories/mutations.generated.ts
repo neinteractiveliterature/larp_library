@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { TagCategoryFragment } from './TagCategoryFragment.generated';
 import { gql } from '@apollo/client';
 import { TagCategoryFragmentDoc } from './TagCategoryFragment.generated';
 import * as Apollo from '@apollo/client';
@@ -10,12 +9,19 @@ export type CreateTagCategoryMutationVariables = Types.Exact<{
   tagCategoryAttributes: Types.TagCategoryAttributes;
 }>;
 
-export type CreateTagCategoryMutationData = { __typename: 'Mutation' } & {
-  createTagCategory?: Types.Maybe<
-    { __typename: 'CreateTagCategoryPayload' } & {
-      tagCategory: { __typename: 'TagCategory' } & TagCategoryFragment;
-    }
-  >;
+export type CreateTagCategoryMutationData = {
+  __typename: 'Mutation';
+  createTagCategory?: Types.Maybe<{
+    __typename: 'CreateTagCategoryPayload';
+    tagCategory: {
+      __typename: 'TagCategory';
+      id: string;
+      name: string;
+      color?: Types.Maybe<string>;
+      textColor?: Types.Maybe<string>;
+      icon?: Types.Maybe<string>;
+    };
+  }>;
 };
 
 export type UpdateTagCategoryMutationVariables = Types.Exact<{
@@ -23,25 +29,31 @@ export type UpdateTagCategoryMutationVariables = Types.Exact<{
   tagCategoryAttributes: Types.TagCategoryAttributes;
 }>;
 
-export type UpdateTagCategoryMutationData = { __typename: 'Mutation' } & {
-  updateTagCategory?: Types.Maybe<
-    { __typename: 'UpdateTagCategoryPayload' } & {
-      tagCategory: { __typename: 'TagCategory' } & TagCategoryFragment;
-    }
-  >;
+export type UpdateTagCategoryMutationData = {
+  __typename: 'Mutation';
+  updateTagCategory?: Types.Maybe<{
+    __typename: 'UpdateTagCategoryPayload';
+    tagCategory: {
+      __typename: 'TagCategory';
+      id: string;
+      name: string;
+      color?: Types.Maybe<string>;
+      textColor?: Types.Maybe<string>;
+      icon?: Types.Maybe<string>;
+    };
+  }>;
 };
 
 export type DeleteTagCategoryMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
-export type DeleteTagCategoryMutationData = { __typename: 'Mutation' } & {
-  deleteTagCategory?: Types.Maybe<
-    { __typename: 'DeleteTagCategoryPayload' } & Pick<
-      Types.DeleteTagCategoryPayload,
-      'clientMutationId'
-    >
-  >;
+export type DeleteTagCategoryMutationData = {
+  __typename: 'Mutation';
+  deleteTagCategory?: Types.Maybe<{
+    __typename: 'DeleteTagCategoryPayload';
+    clientMutationId?: Types.Maybe<string>;
+  }>;
 };
 
 export const CreateTagCategoryDocument = gql`

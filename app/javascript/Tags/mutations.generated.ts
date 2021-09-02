@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { TagFragment } from './queries.generated';
 import { gql } from '@apollo/client';
 import { TagFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
@@ -10,10 +9,24 @@ export type CreateTagMutationVariables = Types.Exact<{
   tagAttributes: Types.TagAttributes;
 }>;
 
-export type CreateTagMutationData = { __typename: 'Mutation' } & {
-  createTag?: Types.Maybe<
-    { __typename: 'CreateTagPayload' } & { tag: { __typename: 'Tag' } & TagFragment }
-  >;
+export type CreateTagMutationData = {
+  __typename: 'Mutation';
+  createTag?: Types.Maybe<{
+    __typename: 'CreateTagPayload';
+    tag: {
+      __typename: 'Tag';
+      id: string;
+      name: string;
+      tagCategory?: Types.Maybe<{
+        __typename: 'TagCategory';
+        id: string;
+        name: string;
+        color?: Types.Maybe<string>;
+        textColor?: Types.Maybe<string>;
+        icon?: Types.Maybe<string>;
+      }>;
+    };
+  }>;
 };
 
 export type UpdateTagMutationVariables = Types.Exact<{
@@ -21,20 +34,36 @@ export type UpdateTagMutationVariables = Types.Exact<{
   tagAttributes: Types.TagAttributes;
 }>;
 
-export type UpdateTagMutationData = { __typename: 'Mutation' } & {
-  updateTag?: Types.Maybe<
-    { __typename: 'UpdateTagPayload' } & { tag: { __typename: 'Tag' } & TagFragment }
-  >;
+export type UpdateTagMutationData = {
+  __typename: 'Mutation';
+  updateTag?: Types.Maybe<{
+    __typename: 'UpdateTagPayload';
+    tag: {
+      __typename: 'Tag';
+      id: string;
+      name: string;
+      tagCategory?: Types.Maybe<{
+        __typename: 'TagCategory';
+        id: string;
+        name: string;
+        color?: Types.Maybe<string>;
+        textColor?: Types.Maybe<string>;
+        icon?: Types.Maybe<string>;
+      }>;
+    };
+  }>;
 };
 
 export type DeleteTagMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
-export type DeleteTagMutationData = { __typename: 'Mutation' } & {
-  deleteTag?: Types.Maybe<
-    { __typename: 'DeleteTagPayload' } & Pick<Types.DeleteTagPayload, 'clientMutationId'>
-  >;
+export type DeleteTagMutationData = {
+  __typename: 'Mutation';
+  deleteTag?: Types.Maybe<{
+    __typename: 'DeleteTagPayload';
+    clientMutationId?: Types.Maybe<string>;
+  }>;
 };
 
 export const CreateTagDocument = gql`
