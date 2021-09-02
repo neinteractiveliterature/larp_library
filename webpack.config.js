@@ -68,6 +68,7 @@ const config = {
       filename: 'css/[name]-[contenthash].css',
     }),
     new DefinePlugin({
+      __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
       'process.env.ASSET_PATH': JSON.stringify(ASSET_PATH),
     }),
   ],
