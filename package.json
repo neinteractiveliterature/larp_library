@@ -10,7 +10,7 @@
   "dependencies": {
     "@apollo/client": "3.4.10",
     "@aws-crypto/sha256-browser": "1.1.1",
-    "@aws-sdk/md5-js": "3.18.0",
+    "@aws-sdk/md5-js": "3.25.0",
     "@neinteractiveliterature/litform": "0.11.1",
     "@popperjs/core": "2.9.2",
     "@rails/ujs": "6.1.3",
