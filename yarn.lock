@@ -2152,10 +2152,10 @@
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.47.tgz#d7a51db20f0650efec24cd04994f523d93172ed4"
   integrity sha512-c5ciR06jK8u9BstrmJyO97m+klJrrhCf9u3rLu3DEAJBirxRqSCvDQoYKmxuYwQI5SZChAWu+tq9oVlGRuzPAg==
 
-"@types/evaporate@2.1.5":
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/@types/evaporate/-/evaporate-2.1.5.tgz#f40248eb9a03b83a18289b4344dfafd024a87c43"
-  integrity sha512-Q3G00aCK7BC8iYbL3emg1a5N+qenyhkGnySQZyqPj3xnCEpDZ5d9tKhamNF3GibH179bYdRvqxyHt2vdtqC/3g==
+"@types/evaporate@2.1.6":
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/@types/evaporate/-/evaporate-2.1.6.tgz#9c611a55b24d5f78fafe567425b285b16c8f472f"
+  integrity sha512-DfvixTGJpqrdpjJMnECR34BG1TxTHmJmMDtgxZ6IwZk2Ra+dk8PT/l7WY68oahyDZ0puPPzBDEwyqmL7XCT85Q==
 
 "@types/hast@^2.0.0":
   version "2.3.1"
