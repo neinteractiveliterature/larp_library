@@ -142,7 +142,7 @@ GEM
       activesupport (> 3)
       elasticsearch (~> 6)
       hashie
-    elasticsearch-rails (6.1.1)
+    elasticsearch-rails (7.2.0)
     elasticsearch-transport (6.8.3)
       faraday (~> 1)
       multi_json
@@ -340,7 +340,7 @@ DEPENDENCIES
   devise_cas_authenticatable (~> 2.0.0.alpha1)
   dotenv-rails
   elasticsearch-model (~> 6.1.1)
-  elasticsearch-rails (~> 6.1.1)
+  elasticsearch-rails (~> 7.2.0)
   factory_bot_rails
   figaro
   graphiql-rails
