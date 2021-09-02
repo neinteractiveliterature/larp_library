@@ -69,7 +69,7 @@
     "@webpack-cli/serve": "1.5.2",
     "babel-loader": "8.2.2",
     "babel-plugin-graphql-tag": "3.3.0",
-    "eslint": "7.28.0",
+    "eslint": "7.32.0",
     "eslint-plugin-react": "7.24.0",
     "eslint-plugin-react-hooks": "4.2.0",
     "graphql": "15.5.2",
