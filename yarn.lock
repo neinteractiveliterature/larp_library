@@ -1204,7 +1204,7 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@graphql-codegen/add@^2.0.2":
+"@graphql-codegen/add@2.0.2", "@graphql-codegen/add@^2.0.2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/add/-/add-2.0.2.tgz#4acbb95be9ebb859a3cebfe7132fdf49ffe06dd8"
   integrity sha512-0X1ofeSvAjCNcLar2ZR1EOmm5dvyKJMFbgM+ySf1PaHyoi3yf/xRI2Du81ONzQ733Lhmn3KTX1VKybm/OB1Qtg==
@@ -1212,7 +1212,7 @@
     "@graphql-codegen/plugin-helpers" "^1.18.2"
     tslib "~2.0.1"
 
-"@graphql-codegen/cli@^1.21.4":
+"@graphql-codegen/cli@1.21.5":
   version "1.21.5"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/cli/-/cli-1.21.5.tgz#b9041553747cfb2dee7c3473a2e2461ec3e7ada5"
   integrity sha512-w3SovNJ9qtMhFLAdPZeCdGvHXDgfdb53mueWDTyncOt04m+tohVnY4qExvyKLTN5zlGxrA/5ubp2x8Az0xQarA==
@@ -1267,7 +1267,7 @@
     "@graphql-tools/utils" "^7.9.1"
     tslib "~2.2.0"
 
-"@graphql-codegen/near-operation-file-preset@^1.18.0":
+"@graphql-codegen/near-operation-file-preset@1.18.1":
   version "1.18.1"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/near-operation-file-preset/-/near-operation-file-preset-1.18.1.tgz#79ea5bb3db85498121ba30d9311341ea6021acea"
   integrity sha512-/QowrCantXEymd7sAK/ZJlmHXboq5zbo0Y2vraEBkpkN3CAqw56lfXKJ5zLk0nuKLGtMD58c/pV9yqtgLI8Syw==
@@ -1289,7 +1289,7 @@
     lodash "~4.17.0"
     tslib "~2.2.0"
 
-"@graphql-codegen/typescript-apollo-client-helpers@^1.1.5":
+"@graphql-codegen/typescript-apollo-client-helpers@1.1.6":
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-apollo-client-helpers/-/typescript-apollo-client-helpers-1.1.6.tgz#bd2fb0d96ad1f17cb8b7cc1f8c5824310d61cc5e"
   integrity sha512-Mb01DcddOY0sKXKMdqnSbpsU2JVU8qz+79UbEH4/T0P1MXGskHyzTLKWYpoSIVZ214oaZOrJmMJNgB+nCAk3QA==
@@ -1300,7 +1300,7 @@
     change-case-all "1.0.14"
     tslib "~2.2.0"
 
-"@graphql-codegen/typescript-operations@^1.17.16":
+"@graphql-codegen/typescript-operations@1.18.0":
   version "1.18.0"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-operations/-/typescript-operations-1.18.0.tgz#04c007df476948ff972daed69c73a77a922c8968"
   integrity sha512-Q4b+jySBgU39uYzSWQcHBn/q5j/gs2yUQGNiCXhV8IIHDJJNR0Zfb2ywY6AMwT7N3rgXmFuIzKAA++xBf2yKRw==
@@ -1311,7 +1311,7 @@
     auto-bind "~4.0.0"
     tslib "~2.2.0"
 
-"@graphql-codegen/typescript-react-apollo@^2.2.4":
+"@graphql-codegen/typescript-react-apollo@2.2.5":
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-react-apollo/-/typescript-react-apollo-2.2.5.tgz#e561d77c3c1cfe32e42ab34c08d517bffc5e9f30"
   integrity sha512-W9YI6qg6TwjD5CD+rQBmbZjwkA88MKc/9i31xvH2xGgdwzY1ybaTL10zMwsm5Ac+dOU6aCGHZVZzHd4wMrO1nw==
