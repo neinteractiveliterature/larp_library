@@ -85,31 +85,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/is-array-buffer@npm:3.23.0":
-  version: 3.23.0
-  resolution: "@aws-sdk/is-array-buffer@npm:3.23.0"
+"@aws-sdk/is-array-buffer@npm:3.29.0":
+  version: 3.29.0
+  resolution: "@aws-sdk/is-array-buffer@npm:3.29.0"
   dependencies:
     tslib: ^2.3.0
-  checksum: 653b707a40a8650acb21e3f7f27b9d223103b757fe1c3157cc84d443a5be29147c1072dfd1c17e2a51e38d65acbce231066559851b831759e4ad35fdd86a0c0d
+  checksum: cc9391f44457440f632a3ab9e952a53cd4ac52e669ba9382d2dfd71b5a3ab616629a88d5a5a5afd18a0c86d6d372c48f18fdbfab43fa496e11ffd6d9f381810e
   languageName: node
   linkType: hard
 
-"@aws-sdk/md5-js@npm:3.25.0":
-  version: 3.25.0
-  resolution: "@aws-sdk/md5-js@npm:3.25.0"
+"@aws-sdk/md5-js@npm:3.29.0":
+  version: 3.29.0
+  resolution: "@aws-sdk/md5-js@npm:3.29.0"
   dependencies:
-    "@aws-sdk/types": 3.25.0
-    "@aws-sdk/util-utf8-browser": 3.23.0
-    "@aws-sdk/util-utf8-node": 3.23.0
+    "@aws-sdk/types": 3.29.0
+    "@aws-sdk/util-utf8-browser": 3.29.0
+    "@aws-sdk/util-utf8-node": 3.29.0
     tslib: ^2.3.0
-  checksum: 966b97d74b7371c304276e6f9e73f958efe94131e182dfe1c6c8783e348d02b6744ea2737ca3f1cc9e82586dcc5018241947fda18419f05e275096525361e61e
+  checksum: e21504a97b440c1498c0565dc7d82dd8548c4ff6c56b065ccbd142acb9e7f45c9d2158fbfbb6ec5e6a476f8dd8e525912011f71d66c8398a68c834cd16ca3d20
   languageName: node
   linkType: hard
 
-"@aws-sdk/types@npm:3.25.0":
-  version: 3.25.0
-  resolution: "@aws-sdk/types@npm:3.25.0"
-  checksum: f24062e6b506368e7cefe9b5d7b6c6661ca560be85ea28191edc215e41ffdd30a48bcbfc791c906ae8efadafb2639f9790a003d300a8ca9d8e8b244cea5e03ee
+"@aws-sdk/types@npm:3.29.0":
+  version: 3.29.0
+  resolution: "@aws-sdk/types@npm:3.29.0"
+  checksum: 9ff82e8799a6778e2fd61e3361c5933ef2d158cf9f87e05de168af796919e81285a26cee7feec19a9be2e715c8229b9ad8339ee9e20c60635f350d255902325a
   languageName: node
   linkType: hard
 
@@ -120,13 +120,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/util-buffer-from@npm:3.23.0":
-  version: 3.23.0
-  resolution: "@aws-sdk/util-buffer-from@npm:3.23.0"
+"@aws-sdk/util-buffer-from@npm:3.29.0":
+  version: 3.29.0
+  resolution: "@aws-sdk/util-buffer-from@npm:3.29.0"
   dependencies:
-    "@aws-sdk/is-array-buffer": 3.23.0
+    "@aws-sdk/is-array-buffer": 3.29.0
     tslib: ^2.3.0
-  checksum: 9be857c10730d4195cee1aeb221971da6d1c71678a2a259243be47107e5023e9e9081d528630e1c56a0175cc82a6df5fb69400b1b6d9392d28c5c53dcc416ce3
+  checksum: 8b833fb9d3ef8b1957457e8e0eaccf8eb4f8124da2f0a67cfbf3702355938869c603354752e905db168b69c1351dc19dfff51d499635a0a95eb48beb40de2389
   languageName: node
   linkType: hard
 
@@ -139,12 +139,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/util-utf8-browser@npm:3.23.0":
-  version: 3.23.0
-  resolution: "@aws-sdk/util-utf8-browser@npm:3.23.0"
+"@aws-sdk/util-utf8-browser@npm:3.29.0":
+  version: 3.29.0
+  resolution: "@aws-sdk/util-utf8-browser@npm:3.29.0"
   dependencies:
     tslib: ^2.3.0
-  checksum: b495d66a946d944ac83af9c97592d78d5c6a45c66ffb9864c156af96cf0b259ab97c007e03ed5182f4d5830d7d6eb6127c6d77c1b42b9fdd0ff4e533fbda13e7
+  checksum: b4896a060cc167b6cedb5d27643ae59f9a80cde0745c480119552935f7084cca0304b1d5055b1c22ccf9c05747a80ab6ef858d9c843a8976e95f8fb3e009e533
   languageName: node
   linkType: hard
 
@@ -157,13 +157,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/util-utf8-node@npm:3.23.0":
-  version: 3.23.0
-  resolution: "@aws-sdk/util-utf8-node@npm:3.23.0"
+"@aws-sdk/util-utf8-node@npm:3.29.0":
+  version: 3.29.0
+  resolution: "@aws-sdk/util-utf8-node@npm:3.29.0"
   dependencies:
-    "@aws-sdk/util-buffer-from": 3.23.0
+    "@aws-sdk/util-buffer-from": 3.29.0
     tslib: ^2.3.0
-  checksum: a467a998ec5ba30d1541c5fd252405be8dc4a00b7d2e6e644a96e49dce0af604b3d2e3e0c80a7b914c865edc4c066fb4e00e4a68647c4d017e0821971dbcb891
+  checksum: 8a0d273c2d5f32036038b4678e53cc7c4a47a36e33fba47d5f7427ca2f7750e4111f1cbf8412859553c38762ca29e8919a5249543cf43d6abe08a21efbf32b09
   languageName: node
   linkType: hard
 
@@ -11412,7 +11412,7 @@ resolve@^2.0.0-next.3:
   dependencies:
     "@apollo/client": 3.4.10
     "@aws-crypto/sha256-browser": 1.1.1
-    "@aws-sdk/md5-js": 3.25.0
+    "@aws-sdk/md5-js": 3.29.0
     "@babel/cli": 7.15.4
     "@babel/core": 7.15.4
     "@babel/plugin-syntax-dynamic-import": 7.8.3
