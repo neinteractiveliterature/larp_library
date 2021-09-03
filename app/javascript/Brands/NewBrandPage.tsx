@@ -33,9 +33,9 @@ export default LoadQueryWrapper(useNewBrandQuery, function NewBrandPage({ data }
 
   useEffect(() => {
     if (!currentUser) {
-      navigate('/users/sign_in');
+      window.location.assign('/users/sign_in');
     }
-  }, [currentUser, navigate]);
+  }, [currentUser]);
 
   if (!currentUser) {
     return <></>;
