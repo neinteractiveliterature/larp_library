@@ -1,6 +1,6 @@
 import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform/lib';
 import sortBy from 'lodash/sortBy';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { generateBrandPath } from '../URLGenerators';
@@ -30,8 +30,14 @@ export default LoadQueryWrapper(useNewBrandQuery, function NewBrandPage({ data }
   };
 
   const { currentUser } = data;
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate('/users/sign_in');
+    }
+  }, [currentUser, navigate]);
+
   if (!currentUser) {
-    navigate('/users/sign_in');
     return <></>;
   }
 
