@@ -24,8 +24,8 @@ gem 'redcarpet'
 gem 'truncate_html'
 gem 'color'
 
-gem 'elasticsearch-rails', '~> 6.1.1'
-gem 'elasticsearch-model', '~> 6.1.1'
+gem 'elasticsearch-rails', '~> 7.2.0'
+gem 'elasticsearch-model', '~> 7.2.0'
 
 gem 'figaro'
 
