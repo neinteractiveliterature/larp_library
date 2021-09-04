@@ -4300,7 +4300,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"assert@npm:^2.0.0":
+"assert@npm:2.0.0":
   version: 2.0.0
   resolution: "assert@npm:2.0.0"
   dependencies:
@@ -10853,7 +10853,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"process@npm:^0.11.10":
+"process@npm:0.11.10":
   version: 0.11.10
   resolution: "process@npm:0.11.10"
   checksum: bfcce49814f7d172a6e6a14d5fa3ac92cc3d0c3b9feb1279774708a719e19acd673995226351a082a9ae99978254e320ccda4240ddc474ba31a76c79491ca7c3
@@ -11786,7 +11786,7 @@ resolve@^2.0.0-next.3:
     "@typescript-eslint/eslint-plugin": 4.30.0
     "@typescript-eslint/parser": 4.30.0
     "@webpack-cli/serve": 1.5.2
-    assert: ^2.0.0
+    assert: 2.0.0
     babel-loader: 8.2.2
     babel-plugin-graphql-tag: 3.3.0
     bootstrap: 5.1.0
@@ -11808,7 +11808,7 @@ resolve@^2.0.0-next.3:
     luxon: 2.0.2
     mini-css-extract-plugin: 2.2.2
     prettier: 2.3.2
-    process: ^0.11.10
+    process: 0.11.10
     react: 17.0.2
     react-bootstrap4-modal: 2.0.0
     react-color: 2.19.3
