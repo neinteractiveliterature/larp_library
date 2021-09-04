@@ -27,8 +27,6 @@ gem 'color'
 gem 'elasticsearch-rails', '~> 7.2.0'
 gem 'elasticsearch-model', '~> 7.2.0'
 
-gem 'figaro'
-
 gem 'rollbar'
 
 gem 'aws-sdk-rails'
