@@ -5,7 +5,7 @@ const path = require('path');
 const { env } = require('process');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { DefinePlugin } = require('webpack');
+const { DefinePlugin, ProvidePlugin } = require('webpack');
 
 const ASSET_PATH =
   process.env.ASSET_PATH ||
@@ -38,6 +38,10 @@ const config = {
     alias: {
       'react/jsx-dev-runtime': 'react/jsx-dev-runtime.js',
       'react/jsx-runtime': 'react/jsx-runtime.js',
+    },
+    fallback: {
+      assert: require.resolve('assert/'),
+      process: require.resolve('process/browser'),
     },
   },
   devtool: 'cheap-module-source-map',
@@ -74,6 +78,9 @@ const config = {
     new DefinePlugin({
       __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
       'process.env.ASSET_PATH': JSON.stringify(ASSET_PATH),
+    }),
+    new ProvidePlugin({
+      process: require.resolve('process/browser'),
     }),
   ],
 };
