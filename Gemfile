@@ -24,6 +24,9 @@ gem 'redcarpet'
 gem 'truncate_html'
 gem 'color'
 
+# Very important: do not upgrade Elasticsearch gem, it will break on Bonsai because Elasticsearch
+# are being assholes about open source
+gem 'elasticsearch', '7.13.3'
 gem 'elasticsearch-rails', '~> 7.2.0'
 gem 'elasticsearch-model', '~> 7.2.0'
 
