@@ -1,4 +1,4 @@
-ruby '3.0.2'
+ruby File.read(File.expand_path('.ruby-version', __dir__)).strip
 
 source 'https://rubygems.org'
 
