@@ -5,9 +5,9 @@ __metadata:
   version: 4
   cacheKey: 8
 
-"@apollo/client@npm:3.4.11":
-  version: 3.4.11
-  resolution: "@apollo/client@npm:3.4.11"
+"@apollo/client@npm:3.4.12":
+  version: 3.4.12
+  resolution: "@apollo/client@npm:3.4.12"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
     "@wry/context": ^0.6.0
@@ -30,7 +30,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 8e068f737a506d4aae6cc63743fd44d20a0afdeda32b4eb84114a23f863331eeb7a7b8098fcdd08817ec2fbad4515d5d89b7a0ac5a915be60cdd4899d8bcf72f
+  checksum: 2ddedff505d0b05f8a0b3fa3615e1ed1c0c08ed0b6146159e4fd6b1e62b2f4dce32e5f8c77c6d0359b6ee8870773f5c594dc2b8104627795048114773f414681
   languageName: node
   linkType: hard
 
@@ -11753,7 +11753,7 @@ resolve@^2.0.0-next.3:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@apollo/client": 3.4.11
+    "@apollo/client": 3.4.12
     "@aws-crypto/sha256-browser": 1.2.1
     "@aws-sdk/md5-js": 3.29.0
     "@babel/cli": 7.15.4
