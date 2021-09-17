@@ -50,29 +50,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-crypto/sha256-browser@npm:1.2.0":
-  version: 1.2.0
-  resolution: "@aws-crypto/sha256-browser@npm:1.2.0"
+"@aws-crypto/sha256-browser@npm:1.2.1":
+  version: 1.2.1
+  resolution: "@aws-crypto/sha256-browser@npm:1.2.1"
   dependencies:
     "@aws-crypto/ie11-detection": ^1.0.0
-    "@aws-crypto/sha256-js": ^1.2.0
+    "@aws-crypto/sha256-js": ^1.2.1
     "@aws-crypto/supports-web-crypto": ^1.0.0
-    "@aws-crypto/util": ^1.2.0
+    "@aws-crypto/util": ^1.2.1
     "@aws-sdk/types": ^3.1.0
     "@aws-sdk/util-locate-window": ^3.0.0
     tslib: ^1.11.1
-  checksum: 26a4932bc7b694e143051383c547ff03f05fd472e83242dc72a2d2855fc7050d86414d3b74ed86cd3b1adfabd8bb1f39f4cfd0ab90ffbb63d007e0399fe70edf
+  checksum: 15b4da2e1e40a406975f027d661da05bd6b11bd6ce2cadfef4b049ca1b06ae7c8d7444c33b19475a508be58beba0004f39eb3898faf44a755ece877dcbce2cfc
   languageName: node
   linkType: hard
 
-"@aws-crypto/sha256-js@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "@aws-crypto/sha256-js@npm:1.2.0"
+"@aws-crypto/sha256-js@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@aws-crypto/sha256-js@npm:1.2.1"
   dependencies:
-    "@aws-crypto/util": ^1.2.0
+    "@aws-crypto/util": ^1.2.1
     "@aws-sdk/types": ^3.1.0
     tslib: ^1.11.1
-  checksum: a0ca201b8279802f33bd201d3eb4692e814e272d313845137fe3f51da613445b2f0705fa3e2e82fd69ebc39a462d6605e0471a6964f749cb09fc2dd23ab9d114
+  checksum: 15ea6da4860db05732cdf11493d7e2539f75566cd14523752528b19fb40dd2ec6e3f28ee7619aa9a780fe2d8b7a12789ba1d2e62c1fe7136f7c2d32a0468603d
   languageName: node
   linkType: hard
 
@@ -85,14 +85,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-crypto/util@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "@aws-crypto/util@npm:1.2.0"
+"@aws-crypto/util@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@aws-crypto/util@npm:1.2.1"
   dependencies:
     "@aws-sdk/types": ^3.1.0
     "@aws-sdk/util-utf8-browser": ^3.0.0
     tslib: ^1.11.1
-  checksum: 888cfa61fb5a15fcc6ba86a6ab2b71201f9cd54c6553012ba0734eca05260dd0ca9b304dfa85c32943bc7a3d25ed17ade10805160ec47c835dcdf704c9b295b7
+  checksum: 1b14ca51bfe533532829fe63832b34b4da8ee2ad22bcf388e914c78f77b08e61b9bffce4e2ed05635467f95bdb6a5a64152d26cc17261241d750f955dea63bea
   languageName: node
   linkType: hard
 
@@ -11754,7 +11754,7 @@ resolve@^2.0.0-next.3:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@apollo/client": 3.4.11
-    "@aws-crypto/sha256-browser": 1.2.0
+    "@aws-crypto/sha256-browser": 1.2.1
     "@aws-sdk/md5-js": 3.29.0
     "@babel/cli": 7.15.4
     "@babel/core": 7.15.5
