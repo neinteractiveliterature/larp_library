@@ -1,4 +1,3 @@
-import { DndWrapper } from '@neinteractiveliterature/litform';
 import EditProjectLinksCard from './EditProjectLinksCard';
 import EditProjectFilesCard from './EditProjectFilesCard';
 import { ProjectFieldsFragment } from './queries.generated';
@@ -8,7 +7,7 @@ export type ProjectContentFieldsProps = Omit<S3UploadProps, 'projectId'> & {
   project: ProjectFieldsFragment;
 };
 
-export default DndWrapper(function ProjectContentFields({
+export default function ProjectContentFields({
   project,
   ...s3UploadProps
 }: ProjectContentFieldsProps): JSX.Element {
@@ -49,4 +48,4 @@ export default DndWrapper(function ProjectContentFields({
       </div>
     </>
   );
-});
+}

@@ -1,11 +1,13 @@
 import { LoadQueryWrapper, useGraphQLConfirm } from '@neinteractiveliterature/litform/lib';
+import sortBy from 'lodash/sortBy';
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router';
 import { Link, useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
 import ProjectHeaders from '../ProjectSearch/ProjectHeaders';
 import { generateProjectPath } from '../URLGenerators';
 import { useDeleteProjectMutation } from './mutations.generated';
-import ProjectFilesSection from './ProjectFilesSection';
+import ProjectFileDisplay from './ProjectFileDisplay';
 import { ProjectLinkDisplay } from './ProjectLinkDisplay';
 import { useProjectPageQuery } from './queries.generated';
 
@@ -19,6 +21,15 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
   const confirm = useGraphQLConfirm();
   const [deleteProject] = useDeleteProjectMutation();
   const navigate = useNavigate();
+
+  const sortedFiles = useMemo(
+    () => sortBy(project.projectFiles, (file) => file.position),
+    [project.projectFiles],
+  );
+  const sortedLinks = useMemo(
+    () => sortBy(project.projectLinks, (link) => link.position),
+    [project.projectLinks],
+  );
 
   const hasLinksAndFiles = project.projectLinks.length > 0 && project.projectFiles.length > 0;
 
@@ -84,7 +95,13 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
             <div className="card-body">
               <div className="mb-4">
                 {hasLinksAndFiles && <h3 className="h4">Downloads</h3>}
-                <ProjectFilesSection project={project} />
+                <ul className="list-unstyled">
+                  {sortedFiles.map((file) => (
+                    <li key={file.id}>
+                      <ProjectFileDisplay file={file} />
+                    </li>
+                  ))}
+                </ul>
                 {hasLinksAndFiles && (
                   <>
                     <hr />
@@ -92,7 +109,7 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
                   </>
                 )}
                 <ul className="list-unstyled m-0">
-                  {project.projectLinks.map((link) => (
+                  {sortedLinks.map((link) => (
                     <li key={link.id}>
                       <ProjectLinkDisplay link={link} />
                     </li>

@@ -1,13 +1,17 @@
 import {
   useConfirm,
-  useSortable,
   useModal,
   buildOptimisticArrayForMove,
+  deleteObjectFromReferenceArrayUpdater,
+  useArrayBasicSortableHandlers,
+  useMatchWidthStyle,
 } from '@neinteractiveliterature/litform';
+import { DndContext, DragOverlay } from '@dnd-kit/core';
+import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { ModalData } from '@neinteractiveliterature/litform/dist/useModal';
 import { useMemo, useCallback } from 'react';
 import { Project, ProjectLink } from '../graphqlTypes.generated';
-import { deleteObjectFromReferenceArrayUpdater } from '../MutationModifierHelpers';
+import { getSortableStyle, useSortableDndSensors } from '../SortableUtils';
 import AddProjectLinkModal from './AddProjectLinkModal';
 import EditProjectLinkModal, { EditProjectLinkModalProps } from './EditProjectLinkModal';
 import { useDeleteProjectLinkMutation, useMoveProjectLinkMutation } from './mutations.generated';
@@ -19,32 +23,29 @@ type EditProjectLinkProps = {
     projectLinks: Pick<ProjectLink, 'id'>[];
   };
   link: ProjectLinkDisplayProps['link'] & Pick<ProjectLink, 'id'>;
-  index: number;
-  moveProjectLink: (dragIndex: number, hoverIndex: number) => void;
   editProjectLinkModal: ModalData<Pick<EditProjectLinkModalProps, 'initialProjectLink'>>;
 };
 
-function EditProjectLink({
-  project,
-  link,
-  index,
-  moveProjectLink,
-  editProjectLinkModal,
-}: EditProjectLinkProps) {
+function EditProjectLink({ project, link, editProjectLinkModal }: EditProjectLinkProps) {
   const confirm = useConfirm();
   const [deleteProjectLink] = useDeleteProjectLinkMutation();
 
-  const [ref, drag, { isDragging }] = useSortable<HTMLLIElement>(
-    index,
-    moveProjectLink,
-    'projectLink',
-  );
+  const { attributes, listeners, isDragging, setNodeRef, transform, transition } = useSortable({
+    id: link.id,
+  });
+  const style = getSortableStyle(transform, transition, isDragging);
 
   return (
-    <li key={link.id} className="d-flex" ref={ref}>
+    <li key={link.id} className="d-flex" style={style}>
       <div className="me-2">
         <span className="visually-hidden">Drag to reorder</span>
-        <i style={{ cursor: isDragging ? 'grabbing' : 'grab' }} className="bi-list" ref={drag} />
+        <i
+          style={{ cursor: 'grab' }}
+          className="bi-grip-vertical"
+          ref={setNodeRef}
+          {...attributes}
+          {...listeners}
+        />
       </div>
       <div className="flex-grow-1">
         <ProjectLinkDisplay link={link} />
@@ -72,6 +73,28 @@ function EditProjectLink({
           }
           aria-label="Delete link"
         >
+          <i className="bi-trash" />
+        </button>
+      </div>
+    </li>
+  );
+}
+
+function EditProjectLinkDragPreview({ link }: Pick<EditProjectLinkProps, 'link'>) {
+  return (
+    <li key={link.id} className="d-flex">
+      <div className="me-2">
+        <span className="visually-hidden">Drag to reorder</span>
+        <i style={{ cursor: 'grabbing' }} className="bi-grip-vertical" />
+      </div>
+      <div className="flex-grow-1">
+        <ProjectLinkDisplay link={link} />
+      </div>
+      <div>
+        <button className="btn btn-outline-primary btn-sm" type="button">
+          <i className="bi-pencil-fill" /> Edit
+        </button>{' '}
+        <button className="btn btn-outline-danger btn-sm" type="button" aria-label="Delete link">
           <i className="bi-trash" />
         </button>
       </div>
@@ -117,22 +140,33 @@ function EditProjectLinksCard({ project }: EditProjectLinksCardProps): JSX.Eleme
     [project, moveProjectLink, sortedLinks],
   );
 
+  const sensors = useSortableDndSensors();
+  const { draggingItem, ...sortableHandlers } = useArrayBasicSortableHandlers(
+    sortedLinks,
+    moveLink,
+    'id',
+  );
+  const [matchWidthRef, matchWidthStyle] = useMatchWidthStyle<HTMLDivElement>();
+
   return (
-    <>
-      <div className="card col-md-4 me-md-2 mb-2 mb-md-0">
+    <DndContext sensors={sensors} {...sortableHandlers}>
+      <div className="card col-md-4 me-md-2 mb-2 mb-md-0" ref={matchWidthRef}>
         <div className="card-header">Links</div>
         <div className="card-body">
           <ul className="list-unstyled">
-            {sortedLinks.map((link, index) => (
-              <EditProjectLink
-                link={link}
-                project={project}
-                editProjectLinkModal={editProjectLinkModal}
-                index={index}
-                moveProjectLink={moveLink}
-                key={link.id}
-              />
-            ))}
+            <SortableContext
+              items={sortedLinks.map((link) => link.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {sortedLinks.map((link) => (
+                <EditProjectLink
+                  link={link}
+                  project={project}
+                  editProjectLinkModal={editProjectLinkModal}
+                  key={link.id}
+                />
+              ))}
+            </SortableContext>
           </ul>
 
           <button
@@ -154,7 +188,14 @@ function EditProjectLinksCard({ project }: EditProjectLinksCardProps): JSX.Eleme
         close={editProjectLinkModal.close}
         initialProjectLink={editProjectLinkModal.state?.initialProjectLink}
       />
-    </>
+      {draggingItem && (
+        <DragOverlay>
+          <div style={matchWidthStyle}>
+            <EditProjectLinkDragPreview link={draggingItem} />
+          </div>
+        </DragOverlay>
+      )}
+    </DndContext>
   );
 }
 
