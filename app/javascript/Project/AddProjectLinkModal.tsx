@@ -1,9 +1,11 @@
-import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import {
+  ErrorDisplay,
+  addNewObjectToReferenceArrayUpdater,
+} from '@neinteractiveliterature/litform';
 import { useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
 
 import { Project, ProjectLink } from '../graphqlTypes.generated';
-import { addNewObjectToReferenceArrayUpdater } from '../MutationModifierHelpers';
 import { useCreateProjectLinkMutation } from './mutations.generated';
 import ProjectLinkFormFields, { ProjectLinkFormProjectLink } from './ProjectLinkFormFields';
 import { ProjectLinkFieldsFragmentDoc } from './queries.generated';

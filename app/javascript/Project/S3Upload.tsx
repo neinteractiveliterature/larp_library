@@ -4,7 +4,7 @@ import { useCompleteProjectFileUploadMutation } from './mutations.generated';
 import { S3ConfigurationContext } from '../S3ConfigurationContext';
 import { ProjectFileFieldsFragment } from './queries';
 import { Project } from '../graphqlTypes.generated';
-import { addNewObjectToReferenceArrayUpdater } from '../MutationModifierHelpers';
+import { addNewObjectToReferenceArrayUpdater } from '@neinteractiveliterature/litform';
 
 export type S3UploadFile = {
   id: number;
