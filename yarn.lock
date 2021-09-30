@@ -3582,7 +3582,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:2.10.1, @popperjs/core@npm:^2.10.1":
+"@popperjs/core@npm:2.10.2":
+  version: 2.10.2
+  resolution: "@popperjs/core@npm:2.10.2"
+  checksum: 43c189e3eb6d032433512d94761b54fc7cae15957ca5528008813f887a67b5760b949f30a5141b476be2ba5a6c677c91def150f603d2d3e30b5e97a5ae51474e
+  languageName: node
+  linkType: hard
+
+"@popperjs/core@npm:^2.10.1":
   version: 2.10.1
   resolution: "@popperjs/core@npm:2.10.1"
   checksum: 55262eb98984a03364a844177a9d4b9ab1c6e3503eaa1ecb086c028b5b6d93985a92b5b5783008962633015fc9f0232fda3ce88f5b17930a909a633387a06505
@@ -11506,7 +11513,7 @@ resolve@^2.0.0-next.3:
     "@graphql-codegen/typescript-operations": 2.1.5
     "@graphql-codegen/typescript-react-apollo": 3.1.4
     "@neinteractiveliterature/litform": 0.20.0
-    "@popperjs/core": 2.10.1
+    "@popperjs/core": 2.10.2
     "@rails/ujs": 6.1.3
     "@types/codemirror": 5.60.3
     "@types/evaporate": 2.1.6
