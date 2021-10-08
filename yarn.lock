@@ -2458,7 +2458,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/commands@npm:^0.19.0, @codemirror/commands@npm:^0.19.3":
+"@codemirror/commands@npm:^0.19.0":
   version: 0.19.4
   resolution: "@codemirror/commands@npm:0.19.4"
   dependencies:
@@ -2469,6 +2469,20 @@ __metadata:
     "@codemirror/view": ^0.19.0
     "@lezer/common": ^0.15.0
   checksum: f223310d77ab824c18305cf6880debf358648e239fee0f97c2c7add100dc58da90fd75e98d4095c5854891daa3fa0ad8c87d6155f60b706abf2664051362da13
+  languageName: node
+  linkType: hard
+
+"@codemirror/commands@npm:^0.19.5":
+  version: 0.19.5
+  resolution: "@codemirror/commands@npm:0.19.5"
+  dependencies:
+    "@codemirror/language": ^0.19.0
+    "@codemirror/matchbrackets": ^0.19.0
+    "@codemirror/state": ^0.19.2
+    "@codemirror/text": ^0.19.0
+    "@codemirror/view": ^0.19.0
+    "@lezer/common": ^0.15.0
+  checksum: 6f826cd20620e2540ae0385e3a8bcf19aac4e2b56b9f5a527581c92926bc311f91c6cbfb33ac17006f149d56aa60bf300e45b730f446ff47c1f7b297dc7f8137
   languageName: node
   linkType: hard
 
@@ -2507,7 +2521,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/highlight@npm:^0.19.0, @codemirror/highlight@npm:^0.19.4":
+"@codemirror/highlight@npm:^0.19.0":
   version: 0.19.5
   resolution: "@codemirror/highlight@npm:0.19.5"
   dependencies:
@@ -2518,6 +2532,20 @@ __metadata:
     "@lezer/common": ^0.15.0
     style-mod: ^4.0.0
   checksum: d54914219455d11af5038fc243600fc968defb6bd8793ace0c1082e5c721a644536f95751b5e27b6aeb4c3f8701e4f848fc5373128d8aaa286c4e9dba439b808
+  languageName: node
+  linkType: hard
+
+"@codemirror/highlight@npm:^0.19.6":
+  version: 0.19.6
+  resolution: "@codemirror/highlight@npm:0.19.6"
+  dependencies:
+    "@codemirror/language": ^0.19.0
+    "@codemirror/rangeset": ^0.19.0
+    "@codemirror/state": ^0.19.0
+    "@codemirror/view": ^0.19.0
+    "@lezer/common": ^0.15.0
+    style-mod: ^4.0.0
+  checksum: 833ffe5aea7269ab782649059a6e41c68f7be3f5a49c3824dcf9a22b1efdc33ac081239fbc79fbdbdc9063800f155f16b435e31441598a9748f31c20a6a301b4
   languageName: node
   linkType: hard
 
@@ -2544,7 +2572,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-html@npm:^0.19.0, @codemirror/lang-html@npm:^0.19.1":
+"@codemirror/lang-html@npm:^0.19.0":
   version: 0.19.1
   resolution: "@codemirror/lang-html@npm:0.19.1"
   dependencies:
@@ -2557,6 +2585,22 @@ __metadata:
     "@lezer/common": ^0.15.0
     "@lezer/html": ^0.15.0
   checksum: 873a7710207ef07cda5255c9e4daf50038a3cae9e3a36a4717ebd056a5bef1a335563969b82e46dc30d0bc32264c702a3a22eacf653279403aacef15bdfb8109
+  languageName: node
+  linkType: hard
+
+"@codemirror/lang-html@npm:^0.19.3":
+  version: 0.19.3
+  resolution: "@codemirror/lang-html@npm:0.19.3"
+  dependencies:
+    "@codemirror/autocomplete": ^0.19.0
+    "@codemirror/highlight": ^0.19.6
+    "@codemirror/lang-css": ^0.19.0
+    "@codemirror/lang-javascript": ^0.19.0
+    "@codemirror/language": ^0.19.0
+    "@codemirror/state": ^0.19.0
+    "@lezer/common": ^0.15.0
+    "@lezer/html": ^0.15.0
+  checksum: 44a621fb4846159714a9faa5f23c14eea604a2f1bd30d021b8adae35068da38a628954a0aa3af02365623c9d86ce7668eb945daddea97a5ee30a0c004e4cd8d3
   languageName: node
   linkType: hard
 
@@ -2590,7 +2634,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/language@npm:^0.19.0, @codemirror/language@npm:^0.19.2":
+"@codemirror/language@npm:^0.19.0, @codemirror/language@npm:^0.19.3":
   version: 0.19.3
   resolution: "@codemirror/language@npm:0.19.3"
   dependencies:
@@ -2672,7 +2716,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/state@npm:^0.19.0, @codemirror/state@npm:^0.19.1, @codemirror/state@npm:^0.19.2":
+"@codemirror/state@npm:^0.19.0, @codemirror/state@npm:^0.19.2":
   version: 0.19.2
   resolution: "@codemirror/state@npm:0.19.2"
   dependencies:
@@ -2698,7 +2742,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:^0.19.0, @codemirror/view@npm:^0.19.6":
+"@codemirror/view@npm:^0.19.0":
   version: 0.19.7
   resolution: "@codemirror/view@npm:0.19.7"
   dependencies:
@@ -2708,6 +2752,19 @@ __metadata:
     style-mod: ^4.0.0
     w3c-keyname: ^2.2.4
   checksum: e888db4585fe10e34b828028e3a5de5c35e6cdfc4af1bcbd16b968eeb760e6825e83e49665d5c81b4bcffe7053cc93773e95d90fe79bd3829c30fa157c82d4be
+  languageName: node
+  linkType: hard
+
+"@codemirror/view@npm:^0.19.9":
+  version: 0.19.9
+  resolution: "@codemirror/view@npm:0.19.9"
+  dependencies:
+    "@codemirror/rangeset": ^0.19.0
+    "@codemirror/state": ^0.19.2
+    "@codemirror/text": ^0.19.0
+    style-mod: ^4.0.0
+    w3c-keyname: ^2.2.4
+  checksum: babb017be1506763f40775fc8501168aa94edf786b724840a0ba234cd6acf64315155c4533ed7d5a34f3829babab47551a42c731d87fdeb5870efcc84b6da00b
   languageName: node
   linkType: hard
 
@@ -3508,12 +3565,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/lr@npm:^0.15.0, @lezer/lr@npm:^0.15.2":
+"@lezer/lr@npm:^0.15.0":
   version: 0.15.2
   resolution: "@lezer/lr@npm:0.15.2"
   dependencies:
     "@lezer/common": ^0.15.0
   checksum: 62009e7587c2eea3992438076f1dd025e9ff498165b41ce3d305b872dd6410ab3f020635469a372c82bcc2304398b827fcbc6bad83d78acc81cdc7c11b698c61
+  languageName: node
+  linkType: hard
+
+"@lezer/lr@npm:^0.15.4":
+  version: 0.15.4
+  resolution: "@lezer/lr@npm:0.15.4"
+  dependencies:
+    "@lezer/common": ^0.15.0
+  checksum: 7d89a461c7f48e93bdadffb9062759b3e5d8b2cf197879d920dc9aa6ad5a1c58038931f2751ad7c0e422f9f741a0ef42ebb20b832a154943d3fec0ef65e00a5b
   languageName: node
   linkType: hard
 
@@ -3535,32 +3601,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform@npm:0.20.0":
-  version: 0.20.0
-  resolution: "@neinteractiveliterature/litform@npm:0.20.0"
+"@neinteractiveliterature/litform@npm:0.20.1":
+  version: 0.20.1
+  resolution: "@neinteractiveliterature/litform@npm:0.20.1"
   dependencies:
     "@codemirror/basic-setup": ^0.19.0
-    "@codemirror/commands": ^0.19.3
-    "@codemirror/highlight": ^0.19.4
-    "@codemirror/lang-html": ^0.19.1
-    "@codemirror/language": ^0.19.2
-    "@codemirror/state": ^0.19.1
-    "@codemirror/view": ^0.19.6
-    "@lezer/lr": ^0.15.2
-    "@popperjs/core": ^2.10.1
+    "@codemirror/commands": ^0.19.5
+    "@codemirror/highlight": ^0.19.6
+    "@codemirror/lang-html": ^0.19.3
+    "@codemirror/language": ^0.19.3
+    "@codemirror/state": ^0.19.2
+    "@codemirror/view": ^0.19.9
+    "@lezer/lr": ^0.15.4
+    "@popperjs/core": ^2.10.2
     classnames: ^2.3.1
     copy-to-clipboard: ^3.3.1
     lodash: ^4.17.21
     luxon: ^2.0.0
     react-bootstrap4-modal: ^2.0.0
-    react-cool-onclickoutside: ^1.6.2
+    react-cool-onclickoutside: ^1.7.0
     react-popper: ^2.2.5
     uuid: ^8.3.2
   peerDependencies:
     "@apollo/client": ^3.3.18
     graphql: ^15.5.0
     react: ^17.0.2
-  checksum: 753078fcf6767956a690d97470a5f4d6108e6fd9cc905e244993cf697f63c34f92995d5f2bc9d729e0ed945c0135e20e1d83462c5572c5292cd90314184a7cac
+  checksum: 98d890c14b51b77907ed19e2a747632816e5ff7c9beebd6e05f66c5e3323218fb71fc7f78dd39d4980d42910ddd8f705a4501b7358e8a5ea7d1055ce551f5b27
   languageName: node
   linkType: hard
 
@@ -3625,17 +3691,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:2.10.2":
+"@popperjs/core@npm:2.10.2, @popperjs/core@npm:^2.10.2":
   version: 2.10.2
   resolution: "@popperjs/core@npm:2.10.2"
   checksum: 43c189e3eb6d032433512d94761b54fc7cae15957ca5528008813f887a67b5760b949f30a5141b476be2ba5a6c677c91def150f603d2d3e30b5e97a5ae51474e
-  languageName: node
-  linkType: hard
-
-"@popperjs/core@npm:^2.10.1":
-  version: 2.10.1
-  resolution: "@popperjs/core@npm:2.10.1"
-  checksum: 55262eb98984a03364a844177a9d4b9ab1c6e3503eaa1ecb086c028b5b6d93985a92b5b5783008962633015fc9f0232fda3ce88f5b17930a909a633387a06505
   languageName: node
   linkType: hard
 
@@ -11058,12 +11117,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-cool-onclickoutside@npm:^1.6.2":
-  version: 1.6.2
-  resolution: "react-cool-onclickoutside@npm:1.6.2"
+"react-cool-onclickoutside@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "react-cool-onclickoutside@npm:1.7.0"
   peerDependencies:
     react: ">= 16.8.0"
-  checksum: 908ad78f291b4eb149010f2b79f520f0e5486957b0f187033da6badd8b784c809e0fecff08054720cf13250692a73fde02b3032356d91beb264dd06d43b13292
+  checksum: 52041d867ff275ee9e925b2fc0616febd17964a372b2319007e4c8ae375a9c583da79ab0f27238a36d7fb7e486ec2293f94b2a2362e9c48db44303884c97b2d4
   languageName: node
   linkType: hard
 
@@ -11656,7 +11715,7 @@ resolve@^2.0.0-next.3:
     "@graphql-codegen/typescript-apollo-client-helpers": 2.1.4
     "@graphql-codegen/typescript-operations": 2.1.6
     "@graphql-codegen/typescript-react-apollo": 3.1.4
-    "@neinteractiveliterature/litform": 0.20.0
+    "@neinteractiveliterature/litform": 0.20.1
     "@popperjs/core": 2.10.2
     "@rails/ujs": 6.1.3
     "@types/codemirror": 5.60.4
