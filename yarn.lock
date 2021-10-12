@@ -3740,12 +3740,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/codemirror@npm:5.60.4":
-  version: 5.60.4
-  resolution: "@types/codemirror@npm:5.60.4"
+"@types/codemirror@npm:5.60.5":
+  version: 5.60.5
+  resolution: "@types/codemirror@npm:5.60.5"
   dependencies:
     "@types/tern": "*"
-  checksum: 542be5cfef8b36defdaba0b4a0c200d8ba8566d7a6a3b7dcef5f11a59a2232aa402d040df5037a0ada8d4aedc99398854d4efef826625f161ab3425d34742a1e
+  checksum: 423b6378b6415b626d9f54d37d69477f96940b30a695d4ec36402feb59a96f7ab42d1c17b8472fbb222a0966f6061deee234e37bcd3e34c75836e989dc95929d
   languageName: node
   linkType: hard
 
@@ -11693,7 +11693,7 @@ resolve@^2.0.0-next.3:
     "@neinteractiveliterature/litform": 0.20.3
     "@popperjs/core": 2.10.2
     "@rails/ujs": 6.1.3
-    "@types/codemirror": 5.60.4
+    "@types/codemirror": 5.60.5
     "@types/evaporate": 2.1.6
     "@types/jquery": 3.5.6
     "@types/lodash": 4.14.175
