@@ -7641,6 +7641,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hast-util-whitespace@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "hast-util-whitespace@npm:2.0.0"
+  checksum: abeb5386075bfb0facfce89eed0e13d2cb27a0910cec8fd234b48821a1538387a73fa7f458842e8c404148dc69434acbc10488d75b02817e460652c2c894c024
+  languageName: node
+  linkType: hard
+
 "header-case@npm:^2.0.4":
   version: 2.0.4
   resolution: "header-case@npm:2.0.4"
@@ -11155,13 +11162,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-markdown@npm:7.0.1":
-  version: 7.0.1
-  resolution: "react-markdown@npm:7.0.1"
+"react-markdown@npm:7.1.0":
+  version: 7.1.0
+  resolution: "react-markdown@npm:7.1.0"
   dependencies:
     "@types/hast": ^2.0.0
     "@types/unist": ^2.0.0
     comma-separated-tokens: ^2.0.0
+    hast-util-whitespace: ^2.0.0
     prop-types: ^15.0.0
     property-information: ^6.0.0
     react-is: ^17.0.0
@@ -11175,7 +11183,7 @@ __metadata:
   peerDependencies:
     "@types/react": ">=16"
     react: ">=16"
-  checksum: fba9f0c8dca9b77a01dac1ecd7d01aef9054127712b77f63d281cd76e8f992b8bddc477ee3cd91c93d88853a2814260676c3220d242ba2caf01d68fa686e8917
+  checksum: 80baaef3cf0112cf7ae2ed104b17a21653b44044c848b31bf2aa36daf14c52fb3bbdf3b5436b67b754a744e5a883f6fa50b88e4e32c43797c40d592245b2cdbd
   languageName: node
   linkType: hard
 
@@ -11734,7 +11742,7 @@ resolve@^2.0.0-next.3:
     react-bootstrap4-modal: 2.0.0
     react-color: 2.19.3
     react-dom: 17.0.2
-    react-markdown: 7.0.1
+    react-markdown: 7.1.0
     react-popper: 2.2.5
     react-router: 6.0.0-beta.3
     react-router-dom: 6.0.0-beta.3
