@@ -4824,9 +4824,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-loader@npm:8.2.2":
-  version: 8.2.2
-  resolution: "babel-loader@npm:8.2.2"
+"babel-loader@npm:8.2.3":
+  version: 8.2.3
+  resolution: "babel-loader@npm:8.2.3"
   dependencies:
     find-cache-dir: ^3.3.1
     loader-utils: ^1.4.0
@@ -4835,7 +4835,7 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0
     webpack: ">=2"
-  checksum: df5092ef9886bb49aacb7c58ac40ed0681ced031c8d91e49d680cedace2aa1703390a31fbe7c0e409f739836e911c5c991119133d90d9289f681c0a8ff2447a1
+  checksum: 78e1e1a91954d644b6ce66366834d4d245febbc0fde33e4e2831725e83d6e760d12b3a78e9534ce92af69067bef1d9d9674df36d8c1f20ee127bc2354b2203ba
   languageName: node
   linkType: hard
 
@@ -11708,7 +11708,7 @@ resolve@^2.0.0-next.3:
     "@typescript-eslint/parser": 5.1.0
     "@webpack-cli/serve": 1.6.0
     assert: 2.0.0
-    babel-loader: 8.2.2
+    babel-loader: 8.2.3
     babel-plugin-graphql-tag: 3.3.0
     bootstrap: 5.1.3
     bootstrap-icons: 1.6.1
