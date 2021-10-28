@@ -26,7 +26,7 @@
     "css-loader": "6.5.0",
     "css-minimizer-webpack-plugin": "3.1.1",
     "evaporate": "2.1.4",
-    "graphql": "15.7.1",
+    "graphql": "15.7.2",
     "history": "5.0.1",
     "jquery": "3.6.0",
     "lodash": "4.17.21",
