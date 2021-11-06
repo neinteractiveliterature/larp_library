@@ -7335,14 +7335,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-tag@npm:2.12.5, graphql-tag@npm:^2.12.3":
-  version: 2.12.5
-  resolution: "graphql-tag@npm:2.12.5"
+"graphql-tag@npm:2.12.6":
+  version: 2.12.6
+  resolution: "graphql-tag@npm:2.12.6"
   dependencies:
     tslib: ^2.1.0
   peerDependencies:
-    graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
-  checksum: 7afe8b0a261bc81278e8350cbc48a641986665fa88521ece137feb8d1d62aacbe79afd4e159b618d56af106291ae8369592e46584fd8fbaf4f440201ea884fdd
+    graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+  checksum: b15162a3d62f17b9b79302445b9ee330e041582f1c7faca74b9dec5daa74272c906ec1c34e1c50592bb6215e5c3eba80a309103f6ba9e4c1cddc350c46f010df
   languageName: node
   linkType: hard
 
@@ -7354,6 +7354,17 @@ __metadata:
   peerDependencies:
     graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
   checksum: 476783e258e3e05020727f2a2ac6b8dcc1ac1fb4a8ccb9e22532d6eaafad40b3403757b3647ff4ee7e4dce8ba67d62bb4aa455f79bada043eb004ae1c1f5487e
+  languageName: node
+  linkType: hard
+
+"graphql-tag@npm:^2.12.3":
+  version: 2.12.5
+  resolution: "graphql-tag@npm:2.12.5"
+  dependencies:
+    tslib: ^2.1.0
+  peerDependencies:
+    graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
+  checksum: 7afe8b0a261bc81278e8350cbc48a641986665fa88521ece137feb8d1d62aacbe79afd4e159b618d56af106291ae8369592e46584fd8fbaf4f440201ea884fdd
   languageName: node
   linkType: hard
 
@@ -11519,7 +11530,7 @@ resolve@^2.0.0-next.3:
     eslint-plugin-react-hooks: 4.2.0
     evaporate: 2.1.4
     graphql: 15.7.2
-    graphql-tag: 2.12.5
+    graphql-tag: 2.12.6
     history: 5.1.0
     husky: 7.0.4
     jquery: 3.6.0
