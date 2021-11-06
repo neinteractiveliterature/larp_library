@@ -7479,7 +7479,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"history@npm:5.1.0":
+"history@npm:5.1.0, history@npm:^5.1.0":
   version: 5.1.0
   resolution: "history@npm:5.1.0"
   dependencies:
@@ -11002,26 +11002,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:6.0.0-beta.3":
-  version: 6.0.0-beta.3
-  resolution: "react-router-dom@npm:6.0.0-beta.3"
+"react-router-dom@npm:6.0.1":
+  version: 6.0.1
+  resolution: "react-router-dom@npm:6.0.1"
   dependencies:
-    react-router: 6.0.0-beta.3
+    history: ^5.1.0
+    react-router: 6.0.1
   peerDependencies:
-    history: ">=5"
     react: ">=16.8"
     react-dom: ">=16.8"
-  checksum: 03a8ecc8ca76d650e52313193a6384d763bd18aeaa86604d85721650634a72b993b899278a470a6a14c6740658de6c5bdc2aded8fd1d0b20d6925b2abab5dfed
+  checksum: cc2d80536f4a02b8fcef826185ad0acb5d66245e9fb89345d54ec0eaea73eb4ff809cbf68ebb1ac8c3de15cbe45f539d7879cc2d3ed4a76c8c42a602dece71b0
   languageName: node
   linkType: hard
 
-"react-router@npm:6.0.0-beta.3":
-  version: 6.0.0-beta.3
-  resolution: "react-router@npm:6.0.0-beta.3"
+"react-router@npm:6.0.1":
+  version: 6.0.1
+  resolution: "react-router@npm:6.0.1"
+  dependencies:
+    history: ^5.1.0
   peerDependencies:
-    history: ">=5"
     react: ">=16.8"
-  checksum: e82b0b350bce22a1de584aa2dc2c25cd049936c7c23e65458744595682b91dac61d5349d454e90f2ebae9a34a8233ddbf2ff7ed5a2af95f3ac8bf775acaaabbf
+  checksum: 66bbaaa98637a0bf4e4c3e4392f8929388e2d07438759129e14709809add974bfa3307d508055c259986439b2f5f9c5558410771355e547c06005ed4feef7c7f
   languageName: node
   linkType: hard
 
@@ -11546,8 +11547,8 @@ resolve@^2.0.0-next.3:
     react-dom: 17.0.2
     react-markdown: 7.1.0
     react-popper: 2.2.5
-    react-router: 6.0.0-beta.3
-    react-router-dom: 6.0.0-beta.3
+    react-router: 6.0.1
+    react-router-dom: 6.0.1
     react-select: 4.3.1
     react-waypoint: 10.1.0
     regenerator-runtime: 0.13.9
