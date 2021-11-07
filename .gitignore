@@ -40,6 +40,8 @@
 !.yarn/versions
 .pnp.*
 
+/.vscode/settings.json
+/dist
 /public/packs
 /public/packs-test
 /node_modules
