@@ -133,7 +133,7 @@ export default LoadQueryWrapper(
                 <AsyncSelect<ProjectSearchProject>
                   isClearable
                   placeholder="Select a project to promote..."
-                  loadOptions={(inputValue) => queryProjects(inputValue)}
+                  loadOptions={(inputValue: string) => queryProjects(inputValue)}
                   value={projectToPromote}
                   onChange={(newValue) => setProjectToPromote(newValue)}
                   getOptionValue={(option) => option.title ?? ''}
