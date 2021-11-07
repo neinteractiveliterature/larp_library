@@ -1,9 +1,8 @@
 import { useApolloClient } from '@apollo/client';
 import React from 'react';
-import AsyncSelect, { Props as AsyncSelectProps } from 'react-select/async';
-import AsyncCreatableSelect, {
-  Props as AsyncCreatableSelectProps,
-} from 'react-select/async-creatable';
+import { GroupBase } from 'react-select';
+import AsyncSelect, { AsyncProps } from 'react-select/async';
+import AsyncCreatableSelect, { AsyncCreatableProps } from 'react-select/async-creatable';
 import { v4 as uuidv4 } from 'uuid';
 import {
   TagAutocompleteQueryData,
@@ -45,7 +44,7 @@ function TagSelector<IsMulti extends boolean, IsCreatable extends boolean>({
     return result.data.tags.edges.map((edge) => edge.node);
   };
 
-  const commonProps: AsyncSelectProps<TagFragment, IsMulti> = {
+  const commonProps: AsyncProps<TagFragment, IsMulti, GroupBase<TagFragment>> = {
     id,
     loadOptions: (inputValue: string) => queryTags(inputValue),
     value,
@@ -97,7 +96,7 @@ function TagSelector<IsMulti extends boolean, IsCreatable extends boolean>({
             id: uuidv4(),
             name: inputValue,
           })}
-          {...(commonProps as AsyncCreatableSelectProps<TagFragment, true>)}
+          {...(commonProps as AsyncCreatableProps<TagFragment, true, GroupBase<TagFragment>>)}
         />
       );
     }
@@ -106,7 +105,7 @@ function TagSelector<IsMulti extends boolean, IsCreatable extends boolean>({
       <AsyncSelect<TagFragment, true>
         isMulti
         onChange={onChangeMulti}
-        {...(commonProps as AsyncSelectProps<TagFragment, true>)}
+        {...(commonProps as AsyncProps<TagFragment, true, GroupBase<TagFragment>>)}
       />
     );
   }
@@ -121,7 +120,7 @@ function TagSelector<IsMulti extends boolean, IsCreatable extends boolean>({
           id: uuidv4(),
           name: inputValue,
         })}
-        {...(commonProps as AsyncCreatableSelectProps<TagFragment, false>)}
+        {...(commonProps as AsyncCreatableProps<TagFragment, false, GroupBase<TagFragment>>)}
       />
     );
   }
@@ -130,7 +129,7 @@ function TagSelector<IsMulti extends boolean, IsCreatable extends boolean>({
     <AsyncSelect<TagFragment, false>
       isClearable
       onChange={onChange as React.Dispatch<React.SetStateAction<TagFragment | null>>}
-      {...(commonProps as AsyncSelectProps<TagFragment, false>)}
+      {...(commonProps as AsyncProps<TagFragment, false, GroupBase<TagFragment>>)}
     />
   );
 }

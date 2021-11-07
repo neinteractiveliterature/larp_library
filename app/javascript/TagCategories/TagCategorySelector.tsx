@@ -35,7 +35,7 @@ function TagCategorySelector({ value, onChange, id }: TagCategorySelectorProps):
       id={id}
       isClearable
       defaultOptions={true} // preload tag categories for blank query
-      loadOptions={(inputValue) => queryTagCategories(inputValue)}
+      loadOptions={(inputValue: string) => queryTagCategories(inputValue)}
       value={value}
       onChange={(newValue) => onChange(newValue)}
       getOptionValue={(option) => option.name ?? ''}
