@@ -30,7 +30,7 @@
     "history": "5.1.0",
     "jquery": "3.6.0",
     "lodash": "4.17.21",
-    "luxon": "2.0.2",
+    "luxon": "2.1.0",
     "mini-css-extract-plugin": "2.4.4",
     "process": "0.11.10",
     "react": "17.0.2",
