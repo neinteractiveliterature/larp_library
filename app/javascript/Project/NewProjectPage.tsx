@@ -9,6 +9,9 @@ import { useNewProjectFormQuery } from './queries.generated';
 
 function useLoadProject() {
   const { brandSlug } = useParams();
+  if (brandSlug == null) {
+    throw new Error('brandSlug param is required');
+  }
   return useNewProjectFormQuery({ variables: { slug: brandSlug } });
 }
 

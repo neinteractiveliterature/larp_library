@@ -7,6 +7,13 @@ import { useInvitationPageQuery } from './queries.generated';
 
 function useInvitationPageQueryFromParams() {
   const { brandSlug, invitationToken } = useParams();
+  if (invitationToken == null) {
+    throw new Error('invitationToken param is required');
+  }
+  if (brandSlug == null) {
+    throw new Error('brandSlug param is required');
+  }
+
   return useInvitationPageQuery({
     variables: { brandSlug, invitationToken },
   });
@@ -24,6 +31,9 @@ export default LoadQueryWrapper(
     const navigate = useNavigate();
 
     const acceptClicked = async () => {
+      if (invitationToken == null) {
+        throw new Error('invitationToken param is required');
+      }
       await acceptBrandMembership({
         variables: {
           brandId: data.brandMembership.brand.id,

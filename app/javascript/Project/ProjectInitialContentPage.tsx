@@ -6,6 +6,9 @@ import { useProjectPageQuery } from './queries.generated';
 
 function useLoadProject() {
   const { projectId } = useParams();
+  if (projectId == null) {
+    throw new Error('projectId param is required');
+  }
   return useProjectPageQuery({ variables: { projectId } });
 }
 

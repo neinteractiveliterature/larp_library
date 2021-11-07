@@ -13,6 +13,9 @@ import buildTagAttributes from './buildTagAttributes';
 
 function useEditTagQueryFromParams() {
   const { tagId } = useParams();
+  if (tagId == null) {
+    throw new Error('tagId param is required');
+  }
   return useEditTagQuery({ variables: { id: tagId } });
 }
 
