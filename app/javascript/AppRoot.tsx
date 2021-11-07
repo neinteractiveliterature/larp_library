@@ -71,18 +71,18 @@ function AppRoot({ s3Configuration }: AppRootProps): JSX.Element {
               />
               <Route path="edit" element={<PageComponents.EditBrandPage />} />
               <Route path="projects/*">
-                <Route path="/:projectId/edit" element={<PageComponents.EditProjectPage />} />
+                <Route path=":projectId/edit" element={<PageComponents.EditProjectPage />} />
                 <Route
-                  path="/:projectId/initial_content"
+                  path=":projectId/initial_content"
                   element={<PageComponents.ProjectInitialContentPage />}
                 />
-                <Route path="/:projectId" element={<PageComponents.ProjectPage />} />
+                <Route path=":projectId" element={<PageComponents.ProjectPage />} />
                 <Route path="new" element={<PageComponents.NewProjectPage />} />
               </Route>
-              <Route path="/" element={<PageComponents.BrandPage />} />
+              <Route path="" element={<PageComponents.BrandPage />} />
             </Route>
 
-            <Route path="/" element={<PageComponents.BrandListPage />} />
+            <Route path="" element={<PageComponents.BrandListPage />} />
           </Route>
 
           <Route path="project_promotions" element={<PageComponents.ProjectPromotionsPage />} />
@@ -90,13 +90,13 @@ function AppRoot({ s3Configuration }: AppRootProps): JSX.Element {
           <Route path="tags/*">
             <Route path="new" element={<PageComponents.NewTagPage />} />
             <Route path=":tagId/edit" element={<PageComponents.EditTagPage />} />
-            <Route path="/" element={<PageComponents.TagListPage />} />
+            <Route path="" element={<PageComponents.TagListPage />} />
           </Route>
 
           <Route path="tag_categories/*">
             <Route path="new" element={<PageComponents.NewTagCategoryPage />} />
             <Route path=":tagCategoryId/edit" element={<PageComponents.EditTagCategoryPage />} />
-            <Route path="/" element={<PageComponents.TagCategoryListPage />} />
+            <Route path="" element={<PageComponents.TagCategoryListPage />} />
           </Route>
 
           <Route path="pages/about" element={<PageComponents.AboutPage />} />
