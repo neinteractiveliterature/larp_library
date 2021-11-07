@@ -13,6 +13,9 @@ import { useProjectPageQuery } from './queries.generated';
 
 function useProjectPageQueryFromParam() {
   const { projectId } = useParams();
+  if (projectId == null) {
+    throw new Error('projectId param is required');
+  }
   return useProjectPageQuery({ variables: { projectId: projectId.replace(/-.*$/, '') } });
 }
 

@@ -13,6 +13,9 @@ import Tag from '../Tags/Tag';
 
 function useEditTagQueryFromParams() {
   const { tagCategoryId } = useParams();
+  if (tagCategoryId == null) {
+    throw new Error('tagCategoryId param is required');
+  }
   return useEditTagCategoryQuery({ variables: { id: tagCategoryId } });
 }
 

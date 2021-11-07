@@ -11,6 +11,10 @@ import UnapprovedBrandAlert from './UnapprovedBrandAlert';
 
 export default function BrandPage(): JSX.Element {
   const { brandSlug } = useParams();
+  if (brandSlug == null) {
+    throw new Error('brandSlug param is required');
+  }
+
   const { data, loading, error, fetchMore } = useBrandPageQuery({
     variables: {
       slug: brandSlug,

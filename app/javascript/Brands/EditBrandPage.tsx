@@ -21,6 +21,10 @@ import UnapprovedBrandAlert from './UnapprovedBrandAlert';
 
 function useEditBrandQueryFromParams() {
   const { brandSlug } = useParams();
+  if (brandSlug == null) {
+    throw new Error('brandSlug param is required');
+  }
+
   return useEditBrandQuery({ variables: { slug: brandSlug } });
 }
 
