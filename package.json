@@ -68,7 +68,7 @@
     "@graphql-codegen/typescript-react-apollo": "3.2.2",
     "@types/codemirror": "5.60.5",
     "@types/evaporate": "2.1.6",
-    "@types/jquery": "3.5.8",
+    "@types/jquery": "3.5.9",
     "@types/lodash": "4.14.177",
     "@types/react-color": "3.0.6",
     "@types/react-dom": "17.0.11",
