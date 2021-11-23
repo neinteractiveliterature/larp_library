@@ -1938,17 +1938,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dnd-kit/core@npm:4.0.2":
-  version: 4.0.2
-  resolution: "@dnd-kit/core@npm:4.0.2"
+"@dnd-kit/core@npm:4.0.3":
+  version: 4.0.3
+  resolution: "@dnd-kit/core@npm:4.0.3"
   dependencies:
     "@dnd-kit/accessibility": ^3.0.0
-    "@dnd-kit/utilities": ^3.0.0
+    "@dnd-kit/utilities": ^3.0.1
     tslib: ^2.0.0
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 010044951ecde966d2cc2d8098d10469d2277244a8b56dd2c06e97dc1a36c0747b6bbdddfadf35d78c33238ebc4365dcda1c2d0d80f2bee097d6812566ff9bfe
+  checksum: 828609317504f32bf37238840e5d2ae545efaaa779d696fdad1606d2ae22ae5668a43466db007efde89c8c1ef04ca66b2c61b6e98465f9487ec37c8e3d11a1b2
   languageName: node
   linkType: hard
 
@@ -1965,7 +1965,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dnd-kit/utilities@npm:3.0.0, @dnd-kit/utilities@npm:^3.0.0":
+"@dnd-kit/utilities@npm:3.0.1, @dnd-kit/utilities@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@dnd-kit/utilities@npm:3.0.1"
+  dependencies:
+    tslib: ^2.0.0
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 01ffe77bf98707e2e0e949b4425caf6a237ad4fc07fe15f9f0e4ab7c710d81ba2190915549c5302386cb55517e7be4bea6560dfb7eba0a516fa46719f837ec57
+  languageName: node
+  linkType: hard
+
+"@dnd-kit/utilities@npm:^3.0.0":
   version: 3.0.0
   resolution: "@dnd-kit/utilities@npm:3.0.0"
   dependencies:
@@ -10816,9 +10827,9 @@ resolve@^2.0.0-next.3:
     "@babel/preset-react": 7.16.0
     "@babel/preset-typescript": 7.16.0
     "@codemirror/lang-markdown": 0.19.2
-    "@dnd-kit/core": 4.0.2
+    "@dnd-kit/core": 4.0.3
     "@dnd-kit/sortable": 5.1.0
-    "@dnd-kit/utilities": 3.0.0
+    "@dnd-kit/utilities": 3.0.1
     "@graphql-codegen/add": 3.1.0
     "@graphql-codegen/cli": 2.3.0
     "@graphql-codegen/near-operation-file-preset": 2.2.2
