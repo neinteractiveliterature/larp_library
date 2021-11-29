@@ -10287,9 +10287,9 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"react-markdown@npm:7.1.0":
-  version: 7.1.0
-  resolution: "react-markdown@npm:7.1.0"
+"react-markdown@npm:7.1.1":
+  version: 7.1.1
+  resolution: "react-markdown@npm:7.1.1"
   dependencies:
     "@types/hast": ^2.0.0
     "@types/unist": ^2.0.0
@@ -10308,7 +10308,7 @@ fsevents@~2.3.2:
   peerDependencies:
     "@types/react": ">=16"
     react: ">=16"
-  checksum: 80baaef3cf0112cf7ae2ed104b17a21653b44044c848b31bf2aa36daf14c52fb3bbdf3b5436b67b754a744e5a883f6fa50b88e4e32c43797c40d592245b2cdbd
+  checksum: 108759c9e1b083402e1f38a88d32e6eb640c0d38d24ccfdec86a5ac3262ecc59e7494dc45eaecd6d613e7b91914dc54558ffc2b2e6cf3d2f6e5230b27fe348c9
   languageName: node
   linkType: hard
 
@@ -10859,7 +10859,7 @@ resolve@^2.0.0-next.3:
     react-bootstrap4-modal: 2.0.0
     react-color: 2.19.3
     react-dom: 17.0.2
-    react-markdown: 7.1.0
+    react-markdown: 7.1.1
     react-popper: 2.2.5
     react-router: 6.0.2
     react-router-dom: 6.0.2
