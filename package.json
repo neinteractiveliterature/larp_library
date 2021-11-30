@@ -44,7 +44,7 @@
     "react-select": "5.2.1",
     "react-waypoint": "10.1.0",
     "regenerator-runtime": "0.13.9",
-    "sass": "1.43.5",
+    "sass": "1.44.0",
     "sass-loader": "12.3.0",
     "style-loader": "3.3.1",
     "tinycolor2": "1.4.2",
