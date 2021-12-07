@@ -5,9 +5,9 @@ __metadata:
   version: 4
   cacheKey: 8
 
-"@apollo/client@npm:3.5.5":
-  version: 3.5.5
-  resolution: "@apollo/client@npm:3.5.5"
+"@apollo/client@npm:3.5.6":
+  version: 3.5.6
+  resolution: "@apollo/client@npm:3.5.6"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
     "@wry/context": ^0.6.0
@@ -18,7 +18,7 @@ __metadata:
     optimism: ^0.16.1
     prop-types: ^15.7.2
     symbol-observable: ^4.0.0
-    ts-invariant: ^0.9.0
+    ts-invariant: ^0.9.4
     tslib: ^2.3.0
     zen-observable-ts: ^1.2.0
   peerDependencies:
@@ -30,7 +30,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 765675a25d2e983c1ed0050a2a2d168e581d98de6771c9ebd8a67e7cf9b13275b08d1b2e4a3fe50d66c46e56f8c206909ff5c0145bf86a906830b6bc3d5e4ed7
+  checksum: 503cc1f34114be1c0fe411744881078f781c6d33b431199dce3813e7cbf85f4cf2f06fd283b08c00f92c0ccea83ef531aa3c5d2215ba2937fb1cc208fbe83300
   languageName: node
   linkType: hard
 
@@ -10794,7 +10794,7 @@ resolve@^2.0.0-next.3:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@apollo/client": 3.5.5
+    "@apollo/client": 3.5.6
     "@aws-crypto/sha256-browser": 2.0.0
     "@aws-sdk/md5-js": 3.40.0
     "@babel/cli": 7.16.0
@@ -11960,12 +11960,12 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"ts-invariant@npm:^0.9.0":
-  version: 0.9.1
-  resolution: "ts-invariant@npm:0.9.1"
+"ts-invariant@npm:^0.9.4":
+  version: 0.9.4
+  resolution: "ts-invariant@npm:0.9.4"
   dependencies:
     tslib: ^2.1.0
-  checksum: 810f8abd2f7f0cf85c16db797ef72f705bc52a51d1982a18656b7b15e2b32739556e8d37989557eec6b69f8a08ddada27651064f2330a529a388e0fa5a5e2e9a
+  checksum: c9e5726361fa266916966b2070605f8664b6dd1d8b0ef7565dbf056abb6a87be26195985ef62dd97aeb0894cf2f4ad5b7f0d89dadadc197eaa38e99222afa29c
   languageName: node
   linkType: hard
 
