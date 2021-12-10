@@ -1784,18 +1784,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-markdown@npm:0.19.2":
-  version: 0.19.2
-  resolution: "@codemirror/lang-markdown@npm:0.19.2"
+"@codemirror/lang-markdown@npm:0.19.3":
+  version: 0.19.3
+  resolution: "@codemirror/lang-markdown@npm:0.19.3"
   dependencies:
     "@codemirror/highlight": ^0.19.0
     "@codemirror/lang-html": ^0.19.0
     "@codemirror/language": ^0.19.0
-    "@codemirror/state": ^0.19.0
+    "@codemirror/state": ^0.19.3
     "@codemirror/view": ^0.19.0
     "@lezer/common": ^0.15.0
     "@lezer/markdown": ^0.15.0
-  checksum: 8647c462a01bd345148fe86ea4db76df6df71651309439d67a5e133f292d40a9317d4209414263b500d78d2af2d567798c92b9b76cdb2f629be8263ca7a621a7
+  checksum: 0f69c3193a3b7c4cb910d91bff6b5c9d8bfbed9fee6bb5571f637ab8bc70bf757be3b8b307136c9784281f6246079ebbdfb39286717a3adf2589ea8bbae38eab
   languageName: node
   linkType: hard
 
@@ -1887,6 +1887,15 @@ __metadata:
   dependencies:
     "@codemirror/text": ^0.19.0
   checksum: 6460ff45d8ce20812a9abcb035a3e5f2a4adcb837c0efd00151b07c8e0bf617f6fdcf7668982b76c8e7bb447b0a83e7b8308817dac754c190c9495b49289bcaf
+  languageName: node
+  linkType: hard
+
+"@codemirror/state@npm:^0.19.3":
+  version: 0.19.6
+  resolution: "@codemirror/state@npm:0.19.6"
+  dependencies:
+    "@codemirror/text": ^0.19.0
+  checksum: 65bee46d76c0b55b10ed4818cbb77267a6c75dff3c8cc04e83056a79a1d36e79d7b8bf750d4695238ac28fe792d6329939fd725839f8314eee34146941cae344
   languageName: node
   linkType: hard
 
@@ -10803,7 +10812,7 @@ resolve@^2.0.0-next.3:
     "@babel/preset-env": 7.16.4
     "@babel/preset-react": 7.16.0
     "@babel/preset-typescript": 7.16.0
-    "@codemirror/lang-markdown": 0.19.2
+    "@codemirror/lang-markdown": 0.19.3
     "@dnd-kit/core": 4.0.3
     "@dnd-kit/sortable": 5.1.0
     "@dnd-kit/utilities": 3.0.1
