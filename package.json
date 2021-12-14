@@ -14,7 +14,7 @@
     "@codemirror/lang-markdown": "0.19.3",
     "@dnd-kit/core": "4.0.3",
     "@dnd-kit/sortable": "5.1.0",
-    "@dnd-kit/utilities": "3.0.1",
+    "@dnd-kit/utilities": "3.0.2",
     "@neinteractiveliterature/litform": "0.21.0",
     "@popperjs/core": "2.11.0",
     "@rails/ujs": "6.1.3",
