@@ -7326,7 +7326,16 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"history@npm:5.1.0, history@npm:^5.1.0":
+"history@npm:5.2.0":
+  version: 5.2.0
+  resolution: "history@npm:5.2.0"
+  dependencies:
+    "@babel/runtime": ^7.7.6
+  checksum: 2c6a05aa86793e0a0857013457f34474c17f81a012c6bdb00bf30862389ac6a8c2df113d82176f67af2fd534ea9dc4e1218470c5526355b6fc1aefcc971f2eb2
+  languageName: node
+  linkType: hard
+
+"history@npm:^5.1.0":
   version: 5.1.0
   resolution: "history@npm:5.1.0"
   dependencies:
@@ -11284,7 +11293,7 @@ resolve@^2.0.0-next.3:
     evaporate: 2.1.4
     graphql: 16.2.0
     graphql-tag: 2.12.6
-    history: 5.1.0
+    history: 5.2.0
     husky: 7.0.4
     jquery: 3.6.0
     lint-staged: 12.1.2
