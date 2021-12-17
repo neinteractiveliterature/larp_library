@@ -10763,27 +10763,27 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:6.1.1":
-  version: 6.1.1
-  resolution: "react-router-dom@npm:6.1.1"
+"react-router-dom@npm:6.2.0":
+  version: 6.2.0
+  resolution: "react-router-dom@npm:6.2.0"
   dependencies:
     history: ^5.1.0
-    react-router: 6.1.1
+    react-router: 6.2.0
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
-  checksum: 211d9c4bb94037a7c8654506fcfd535bccfc11812204fd1743b1871d63da61cdaccd12d65a95a7ac4a53ad79b35e7d52f5d2a5925587d4ca1bc5f234805bab1c
+  checksum: a4d04b41f7edae1d0a118ff37b241859ed7d614e957c3b175511c215f5991acbfab5f01ae0e7ec41eba544d06c883dab649d6d9e82007ee79d4c32539e0aeccf
   languageName: node
   linkType: hard
 
-"react-router@npm:6.1.1":
-  version: 6.1.1
-  resolution: "react-router@npm:6.1.1"
+"react-router@npm:6.2.0":
+  version: 6.2.0
+  resolution: "react-router@npm:6.2.0"
   dependencies:
     history: ^5.1.0
   peerDependencies:
     react: ">=16.8"
-  checksum: d290d4646b894f8166797b65d298950c63b7c841ff954c8fe7dc1bd469714402611bff52da17c8c69c793c952e22c2123925615a594b57b474e7f52bf8c6a77b
+  checksum: 84267e3218e5b44cf6039e0e08873f596bf0fc03753da59adcb41cc26f365cf28acc9a03c3b60161d7fec3bf9b70f634b613c6b8a7299e381b61c13cdfc02c13
   languageName: node
   linkType: hard
 
@@ -11299,8 +11299,8 @@ resolve@^2.0.0-next.3:
     react-dom: 17.0.2
     react-markdown: 7.1.1
     react-popper: 2.2.5
-    react-router: 6.1.1
-    react-router-dom: 6.1.1
+    react-router: 6.2.0
+    react-router-dom: 6.2.0
     react-select: 5.2.1
     react-waypoint: 10.1.0
     regenerator-runtime: 0.13.9
