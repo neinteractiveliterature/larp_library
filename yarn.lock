@@ -3579,10 +3579,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/evaporate@npm:2.1.6":
-  version: 2.1.6
-  resolution: "@types/evaporate@npm:2.1.6"
-  checksum: 872e8e5e1a8187c3f0c6568cc0d2efa1b4dc36cf41adf4e5c81397751252cc64e439269da5fd2632a479aaccdc92d4b40d8c47bb88a4aaa0feaf5598cb4e9946
+"@types/evaporate@npm:2.1.7":
+  version: 2.1.7
+  resolution: "@types/evaporate@npm:2.1.7"
+  checksum: b1c38cdb7f741a4b359887923aa8a2cfaa539a3e4e3f3d76c87d55d0d4ff47fe23a91a652b22fc795d1146d041b53ab48492cb7481ab851e24e3d6b7bbfdb42b
   languageName: node
   linkType: hard
 
@@ -11358,7 +11358,7 @@ resolve@^2.0.0-next.3:
     "@popperjs/core": 2.11.0
     "@rails/ujs": 6.1.4
     "@types/codemirror": 5.60.5
-    "@types/evaporate": 2.1.6
+    "@types/evaporate": 2.1.7
     "@types/jquery": 3.5.10
     "@types/lodash": 4.14.178
     "@types/react": 17.0.38
