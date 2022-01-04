@@ -16,7 +16,7 @@
     "@dnd-kit/sortable": "5.1.0",
     "@dnd-kit/utilities": "3.0.2",
     "@neinteractiveliterature/litform": "0.21.0",
-    "@popperjs/core": "2.11.0",
+    "@popperjs/core": "2.11.2",
     "@rails/ujs": "6.1.4",
     "@types/react": "17.0.38",
     "assert": "2.0.0",
