@@ -7666,10 +7666,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"graphql@npm:16.2.0":
-  version: 16.2.0
-  resolution: "graphql@npm:16.2.0"
-  checksum: 204b5c9991b82561651a28b13dbb2e0e67514171a6a8c045ca4a527b944087344a14519d0426d661b49f2305584b390591abadc82b942f7b65e64e05cb31a584
+"graphql@npm:16.3.0":
+  version: 16.3.0
+  resolution: "graphql@npm:16.3.0"
+  checksum: ba540641e9cd2a8de5b989ff1433b015f232fa73aaef478d6709c1339cd43113347917acb965a5799c004667687852fc8ff0cfaa935eb26374c91c1fd7fdaeb1
   languageName: node
   linkType: hard
 
@@ -11734,7 +11734,7 @@ resolve@^2.0.0-next.3:
     eslint-plugin-react: 7.28.0
     eslint-plugin-react-hooks: 4.3.0
     evaporate: 2.1.4
-    graphql: 16.2.0
+    graphql: 16.3.0
     graphql-tag: 2.12.6
     history: 5.2.0
     husky: 7.0.4
