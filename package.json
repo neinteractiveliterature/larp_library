@@ -65,7 +65,7 @@
     "@graphql-codegen/near-operation-file-preset": "2.2.4",
     "@graphql-codegen/typescript-apollo-client-helpers": "2.1.10",
     "@graphql-codegen/typescript-operations": "2.3.0",
-    "@graphql-codegen/typescript-react-apollo": "3.2.5",
+    "@graphql-codegen/typescript-react-apollo": "3.2.6",
     "@types/codemirror": "5.60.5",
     "@types/evaporate": "2.1.7",
     "@types/jquery": "3.5.13",
