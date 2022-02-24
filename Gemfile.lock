@@ -212,6 +212,10 @@ GEM
     minitest (5.15.0)
     multi_json (1.15.0)
     multipart-post (2.1.1)
+    net-pop (0.1.1)
+      digest
+      net-protocol
+      timeout
     net-protocol (0.1.2)
       io-wait
       timeout
@@ -366,6 +370,7 @@ DEPENDENCIES
   graphql-rails_logger
   listen
   minipack
+  net-pop
   net-smtp
   pg
   pry-rails
