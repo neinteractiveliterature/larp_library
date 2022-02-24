@@ -16,6 +16,8 @@ gem 'devise_cas_authenticatable', '~> 2.0.0.alpha1'
 gem 'rack-cas'
 gem 'cancancan'
 
+gem 'net-smtp'
+
 gem 'aws-sdk-s3'
 
 gem 'graphql'
