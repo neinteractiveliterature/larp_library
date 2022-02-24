@@ -18,6 +18,7 @@ gem 'cancancan'
 
 gem 'net-pop'
 gem 'net-smtp'
+gem 'net-imap'
 
 gem 'aws-sdk-s3'
 
