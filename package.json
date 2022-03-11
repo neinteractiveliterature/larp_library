@@ -10,7 +10,7 @@
   "dependencies": {
     "@apollo/client": "3.5.10",
     "@aws-crypto/sha256-browser": "2.0.1",
-    "@aws-sdk/md5-js": "3.53.0",
+    "@aws-sdk/md5-js": "3.54.0",
     "@codemirror/lang-markdown": "0.19.6",
     "@dnd-kit/core": "4.0.3",
     "@dnd-kit/sortable": "5.1.0",
