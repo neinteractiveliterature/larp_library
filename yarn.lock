@@ -9336,10 +9336,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"luxon@npm:2.3.1":
-  version: 2.3.1
-  resolution: "luxon@npm:2.3.1"
-  checksum: ce5eec873a0172a0956618531e28010e8d8319a8b3a836b893d0f92239413a1fc5f77841ca24988e27bd61e8b2748e160e9dfcb13e92d7f031c1e31ad1c8ae91
+"luxon@npm:2.3.2":
+  version: 2.3.2
+  resolution: "luxon@npm:2.3.2"
+  checksum: ba4f9daa56d03771c2ddf00e3bf996ec7937badfdc2f85f5b58d63c75bb511369b3316f54ab9ce5ab42bfc9118513971f6599128529b68620b876a4b7c16570b
   languageName: node
   linkType: hard
 
@@ -11929,7 +11929,7 @@ resolve@^2.0.0-next.3:
     jquery: 3.6.0
     lint-staged: 12.3.8
     lodash: 4.17.21
-    luxon: 2.3.1
+    luxon: 2.3.2
     mini-css-extract-plugin: 2.6.0
     prettier: 2.6.2
     process: 0.11.10
