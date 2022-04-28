@@ -4221,6 +4221,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/prop-types@npm:^15.0.0":
+  version: 15.7.5
+  resolution: "@types/prop-types@npm:15.7.5"
+  checksum: 5b43b8b15415e1f298243165f1d44390403bb2bd42e662bca3b5b5633fdd39c938e91b7fce3a9483699db0f7a715d08cef220c121f723a634972fdf596aec980
+  languageName: node
+  linkType: hard
+
 "@types/qs@npm:*":
   version: 6.9.7
   resolution: "@types/qs@npm:6.9.7"
@@ -9537,20 +9544,21 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"mdast-util-to-hast@npm:^11.0.0":
-  version: 11.2.0
-  resolution: "mdast-util-to-hast@npm:11.2.0"
+"mdast-util-to-hast@npm:^12.1.0":
+  version: 12.1.1
+  resolution: "mdast-util-to-hast@npm:12.1.1"
   dependencies:
     "@types/hast": ^2.0.0
     "@types/mdast": ^3.0.0
     "@types/mdurl": ^1.0.0
     mdast-util-definitions: ^5.0.0
     mdurl: ^1.0.0
+    micromark-util-sanitize-uri: ^1.0.0
     unist-builder: ^3.0.0
     unist-util-generated: ^2.0.0
     unist-util-position: ^4.0.0
-    unist-util-visit: ^3.0.0
-  checksum: b7259b7d45ce3c40676e5f70ce4db638e22f8addd11946c5c4368315e9210e40d99f78e66749585002b8eba52917100c533d435b459b930fe415cea10fa2f7cd
+    unist-util-visit: ^4.0.0
+  checksum: 4c5a73e0463493d5ab2c033d42f8daead24d0808969bf21c3a720786784a347cedc1d3ae26b37737dbe3ea0839bc130bf7e20f3bc02e2387e6e7b0a5f94bafe4
   languageName: node
   linkType: hard
 
@@ -11446,26 +11454,34 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"react-is@npm:^17.0.0, react-is@npm:^17.0.1":
+"react-is@npm:^17.0.1":
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 9d6d111d8990dc98bc5402c1266a808b0459b5d54830bbea24c12d908b536df7883f268a7868cfaedde3dd9d4e0d574db456f84d2e6df9c4526f99bb4b5344d8
   languageName: node
   linkType: hard
 
-"react-markdown@npm:7.1.2":
-  version: 7.1.2
-  resolution: "react-markdown@npm:7.1.2"
+"react-is@npm:^18.0.0":
+  version: 18.1.0
+  resolution: "react-is@npm:18.1.0"
+  checksum: d206a0fe6790851bff168727bfb896de02c5591695afb0c441163e8630136a3e13ee1a7ddd59fdccddcc93968b4721ae112c10f790b194b03b35a3dc13a355ef
+  languageName: node
+  linkType: hard
+
+"react-markdown@npm:8.0.3":
+  version: 8.0.3
+  resolution: "react-markdown@npm:8.0.3"
   dependencies:
     "@types/hast": ^2.0.0
+    "@types/prop-types": ^15.0.0
     "@types/unist": ^2.0.0
     comma-separated-tokens: ^2.0.0
     hast-util-whitespace: ^2.0.0
     prop-types: ^15.0.0
     property-information: ^6.0.0
-    react-is: ^17.0.0
+    react-is: ^18.0.0
     remark-parse: ^10.0.0
-    remark-rehype: ^9.0.0
+    remark-rehype: ^10.0.0
     space-separated-tokens: ^2.0.0
     style-to-object: ^0.3.0
     unified: ^10.0.0
@@ -11474,7 +11490,7 @@ fsevents@~2.3.2:
   peerDependencies:
     "@types/react": ">=16"
     react: ">=16"
-  checksum: 6f6cd6cfee64e936edb31e3aca49dd284fc5f55c018cb4430f9b3f2f1b3df343a6507c8f33714f1bb2f620a5a05650166bc1add951fd6f8623731b689afedcfd
+  checksum: 66c0b45889d0262168547d9356145ced276993dac1d441c5c1cf2371fe71f347419696f9040c084c7d77c1caced21d358677c38f66edae736f942ac5964c032f
   languageName: node
   linkType: hard
 
@@ -11789,15 +11805,15 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"remark-rehype@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "remark-rehype@npm:9.0.0"
+"remark-rehype@npm:^10.0.0":
+  version: 10.1.0
+  resolution: "remark-rehype@npm:10.1.0"
   dependencies:
     "@types/hast": ^2.0.0
     "@types/mdast": ^3.0.0
-    mdast-util-to-hast: ^11.0.0
+    mdast-util-to-hast: ^12.1.0
     unified: ^10.0.0
-  checksum: 7b0bb7eb10689786ad967e945eafdcb7f91c00c29e76f531417cf5e75c3547a5e75cf7ce3370f71d0282f50983121af8d88e8eb43548482c76f253a45f1625f1
+  checksum: b9ac8acff3383b204dfdc2599d0bdf86e6ca7e837033209584af2e6aaa6a9013e519a379afa3201299798cab7298c8f4b388de118c312c67234c133318aec084
   languageName: node
   linkType: hard
 
@@ -12072,7 +12088,7 @@ resolve@^2.0.0-next.3:
     react-bootstrap4-modal: 2.0.0
     react-color: 2.19.3
     react-dom: 17.0.2
-    react-markdown: 7.1.2
+    react-markdown: 8.0.3
     react-popper: 2.3.0
     react-router: 6.3.0
     react-router-dom: 6.3.0
