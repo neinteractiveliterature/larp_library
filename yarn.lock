@@ -11478,7 +11478,21 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"react-popper@npm:2.2.5, react-popper@npm:^2.2.5":
+"react-popper@npm:2.3.0":
+  version: 2.3.0
+  resolution: "react-popper@npm:2.3.0"
+  dependencies:
+    react-fast-compare: ^3.0.1
+    warning: ^4.0.2
+  peerDependencies:
+    "@popperjs/core": ^2.0.0
+    react: ^16.8.0 || ^17 || ^18
+    react-dom: ^16.8.0 || ^17 || ^18
+  checksum: 837111c98738011c69b3069a464ea5bdcbf487105b6148e8faf90cb7337e134edb1b98b8824322941c378756cca30a15c18c25f558e53b85ed5762fa0dc8e6b2
+  languageName: node
+  linkType: hard
+
+"react-popper@npm:^2.2.5":
   version: 2.2.5
   resolution: "react-popper@npm:2.2.5"
   dependencies:
@@ -12059,7 +12073,7 @@ resolve@^2.0.0-next.3:
     react-color: 2.19.3
     react-dom: 17.0.2
     react-markdown: 7.1.2
-    react-popper: 2.2.5
+    react-popper: 2.3.0
     react-router: 6.3.0
     react-router-dom: 6.3.0
     react-select: 5.3.1
