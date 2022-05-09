@@ -4031,10 +4031,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rails/ujs@npm:6.1.5":
-  version: 6.1.5
-  resolution: "@rails/ujs@npm:6.1.5"
-  checksum: a7cae76a9b1919951036f1b47038a4fd3faf716f40917a9cbd984bc698ede0079bd5307e2165793f6f8c15fe2e8ec13c0a9f3e687d17f47569939e48db7bafd7
+"@rails/ujs@npm:6.1.6":
+  version: 6.1.6
+  resolution: "@rails/ujs@npm:6.1.6"
+  checksum: 7b811ea6a08c77335dbee60279b84bd245093b282dba53fc646a06d0e7fe20ac38eb4d73feab5845d5a25c6d1e9cd408ad3245baa962e63eb66bc8ca1dc67d37
   languageName: node
   linkType: hard
 
@@ -12184,7 +12184,7 @@ resolve@^2.0.0-next.3:
     "@graphql-codegen/typescript-react-apollo": 3.2.13
     "@neinteractiveliterature/litform": 0.22.1
     "@popperjs/core": 2.11.5
-    "@rails/ujs": 6.1.5
+    "@rails/ujs": 6.1.6
     "@types/codemirror": 5.60.5
     "@types/evaporate": 2.1.7
     "@types/jquery": 3.5.14
