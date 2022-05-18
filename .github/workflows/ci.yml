@@ -1,0 +1,181 @@
+name: Continuous integration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request: {}
+
+jobs:
+  graphql-codegen-tsc:
+    name: graphql-codegen-tsc
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: install node
+      uses: actions/setup-node@v3
+      with:
+        cache: yarn
+    - name: yarn install
+      run: yarn install
+    - name: graphql-codegen
+      run: yarn run graphql:codegen
+    - name: tsc on resulting generated files
+      run: yarn run tsc --noEmit
+  jest:
+    name: jest
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: install node
+      uses: actions/setup-node@v3
+      with:
+        cache: yarn
+    - name: yarn install
+      run: yarn install
+    - name: build
+      run: yarn run test
+    - name: Publish Test Report
+      uses: mikepenz/action-junit-report@v3
+      if: always() # always run even if the previous step fails
+      with:
+        check_name: 'Jest Report'
+        report_paths: 'test/reports/TEST-*.xml'
+    - name: Archive HTML test reports
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-reports
+        path: test/html_reports
+  minitest:
+    name: minitest
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost/larp_library_test
+      RAILS_ENV: test
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+        env:
+          discovery.type: single-node
+        options: >-
+          --health-cmd "curl http://localhost:9200/_cluster/health"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+        ports:
+          - 9200:9200
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install libvips42
+        run: sudo apt-get update && sudo apt-get install libvips42
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Database setup
+        run: bundle exec rails db:create db:migrate
+      - name: Run tests
+        run: TERM=xterm-color bundle exec rails test
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v3
+        if: always() # always run even if the previous step fails
+        with:
+          check_name: 'Minitest Report'
+          report_paths: 'test/reports/TEST-*.xml'
+      - name: Archive HTML test reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-reports
+          path: test/html_reports
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up webpack cache
+      uses: actions/cache@v3
+      id: webpack-cache # use this to check for `cache-hit` (`steps.webpack-cache.outputs.cache-hit != 'true'`)
+      with:
+        path: build-cache
+        key: ${{ runner.os }}-dockerimage-webpack-${{ github.ref }}
+        restore-keys: |
+          ${{ runner.os }}-dockerimage-webpack-${{ github.ref }}-
+          ${{ runner.os }}-dockerimage-webpack-
+    - name: install node
+      uses: actions/setup-node@v3
+      with:
+        cache: yarn
+    - name: yarn install
+      run: yarn install
+    - name: Log in to registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    - name: Build webpack bundle
+      run: yarn run build
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@master
+    - name: Read .ruby-version
+      id: ruby-version
+      run: echo "::set-output name=ruby-version::$(cat .ruby-version)"
+    - name: Read .node-version
+      id: node-version
+      run: echo "::set-output name=node-version::$(cat .node-version)"
+    - name: Build (and push to Docker Hub, if on main)
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
+        platforms: linux/amd64,linux/arm64
+        target: production
+        tags: |
+          ghcr.io/neinteractiveliterature/larp_library:${{ github.sha }}
+        build-args: |
+          RUBY_VERSION=${{ steps.ruby-version.outputs.ruby-version }}
+          NODE_VERSION=${{ steps.node-version.outputs.node-version }}
+        cache-from: type=gha,scope=${{ github.workflow }}
+        cache-to: type=gha,mode=max,scope=${{ github.workflow }}
+  update-release-draft:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
+    needs:
+      - graphql-codegen-tsc
+      - jest
+      - minitest
+      - docker-build
+    outputs:
+      name: ${{ steps.release-drafter.outputs.name }}
+      html_url: ${{ steps.release-drafter.outputs.html_url }}
+    steps:
+      - uses: release-drafter/release-drafter@v5
+        id: release-drafter
+        with:
+          config-name: release-drafter.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Post about drafted release to Slack
+        id: slack
+        uses: slackapi/slack-github-action@v1.18.0
+        with:
+          channel-id: ${{ secrets.SlackCISuccessNotificationChannelID }}
+          slack-message: |
+            Draft Larp Library release ${{ steps.release-drafter.outputs.name }} updated:
+
+            - ${{ join(github.event.commits.*.message, '%0A- ') }}
+
+            To release Larp Library to production, visit: ${{ steps.release-drafter.outputs.html_url }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SlackToken }}
