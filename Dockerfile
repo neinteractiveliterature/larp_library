@@ -10,7 +10,7 @@ USER root
 RUN useradd www
 WORKDIR /usr/src/larp_library
 
-RUN apt-get update && apt-get install -y libvips42 git build-essential shared-mime-info libpq-dev && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y git build-essential shared-mime-info libpq-dev && rm -rf /var/lib/apt/lists/*
 
 COPY --chown=www:www Gemfile Gemfile.lock .ruby-version /usr/src/larp_library/
 RUN bundle config set without 'development test' \
@@ -59,7 +59,7 @@ ENV NODE_ENV production
 
 USER root
 RUN useradd -ms /bin/bash www
-RUN apt-get update && apt-get install -y --no-install-recommends libvips42 poppler-utils curl xz-utils libjemalloc2 shared-mime-info libpq5 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends libjemalloc2 shared-mime-info libpq5 && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build --chown=www /usr/src/larp_library /usr/src/larp_library

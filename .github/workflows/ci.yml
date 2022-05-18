@@ -22,31 +22,6 @@ jobs:
       run: yarn run graphql:codegen
     - name: tsc on resulting generated files
       run: yarn run tsc --noEmit
-  jest:
-    name: jest
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: install node
-      uses: actions/setup-node@v3
-      with:
-        cache: yarn
-    - name: yarn install
-      run: yarn install
-    - name: build
-      run: yarn run test
-    - name: Publish Test Report
-      uses: mikepenz/action-junit-report@v3
-      if: always() # always run even if the previous step fails
-      with:
-        check_name: 'Jest Report'
-        report_paths: 'test/reports/TEST-*.xml'
-    - name: Archive HTML test reports
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: test-reports
-        path: test/html_reports
   minitest:
     name: minitest
     runs-on: ubuntu-latest
@@ -78,12 +53,12 @@ jobs:
           - 9200:9200
     steps:
       - uses: actions/checkout@v3
-      - name: Install libvips42
-        run: sudo apt-get update && sudo apt-get install libvips42
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+      - name: Elasticsearch index setup
+        run: bundle exec rails larp_library:elasticsearch:setup
       - name: Database setup
         run: bundle exec rails db:create db:migrate
       - name: Run tests
@@ -153,7 +128,6 @@ jobs:
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
     needs:
       - graphql-codegen-tsc
-      - jest
       - minitest
       - docker-build
     outputs:
