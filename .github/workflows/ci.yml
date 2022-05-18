@@ -57,10 +57,10 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      - name: Elasticsearch index setup
-        run: bundle exec rails larp_library:elasticsearch:setup
       - name: Database setup
         run: bundle exec rails db:create db:migrate
+      - name: Elasticsearch index setup
+        run: bundle exec rails larp_library:elasticsearch:setup
       - name: Run tests
         run: TERM=xterm-color bundle exec rails test
       - name: Publish Test Report
