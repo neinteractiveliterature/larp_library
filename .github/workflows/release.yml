@@ -45,13 +45,13 @@ jobs:
     - name: Log in to registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
     - name: Pull built image
-      run: docker pull ghcr.io/neinteractiveliterature/larp-library:${{ github.sha }}
+      run: docker pull ghcr.io/neinteractiveliterature/larp_library:${{ github.sha }}
     - name: Log into Heroku Container Registry
       env:
         HEROKU_API_KEY: ${{ secrets.HerokuApiToken }}
       run: heroku container:login
     - name: Tag production image as "web"
-      run: docker tag ghcr.io/neinteractiveliterature/larp-library:${{ github.sha }} registry.heroku.com/larp-library/web
+      run: docker tag ghcr.io/neinteractiveliterature/larp_library:${{ github.sha }} registry.heroku.com/larp-library/web
     - name: Push "web" image to Heroku Container Registry
       run: docker push registry.heroku.com/larp-library/web
     - name: Release app to Heroku
