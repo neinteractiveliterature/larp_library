@@ -1,5 +1,6 @@
+# frozen_string_literal: true
 module Types
-  class QueryType < Types::BaseObject
+  class QueryType < Types::BaseObject # rubocop:disable Metrics/ClassLength
     include GraphQL::Types::Relay::HasNodeField
     include GraphQL::Types::Relay::HasNodesField
 
@@ -23,6 +24,7 @@ module Types
       argument :facilitator_count_lower_bound, Int, required: false
     end
 
+    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ParameterLists
     def projects(
       query_string: nil,
       tag: nil,
@@ -34,21 +36,22 @@ module Types
       facilitator_count_upper_bound: nil,
       facilitator_count_lower_bound: nil
     )
-      SearchRequest.new(
-        Project,
-        ProjectSearch.new(
-          query_string: query_string,
-          tag: tag,
-          brand_id: brand_id,
-          title: title,
-          authors: authors,
-          player_count_upper_bound: player_count_upper_bound,
-          player_count_lower_bound: player_count_lower_bound,
-          facilitator_count_upper_bound: facilitator_count_upper_bound,
-          facilitator_count_lower_bound: facilitator_count_lower_bound
-        ).to_hash
-      )
+      scope = Project.joins(:brand).where(brands: { approved: true })
+
+      scope = scope.joins(:tags).where(tags: { name: tag }) if tag.present?
+      scope = scope.where(brand_id: brand_id) if brand_id.present?
+      scope = scope.search_title(title) if title.present?
+      scope = scope.search_authors(authors) if authors.present?
+      scope = scope.where("max_players >= ?", player_count_upper_bound) if player_count_upper_bound.present?
+      scope = scope.where("min_players <= ?", player_count_lower_bound) if player_count_lower_bound.present?
+      scope =
+        scope.where("max_facilitators >= ?", facilitator_count_upper_bound) if facilitator_count_upper_bound.present?
+      scope =
+        scope.where("min_facilitators <= ?", facilitator_count_lower_bound) if facilitator_count_lower_bound.present?
+
+      query_string.present? ? scope.search(query_string) : scope.order(:title_for_ordering)
     end
+    # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ParameterLists
 
     field :brand, Types::BrandType, null: false do
       argument :id, ID, required: false
@@ -61,7 +64,7 @@ module Types
       elsif slug
         Brand.find_by!(slug: slug)
       else
-        raise GraphQL::ExecutionError, 'Either id or slug must be specified to find a Brand'
+        raise GraphQL::ExecutionError, "Either id or slug must be specified to find a Brand"
       end
     end
 
@@ -83,12 +86,13 @@ module Types
     end
 
     def brands(unapproved: false)
-      scope = Brand
-        .select('brands.*, count(projects.id) as project_count')
-        .joins('left join projects on projects.brand_id = brands.id')
-        .group('projects.brand_id, brands.id')
-        .order('project_count desc')
-        .accessible_by(context[:current_ability])
+      scope =
+        Brand
+          .select("brands.*, count(projects.id) as project_count")
+          .joins("left join projects on projects.brand_id = brands.id")
+          .group("projects.brand_id, brands.id")
+          .order("project_count desc")
+          .accessible_by(context[:current_ability])
 
       scope = scope.where(approved: false) if unapproved
       scope
@@ -99,22 +103,18 @@ module Types
     end
 
     def tags(query_string: nil)
+      scope = Tag.order("upper(tags.name)")
+
       if query_string.present?
-        SearchRequest.new(
-          Tag,
-          {
-            query: {
-              multi_match: {
-                query: query_string,
-                fields: [:name, :category_name],
-                type: 'phrase_prefix'
-              }
-            }
-          }
-        )
-      else
-        Tag.order('upper(name)')
+        scope =
+          scope.left_joins(:tag_category).where(
+            "tags.name ILIKE ? OR tag_categories.name ILIKE ?",
+            "#{query_string}%",
+            "#{query_string}%"
+          )
       end
+
+      scope
     end
 
     field :tag, Types::TagType, null: false do
@@ -140,8 +140,8 @@ module Types
     end
 
     def tag_categories(query_string: nil)
-      scope = TagCategory.order('upper(name)')
-      scope = scope.where('upper(name) like ?', "#{query_string.upcase}%") if query_string.present?
+      scope = TagCategory.order("upper(name)")
+      scope = scope.where("upper(name) like ?", "#{query_string.upcase}%") if query_string.present?
       scope
     end
 
@@ -156,7 +156,7 @@ module Types
     field :project_promotions, [Types::ProjectPromotionType], null: false
 
     def project_promotions
-      ProjectPromotion.joins(:project).order('projects.title')
+      ProjectPromotion.joins(:project).order("projects.title")
     end
 
     field :licenses, [Types::LicenseType], null: false

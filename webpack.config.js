@@ -8,8 +8,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 
 const ASSET_PATH =
-  process.env.ASSET_PATH ||
-  (process.env.NODE_ENV === 'production' ? '/packs/' : 'http://localhost:3042/packs/');
+  process.env.ASSET_PATH || (process.env.NODE_ENV === 'production' ? '/packs/' : 'http://localhost:3042/packs/');
 
 const config = {
   mode: env.NODE_ENV === 'production' ? 'production' : 'development',
@@ -35,10 +34,6 @@ const config = {
   resolve: {
     extensions: ['.js', '.mjs', '.ts', '.tsx'],
     modules: [path.resolve(__dirname, './app/javascript'), 'node_modules'],
-    alias: {
-      'react/jsx-dev-runtime': 'react/jsx-dev-runtime.js',
-      'react/jsx-runtime': 'react/jsx-runtime.js',
-    },
     fallback: {
       assert: require.resolve('assert/'),
       process: require.resolve('process/browser'),
@@ -54,11 +49,7 @@ const config = {
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [
-          MiniCssExtractPlugin.loader,
-          require.resolve('css-loader'),
-          require.resolve('sass-loader'),
-        ],
+        use: [MiniCssExtractPlugin.loader, require.resolve('css-loader'), require.resolve('sass-loader')],
       },
       {
         test: /\.css$/i,

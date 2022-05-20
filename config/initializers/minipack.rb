@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Minipack.configuration do |c|
   # By default c.cache is set to `false`, which means an application always parses a
   # manifest.json. In development, you should set cache false usually.
@@ -5,11 +6,12 @@ Minipack.configuration do |c|
   c.cache = !Rails.env.development?
 
   # Register a path to a manifest file here. Right now you have to specify an absolute path.
-  c.manifest = if Rails.env.development?
-    'http://localhost:3042/packs/manifest.json'
-  else
-    Rails.root.join('public', 'packs', 'manifest.json')
-  end
+  c.manifest =
+    if Rails.env.development?
+      "http://localhost:3042/packs/manifest.json"
+    else
+      Rails.root.join("public/packs/manifest.json")
+    end
 
   # If you are not extracting CSS in your webpack config you should set this flag to false
   # c.extract_css = !Rails.env.development?
@@ -49,11 +51,11 @@ Minipack.configuration do |c|
   # c.build_command = 'node_modules/.bin/webpack --config config/webpack.config.js --mode production'
   #
   # You are also able to specify npm run script.
-  c.build_command = 'yarn run build'
+  c.build_command = "yarn run build"
 
   # A full package installation command, with it's arguments and options. The command is executed under the `base_path`.
   # c.pkg_install_command = 'npm install'
   #
   # If you prefer `yarn`:
-  c.pkg_install_command = 'yarn install'
+  c.pkg_install_command = "yarn install"
 end

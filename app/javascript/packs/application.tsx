@@ -1,7 +1,7 @@
 import '../setPublicPath';
 import 'regenerator-runtime/runtime';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import 'bootstrap/js/dist/alert';
 import 'bootstrap/js/dist/dropdown';
@@ -20,7 +20,8 @@ window.addEventListener('load', () => {
 
     if (reactClass) {
       const props = JSON.parse(element.getAttribute('data-props') ?? '{}');
-      ReactDOM.render(React.createElement(reactClass, props), element);
+      const root = createRoot(element);
+      root.render(React.createElement(reactClass, props));
     }
   });
 });

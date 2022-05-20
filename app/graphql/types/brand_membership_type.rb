@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Types
   class BrandMembershipType < Types::BaseObject
     perform_authorization

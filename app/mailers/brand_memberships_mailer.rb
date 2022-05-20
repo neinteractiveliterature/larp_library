@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class BrandMembershipsMailer < ApplicationMailer
   def invitation(brand_membership, inviting_user)
     @brand_membership = brand_membership

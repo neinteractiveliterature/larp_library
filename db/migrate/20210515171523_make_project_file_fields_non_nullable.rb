@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MakeProjectFileFieldsNonNullable < ActiveRecord::Migration[6.1]
   def change
     %i[url filename filesize filepath].each do |column_name|

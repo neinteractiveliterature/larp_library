@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Types
   class AbilityType < Types::BaseObject
     field :can_create_project_promotions, Boolean, null: false

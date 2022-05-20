@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MakeTagFieldsNonNullable < ActiveRecord::Migration[6.1]
   def change
     change_column_null :tags, :name, false

@@ -1,6 +1,7 @@
+# frozen_string_literal: true
 module AbsoluteUrls
   def default_url_scheme
-    Rails.env.production? ? 'https' : 'http'
+    Rails.env.production? ? "https" : "http"
   end
 
   def default_url_host

@@ -1,8 +1,5 @@
 {
-  "extends": [
-    "config:base",
-    ":disableRateLimiting"
-  ],
+  "extends": ["config:base", ":disableRateLimiting"],
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
@@ -13,8 +10,9 @@
       "automerge": true
     },
     {
-      "matchPackageNames": ["elasticsearch", "elasticsearch-transport", "elasticsearch-api"],
-      "allowedVersions": "< 7.14"
+      "matchPackagePrefixes": ["@neinteractiveliterature/litform", "@codemirror/*"],
+      "enabled": false
     }
-  ]
+  ],
+  "postUpdateOptions": ["yarnDedupeHighest"]
 }

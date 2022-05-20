@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 class SessionsController < Devise::CasSessionsController
-  prepend_before_action :set_return_to, only: [:new]
+  prepend_before_action :set_return_to, only: [:new] # rubocop:disable Rails/LexicallyScopedActionFilter
 
   private
 
   def set_return_to
-    return unless params[:user_return_to].present?
+    return if params[:user_return_to].blank?
     session[:user_return_to] = params[:user_return_to]
   end
 end

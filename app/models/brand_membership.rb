@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class BrandMembership < ApplicationRecord
   belongs_to :brand
   belongs_to :user, optional: true
@@ -5,10 +6,11 @@ class BrandMembership < ApplicationRecord
   delegate :email, to: :user, allow_nil: true
   after_save :send_invitation_email_if_necessary
 
-  validates :user_id, uniqueness: {
-    unless: :invitation_token,
-    message: 'is already a member of this brand'
-  }
+  validates :user_id,
+            uniqueness: {
+              unless: :invitation_token,
+              message: "is already a member of this brand"
+            }
 
   def email=(email)
     self.invitation_email = email
@@ -17,7 +19,7 @@ class BrandMembership < ApplicationRecord
   end
 
   def inviting_user_id=(inviting_user_id)
-    return unless inviting_user_id.present?
+    return if inviting_user_id.blank?
     @inviting_user = User.find(inviting_user_id)
   end
 

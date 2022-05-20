@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Mutations
   class DeleteProject < BaseMutation
     argument :id, ID, required: true
