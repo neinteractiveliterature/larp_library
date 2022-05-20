@@ -2833,7 +2833,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prettier/plugin-ruby@npm:^3.1.2":
+"@prettier/plugin-ruby@npm:3.1.2":
   version: 3.1.2
   resolution: "@prettier/plugin-ruby@npm:3.1.2"
   dependencies:
@@ -10618,7 +10618,7 @@ __metadata:
     "@graphql-codegen/typescript-react-apollo": 3.2.14
     "@neinteractiveliterature/litform": 0.21.0
     "@popperjs/core": 2.11.5
-    "@prettier/plugin-ruby": ^3.1.2
+    "@prettier/plugin-ruby": 3.1.2
     "@rails/ujs": 6.1.6
     "@types/codemirror": 5.60.5
     "@types/evaporate": 2.1.7
