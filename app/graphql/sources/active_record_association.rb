@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 class Sources::ActiveRecordAssociation < GraphQL::Dataloader::Source
   def initialize(model_class, association_name)
-    super
+    super()
+
     @model_class = model_class
     @association_name = association_name
 
