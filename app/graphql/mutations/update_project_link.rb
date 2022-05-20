@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Mutations
   class UpdateProjectLink < BaseMutation
     argument :id, ID, required: true

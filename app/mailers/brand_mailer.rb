@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class BrandMailer < ApplicationMailer
   def brand_pending(brand)
     @brand = brand

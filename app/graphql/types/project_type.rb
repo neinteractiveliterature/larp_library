@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Types
   class ProjectType < Types::BaseObject
     perform_authorization
@@ -28,7 +29,7 @@ module Types
     association_loaders Project, :brand, :project_files, :project_links, :tags
 
     def license
-      return nil unless object.license.present?
+      return nil if object.license.blank?
       Project::LICENSES[object.license.to_sym]&.merge(id: object.license)
     end
 

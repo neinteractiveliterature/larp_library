@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 class AddPositionToProjectFiles < ActiveRecord::Migration[6.1]
   def change
     add_column :project_files, :position, :integer
 
     reversible do |dir|
       dir.up do
-        execute <<~SQL
+        execute <<~SQL.squish
           UPDATE project_files
           SET position = subquery.position
           FROM (

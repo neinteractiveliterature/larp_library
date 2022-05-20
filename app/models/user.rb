@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 class User < ApplicationRecord
   devise :cas_authenticatable, :trackable
 
-  has_many :brand_memberships
+  has_many :brand_memberships, dependent: :destroy
   has_many :brands, through: :brand_memberships
 
   def name

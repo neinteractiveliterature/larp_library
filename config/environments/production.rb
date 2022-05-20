@@ -1,4 +1,5 @@
-Rails.application.configure do
+# frozen_string_literal: true
+Rails.application.configure do # rubocop:disable Metrics/BlockLength
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -11,7 +12,7 @@ Rails.application.configure do
   config.eager_load = true
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
   # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
@@ -20,12 +21,12 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
 
   config.public_file_server.headers = {
-    'Access-Control-Allow-Origin' => '*',
-    'Cache-Control' => 'public, max-age=15552000',
-    'Expires' => "#{1.year.from_now.to_formatted_s(:rfc822)}"
+    "Access-Control-Allow-Origin" => "*",
+    "Cache-Control" => "public, max-age=15552000",
+    "Expires" => 1.year.from_now.to_formatted_s(:rfc822).to_s
   }
 
   # Compress CSS using a preprocessor.
@@ -35,7 +36,7 @@ Rails.application.configure do
   config.assets.compile = false
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  asset_hostname = ENV['ASSETS_HOST'] || config.action_mailer.default_url_options[:host]
+  asset_hostname = ENV["ASSETS_HOST"] || config.action_mailer.default_url_options[:host]
   config.action_controller.asset_host = "//#{asset_hostname}"
 
   # Specifies the header that your server uses for sending files.
@@ -58,7 +59,7 @@ Rails.application.configure do
   config.log_level = :debug
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
+  config.log_tags = [:request_id]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -88,17 +89,17 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger = ActiveSupport::Logger.new($stdout)
     logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
 
-  config.action_mailer.default_url_options = { host: 'www.larplibrary.org', protocol: 'https' }
+  config.action_mailer.default_url_options = { host: "www.larplibrary.org", protocol: "https" }
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.action_mailer.default_url_options = { host: 'www.larplibrary.org', protocol: 'https' }
+  config.action_mailer.default_url_options = { host: "www.larplibrary.org", protocol: "https" }
   config.action_mailer.delivery_method = :aws_sdk
 
   # Inserts middleware to perform automatic connection switching.

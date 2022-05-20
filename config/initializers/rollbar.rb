@@ -1,30 +1,29 @@
-require 'rollbar/rails'
+# frozen_string_literal: true
+require "rollbar/rails"
 
-Rollbar.configure do |config|
+Rollbar.configure do |config| # rubocop:disable Metrics/BlockLength
   # Without configuration, Rollbar is enabled in all environments.
   # To disable in specific environments, set config.enabled=false.
 
-  config.access_token = ENV['ROLLBAR_ACCESS_TOKEN']
+  config.access_token = ENV["ROLLBAR_ACCESS_TOKEN"]
 
   # Only enable in production environment
   config.enabled = false unless Rails.env.production?
 
-  capistrano_revision_path = File.expand_path('REVISION', Rails.root)
-  rollbar_code_version = ENV['HEROKU_SLUG_COMMIT']
-  rollbar_code_version ||= if File.exist?(capistrano_revision_path)
-    File.read(capistrano_revision_path).strip
-  end
+  capistrano_revision_path = File.expand_path("REVISION", Rails.root)
+  rollbar_code_version = ENV["HEROKU_SLUG_COMMIT"]
+  rollbar_code_version ||= (File.read(capistrano_revision_path).strip if File.exist?(capistrano_revision_path))
 
   # Mask the least significant bits of the IP
   config.anonymize_user_ip = true
 
-  if ENV['ROLLBAR_CLIENT_ACCESS_TOKEN'] && !Rails.env.test?
+  if ENV["ROLLBAR_CLIENT_ACCESS_TOKEN"] && !Rails.env.test?
     config.js_enabled = true
     config.js_options = {
-      accessToken: ENV['ROLLBAR_CLIENT_ACCESS_TOKEN'],
+      accessToken: ENV["ROLLBAR_CLIENT_ACCESS_TOKEN"],
       captureUncaught: true,
       captureUnhandledRejections: true,
-      captureIp: 'anonymous',
+      captureIp: "anonymous",
       payload: {
         environment: Rails.env.to_s,
         client: {
@@ -57,9 +56,7 @@ Rollbar.configure do |config|
   # has already been reported and logged the level will need to be changed
   # via the rollbar interface.
   # Valid levels: 'critical', 'error', 'warning', 'info', 'debug', 'ignore'
-  config.exception_level_filters.merge!(
-    'ActionController::RoutingError' => 'ignore'
-  )
+  config.exception_level_filters["ActionController::RoutingError"] = "ignore"
 
   # Enable asynchronous reporting (uses girl_friday or Threading if girl_friday
   # is not installed)
@@ -94,5 +91,5 @@ Rollbar.configure do |config|
   # environment variable like this: `ROLLBAR_ENV=staging`. This is a recommended
   # setup for Heroku. See:
   # https://devcenter.heroku.com/articles/deploying-to-a-custom-rails-environment
-  config.environment = ENV['ROLLBAR_ENV'].presence || Rails.env
+  config.environment = ENV["ROLLBAR_ENV"].presence || Rails.env
 end

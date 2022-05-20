@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 class ProjectFile < ApplicationRecord
   def self.s3_bucket
-    ENV['AWS_S3_BUCKET'] || "larp-library-#{Rails.env}"
+    ENV["AWS_S3_BUCKET"] || "larp-library-#{Rails.env}"
   end
 
   belongs_to :project
-  belongs_to :uploader, class_name: 'User'
+  belongs_to :uploader, class_name: "User"
   validate :project_must_have_license, on: :create
   acts_as_list scope: :project
 
@@ -35,11 +36,11 @@ class ProjectFile < ApplicationRecord
   end
 
   def s3_key
-    CGI.unescape filepath.gsub(%r{\A/#{ProjectFile.s3_bucket}/}, '')
+    CGI.unescape filepath.gsub(%r{\A/#{ProjectFile.s3_bucket}/}, "")
   end
 
   def project_must_have_license
     return if project&.license.present?
-    errors.add(:base, 'Attaching files is only allowed for projects that specify a license')
+    errors.add(:base, "Attaching files is only allowed for projects that specify a license")
   end
 end

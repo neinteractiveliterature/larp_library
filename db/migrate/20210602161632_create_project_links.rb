@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateProjectLinks < ActiveRecord::Migration[6.1]
   def change
     create_table :project_links do |t|

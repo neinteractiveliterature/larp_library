@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Types
   class LicenseType < Types::BaseObject
     field :id, ID, null: false
@@ -14,7 +15,7 @@ module Types
 
     def discouraged_reason
       return nil unless discouraged
-      return 'discouraged, see our licensing page for details' unless object[:discouraged_reason]
+      return "discouraged, see our licensing page for details" unless object[:discouraged_reason]
       object[:discouraged_reason]
     end
   end

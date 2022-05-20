@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Mutations
   class CreateProject < BaseMutation
     argument :brand_id, ID, required: true

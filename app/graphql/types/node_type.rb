@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Types
   module NodeType
     include Types::BaseInterface

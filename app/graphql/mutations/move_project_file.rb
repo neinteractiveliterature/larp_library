@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Mutations
   class MoveProjectFile < BaseMutation
     argument :id, ID, required: true
@@ -15,7 +16,7 @@ module Mutations
     def resolve(destination_index:, **_args)
       # https://github.com/brendon/acts_as_list#2-rescue-then-retry
       attempts_left = 2
-      while attempts_left > 0
+      while attempts_left.positive?
         attempts_left -= 1
         begin
           ProjectFile.transaction do
@@ -23,7 +24,7 @@ module Mutations
           end
           attempts_left = 0
         rescue ActiveRecord::Deadlocked
-          raise unless attempts_left > 0
+          raise unless attempts_left.positive?
         end
       end
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Types
   class BaseConnection < Types::BaseObject
     include GraphQL::Types::Relay::ConnectionBehaviors
@@ -13,8 +14,6 @@ module Types
       case object
       when GraphQL::Pagination::ActiveRecordRelationConnection
         count_active_record_relation
-      when Connections::SearchRequestConnection
-        object.total_count
       else
         object.nodes&.count
       end
@@ -27,13 +26,13 @@ module Types
       scope = object.items
 
       scope_has_id = scope.select_values.any? do |select_value|
-        select_value.split(',').map(&:strip).any? do |column_spec|
+        select_value.split(",").map(&:strip).any? do |column_spec|
           ["#{model.table_name}.*", "#{model.table_name}.id"].include?(column_spec)
         end
       end
       scope = scope.select(:id) unless scope_has_id
 
-      where_clause = <<~SQL
+      where_clause = <<~SQL.squish
         #{model.table_name}.id IN (SELECT scoped_query.id FROM (#{scope.to_sql}) scoped_query)
       SQL
 

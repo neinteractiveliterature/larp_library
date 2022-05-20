@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Mutations
   class CreateTagCategory < BaseMutation
     argument :tag_category_attributes, Types::TagCategoryAttributes, required: true

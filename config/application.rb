@@ -1,35 +1,37 @@
-require_relative 'boot'
+# frozen_string_literal: true
+require_relative "boot"
 
-require 'rails'
+require "rails"
 
 # Pick the frameworks you want:
-require 'active_model/railtie'
-require 'active_record/railtie'
+require "active_model/railtie"
+require "active_record/railtie"
 # require 'active_storage/engine'
-require 'action_controller/railtie'
-require 'action_mailer/railtie'
+require "action_controller/railtie"
+require "action_mailer/railtie"
 # require 'action_mailbox/engine'
 # require 'action_text/engine'
-require 'action_view/railtie'
+require "action_view/railtie"
 # require 'action_cable/engine'
-require 'sprockets/railtie'
-require 'rails/test_unit/railtie'
+require "sprockets/railtie"
+require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
-
-require 'elasticsearch/rails/instrumentation'
 
 module LarpLibrary
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
 
-    config.rack_cas.server_url = 'https://accounts.sugarpond.net/cas'
-    config.rack_cas.service = '/users/service'
+    config.rack_cas.server_url = "https://accounts.sugarpond.net/cas"
+    config.rack_cas.service = "/users/service"
 
     config.middleware.use Rack::Deflater
+
+    # we use generated columns, which the Ruby schema format doesn't support
+    config.active_record.schema_format = :sql
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

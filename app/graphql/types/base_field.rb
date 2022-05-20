@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Types
   class BaseField < GraphQL::Schema::Field
     argument_class Types::BaseArgument
@@ -17,9 +18,7 @@ not nullable"
     attr_reader :required_permission
 
     def resolve(object, arguments, context)
-      if required_permission && !context[:current_ability].can?(required_permission, object)
-        return nil
-      end
+      return nil if required_permission && !context[:current_ability].can?(required_permission, object)
 
       super
     end

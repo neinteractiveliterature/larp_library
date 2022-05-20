@@ -28,11 +28,7 @@ gem 'redcarpet'
 gem 'truncate_html'
 gem 'color'
 
-# Very important: do not upgrade Elasticsearch gem, it will break on Bonsai because Elasticsearch
-# are being assholes about open source
-gem 'elasticsearch', '7.13.3'
-gem 'elasticsearch-rails', '~> 7.2.0'
-gem 'elasticsearch-model', '~> 7.2.0'
+gem 'pg_search'
 
 gem 'rollbar'
 
@@ -42,9 +38,11 @@ gem 'acts_as_list'
 
 group :development do
   gem 'graphiql-rails'
+  gem 'prettier', '~> 3.1'
+  gem 'prettier_print'
   gem 'rubocop'
-  gem 'rubocop-rails'
   gem 'rubocop-performance'
+  gem 'rubocop-rails'
   gem 'solargraph'
 end
 

@@ -1,16 +1,13 @@
+# frozen_string_literal: true
 class Tag < ApplicationRecord
-  include ElasticsearchModel
+  include PgSearch::Model
+  multisearchable against: %i[name category_name]
 
-  has_and_belongs_to_many :projects
+  has_and_belongs_to_many :projects # rubocop:disable Rails/HasAndBelongsToMany
   belongs_to :tag_category, optional: true
 
   validates :name, presence: true
-  delegate :name, to: :tag_category, prefix: 'category', allow_nil: true
-
-  mapping do
-    indexes :name, type: 'text'
-    indexes :category_name, type: 'text'
-  end
+  delegate :name, to: :tag_category, prefix: "category", allow_nil: true
 
   def color
     tag_category.try(:color) || TagCategory.new.color
