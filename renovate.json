@@ -10,10 +10,6 @@
       "automerge": true
     },
     {
-      "matchPackageNames": ["elasticsearch", "elasticsearch-transport", "elasticsearch-api"],
-      "allowedVersions": "< 7.14"
-    },
-    {
       "matchPackagePrefixes": ["@neinteractiveliterature/litform", "@codemirror/*"],
       "enabled": false
     }
