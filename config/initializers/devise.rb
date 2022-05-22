@@ -1,8 +1,11 @@
 # frozen_string_literal: true
+
+require "omniauth/strategies/intercode"
+
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
-  config.cas_logout_url_param = "destination"
+  config.omniauth :intercode, ENV["INTERCODE_APP_ID"], ENV["INTERCODE_APP_SECRET"], scope: "public openid"
 
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
@@ -14,7 +17,7 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = "nat@aegames.org"
+  config.mailer_sender = "webmaster@interactiveliterature.org"
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'

@@ -64,6 +64,7 @@ GEM
       activerecord (>= 4.2)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
+    aes_key_wrap (1.1.0)
     ast (2.4.2)
     aws-eventstream (1.2.0)
     aws-partitions (1.494.0)
@@ -105,6 +106,7 @@ GEM
     backport (1.2.0)
     bcrypt (3.1.16)
     benchmark (0.1.1)
+    bindata (2.4.10)
     builder (3.2.4)
     byebug (11.1.3)
     cancancan (3.3.0)
@@ -124,9 +126,6 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-    devise_cas_authenticatable (2.0.0.alpha1)
-      devise (>= 4.0.0)
-      rack-cas
     diff-lcs (1.4.4)
     digest (3.1.0)
     dotenv (2.7.6)
@@ -140,6 +139,10 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
+    faraday (2.3.0)
+      faraday-net_http (~> 2.0)
+      ruby2_keywords (>= 0.0.4)
+    faraday-net_http (2.0.3)
     ffi (1.15.3)
     globalid (1.0.0)
       activesupport (>= 5.0)
@@ -147,6 +150,9 @@ GEM
       railties
       sprockets-rails
     graphql (1.12.16)
+    graphql-client (0.18.0)
+      activesupport (>= 3.0)
+      graphql
     graphql-rails_logger (1.2.3)
       actionpack (> 5.0)
       activesupport (> 5.0)
@@ -155,11 +161,21 @@ GEM
     haml (5.2.2)
       temple (>= 0.8.0)
       tilt
+    hashie (5.0.0)
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
+    intercode_client (0.1.1)
+      graphql-client
+      json-jwt
+      omniauth-oauth2
     io-wait (0.2.1)
     jaro_winkler (1.5.4)
     jmespath (1.4.0)
+    json-jwt (1.13.0)
+      activesupport (>= 4.2)
+      aes_key_wrap
+      bindata
+    jwt (2.3.0)
     kramdown (2.3.1)
       rexml
     kramdown-parser-gfm (1.1.0)
@@ -180,6 +196,8 @@ GEM
       actionview
       railties (>= 4.2)
     minitest (5.15.0)
+    multi_json (1.15.0)
+    multi_xml (0.6.0)
     net-imap (0.2.3)
       digest
       net-protocol
@@ -199,6 +217,22 @@ GEM
     nokogiri (1.13.6)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
+    oauth2 (1.4.9)
+      faraday (>= 0.17.3, < 3.0)
+      jwt (>= 1.0, < 3.0)
+      multi_json (~> 1.3)
+      multi_xml (~> 0.5)
+      rack (>= 1.2, < 3)
+    omniauth (2.1.0)
+      hashie (>= 3.4.6)
+      rack (>= 2.2.3)
+      rack-protection
+    omniauth-oauth2 (1.7.2)
+      oauth2 (~> 1.4)
+      omniauth (>= 1.9, < 3)
+    omniauth-rails_csrf_protection (1.0.1)
+      actionpack (>= 4.2)
+      omniauth (~> 2.0)
     orm_adapter (0.5.0)
     parallel (1.20.1)
     parser (3.0.2.0)
@@ -226,6 +260,8 @@ GEM
       addressable (~> 2.3)
       nokogiri (~> 1.5)
       rack (>= 1.3)
+    rack-protection (2.2.0)
+      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (6.1.6)
@@ -289,6 +325,7 @@ GEM
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
     ruby-progressbar (1.11.0)
+    ruby2_keywords (0.0.5)
     solargraph (0.43.0)
       backport (~> 1.2)
       benchmark
@@ -348,17 +385,18 @@ DEPENDENCIES
   color
   database_cleaner
   devise (~> 4.8.0)
-  devise_cas_authenticatable (~> 2.0.0.alpha1)
   dotenv-rails
   factory_bot_rails
   graphiql-rails
   graphql
   graphql-rails_logger
+  intercode_client
   listen
   minipack
   net-imap
   net-pop
   net-smtp
+  omniauth-rails_csrf_protection
   pg
   pg_search
   prettier (~> 3.1)

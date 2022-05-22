@@ -3,5 +3,7 @@
   s3Configuration: {
     awsAccessKeyId: ENV['AWS_ACCESS_KEY_ID'],
     bucketName: (ENV['AWS_S3_BUCKET'] || "larp-library-#{Rails.env}")
-  }
+  },
+  signInCSRFToken: form_authenticity_token(form_options: { action: '/users/auth/intercode', method: 'POST' }),
+  signOutCSRFToken: form_authenticity_token(form_options: { action: '/'})
 %>

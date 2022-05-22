@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class SessionsController < Devise::CasSessionsController
+class SessionsController < Devise::SessionsController
   prepend_before_action :set_return_to, only: [:new] # rubocop:disable Rails/LexicallyScopedActionFilter
 
   private

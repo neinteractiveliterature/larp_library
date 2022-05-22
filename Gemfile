@@ -12,9 +12,10 @@ gem 'minipack'
 gem 'listen'
 
 gem 'devise', '~> 4.8.0'
-gem 'devise_cas_authenticatable', '~> 2.0.0.alpha1'
 gem 'rack-cas'
 gem 'cancancan'
+gem 'intercode_client'
+gem 'omniauth-rails_csrf_protection'
 
 gem 'net-pop'
 gem 'net-smtp'

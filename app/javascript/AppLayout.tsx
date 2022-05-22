@@ -1,19 +1,17 @@
 import { LoadQueryWrapper, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { ReactNode, Suspense } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  AppLayoutQueryData,
-  AppLayoutQueryVariables,
-  useAppLayoutQuery,
-} from './queries.generated';
+import { AppLayoutQueryData, AppLayoutQueryVariables, useAppLayoutQuery } from './queries.generated';
 
 export type AppLayoutProps = {
   children: ReactNode;
+  signInCSRFToken: string;
+  signOutCSRFToken: string;
 };
 
 export default LoadQueryWrapper<AppLayoutQueryData, AppLayoutQueryVariables, AppLayoutProps>(
   useAppLayoutQuery,
-  function AppLayout({ data, children }) {
+  function AppLayout({ data, children, signInCSRFToken, signOutCSRFToken }) {
     return (
       <>
         <div className="container">
@@ -73,9 +71,20 @@ export default LoadQueryWrapper<AppLayoutQueryData, AppLayoutQueryVariables, App
                   </li>
                   <li>
                     {data.currentUser ? (
-                      <a href="/users/sign_out">Sign out</a>
+                      <form action="/users/sign_out" method="POST">
+                        <input type="hidden" name="_method" value="DELETE" />
+                        <input type="hidden" name="authenticity_token" value={signOutCSRFToken} />
+                        <button type="submit" className="btn btn-link">
+                          Sign out
+                        </button>
+                      </form>
                     ) : (
-                      <a href="/users/sign_in">Sign in</a>
+                      <form action="/users/auth/intercode" method="POST">
+                        <input type="hidden" name="authenticity_token" value={signInCSRFToken} />
+                        <button className="btn btn-link" type="submit">
+                          Sign in
+                        </button>
+                      </form>
                     )}
                   </li>
                 </ul>
@@ -83,20 +92,14 @@ export default LoadQueryWrapper<AppLayoutQueryData, AppLayoutQueryVariables, App
             </ul>
           </nav>
 
-          <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-            {children}
-          </Suspense>
+          <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>{children}</Suspense>
 
           <nav>
             <ul className="list-inline" style={{ textAlign: 'center' }}>
               <li className="list-inline-item">
                 <small>
                   Larp Library &copy; 2015-{new Date().getFullYear()}{' '}
-                  <a
-                    href="http://interactiveliterature.org"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                  >
+                  <a href="http://interactiveliterature.org" target="_blank" rel="noreferrer noopener">
                     New England Interactive Literature
                   </a>
                 </small>
