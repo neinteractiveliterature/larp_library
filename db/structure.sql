@@ -406,7 +406,9 @@ CREATE TABLE public.users (
     current_sign_in_ip character varying,
     last_sign_in_ip character varying,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    provider character varying,
+    uid character varying
 );
 
 
@@ -827,6 +829,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220520003728'),
 ('20220520004351'),
 ('20220520145832'),
-('20220520150212');
+('20220520150212'),
+('20220521194451');
 
 

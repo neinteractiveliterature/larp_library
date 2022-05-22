@@ -12,32 +12,23 @@ const PageComponentImports: {
   BrandPage: () => import(/* webpackChunkName: "BrandPage" */ './Brands/BrandPage'),
   BrandListPage: () => import(/* webpackChunkName: "BrandListPage" */ './Brands/BrandListPage'),
   EditBrandPage: () => import(/* webpackChunkName: "EditBrandPage" */ './Brands/EditBrandPage'),
-  EditProjectPage: () =>
-    import(/* webpackChunkName: "EditProjectPage" */ './Project/EditProjectPage'),
+  EditProjectPage: () => import(/* webpackChunkName: "EditProjectPage" */ './Project/EditProjectPage'),
   EditTagPage: () => import(/* webpackChunkName: "EditTagPage" */ './Tags/EditTagPage'),
   EditTagCategoryPage: () =>
     import(/* webpackChunkName: "EditTagCategoryPage" */ './TagCategories/EditTagCategoryPage'),
-  LicensingPage: () =>
-    import(/* webpackChunkName: "LicensingPage" */ './StaticPages/LicensingPage'),
+  LicensingPage: () => import(/* webpackChunkName: "LicensingPage" */ './StaticPages/LicensingPage'),
   NewBrandPage: () => import(/* webpackChunkName: "NewBrandPage" */ './Brands/NewBrandPage'),
   NewProjectPage: () => import(/* webpackChunkName: "NewProjectPage" */ './Project/NewProjectPage'),
   NewTagPage: () => import(/* webpackChunkName: "NewTagPage" */ './Tags/NewTagPage'),
-  NewTagCategoryPage: () =>
-    import(/* webpackChunkName: "NewTagCategoryPage" */ './TagCategories/NewTagCategoryPage'),
+  NewTagCategoryPage: () => import(/* webpackChunkName: "NewTagCategoryPage" */ './TagCategories/NewTagCategoryPage'),
   HomePage: () => import(/* webpackChunkName: "HomePage" */ './HomePage/HomePage'),
-  InvitationPage: () =>
-    import(/* webpackChunkName: "InvitationPage" */ './Invitations/InvitationPage'),
+  InvitationPage: () => import(/* webpackChunkName: "InvitationPage" */ './Invitations/InvitationPage'),
   ProjectInitialContentPage: () =>
-    import(
-      /* webpackChunkName: "ProjectInitialContentPage" */ './Project/ProjectInitialContentPage'
-    ),
+    import(/* webpackChunkName: "ProjectInitialContentPage" */ './Project/ProjectInitialContentPage'),
   ProjectPromotionsPage: () =>
-    import(
-      /* webpackChunkName: "ProjectPromotionsPage" */ './ProjectPromotions/ProjectPromotionsPage'
-    ),
+    import(/* webpackChunkName: "ProjectPromotionsPage" */ './ProjectPromotions/ProjectPromotionsPage'),
   ProjectPage: () => import(/* webpackChunkName: "ProjectPage" */ './Project/ProjectPage'),
-  ProjectSearchPage: () =>
-    import(/* webpackChunkName: "ProjectSearchPage" */ './ProjectSearch/ProjectSearchPage'),
+  ProjectSearchPage: () => import(/* webpackChunkName: "ProjectSearchPage" */ './ProjectSearch/ProjectSearchPage'),
   TagListPage: () => import(/* webpackChunkName: "TagListPage" */ './Tags/TagListPage'),
   TagCategoryListPage: () =>
     import(/* webpackChunkName: "TagCategoryListPage" */ './TagCategories/TagCategoryListPage'),
@@ -45,18 +36,18 @@ const PageComponentImports: {
     import(/* webpackChunkName: "UnapprovedBrandsListPage" */ './Brands/UnapprovedBrandsListPage'),
 };
 
-const PageComponents = mapValues(PageComponentImports, (importFunction) =>
-  React.lazy(importFunction),
-);
+const PageComponents = mapValues(PageComponentImports, (importFunction) => React.lazy(importFunction));
 
 export type AppRootProps = {
   s3Configuration: S3ConfigurationContextValue;
+  signInCSRFToken: string;
+  signOutCSRFToken: string;
 };
 
-function AppRoot({ s3Configuration }: AppRootProps): JSX.Element {
+function AppRoot({ s3Configuration, signInCSRFToken, signOutCSRFToken }: AppRootProps): JSX.Element {
   return (
     <S3ConfigurationContext.Provider value={s3Configuration}>
-      <AppLayout>
+      <AppLayout signInCSRFToken={signInCSRFToken} signOutCSRFToken={signOutCSRFToken}>
         <Routes>
           <Route path="projects" element={<PageComponents.ProjectSearchPage />} />
 
@@ -65,17 +56,11 @@ function AppRoot({ s3Configuration }: AppRootProps): JSX.Element {
             <Route path="new" element={<PageComponents.NewBrandPage />} />
 
             <Route path=":brandSlug/*">
-              <Route
-                path="invitations/:invitationToken"
-                element={<PageComponents.InvitationPage />}
-              />
+              <Route path="invitations/:invitationToken" element={<PageComponents.InvitationPage />} />
               <Route path="edit" element={<PageComponents.EditBrandPage />} />
               <Route path="projects/*">
                 <Route path=":projectId/edit" element={<PageComponents.EditProjectPage />} />
-                <Route
-                  path=":projectId/initial_content"
-                  element={<PageComponents.ProjectInitialContentPage />}
-                />
+                <Route path=":projectId/initial_content" element={<PageComponents.ProjectInitialContentPage />} />
                 <Route path=":projectId" element={<PageComponents.ProjectPage />} />
                 <Route path="new" element={<PageComponents.NewProjectPage />} />
               </Route>
