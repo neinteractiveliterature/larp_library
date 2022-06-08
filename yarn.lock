@@ -10103,14 +10103,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^17.0.1":
-  version: 17.0.2
-  resolution: "react-is@npm:17.0.2"
-  checksum: 9d6d111d8990dc98bc5402c1266a808b0459b5d54830bbea24c12d908b536df7883f268a7868cfaedde3dd9d4e0d574db456f84d2e6df9c4526f99bb4b5344d8
-  languageName: node
-  linkType: hard
-
-"react-is@npm:^18.0.0":
+"react-is@npm:^17.0.1 || ^18.0.0, react-is@npm:^18.0.0":
   version: 18.1.0
   resolution: "react-is@npm:18.1.0"
   checksum: d206a0fe6790851bff168727bfb896de02c5591695afb0c441163e8630136a3e13ee1a7ddd59fdccddcc93968b4721ae112c10f790b194b03b35a3dc13a355ef
@@ -10214,17 +10207,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-waypoint@npm:10.1.0":
-  version: 10.1.0
-  resolution: "react-waypoint@npm:10.1.0"
+"react-waypoint@npm:10.3.0":
+  version: 10.3.0
+  resolution: "react-waypoint@npm:10.3.0"
   dependencies:
     "@babel/runtime": ^7.12.5
     consolidated-events: ^1.1.0 || ^2.0.0
     prop-types: ^15.0.0
-    react-is: ^17.0.1
+    react-is: ^17.0.1 || ^18.0.0
   peerDependencies:
-    react: ^15.3.0 || ^16.0.0 || ^17.0.0
-  checksum: 70d7e753eba909a2cd3519cee33e25725a89ad883c94fbc8cf7e5705c94c47d909f5ebcb58a7e0018d8c9ecaaf39c831524bf9e15100a03863173c752cf54db1
+    react: ^15.3.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+  checksum: 5a476432cd4a55ae022b33f82610a1addae92912ec88111cf33c17ef473bbbfc2c695714cb3bd60911259c92c5b6349f80033b022bf1e59e1a4be9b198a70a7a
   languageName: node
   linkType: hard
 
@@ -10717,7 +10710,7 @@ __metadata:
     react-router: 6.3.0
     react-router-dom: 6.3.0
     react-select: 5.3.2
-    react-waypoint: 10.1.0
+    react-waypoint: 10.3.0
     regenerator-runtime: 0.13.9
     sass: 1.52.2
     sass-loader: 13.0.0
