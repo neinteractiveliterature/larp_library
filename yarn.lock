@@ -2117,12 +2117,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/cli@npm:2.10.0":
-  version: 2.10.0
-  resolution: "@graphql-codegen/cli@npm:2.10.0"
+"@graphql-codegen/cli@npm:2.11.0":
+  version: 2.11.0
+  resolution: "@graphql-codegen/cli@npm:2.11.0"
   dependencies:
     "@graphql-codegen/core": 2.6.0
-    "@graphql-codegen/plugin-helpers": ^2.6.0
+    "@graphql-codegen/plugin-helpers": ^2.6.1
     "@graphql-tools/apollo-engine-loader": ^7.3.1
     "@graphql-tools/code-file-loader": ^7.3.0
     "@graphql-tools/git-loader": ^7.2.0
@@ -2159,7 +2159,7 @@ __metadata:
     graphql-code-generator: cjs/bin.js
     graphql-codegen: cjs/bin.js
     graphql-codegen-esm: esm/bin.js
-  checksum: 170222aaf5e50f0dfdab8a5fecdc56836705c504b7f11f89feee63ba14c724c4abd9c0626d8e294e1291581f7d2e08c508787ee641df3a0acb0d710deaef7b5d
+  checksum: 1adc7b063d846342c3813d79d670dffa9852fc800fc7b54f3111df05aa618da6c0ba51cdd865fad0d8dc14873f177399511a0ac8a4ac2d42bdfbc24dcaee938b
   languageName: node
   linkType: hard
 
@@ -2193,9 +2193,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/plugin-helpers@npm:^2.5.0, @graphql-codegen/plugin-helpers@npm:^2.6.0":
-  version: 2.6.0
-  resolution: "@graphql-codegen/plugin-helpers@npm:2.6.0"
+"@graphql-codegen/plugin-helpers@npm:^2.5.0, @graphql-codegen/plugin-helpers@npm:^2.6.0, @graphql-codegen/plugin-helpers@npm:^2.6.1":
+  version: 2.6.1
+  resolution: "@graphql-codegen/plugin-helpers@npm:2.6.1"
   dependencies:
     "@graphql-tools/utils": ^8.8.0
     change-case-all: 1.0.14
@@ -2205,7 +2205,7 @@ __metadata:
     tslib: ~2.4.0
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: 4635e10fb9a98d3643004077e1b540e0abc54b4b350669c3758c88ef32a31eac13a75cca08803500cd1bb8ea4d2d242edff2c3e852eb4ddf709aff075d18b3f7
+  checksum: a3bad44b9c518ed5a12bf6a4e667afe56ed11f2e305157e29730c622c54f0a6cad9b561a737e3fbf96aaba0af8e4c517ad52dc1986459822f85864954acf9a16
   languageName: node
   linkType: hard
 
@@ -10090,7 +10090,7 @@ __metadata:
     "@dnd-kit/sortable": 6.0.1
     "@dnd-kit/utilities": 3.2.0
     "@graphql-codegen/add": 3.2.0
-    "@graphql-codegen/cli": 2.10.0
+    "@graphql-codegen/cli": 2.11.0
     "@graphql-codegen/near-operation-file-preset": 2.4.0
     "@graphql-codegen/typescript-apollo-client-helpers": 2.2.2
     "@graphql-codegen/typescript-operations": 2.5.2
