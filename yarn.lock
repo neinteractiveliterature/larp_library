@@ -2132,9 +2132,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/cli@npm:2.11.6":
-  version: 2.11.6
-  resolution: "@graphql-codegen/cli@npm:2.11.6"
+"@graphql-codegen/cli@npm:2.11.7":
+  version: 2.11.7
+  resolution: "@graphql-codegen/cli@npm:2.11.7"
   dependencies:
     "@graphql-codegen/core": 2.6.2
     "@graphql-codegen/plugin-helpers": ^2.6.2
@@ -2148,7 +2148,7 @@ __metadata:
     "@graphql-tools/prisma-loader": ^7.2.7
     "@graphql-tools/url-loader": ^7.13.2
     "@graphql-tools/utils": ^8.9.0
-    "@whatwg-node/fetch": ^0.2.3
+    "@whatwg-node/fetch": ^0.3.0
     ansi-escapes: ^4.3.1
     chalk: ^4.1.0
     chokidar: ^3.5.2
@@ -2174,7 +2174,7 @@ __metadata:
     graphql-code-generator: cjs/bin.js
     graphql-codegen: cjs/bin.js
     graphql-codegen-esm: esm/bin.js
-  checksum: 2da1a75388d99eb0e51c2eb90c910dd2bedf4f1967acf7eebb5f59e2a49d9fee3b03846a71efe2a49a1e59631c1f0091c85a700a9c270b0f4d795d34752cdc77
+  checksum: 6ed97c84eb958dca8cfdbf28168aa1db36f6daa4edefbcf22acbef3927629bcd25ffc9525d63a77cab09cbced19a09909ccad07c3987116165e881e4dcf5269b
   languageName: node
   linkType: hard
 
@@ -3677,7 +3677,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:^0.2.3, @whatwg-node/fetch@npm:^0.2.4":
+"@whatwg-node/fetch@npm:^0.2.4":
   version: 0.2.6
   resolution: "@whatwg-node/fetch@npm:0.2.6"
   dependencies:
@@ -3691,6 +3691,23 @@ __metadata:
     undici: ^5.8.0
     web-streams-polyfill: ^3.2.0
   checksum: 12ee718be802860fbde2647ec0139dba598a278b0248326c0a314591b7096c84c34b16f5317273b0b11f3bbc6ff0d5d1df08983b4e9f5c3f0d779fde727f21af
+  languageName: node
+  linkType: hard
+
+"@whatwg-node/fetch@npm:^0.3.0":
+  version: 0.3.2
+  resolution: "@whatwg-node/fetch@npm:0.3.2"
+  dependencies:
+    "@peculiar/webcrypto": ^1.4.0
+    abort-controller: ^3.0.0
+    busboy: ^1.6.0
+    event-target-polyfill: ^0.0.3
+    form-data-encoder: ^1.7.1
+    formdata-node: ^4.3.1
+    node-fetch: ^2.6.7
+    undici: ^5.8.0
+    web-streams-polyfill: ^3.2.0
+  checksum: d9cb1b1293694edf0d61889512e5b5a0b8b69db2cf8c4cca4acdbbe652f899742456d10954312ef96a8f7257a898d6275b50df03cc481e5a97740cb301930892
   languageName: node
   linkType: hard
 
@@ -10245,7 +10262,7 @@ __metadata:
     "@dnd-kit/sortable": 6.0.1
     "@dnd-kit/utilities": 3.2.0
     "@graphql-codegen/add": 3.2.1
-    "@graphql-codegen/cli": 2.11.6
+    "@graphql-codegen/cli": 2.11.7
     "@graphql-codegen/near-operation-file-preset": 2.4.1
     "@graphql-codegen/typescript-apollo-client-helpers": 2.2.3
     "@graphql-codegen/typescript-operations": 2.5.3
