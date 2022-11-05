@@ -4,7 +4,9 @@ import { Confirm, ErrorBoundary, PageLoadingIndicator } from '@neinteractivelite
 import useLarpLibraryApolloClient from './useLarpLibraryApolloClient';
 import { BrowserRouter } from 'react-router-dom';
 
-function AppWrapper<P>(WrappedComponent: React.ComponentType<P>): React.ComponentType<P> {
+function AppWrapper<P extends JSX.IntrinsicAttributes>(
+  WrappedComponent: React.ComponentType<P>,
+): React.ComponentType<P> {
   type WrapperProps = P & { graphqlCSRFToken: string };
   const Wrapper = ({ graphqlCSRFToken, ...props }: WrapperProps) => {
     const onUnauthenticated = () => {
