@@ -38,7 +38,7 @@ const PageComponentImports: {
 
 const PageComponents = mapValues(PageComponentImports, (importFunction) => React.lazy(importFunction));
 
-export type AppRootProps = {
+export type AppRootProps = JSX.IntrinsicAttributes & {
   s3Configuration: S3ConfigurationContextValue;
   signInCSRFToken: string;
   signOutCSRFToken: string;
