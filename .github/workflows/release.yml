@@ -24,22 +24,32 @@ jobs:
       run: docker tag ghcr.io/neinteractiveliterature/larp_library:${{ github.sha }} neinteractiveliterature/larp_library:latest
     - name: Push to Docker Hub
       run: docker push neinteractiveliterature/larp_library:latest && docker push neinteractiveliterature/larp_library:${{ github.event.release.name }}
-  render-release:
+  heroku-release:
     runs-on: ubuntu-latest
-    needs:
-      - docker-release
     steps:
-    - name: Release app to Render
-      uses: peter-evans/repository-dispatch@v2
-      with:
-        token: ${{ secrets.LARP_LIBRARY_RENDER_ACCESS_TOKEN }}
-        repository: neinteractiveliterature/larp_library-render
-        event-type: larp-library-release
-        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "tag": "${{ github.event.release.name }}"}'
+    - uses: actions/checkout@v3
+    - name: Install Heroku CLI
+      run: curl https://cli-assets.heroku.com/install.sh | sh
+    - name: Log in to registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    - name: Pull built image
+      run: docker pull ghcr.io/neinteractiveliterature/larp_library:${{ github.sha }}
+    - name: Log into Heroku Container Registry
+      env:
+        HEROKU_API_KEY: ${{ secrets.HerokuApiToken }}
+      run: heroku container:login
+    - name: Tag production image as "web"
+      run: docker tag ghcr.io/neinteractiveliterature/larp_library:${{ github.sha }} registry.heroku.com/${{ secrets.HerokuAppName }}/web
+    - name: Push "web" image to Heroku Container Registry
+      run: docker push registry.heroku.com/intercode/web
+    - name: Release app to Heroku
+      env:
+        HEROKU_API_KEY: ${{ secrets.HerokuApiToken }}
+      run: heroku container:release -a ${{ secrets.HerokuAppName }} web
   notify-slack:
     runs-on: ubuntu-latest
     needs:
-      - render-release
+      - heroku-release
     steps:
     - name: Format release notes for Slack
       id: format-release-notes
