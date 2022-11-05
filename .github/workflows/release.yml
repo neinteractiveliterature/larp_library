@@ -41,7 +41,7 @@ jobs:
     - name: Tag production image as "web"
       run: docker tag ghcr.io/neinteractiveliterature/larp_library:${{ github.sha }} registry.heroku.com/${{ secrets.HerokuAppName }}/web
     - name: Push "web" image to Heroku Container Registry
-      run: docker push registry.heroku.com/intercode/web
+      run: docker push registry.heroku.com/${{ secrets.HerokuAppName }}/web
     - name: Release app to Heroku
       env:
         HEROKU_API_KEY: ${{ secrets.HerokuApiToken }}
