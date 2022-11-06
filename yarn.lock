@@ -7942,7 +7942,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:2.5.0, luxon@npm:^2.4.0":
+"luxon@npm:3.1.0":
+  version: 3.1.0
+  resolution: "luxon@npm:3.1.0"
+  checksum: f8a850b759ba7a2e009d904c522ed7bc264bf4add57578f8948e52a0ed96b627b025b5aad8032295b570ae19fac41f0ffab91bdb128715fb0cc020798a7ba886
+  languageName: node
+  linkType: hard
+
+"luxon@npm:^2.4.0":
   version: 2.5.0
   resolution: "luxon@npm:2.5.0"
   checksum: 2fccce6bbdfc8f13c5a8c148ff045ab3b10f4f80cac28dd92575588fffce9b2d7197096d7fedcc61a6245b59f4233507797f530e63f22b9ae4c425dff2909ae3
@@ -10360,7 +10367,7 @@ __metadata:
     jquery: 3.6.1
     lint-staged: 13.0.3
     lodash: 4.17.21
-    luxon: 2.5.0
+    luxon: 3.1.0
     mini-css-extract-plugin: 2.6.1
     prettier: 2.7.1
     process: 0.11.10
