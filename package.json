@@ -43,7 +43,7 @@
     "react-router-dom": "6.3.0",
     "react-select": "5.4.0",
     "react-waypoint": "10.3.0",
-    "regenerator-runtime": "0.13.9",
+    "regenerator-runtime": "0.13.10",
     "sass": "1.54.6",
     "sass-loader": "13.0.2",
     "style-loader": "3.3.1",
