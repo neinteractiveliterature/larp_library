@@ -424,6 +424,7 @@ DEPENDENCIES
   rubocop-rails
   solargraph
   spring
+  sprockets-rails
   truncate_html
 
 RUBY VERSION

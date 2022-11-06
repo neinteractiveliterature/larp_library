@@ -8,6 +8,7 @@ gem 'rails', '= 7.0.4'
 gem 'pg'
 
 gem 'minipack'
+gem 'sprockets-rails'
 
 gem 'listen'
 
