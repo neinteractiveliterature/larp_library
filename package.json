@@ -17,7 +17,7 @@
     "@dnd-kit/utilities": "3.2.0",
     "@neinteractiveliterature/litform": "0.28.0",
     "@popperjs/core": "2.11.6",
-    "@rails/ujs": "6.1.7",
+    "@rails/ujs": "7.0.4",
     "@types/react": "18.0.25",
     "assert": "2.0.0",
     "bootstrap": "5.2.2",
