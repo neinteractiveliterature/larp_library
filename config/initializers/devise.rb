@@ -5,7 +5,8 @@ require "omniauth/strategies/intercode"
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
-  config.omniauth :intercode, ENV["INTERCODE_APP_ID"], ENV["INTERCODE_APP_SECRET"], scope: "public openid"
+  config.omniauth :intercode, ENV.fetch("INTERCODE_APP_ID", nil), ENV.fetch("INTERCODE_APP_SECRET", nil), 
+scope: "public openid"
 
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing

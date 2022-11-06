@@ -5,13 +5,13 @@ Rollbar.configure do |config| # rubocop:disable Metrics/BlockLength
   # Without configuration, Rollbar is enabled in all environments.
   # To disable in specific environments, set config.enabled=false.
 
-  config.access_token = ENV["ROLLBAR_ACCESS_TOKEN"]
+  config.access_token = ENV.fetch("ROLLBAR_ACCESS_TOKEN", nil)
 
   # Only enable in production environment
   config.enabled = false unless Rails.env.production?
 
   capistrano_revision_path = File.expand_path("REVISION", Rails.root)
-  rollbar_code_version = ENV["HEROKU_SLUG_COMMIT"]
+  rollbar_code_version = ENV.fetch("HEROKU_SLUG_COMMIT", nil)
   rollbar_code_version ||= (File.read(capistrano_revision_path).strip if File.exist?(capistrano_revision_path))
 
   # Mask the least significant bits of the IP

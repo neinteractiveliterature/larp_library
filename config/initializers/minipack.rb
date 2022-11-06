@@ -10,7 +10,7 @@ Minipack.configuration do |c|
     if Rails.env.development?
       "http://localhost:3042/packs/manifest.json"
     else
-      Rails.root.join("public/packs/manifest.json")
+      Rails.public_path.join('packs/manifest.json')
     end
 
   # If you are not extracting CSS in your webpack config you should set this flag to false
