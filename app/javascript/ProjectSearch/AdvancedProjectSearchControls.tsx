@@ -4,8 +4,8 @@ import {
   HelpPopover,
   parseIntOrNull,
   useDebouncedState,
-  useUniqueId,
 } from '@neinteractiveliterature/litform';
+import { useId } from 'react';
 import TagSelector from '../Tags/TagSelector';
 import { ProjectSearchQueryData } from './queries.generated';
 import useProjectSearchParams from './useProjectSearchParams';
@@ -45,22 +45,20 @@ export default function AdvancedProjectSearchControls({
     (newValue) => setProjectSearchParams({ playerCountUpperBound: newValue }),
     250,
   );
-  const [transientFacilitatorCountLowerBound, setTransientFacilitatorCountLowerBound] =
-    useDebouncedState(
-      projectSearchParams.facilitatorCountLowerBound,
-      (newValue) => setProjectSearchParams({ facilitatorCountLowerBound: newValue }),
-      250,
-    );
-  const [transientFacilitatorCountUpperBound, setTransientFacilitatorCountUpperBound] =
-    useDebouncedState(
-      projectSearchParams.facilitatorCountUpperBound,
-      (newValue) => setProjectSearchParams({ facilitatorCountUpperBound: newValue }),
-      250,
-    );
-  const minPlayerCountId = useUniqueId('min-player-count-');
-  const maxPlayerCountId = useUniqueId('max-player-count-');
-  const minFacilitatorCountId = useUniqueId('min-facilitator-count-');
-  const maxFacilitatorCountId = useUniqueId('max-facilitator-count-');
+  const [transientFacilitatorCountLowerBound, setTransientFacilitatorCountLowerBound] = useDebouncedState(
+    projectSearchParams.facilitatorCountLowerBound,
+    (newValue) => setProjectSearchParams({ facilitatorCountLowerBound: newValue }),
+    250,
+  );
+  const [transientFacilitatorCountUpperBound, setTransientFacilitatorCountUpperBound] = useDebouncedState(
+    projectSearchParams.facilitatorCountUpperBound,
+    (newValue) => setProjectSearchParams({ facilitatorCountUpperBound: newValue }),
+    250,
+  );
+  const minPlayerCountId = useId();
+  const maxPlayerCountId = useId();
+  const minFacilitatorCountId = useId();
+  const maxFacilitatorCountId = useId();
 
   return (
     <div className="card mb-2">
@@ -83,19 +81,11 @@ export default function AdvancedProjectSearchControls({
           </div>
 
           <div className="col-12 col-lg-6 pe-lg-1 col-xl-4">
-            <BootstrapFormInput
-              label="Title"
-              value={transientTitle ?? ''}
-              onTextChange={setTransientTitle}
-            />
+            <BootstrapFormInput label="Title" value={transientTitle ?? ''} onTextChange={setTransientTitle} />
           </div>
 
           <div className="col-12 col-lg-6 ps-lg-1 col-xl-4 pe-xl-1">
-            <BootstrapFormInput
-              label="Author(s)"
-              value={transientAuthors ?? ''}
-              onTextChange={setTransientAuthors}
-            />
+            <BootstrapFormInput label="Author(s)" value={transientAuthors ?? ''} onTextChange={setTransientAuthors} />
           </div>
 
           <div className="col-12 col-lg-12 col-xl-4 ps-xl-1">
@@ -126,9 +116,7 @@ export default function AdvancedProjectSearchControls({
                 style={{ maxWidth: '5rem' }}
                 value={transientPlayerCountLowerBound ?? ''}
                 min={0}
-                onChange={(event) =>
-                  setTransientPlayerCountLowerBound(parseIntOrNull(event.target.value))
-                }
+                onChange={(event) => setTransientPlayerCountLowerBound(parseIntOrNull(event.target.value))}
               />
               <label className="form-label mb-0" htmlFor={maxPlayerCountId}>
                 and
@@ -140,21 +128,18 @@ export default function AdvancedProjectSearchControls({
                 style={{ maxWidth: '5rem' }}
                 value={transientPlayerCountUpperBound ?? ''}
                 min={0}
-                onChange={(event) =>
-                  setTransientPlayerCountUpperBound(parseIntOrNull(event.target.value))
-                }
+                onChange={(event) => setTransientPlayerCountUpperBound(parseIntOrNull(event.target.value))}
               />
               <div>player(s)</div>
               <HelpPopover iconSet="bootstrap-icons">
                 <p>
-                  This will find larps that accommodate your requested player count range. It’s
-                  inclusive, so if you search for larps that support between 8 and 10 players, larps
-                  that support between 5 and 12 players will also come up.
+                  This will find larps that accommodate your requested player count range. It’s inclusive, so if you
+                  search for larps that support between 8 and 10 players, larps that support between 5 and 12 players
+                  will also come up.
                 </p>
 
                 <p className="mb-0">
-                  Larps that don’t specify a supported player count won’t come up if you enter
-                  numbers in these fields.
+                  Larps that don’t specify a supported player count won’t come up if you enter numbers in these fields.
                 </p>
               </HelpPopover>
             </div>
@@ -172,9 +157,7 @@ export default function AdvancedProjectSearchControls({
                 style={{ maxWidth: '5rem' }}
                 value={transientFacilitatorCountLowerBound ?? ''}
                 min={0}
-                onChange={(event) =>
-                  setTransientFacilitatorCountLowerBound(parseIntOrNull(event.target.value))
-                }
+                onChange={(event) => setTransientFacilitatorCountLowerBound(parseIntOrNull(event.target.value))}
               />
               <label className="form-label mb-0" htmlFor={maxFacilitatorCountId}>
                 and
@@ -186,21 +169,19 @@ export default function AdvancedProjectSearchControls({
                 style={{ maxWidth: '5rem' }}
                 value={transientFacilitatorCountUpperBound ?? ''}
                 min={0}
-                onChange={(event) =>
-                  setTransientFacilitatorCountUpperBound(parseIntOrNull(event.target.value))
-                }
+                onChange={(event) => setTransientFacilitatorCountUpperBound(parseIntOrNull(event.target.value))}
               />
               <div>facilitator(s)</div>
               <HelpPopover iconSet="bootstrap-icons">
                 <p>
-                  This will find larps that work with your requested facilitator/GM count range.
-                  It’s inclusive, so if you search for larps that require between 3 and 4
-                  facilitators, larps that require between 2 and 5 faciliators will also come up.
+                  This will find larps that work with your requested facilitator/GM count range. It’s inclusive, so if
+                  you search for larps that require between 3 and 4 facilitators, larps that require between 2 and 5
+                  faciliators will also come up.
                 </p>
 
                 <p className="mb-0">
-                  Larps that don’t specify a required facilitator count won’t come up if you enter
-                  numbers in these fields.
+                  Larps that don’t specify a required facilitator count won’t come up if you enter numbers in these
+                  fields.
                 </p>
               </HelpPopover>
             </div>
