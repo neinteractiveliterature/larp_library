@@ -4,10 +4,11 @@ source 'https://rubygems.org'
 
 gem 'dotenv-rails', groups: [:development, :test]
 
-gem 'rails', '= 6.1.7'
+gem 'rails', '= 7.0.4'
 gem 'pg'
 
 gem 'minipack'
+gem 'sprockets-rails'
 
 gem 'listen'
 
