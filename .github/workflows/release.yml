@@ -43,7 +43,7 @@ jobs:
     - name: Push "web" image to Heroku Container Registry
       run: docker push registry.heroku.com/${{ secrets.HerokuAppName }}/web
     - name: Build "release" image
-      run: docker buildx build -t registry.heroku.com/larp_library/release
+      run: docker buildx build -t registry.heroku.com/${{ secrets.HerokuAppName }}/release
         --build-arg BASE_IMAGE=ghcr.io/neinteractiveliterature/larp_library:${{ github.sha }}
         --build-arg REVISION=${{ github.sha }}
         -f Dockerfile.release
