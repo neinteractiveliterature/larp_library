@@ -1682,9 +1682,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-markdown@npm:6.0.4":
-  version: 6.0.4
-  resolution: "@codemirror/lang-markdown@npm:6.0.4"
+"@codemirror/lang-markdown@npm:6.0.5":
+  version: 6.0.5
+  resolution: "@codemirror/lang-markdown@npm:6.0.5"
   dependencies:
     "@codemirror/lang-html": ^6.0.0
     "@codemirror/language": ^6.3.0
@@ -1692,7 +1692,7 @@ __metadata:
     "@codemirror/view": ^6.0.0
     "@lezer/common": ^1.0.0
     "@lezer/markdown": ^1.0.0
-  checksum: 3929c0756baf2d40abd4457be2b1bd3d610149d6f4aebae1ea89a1e1b1d722dad7eb282e6ede7da77215bfc1b3a3f3fb66e44e751d94fcc5c9e696720a1640bb
+  checksum: d69148ea3f954aaae98cb22ef2ae790a1d51ad9a22344b2cf3e8b7cdb0e953c342f736257a88fb71b4b74f0fd4338480091fdb047e266b4c6665e4a83f552d4c
   languageName: node
   linkType: hard
 
@@ -10322,7 +10322,7 @@ __metadata:
     "@babel/preset-env": 7.20.2
     "@babel/preset-react": 7.18.6
     "@babel/preset-typescript": 7.18.6
-    "@codemirror/lang-markdown": 6.0.4
+    "@codemirror/lang-markdown": 6.0.5
     "@dnd-kit/core": 6.0.5
     "@dnd-kit/sortable": 7.0.1
     "@dnd-kit/utilities": 3.2.0
