@@ -70,7 +70,7 @@
     "@types/codemirror": "5.60.5",
     "@types/evaporate": "2.1.7",
     "@types/jquery": "3.5.14",
-    "@types/lodash": "4.14.188",
+    "@types/lodash": "4.14.189",
     "@types/react-color": "3.0.6",
     "@types/react-dom": "18.0.9",
     "@types/tinycolor2": "1.4.3",
