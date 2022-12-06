@@ -8,7 +8,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@apollo/client": "3.7.1",
+    "@apollo/client": "3.7.2",
     "@aws-crypto/sha256-browser": "2.0.2",
     "@aws-sdk/md5-js": "3.224.0",
     "@codemirror/lang-markdown": "6.0.5",
