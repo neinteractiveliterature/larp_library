@@ -31,7 +31,7 @@
     "jquery": "3.6.1",
     "lodash": "4.17.21",
     "luxon": "3.1.1",
-    "mini-css-extract-plugin": "2.7.1",
+    "mini-css-extract-plugin": "2.7.2",
     "process": "0.11.10",
     "react": "18.2.0",
     "react-bootstrap4-modal": "2.0.0",
