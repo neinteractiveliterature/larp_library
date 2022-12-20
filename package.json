@@ -99,5 +99,5 @@
     "*.{js,jsx,ts,tsx,css,md}": "prettier --write",
     "*.{rb,rake}": "bundle exec rubocop -a"
   },
-  "packageManager": "yarn@3.3.0"
+  "packageManager": "yarn@3.3.1"
 }
