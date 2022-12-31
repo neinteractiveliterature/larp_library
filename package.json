@@ -67,7 +67,7 @@
     "@graphql-codegen/typescript-operations": "2.5.11",
     "@graphql-codegen/typescript-react-apollo": "3.3.7",
     "@prettier/plugin-ruby": "3.2.2",
-    "@types/codemirror": "5.60.5",
+    "@types/codemirror": "5.60.6",
     "@types/evaporate": "2.1.7",
     "@types/jquery": "3.5.14",
     "@types/lodash": "4.14.191",
