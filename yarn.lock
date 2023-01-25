@@ -154,15 +154,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/md5-js@npm:3.257.0":
-  version: 3.257.0
-  resolution: "@aws-sdk/md5-js@npm:3.257.0"
+"@aws-sdk/md5-js@npm:3.258.0":
+  version: 3.258.0
+  resolution: "@aws-sdk/md5-js@npm:3.258.0"
   dependencies:
     "@aws-sdk/types": 3.257.0
-    "@aws-sdk/util-utf8-browser": 3.188.0
-    "@aws-sdk/util-utf8-node": 3.208.0
+    "@aws-sdk/util-utf8": 3.254.0
     tslib: ^2.3.1
-  checksum: 429d9a57e95fbe5fb518e23ec602fc6c34fa3c60f6f5686e89d822cb6cf573ffa954c9ad21f031a5f1e5c1cb282f9e660b77fe3df430ae7fbd933a3c2b2067a9
+  checksum: e1812a1aae620d242d42b2425d40169e7af94c0a29275704d9dbb2ec68161207cc79a75cdc66b60b5ad24fd1607e6fcc14dc3aa3adb18fb71446b546898ea730
   languageName: node
   linkType: hard
 
@@ -194,7 +193,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/util-utf8-browser@npm:3.188.0, @aws-sdk/util-utf8-browser@npm:^3.0.0":
+"@aws-sdk/util-utf8-browser@npm:^3.0.0":
   version: 3.188.0
   resolution: "@aws-sdk/util-utf8-browser@npm:3.188.0"
   dependencies:
@@ -203,13 +202,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/util-utf8-node@npm:3.208.0":
-  version: 3.208.0
-  resolution: "@aws-sdk/util-utf8-node@npm:3.208.0"
+"@aws-sdk/util-utf8@npm:3.254.0":
+  version: 3.254.0
+  resolution: "@aws-sdk/util-utf8@npm:3.254.0"
   dependencies:
     "@aws-sdk/util-buffer-from": 3.208.0
     tslib: ^2.3.1
-  checksum: 0f4c1d0d3f6eb40d92bc7163c6dcf97f90b3a8be05df46ba4f9bb7723a3e6acabf2cb0f2486411b03d22e8fcccae9e757ed02afad384ff5f44a3a659a78c5752
+  checksum: e5dfe7565f2de32245a544d1d715d803025bc5522538c0206fa61377f747804d95fc2e5e25976144bb63a6857e360b4286d101e730ab5d39866c60383a47e7d5
   languageName: node
   linkType: hard
 
@@ -10441,7 +10440,7 @@ __metadata:
   dependencies:
     "@apollo/client": 3.7.5
     "@aws-crypto/sha256-browser": 2.0.2
-    "@aws-sdk/md5-js": 3.257.0
+    "@aws-sdk/md5-js": 3.258.0
     "@babel/cli": 7.20.7
     "@babel/core": 7.20.12
     "@babel/plugin-syntax-dynamic-import": 7.8.3
