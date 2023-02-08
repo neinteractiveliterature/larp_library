@@ -154,23 +154,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/md5-js@npm:3.266.0":
-  version: 3.266.0
-  resolution: "@aws-sdk/md5-js@npm:3.266.0"
+"@aws-sdk/md5-js@npm:3.266.1":
+  version: 3.266.1
+  resolution: "@aws-sdk/md5-js@npm:3.266.1"
   dependencies:
-    "@aws-sdk/types": 3.266.0
+    "@aws-sdk/types": 3.266.1
     "@aws-sdk/util-utf8": 3.254.0
     tslib: ^2.3.1
-  checksum: bb318b4ab676bc930762b7cd7c0f1129f3704efcde241fe51ca1c46422f577cade40508202311dcdc4d6abd83caf5772f195f9988134f1c3df2c276995075262
+  checksum: 65846d079c895e9605338994a9f3762aa353f2b69591faf596eb6c4b6ab265d98644a85f62d0376661c2cdc1472b9998912e00cd9d8f93f5d428c276ab71a156
   languageName: node
   linkType: hard
 
-"@aws-sdk/types@npm:3.266.0, @aws-sdk/types@npm:^3.110.0":
-  version: 3.266.0
-  resolution: "@aws-sdk/types@npm:3.266.0"
+"@aws-sdk/types@npm:3.266.1, @aws-sdk/types@npm:^3.110.0":
+  version: 3.266.1
+  resolution: "@aws-sdk/types@npm:3.266.1"
   dependencies:
     tslib: ^2.3.1
-  checksum: 811196d787abb277333d3e56ebff08871452152d1e3fed0b827105bb6c0739edb6b09d80ffb023008c7215f335daecd2f89f570f190e7d17c50a8abf417c81bf
+  checksum: 3557812663158ce0bcabdc00ecd25e97d4ba046aa68cf4aaf21e01a75743591299218822b5bcb23468755bb063f452eedc087e692af0f913d0ae97faf978029a
   languageName: node
   linkType: hard
 
@@ -10536,7 +10536,7 @@ __metadata:
   dependencies:
     "@apollo/client": 3.7.7
     "@aws-crypto/sha256-browser": 2.0.2
-    "@aws-sdk/md5-js": 3.266.0
+    "@aws-sdk/md5-js": 3.266.1
     "@babel/cli": 7.20.7
     "@babel/core": 7.20.12
     "@babel/plugin-syntax-dynamic-import": 7.8.3
