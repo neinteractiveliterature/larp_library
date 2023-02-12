@@ -4,24 +4,24 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { TagCategoryFragmentDoc } from './TagCategoryFragment.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions = {};
+const defaultOptions = {} as const;
 export type CreateTagCategoryMutationVariables = Types.Exact<{
   tagCategoryAttributes: Types.TagCategoryAttributes;
 }>;
 
 export type CreateTagCategoryMutationData = {
   __typename: 'Mutation';
-  createTagCategory?: Types.Maybe<{
+  createTagCategory?: {
     __typename: 'CreateTagCategoryPayload';
     tagCategory: {
       __typename: 'TagCategory';
       id: string;
       name: string;
-      color?: Types.Maybe<string>;
-      textColor?: Types.Maybe<string>;
-      icon?: Types.Maybe<string>;
+      color?: string | null;
+      textColor?: string | null;
+      icon?: string | null;
     };
-  }>;
+  } | null;
 };
 
 export type UpdateTagCategoryMutationVariables = Types.Exact<{
@@ -31,17 +31,17 @@ export type UpdateTagCategoryMutationVariables = Types.Exact<{
 
 export type UpdateTagCategoryMutationData = {
   __typename: 'Mutation';
-  updateTagCategory?: Types.Maybe<{
+  updateTagCategory?: {
     __typename: 'UpdateTagCategoryPayload';
     tagCategory: {
       __typename: 'TagCategory';
       id: string;
       name: string;
-      color?: Types.Maybe<string>;
-      textColor?: Types.Maybe<string>;
-      icon?: Types.Maybe<string>;
+      color?: string | null;
+      textColor?: string | null;
+      icon?: string | null;
     };
-  }>;
+  } | null;
 };
 
 export type DeleteTagCategoryMutationVariables = Types.Exact<{
@@ -50,10 +50,7 @@ export type DeleteTagCategoryMutationVariables = Types.Exact<{
 
 export type DeleteTagCategoryMutationData = {
   __typename: 'Mutation';
-  deleteTagCategory?: Types.Maybe<{
-    __typename: 'DeleteTagCategoryPayload';
-    clientMutationId?: Types.Maybe<string>;
-  }>;
+  deleteTagCategory?: { __typename: 'DeleteTagCategoryPayload'; clientMutationId?: string | null } | null;
 };
 
 export const CreateTagCategoryDocument = gql`
@@ -89,10 +86,7 @@ export type CreateTagCategoryMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useCreateTagCategoryMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateTagCategoryMutationData,
-    CreateTagCategoryMutationVariables
-  >,
+  baseOptions?: Apollo.MutationHookOptions<CreateTagCategoryMutationData, CreateTagCategoryMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<CreateTagCategoryMutationData, CreateTagCategoryMutationVariables>(
@@ -140,10 +134,7 @@ export type UpdateTagCategoryMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useUpdateTagCategoryMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateTagCategoryMutationData,
-    UpdateTagCategoryMutationVariables
-  >,
+  baseOptions?: Apollo.MutationHookOptions<UpdateTagCategoryMutationData, UpdateTagCategoryMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<UpdateTagCategoryMutationData, UpdateTagCategoryMutationVariables>(
@@ -187,10 +178,7 @@ export type DeleteTagCategoryMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useDeleteTagCategoryMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteTagCategoryMutationData,
-    DeleteTagCategoryMutationVariables
-  >,
+  baseOptions?: Apollo.MutationHookOptions<DeleteTagCategoryMutationData, DeleteTagCategoryMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<DeleteTagCategoryMutationData, DeleteTagCategoryMutationVariables>(

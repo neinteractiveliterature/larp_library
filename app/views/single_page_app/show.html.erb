@@ -1,6 +1,7 @@
 <%=
   react_component "AppRoot",
   s3Configuration: {
+    awsRegion: ENV['AWS_REGION'],
     awsAccessKeyId: ENV['AWS_ACCESS_KEY_ID'],
     bucketName: (ENV['AWS_S3_BUCKET'] || "larp-library-#{Rails.env}")
   },

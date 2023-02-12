@@ -5,9 +5,9 @@ import { gql } from '@apollo/client';
 import { TagCategoryFragmentDoc } from './TagCategoryFragment.generated';
 import { TagFragmentDoc } from '../Tags/queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions = {};
+const defaultOptions = {} as const;
 export type TagCategoryAutocompleteQueryVariables = Types.Exact<{
-  queryString?: Types.Maybe<Types.Scalars['String']>;
+  queryString?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 export type TagCategoryAutocompleteQueryData = {
@@ -20,16 +20,16 @@ export type TagCategoryAutocompleteQueryData = {
         __typename: 'TagCategory';
         id: string;
         name: string;
-        color?: Types.Maybe<string>;
-        textColor?: Types.Maybe<string>;
-        icon?: Types.Maybe<string>;
+        color?: string | null;
+        textColor?: string | null;
+        icon?: string | null;
       };
     }>;
   };
 };
 
 export type TagCategoryListPageQueryVariables = Types.Exact<{
-  after?: Types.Maybe<Types.Scalars['String']>;
+  after?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 export type TagCategoryListPageQueryData = {
@@ -37,16 +37,16 @@ export type TagCategoryListPageQueryData = {
   tagCategories: {
     __typename: 'TagCategoryConnection';
     totalCount: number;
-    pageInfo: { __typename: 'PageInfo'; endCursor?: Types.Maybe<string> };
+    pageInfo: { __typename: 'PageInfo'; endCursor?: string | null };
     edges: Array<{
       __typename: 'TagCategoryEdge';
       node: {
         __typename: 'TagCategory';
         id: string;
         name: string;
-        color?: Types.Maybe<string>;
-        textColor?: Types.Maybe<string>;
-        icon?: Types.Maybe<string>;
+        color?: string | null;
+        textColor?: string | null;
+        icon?: string | null;
       };
     }>;
   };
@@ -62,21 +62,21 @@ export type EditTagCategoryQueryData = {
     __typename: 'TagCategory';
     id: string;
     name: string;
-    color?: Types.Maybe<string>;
-    textColor?: Types.Maybe<string>;
-    icon?: Types.Maybe<string>;
+    color?: string | null;
+    textColor?: string | null;
+    icon?: string | null;
     tags: Array<{
       __typename: 'Tag';
       id: string;
       name: string;
-      tagCategory?: Types.Maybe<{
+      tagCategory?: {
         __typename: 'TagCategory';
         id: string;
         name: string;
-        color?: Types.Maybe<string>;
-        textColor?: Types.Maybe<string>;
-        icon?: Types.Maybe<string>;
-      }>;
+        color?: string | null;
+        textColor?: string | null;
+        icon?: string | null;
+      } | null;
     }>;
   };
 };
@@ -112,10 +112,7 @@ export const TagCategoryAutocompleteQueryDocument = gql`
  * });
  */
 export function useTagCategoryAutocompleteQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    TagCategoryAutocompleteQueryData,
-    TagCategoryAutocompleteQueryVariables
-  >,
+  baseOptions?: Apollo.QueryHookOptions<TagCategoryAutocompleteQueryData, TagCategoryAutocompleteQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<TagCategoryAutocompleteQueryData, TagCategoryAutocompleteQueryVariables>(
@@ -124,20 +121,15 @@ export function useTagCategoryAutocompleteQuery(
   );
 }
 export function useTagCategoryAutocompleteQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    TagCategoryAutocompleteQueryData,
-    TagCategoryAutocompleteQueryVariables
-  >,
+  baseOptions?: Apollo.LazyQueryHookOptions<TagCategoryAutocompleteQueryData, TagCategoryAutocompleteQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    TagCategoryAutocompleteQueryData,
-    TagCategoryAutocompleteQueryVariables
-  >(TagCategoryAutocompleteQueryDocument, options);
+  return Apollo.useLazyQuery<TagCategoryAutocompleteQueryData, TagCategoryAutocompleteQueryVariables>(
+    TagCategoryAutocompleteQueryDocument,
+    options,
+  );
 }
-export type TagCategoryAutocompleteQueryHookResult = ReturnType<
-  typeof useTagCategoryAutocompleteQuery
->;
+export type TagCategoryAutocompleteQueryHookResult = ReturnType<typeof useTagCategoryAutocompleteQuery>;
 export type TagCategoryAutocompleteQueryLazyQueryHookResult = ReturnType<
   typeof useTagCategoryAutocompleteQueryLazyQuery
 >;
@@ -180,10 +172,7 @@ export const TagCategoryListPageQueryDocument = gql`
  * });
  */
 export function useTagCategoryListPageQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    TagCategoryListPageQueryData,
-    TagCategoryListPageQueryVariables
-  >,
+  baseOptions?: Apollo.QueryHookOptions<TagCategoryListPageQueryData, TagCategoryListPageQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<TagCategoryListPageQueryData, TagCategoryListPageQueryVariables>(
@@ -192,10 +181,7 @@ export function useTagCategoryListPageQuery(
   );
 }
 export function useTagCategoryListPageQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    TagCategoryListPageQueryData,
-    TagCategoryListPageQueryVariables
-  >,
+  baseOptions?: Apollo.LazyQueryHookOptions<TagCategoryListPageQueryData, TagCategoryListPageQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<TagCategoryListPageQueryData, TagCategoryListPageQueryVariables>(
@@ -204,9 +190,7 @@ export function useTagCategoryListPageQueryLazyQuery(
   );
 }
 export type TagCategoryListPageQueryHookResult = ReturnType<typeof useTagCategoryListPageQuery>;
-export type TagCategoryListPageQueryLazyQueryHookResult = ReturnType<
-  typeof useTagCategoryListPageQueryLazyQuery
->;
+export type TagCategoryListPageQueryLazyQueryHookResult = ReturnType<typeof useTagCategoryListPageQueryLazyQuery>;
 export type TagCategoryListPageQueryQueryResult = Apollo.QueryResult<
   TagCategoryListPageQueryData,
   TagCategoryListPageQueryVariables
@@ -251,10 +235,7 @@ export function useEditTagCategoryQuery(
   );
 }
 export function useEditTagCategoryQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    EditTagCategoryQueryData,
-    EditTagCategoryQueryVariables
-  >,
+  baseOptions?: Apollo.LazyQueryHookOptions<EditTagCategoryQueryData, EditTagCategoryQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<EditTagCategoryQueryData, EditTagCategoryQueryVariables>(
@@ -263,9 +244,7 @@ export function useEditTagCategoryQueryLazyQuery(
   );
 }
 export type EditTagCategoryQueryHookResult = ReturnType<typeof useEditTagCategoryQuery>;
-export type EditTagCategoryQueryLazyQueryHookResult = ReturnType<
-  typeof useEditTagCategoryQueryLazyQuery
->;
+export type EditTagCategoryQueryLazyQueryHookResult = ReturnType<typeof useEditTagCategoryQueryLazyQuery>;
 export type EditTagCategoryQueryQueryResult = Apollo.QueryResult<
   EditTagCategoryQueryData,
   EditTagCategoryQueryVariables

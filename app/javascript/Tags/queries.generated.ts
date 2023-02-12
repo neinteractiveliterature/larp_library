@@ -4,23 +4,23 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { TagCategoryFragmentDoc } from '../TagCategories/TagCategoryFragment.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions = {};
+const defaultOptions = {} as const;
 export type TagFragment = {
   __typename: 'Tag';
   id: string;
   name: string;
-  tagCategory?: Types.Maybe<{
+  tagCategory?: {
     __typename: 'TagCategory';
     id: string;
     name: string;
-    color?: Types.Maybe<string>;
-    textColor?: Types.Maybe<string>;
-    icon?: Types.Maybe<string>;
-  }>;
+    color?: string | null;
+    textColor?: string | null;
+    icon?: string | null;
+  } | null;
 };
 
 export type TagAutocompleteQueryVariables = Types.Exact<{
-  queryString?: Types.Maybe<Types.Scalars['String']>;
+  queryString?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 export type TagAutocompleteQueryData = {
@@ -33,21 +33,21 @@ export type TagAutocompleteQueryData = {
         __typename: 'Tag';
         id: string;
         name: string;
-        tagCategory?: Types.Maybe<{
+        tagCategory?: {
           __typename: 'TagCategory';
           id: string;
           name: string;
-          color?: Types.Maybe<string>;
-          textColor?: Types.Maybe<string>;
-          icon?: Types.Maybe<string>;
-        }>;
+          color?: string | null;
+          textColor?: string | null;
+          icon?: string | null;
+        } | null;
       };
     }>;
   };
 };
 
 export type TagListPageQueryVariables = Types.Exact<{
-  after?: Types.Maybe<Types.Scalars['String']>;
+  after?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 export type TagListPageQueryData = {
@@ -55,21 +55,21 @@ export type TagListPageQueryData = {
   tags: {
     __typename: 'TagConnection';
     totalCount: number;
-    pageInfo: { __typename: 'PageInfo'; endCursor?: Types.Maybe<string> };
+    pageInfo: { __typename: 'PageInfo'; endCursor?: string | null };
     edges: Array<{
       __typename: 'TagEdge';
       node: {
         __typename: 'Tag';
         id: string;
         name: string;
-        tagCategory?: Types.Maybe<{
+        tagCategory?: {
           __typename: 'TagCategory';
           id: string;
           name: string;
-          color?: Types.Maybe<string>;
-          textColor?: Types.Maybe<string>;
-          icon?: Types.Maybe<string>;
-        }>;
+          color?: string | null;
+          textColor?: string | null;
+          icon?: string | null;
+        } | null;
       };
     }>;
   };
@@ -86,14 +86,14 @@ export type EditTagQueryData = {
     id: string;
     name: string;
     projects: { __typename: 'ProjectConnection'; totalCount: number };
-    tagCategory?: Types.Maybe<{
+    tagCategory?: {
       __typename: 'TagCategory';
       id: string;
       name: string;
-      color?: Types.Maybe<string>;
-      textColor?: Types.Maybe<string>;
-      icon?: Types.Maybe<string>;
-    }>;
+      color?: string | null;
+      textColor?: string | null;
+      icon?: string | null;
+    } | null;
   };
 };
 
@@ -148,10 +148,7 @@ export function useTagAutocompleteQuery(
   );
 }
 export function useTagAutocompleteQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    TagAutocompleteQueryData,
-    TagAutocompleteQueryVariables
-  >,
+  baseOptions?: Apollo.LazyQueryHookOptions<TagAutocompleteQueryData, TagAutocompleteQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<TagAutocompleteQueryData, TagAutocompleteQueryVariables>(
@@ -160,9 +157,7 @@ export function useTagAutocompleteQueryLazyQuery(
   );
 }
 export type TagAutocompleteQueryHookResult = ReturnType<typeof useTagAutocompleteQuery>;
-export type TagAutocompleteQueryLazyQueryHookResult = ReturnType<
-  typeof useTagAutocompleteQueryLazyQuery
->;
+export type TagAutocompleteQueryLazyQueryHookResult = ReturnType<typeof useTagAutocompleteQueryLazyQuery>;
 export type TagAutocompleteQueryQueryResult = Apollo.QueryResult<
   TagAutocompleteQueryData,
   TagAutocompleteQueryVariables
@@ -205,26 +200,17 @@ export function useTagListPageQuery(
   baseOptions?: Apollo.QueryHookOptions<TagListPageQueryData, TagListPageQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<TagListPageQueryData, TagListPageQueryVariables>(
-    TagListPageQueryDocument,
-    options,
-  );
+  return Apollo.useQuery<TagListPageQueryData, TagListPageQueryVariables>(TagListPageQueryDocument, options);
 }
 export function useTagListPageQueryLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<TagListPageQueryData, TagListPageQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<TagListPageQueryData, TagListPageQueryVariables>(
-    TagListPageQueryDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<TagListPageQueryData, TagListPageQueryVariables>(TagListPageQueryDocument, options);
 }
 export type TagListPageQueryHookResult = ReturnType<typeof useTagListPageQuery>;
 export type TagListPageQueryLazyQueryHookResult = ReturnType<typeof useTagListPageQueryLazyQuery>;
-export type TagListPageQueryQueryResult = Apollo.QueryResult<
-  TagListPageQueryData,
-  TagListPageQueryVariables
->;
+export type TagListPageQueryQueryResult = Apollo.QueryResult<TagListPageQueryData, TagListPageQueryVariables>;
 export const EditTagQueryDocument = gql`
   query EditTagQuery($id: ID!) {
     tag(id: $id) {
@@ -254,9 +240,7 @@ export const EditTagQueryDocument = gql`
  *   },
  * });
  */
-export function useEditTagQuery(
-  baseOptions: Apollo.QueryHookOptions<EditTagQueryData, EditTagQueryVariables>,
-) {
+export function useEditTagQuery(baseOptions: Apollo.QueryHookOptions<EditTagQueryData, EditTagQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<EditTagQueryData, EditTagQueryVariables>(EditTagQueryDocument, options);
 }
@@ -264,10 +248,7 @@ export function useEditTagQueryLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<EditTagQueryData, EditTagQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<EditTagQueryData, EditTagQueryVariables>(
-    EditTagQueryDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<EditTagQueryData, EditTagQueryVariables>(EditTagQueryDocument, options);
 }
 export type EditTagQueryHookResult = ReturnType<typeof useEditTagQuery>;
 export type EditTagQueryLazyQueryHookResult = ReturnType<typeof useEditTagQueryLazyQuery>;

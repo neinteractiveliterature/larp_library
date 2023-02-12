@@ -667,6 +667,13 @@ CREATE INDEX index_pg_search_documents_on_searchable ON public.pg_search_documen
 
 
 --
+-- Name: index_project_files_on_filepath; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_project_files_on_filepath ON public.project_files USING btree (filepath);
+
+
+--
 -- Name: index_project_files_on_project_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -830,6 +837,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220520004351'),
 ('20220520145832'),
 ('20220520150212'),
-('20220521194451');
+('20220521194451'),
+('20230212190415');
 
 

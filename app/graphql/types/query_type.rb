@@ -176,5 +176,35 @@ module Types
     def current_ability
       context[:current_ability]
     end
+
+    field :presign_s3_url, String, null: false do
+      argument :http_method, String, required: true
+      argument :url, String, required: true
+      argument :headers, GraphQL::Types::JSON, required: true
+    end
+
+    def presign_s3_url(http_method:, url:, headers:)
+      raise GraphQL::ExecutionError, "Must be signed in" unless current_user
+
+      unless %w[PUT POST].include?(http_method.upcase)
+        raise GraphQL::ExecutionError, "Only PUT and POST requests can be pre-signed"
+      end
+
+      uri = URI.parse(url)
+      unless uri.hostname == "#{ProjectFile.s3_bucket}.s3.#{ENV.fetch("AWS_REGION")}.amazonaws.com"
+        raise GraphQL::ExecutionError, "Unexpected hostname"
+      end
+      filepath = uri.path.gsub(%r{\A/*}, "")
+      raise GraphQL::ExecutionError, "Cannot overwrite existing object" if ProjectFile.where(filepath: filepath).any?
+
+      signer =
+        Aws::Sigv4::Signer.new(
+          service: "s3",
+          region: ENV.fetch("AWS_REGION"),
+          access_key_id: ENV.fetch("AWS_ACCESS_KEY_ID"),
+          secret_access_key: ENV.fetch("AWS_SECRET_ACCESS_KEY")
+        )
+      signer.presign_url(http_method: http_method, url: url, headers: headers)
+    end
   end
 end

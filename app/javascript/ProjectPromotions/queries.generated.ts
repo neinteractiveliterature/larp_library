@@ -3,7 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions = {};
+const defaultOptions = {} as const;
 export type ProjectPromotionFieldsFragment = {
   __typename: 'ProjectPromotion';
   id: string;
@@ -11,7 +11,7 @@ export type ProjectPromotionFieldsFragment = {
   project: {
     __typename: 'Project';
     id: string;
-    title?: Types.Maybe<string>;
+    title?: string | null;
     brand: { __typename: 'Brand'; id: string; slug: string };
   };
 };
@@ -27,7 +27,7 @@ export type ProjectPromotionsPageQueryData = {
     project: {
       __typename: 'Project';
       id: string;
-      title?: Types.Maybe<string>;
+      title?: string | null;
       brand: { __typename: 'Brand'; id: string; slug: string };
     };
   }>;
@@ -73,10 +73,7 @@ export const ProjectPromotionsPageQueryDocument = gql`
  * });
  */
 export function useProjectPromotionsPageQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    ProjectPromotionsPageQueryData,
-    ProjectPromotionsPageQueryVariables
-  >,
+  baseOptions?: Apollo.QueryHookOptions<ProjectPromotionsPageQueryData, ProjectPromotionsPageQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<ProjectPromotionsPageQueryData, ProjectPromotionsPageQueryVariables>(
@@ -85,10 +82,7 @@ export function useProjectPromotionsPageQuery(
   );
 }
 export function useProjectPromotionsPageQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ProjectPromotionsPageQueryData,
-    ProjectPromotionsPageQueryVariables
-  >,
+  baseOptions?: Apollo.LazyQueryHookOptions<ProjectPromotionsPageQueryData, ProjectPromotionsPageQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<ProjectPromotionsPageQueryData, ProjectPromotionsPageQueryVariables>(
@@ -97,9 +91,7 @@ export function useProjectPromotionsPageQueryLazyQuery(
   );
 }
 export type ProjectPromotionsPageQueryHookResult = ReturnType<typeof useProjectPromotionsPageQuery>;
-export type ProjectPromotionsPageQueryLazyQueryHookResult = ReturnType<
-  typeof useProjectPromotionsPageQueryLazyQuery
->;
+export type ProjectPromotionsPageQueryLazyQueryHookResult = ReturnType<typeof useProjectPromotionsPageQueryLazyQuery>;
 export type ProjectPromotionsPageQueryQueryResult = Apollo.QueryResult<
   ProjectPromotionsPageQueryData,
   ProjectPromotionsPageQueryVariables

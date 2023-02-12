@@ -7,11 +7,15 @@ class ProjectFilesController < ApplicationController
   respond_to :json
 
   def auth_upload
-    digest = OpenSSL::Digest.new("sha1")
-    hmac = OpenSSL::HMAC.digest(digest, ENV["AWS_SECRET_ACCESS_KEY"].encode("UTF-8"),
-request["to_sign"].encode("UTF-8"))
-    hmac64 = Base64.encode64(hmac).chomp
+    signer =
+      Aws::Sigv4::Signer.new(
+        service: "s3",
+        region: ENV.fetch("AWS_REGION"),
+        access_key_id: ENV.fetch("AWS_ACCESS_KEY_ID"),
+        secret_access_key: ENV.fetch("AWS_SECRET_ACCESS_KEY")
+      )
+    signature = signer.sign_request(http_method: params[:http_method], url: params[:url], headers: params[:headers])
 
-    render plain: hmac64, status: :ok
+    render json: signature.headers, status: :ok
   end
 end

@@ -394,6 +394,7 @@ DEPENDENCIES
   acts_as_list
   aws-sdk-rails
   aws-sdk-s3
+  aws-sigv4
   byebug
   cancancan
   color
