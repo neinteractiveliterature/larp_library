@@ -2,16 +2,16 @@ import { LoadQueryWrapper, PageLoadingIndicator } from '@neinteractiveliterature
 import { ReactNode, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { AppLayoutQueryData, AppLayoutQueryVariables, useAppLayoutQuery } from './queries.generated';
+import { SignInButton } from './SignInButton';
+import { SignOutButton } from './SignOutButton';
 
 export type AppLayoutProps = {
   children: ReactNode;
-  signInCSRFToken: string;
-  signOutCSRFToken: string;
 };
 
 export default LoadQueryWrapper<AppLayoutQueryData, AppLayoutQueryVariables, AppLayoutProps>(
   useAppLayoutQuery,
-  function AppLayout({ data, children, signInCSRFToken, signOutCSRFToken }) {
+  function AppLayout({ data, children }) {
     return (
       <>
         <div className="container">
@@ -69,24 +69,7 @@ export default LoadQueryWrapper<AppLayoutQueryData, AppLayoutQueryVariables, App
                   <li>
                     <Link to="/brands/new">Publish your larp</Link>
                   </li>
-                  <li>
-                    {data.currentUser ? (
-                      <form action="/users/sign_out" method="POST">
-                        <input type="hidden" name="_method" value="DELETE" />
-                        <input type="hidden" name="authenticity_token" value={signOutCSRFToken} />
-                        <button type="submit" className="btn btn-link">
-                          Sign out
-                        </button>
-                      </form>
-                    ) : (
-                      <form action="/users/auth/intercode" method="POST">
-                        <input type="hidden" name="authenticity_token" value={signInCSRFToken} />
-                        <button className="btn btn-link" type="submit">
-                          Sign in
-                        </button>
-                      </form>
-                    )}
-                  </li>
+                  <li>{data.currentUser ? <SignOutButton /> : <SignInButton />}</li>
                 </ul>
               </li>
             </ul>

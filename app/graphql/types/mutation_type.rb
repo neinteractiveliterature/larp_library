@@ -31,5 +31,7 @@ module Types
     field :create_tag_category, mutation: Mutations::CreateTagCategory
     field :update_tag_category, mutation: Mutations::UpdateTagCategory
     field :delete_tag_category, mutation: Mutations::DeleteTagCategory
+
+    field :set_return_url, mutation: Mutations::SetReturnUrl
   end
 end

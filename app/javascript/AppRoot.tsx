@@ -44,52 +44,64 @@ export type AppRootProps = JSX.IntrinsicAttributes & {
   signOutCSRFToken: string;
 };
 
+export type CSRFTokensContextValue = {
+  signInCSRFToken: string;
+  signOutCSRFToken: string;
+};
+
+export const CSRFTokensContext = React.createContext<CSRFTokensContextValue>({
+  signInCSRFToken: '',
+  signOutCSRFToken: '',
+});
+
 function AppRoot({ s3Configuration, signInCSRFToken, signOutCSRFToken }: AppRootProps): JSX.Element {
   return (
     <S3ConfigurationContext.Provider value={s3Configuration}>
-      <AppLayout signInCSRFToken={signInCSRFToken} signOutCSRFToken={signOutCSRFToken}>
-        <Routes>
-          <Route path="projects" element={<PageComponents.ProjectSearchPage />} />
+      <CSRFTokensContext.Provider value={{ signInCSRFToken, signOutCSRFToken }}>
+        <AppLayout>
+          <Routes>
+            <Route path="projects" element={<PageComponents.ProjectSearchPage />} />
 
-          <Route path="brands/*">
-            <Route path="unapproved" element={<PageComponents.UnapprovedBrandsListPage />} />
-            <Route path="new" element={<PageComponents.NewBrandPage />} />
+            <Route path="brands/*">
+              <Route path="unapproved" element={<PageComponents.UnapprovedBrandsListPage />} />
+              <Route path="new" element={<PageComponents.NewBrandPage />} />
 
-            <Route path=":brandSlug/*">
-              <Route path="invitations/:invitationToken" element={<PageComponents.InvitationPage />} />
-              <Route path="edit" element={<PageComponents.EditBrandPage />} />
-              <Route path="projects/*">
-                <Route path=":projectId/edit" element={<PageComponents.EditProjectPage />} />
-                <Route path=":projectId/initial_content" element={<PageComponents.ProjectInitialContentPage />} />
-                <Route path=":projectId" element={<PageComponents.ProjectPage />} />
-                <Route path="new" element={<PageComponents.NewProjectPage />} />
+              <Route path=":brandSlug/*">
+                <Route path="invitations/:invitationToken" element={<PageComponents.InvitationPage />} />
+                <Route path="edit" element={<PageComponents.EditBrandPage />} />
+                <Route path="projects/*">
+                  <Route path=":projectId/edit" element={<PageComponents.EditProjectPage />} />
+                  <Route path=":projectId/initial_content" element={<PageComponents.ProjectInitialContentPage />} />
+                  <Route path=":projectId" element={<PageComponents.ProjectPage />} />
+                  <Route path="new" element={<PageComponents.NewProjectPage />} />
+                </Route>
+                <Route path="" element={<PageComponents.BrandPage />} />
               </Route>
-              <Route path="" element={<PageComponents.BrandPage />} />
+
+              <Route path="" element={<PageComponents.BrandListPage />} />
             </Route>
 
-            <Route path="" element={<PageComponents.BrandListPage />} />
-          </Route>
+            <Route path="project_promotions" element={<PageComponents.ProjectPromotionsPage />} />
 
-          <Route path="project_promotions" element={<PageComponents.ProjectPromotionsPage />} />
+            <Route path="tags/*">
+              <Route path="new" element={<PageComponents.NewTagPage />} />
+              <Route path=":tagId/edit" element={<PageComponents.EditTagPage />} />
+              <Route path="" element={<PageComponents.TagListPage />} />
+            </Route>
 
-          <Route path="tags/*">
-            <Route path="new" element={<PageComponents.NewTagPage />} />
-            <Route path=":tagId/edit" element={<PageComponents.EditTagPage />} />
-            <Route path="" element={<PageComponents.TagListPage />} />
-          </Route>
+            <Route path="tag_categories/*">
+              <Route path="new" element={<PageComponents.NewTagCategoryPage />} />
+              <Route path=":tagCategoryId/edit" element={<PageComponents.EditTagCategoryPage />} />
+              <Route path="" element={<PageComponents.TagCategoryListPage />} />
+            </Route>
 
-          <Route path="tag_categories/*">
-            <Route path="new" element={<PageComponents.NewTagCategoryPage />} />
-            <Route path=":tagCategoryId/edit" element={<PageComponents.EditTagCategoryPage />} />
-            <Route path="" element={<PageComponents.TagCategoryListPage />} />
-          </Route>
+            <Route path="pages/about" element={<PageComponents.AboutPage />} />
+            <Route path="pages/licensing" element={<PageComponents.LicensingPage />} />
 
-          <Route path="pages/about" element={<PageComponents.AboutPage />} />
-          <Route path="pages/licensing" element={<PageComponents.LicensingPage />} />
-
-          <Route path="/" element={<PageComponents.HomePage />} />
-        </Routes>
-      </AppLayout>
+            <Route path="/" element={<PageComponents.HomePage />} />
+          </Routes>
+        </AppLayout>
+      </CSRFTokensContext.Provider>
     </S3ConfigurationContext.Provider>
   );
 }
