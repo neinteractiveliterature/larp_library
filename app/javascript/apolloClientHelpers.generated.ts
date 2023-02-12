@@ -244,6 +244,7 @@ export type MutationKeySpecifier = (
   | 'moveProjectFile'
   | 'moveProjectLink'
   | 'promoteProject'
+  | 'setReturnUrl'
   | 'unpromoteProject'
   | 'updateBrand'
   | 'updateProject'
@@ -271,6 +272,7 @@ export type MutationFieldPolicy = {
   moveProjectFile?: FieldPolicy<any> | FieldReadFunction<any>;
   moveProjectLink?: FieldPolicy<any> | FieldReadFunction<any>;
   promoteProject?: FieldPolicy<any> | FieldReadFunction<any>;
+  setReturnUrl?: FieldPolicy<any> | FieldReadFunction<any>;
   unpromoteProject?: FieldPolicy<any> | FieldReadFunction<any>;
   updateBrand?: FieldPolicy<any> | FieldReadFunction<any>;
   updateProject?: FieldPolicy<any> | FieldReadFunction<any>;
@@ -451,6 +453,10 @@ export type QueryFieldPolicy = {
   tagCategories?: FieldPolicy<any> | FieldReadFunction<any>;
   tagCategory?: FieldPolicy<any> | FieldReadFunction<any>;
   tags?: FieldPolicy<any> | FieldReadFunction<any>;
+};
+export type SetReturnUrlPayloadKeySpecifier = ('clientMutationId' | SetReturnUrlPayloadKeySpecifier)[];
+export type SetReturnUrlPayloadFieldPolicy = {
+  clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>;
 };
 export type TagKeySpecifier = (
   | 'createdAt'
@@ -723,6 +729,10 @@ export type StrictTypedTypePolicies = {
   Query?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?: false | QueryKeySpecifier | (() => undefined | QueryKeySpecifier);
     fields?: QueryFieldPolicy;
+  };
+  SetReturnUrlPayload?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
+    keyFields?: false | SetReturnUrlPayloadKeySpecifier | (() => undefined | SetReturnUrlPayloadKeySpecifier);
+    fields?: SetReturnUrlPayloadFieldPolicy;
   };
   Tag?: Omit<TypePolicy, 'fields' | 'keyFields'> & {
     keyFields?: false | TagKeySpecifier | (() => undefined | TagKeySpecifier);
