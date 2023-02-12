@@ -12,7 +12,7 @@ export const HomePageQuery = gql`
       }
     }
 
-    tags {
+    tags(first: 200) {
       edges {
         node {
           id
@@ -30,6 +30,11 @@ export const HomePageQuery = gql`
         node {
           id
           name
+
+          tags {
+            id
+            ...TagFragment
+          }
         }
       }
     }

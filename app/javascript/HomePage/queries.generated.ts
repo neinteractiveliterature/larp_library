@@ -63,7 +63,27 @@ export type HomePageQueryData = {
   };
   tagCategories: {
     __typename: 'TagCategoryConnection';
-    edges: Array<{ __typename: 'TagCategoryEdge'; node: { __typename: 'TagCategory'; id: string; name: string } }>;
+    edges: Array<{
+      __typename: 'TagCategoryEdge';
+      node: {
+        __typename: 'TagCategory';
+        id: string;
+        name: string;
+        tags: Array<{
+          __typename: 'Tag';
+          id: string;
+          name: string;
+          tagCategory?: {
+            __typename: 'TagCategory';
+            id: string;
+            name: string;
+            color?: string | null;
+            textColor?: string | null;
+            icon?: string | null;
+          } | null;
+        }>;
+      };
+    }>;
   };
 };
 
@@ -75,7 +95,7 @@ export const HomePageQueryDocument = gql`
         ...ProjectHeadersFragment
       }
     }
-    tags {
+    tags(first: 200) {
       edges {
         node {
           id
@@ -91,6 +111,10 @@ export const HomePageQueryDocument = gql`
         node {
           id
           name
+          tags {
+            id
+            ...TagFragment
+          }
         }
       }
     }

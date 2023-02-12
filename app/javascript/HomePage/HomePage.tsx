@@ -31,20 +31,19 @@ export default LoadQueryWrapper(useHomePageQuery, function HomePage({ data }) {
       <div className="col-md-4">
         <h2>Welcome to Larp Library</h2>
         <p>
-          Larp Library is an online repository of free-to-run live action roleplaying games. All
-          larps in the library are freely licensed for anyone to download, read, run, and play. You
-          can <Link to="/projects">browse or search our library of games here</Link>.
+          Larp Library is an online repository of free-to-run live action roleplaying games. All larps in the library
+          are freely licensed for anyone to download, read, run, and play. You can{' '}
+          <Link to="/projects">browse or search our library of games here</Link>.
         </p>
         <p>
           If you&rsquo;re a larp creator and are interested in sharing your work, you can{' '}
-          <Link to="/brands/new">sign up here</Link> and get your own brand page, from which you can
-          publish all your projects.
+          <Link to="/brands/new">sign up here</Link> and get your own brand page, from which you can publish all your
+          projects.
         </p>
         <p>
           Larp Library is a project of{' '}
-          <a href="https://interactiveliterature.org">New England Interactive Literature</a>, the
-          same organization that runs the New England Intercon conventions and NELCO and publishes
-          Game Wrap.
+          <a href="https://interactiveliterature.org">New England Interactive Literature</a>, the same organization that
+          runs the New England Intercon conventions and NELCO and publishes Game Wrap.
         </p>
       </div>
       <div className="col-md-4">
@@ -88,8 +87,7 @@ export default LoadQueryWrapper(useHomePageQuery, function HomePage({ data }) {
                         <li className="mb-1" key={tag.id}>
                           <Tag tag={tag} linkTo={generateProjectSearchPath({ tag: tag.name })} />
                           <small className="ms-1">
-                            ({tag.projects.totalCount}{' '}
-                            {tag.projects.totalCount === 1 ? 'project' : 'projects'})
+                            ({tag.projects.totalCount} {tag.projects.totalCount === 1 ? 'project' : 'projects'})
                           </small>
                         </li>
                       ))}
@@ -103,14 +101,9 @@ export default LoadQueryWrapper(useHomePageQuery, function HomePage({ data }) {
                 <ul className="list-unstyled">
                   {tagsByCategoryId['uncategorized'].map((tag) => (
                     <li className="mb-1" key={tag.id}>
-                      <Tag
-                        key={tag.id}
-                        tag={tag}
-                        linkTo={generateProjectSearchPath({ tag: tag.name })}
-                      />
+                      <Tag key={tag.id} tag={tag} linkTo={generateProjectSearchPath({ tag: tag.name })} />
                       <small className="ms-1">
-                        ({tag.projects.totalCount}{' '}
-                        {tag.projects.totalCount === 1 ? 'project' : 'projects'})
+                        ({tag.projects.totalCount} {tag.projects.totalCount === 1 ? 'project' : 'projects'})
                       </small>
                     </li>
                   ))}

@@ -98,7 +98,7 @@ module Types
       scope
     end
 
-    field :tags, Types::TagType.connection_type, null: false do
+    field :tags, Types::TagType.connection_type, null: false, max_page_size: 200 do
       argument :query_string, String, required: false
     end
 
