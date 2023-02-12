@@ -27,8 +27,6 @@ module Mutations
 
     def resolve(**_args)
       @project_file.save!
-      s3_object = Aws::S3::Object.new(ProjectFile.s3_bucket, @project_file.filepath)
-      s3_object.put({ content_disposition: "attachment" })
 
       { project_file: @project_file }
     end

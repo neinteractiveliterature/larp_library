@@ -4,29 +4,29 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { TagFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions = {};
+const defaultOptions = {} as const;
 export type CreateTagMutationVariables = Types.Exact<{
   tagAttributes: Types.TagAttributes;
 }>;
 
 export type CreateTagMutationData = {
   __typename: 'Mutation';
-  createTag?: Types.Maybe<{
+  createTag?: {
     __typename: 'CreateTagPayload';
     tag: {
       __typename: 'Tag';
       id: string;
       name: string;
-      tagCategory?: Types.Maybe<{
+      tagCategory?: {
         __typename: 'TagCategory';
         id: string;
         name: string;
-        color?: Types.Maybe<string>;
-        textColor?: Types.Maybe<string>;
-        icon?: Types.Maybe<string>;
-      }>;
+        color?: string | null;
+        textColor?: string | null;
+        icon?: string | null;
+      } | null;
     };
-  }>;
+  } | null;
 };
 
 export type UpdateTagMutationVariables = Types.Exact<{
@@ -36,22 +36,22 @@ export type UpdateTagMutationVariables = Types.Exact<{
 
 export type UpdateTagMutationData = {
   __typename: 'Mutation';
-  updateTag?: Types.Maybe<{
+  updateTag?: {
     __typename: 'UpdateTagPayload';
     tag: {
       __typename: 'Tag';
       id: string;
       name: string;
-      tagCategory?: Types.Maybe<{
+      tagCategory?: {
         __typename: 'TagCategory';
         id: string;
         name: string;
-        color?: Types.Maybe<string>;
-        textColor?: Types.Maybe<string>;
-        icon?: Types.Maybe<string>;
-      }>;
+        color?: string | null;
+        textColor?: string | null;
+        icon?: string | null;
+      } | null;
     };
-  }>;
+  } | null;
 };
 
 export type DeleteTagMutationVariables = Types.Exact<{
@@ -60,10 +60,7 @@ export type DeleteTagMutationVariables = Types.Exact<{
 
 export type DeleteTagMutationData = {
   __typename: 'Mutation';
-  deleteTag?: Types.Maybe<{
-    __typename: 'DeleteTagPayload';
-    clientMutationId?: Types.Maybe<string>;
-  }>;
+  deleteTag?: { __typename: 'DeleteTagPayload'; clientMutationId?: string | null } | null;
 };
 
 export const CreateTagDocument = gql`
@@ -76,10 +73,7 @@ export const CreateTagDocument = gql`
   }
   ${TagFragmentDoc}
 `;
-export type CreateTagMutationFn = Apollo.MutationFunction<
-  CreateTagMutationData,
-  CreateTagMutationVariables
->;
+export type CreateTagMutationFn = Apollo.MutationFunction<CreateTagMutationData, CreateTagMutationVariables>;
 
 /**
  * __useCreateTagMutation__
@@ -102,17 +96,11 @@ export function useCreateTagMutation(
   baseOptions?: Apollo.MutationHookOptions<CreateTagMutationData, CreateTagMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<CreateTagMutationData, CreateTagMutationVariables>(
-    CreateTagDocument,
-    options,
-  );
+  return Apollo.useMutation<CreateTagMutationData, CreateTagMutationVariables>(CreateTagDocument, options);
 }
 export type CreateTagMutationHookResult = ReturnType<typeof useCreateTagMutation>;
 export type CreateTagMutationResult = Apollo.MutationResult<CreateTagMutationData>;
-export type CreateTagMutationOptions = Apollo.BaseMutationOptions<
-  CreateTagMutationData,
-  CreateTagMutationVariables
->;
+export type CreateTagMutationOptions = Apollo.BaseMutationOptions<CreateTagMutationData, CreateTagMutationVariables>;
 export const UpdateTagDocument = gql`
   mutation UpdateTag($id: ID!, $tagAttributes: TagAttributes!) {
     updateTag(input: { id: $id, tagAttributes: $tagAttributes }) {
@@ -123,10 +111,7 @@ export const UpdateTagDocument = gql`
   }
   ${TagFragmentDoc}
 `;
-export type UpdateTagMutationFn = Apollo.MutationFunction<
-  UpdateTagMutationData,
-  UpdateTagMutationVariables
->;
+export type UpdateTagMutationFn = Apollo.MutationFunction<UpdateTagMutationData, UpdateTagMutationVariables>;
 
 /**
  * __useUpdateTagMutation__
@@ -150,17 +135,11 @@ export function useUpdateTagMutation(
   baseOptions?: Apollo.MutationHookOptions<UpdateTagMutationData, UpdateTagMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UpdateTagMutationData, UpdateTagMutationVariables>(
-    UpdateTagDocument,
-    options,
-  );
+  return Apollo.useMutation<UpdateTagMutationData, UpdateTagMutationVariables>(UpdateTagDocument, options);
 }
 export type UpdateTagMutationHookResult = ReturnType<typeof useUpdateTagMutation>;
 export type UpdateTagMutationResult = Apollo.MutationResult<UpdateTagMutationData>;
-export type UpdateTagMutationOptions = Apollo.BaseMutationOptions<
-  UpdateTagMutationData,
-  UpdateTagMutationVariables
->;
+export type UpdateTagMutationOptions = Apollo.BaseMutationOptions<UpdateTagMutationData, UpdateTagMutationVariables>;
 export const DeleteTagDocument = gql`
   mutation DeleteTag($id: ID!) {
     deleteTag(input: { id: $id }) {
@@ -168,10 +147,7 @@ export const DeleteTagDocument = gql`
     }
   }
 `;
-export type DeleteTagMutationFn = Apollo.MutationFunction<
-  DeleteTagMutationData,
-  DeleteTagMutationVariables
->;
+export type DeleteTagMutationFn = Apollo.MutationFunction<DeleteTagMutationData, DeleteTagMutationVariables>;
 
 /**
  * __useDeleteTagMutation__
@@ -194,14 +170,8 @@ export function useDeleteTagMutation(
   baseOptions?: Apollo.MutationHookOptions<DeleteTagMutationData, DeleteTagMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<DeleteTagMutationData, DeleteTagMutationVariables>(
-    DeleteTagDocument,
-    options,
-  );
+  return Apollo.useMutation<DeleteTagMutationData, DeleteTagMutationVariables>(DeleteTagDocument, options);
 }
 export type DeleteTagMutationHookResult = ReturnType<typeof useDeleteTagMutation>;
 export type DeleteTagMutationResult = Apollo.MutationResult<DeleteTagMutationData>;
-export type DeleteTagMutationOptions = Apollo.BaseMutationOptions<
-  DeleteTagMutationData,
-  DeleteTagMutationVariables
->;
+export type DeleteTagMutationOptions = Apollo.BaseMutationOptions<DeleteTagMutationData, DeleteTagMutationVariables>;

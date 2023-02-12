@@ -3,7 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions = {};
+const defaultOptions = {} as const;
 export type AcceptBrandMembershipInvitationMutationVariables = Types.Exact<{
   brandId: Types.Scalars['ID'];
   invitationToken: Types.Scalars['String'];
@@ -11,17 +11,15 @@ export type AcceptBrandMembershipInvitationMutationVariables = Types.Exact<{
 
 export type AcceptBrandMembershipInvitationMutationData = {
   __typename: 'Mutation';
-  acceptBrandMembershipInvitation?: Types.Maybe<{
+  acceptBrandMembershipInvitation?: {
     __typename: 'AcceptBrandMembershipInvitationPayload';
-    clientMutationId?: Types.Maybe<string>;
-  }>;
+    clientMutationId?: string | null;
+  } | null;
 };
 
 export const AcceptBrandMembershipInvitationDocument = gql`
   mutation AcceptBrandMembershipInvitation($brandId: ID!, $invitationToken: String!) {
-    acceptBrandMembershipInvitation(
-      input: { brandId: $brandId, invitationToken: $invitationToken }
-    ) {
+    acceptBrandMembershipInvitation(input: { brandId: $brandId, invitationToken: $invitationToken }) {
       clientMutationId
     }
   }

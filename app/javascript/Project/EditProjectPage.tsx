@@ -44,17 +44,8 @@ export default LoadQueryWrapper(useLoadProject, function EditProjectPage({ data 
         renderContent: function ProjectPropertiesTab() {
           return (
             <section className="p-2 bg-light border border-color-light border-top-0">
-              <ProjectFormFields
-                licenseOptions={data.licenses}
-                onChange={setProject}
-                project={project}
-              />
-              <button
-                className="btn btn-primary"
-                type="button"
-                onClick={saveProject}
-                disabled={loading}
-              >
+              <ProjectFormFields licenseOptions={data.licenses} onChange={setProject} project={project} />
+              <button className="btn btn-primary" type="button" onClick={saveProject} disabled={loading}>
                 {saved ? (
                   <>
                     Saved! <i className="bi-check" />
@@ -74,10 +65,7 @@ export default LoadQueryWrapper(useLoadProject, function EditProjectPage({ data 
         renderContent: function ProjectContentTab() {
           return (
             <section className="p-2 bg-light border border-color-light border-top-0">
-              <ProjectContentFields
-                project={data.project}
-                signerURL={`${generateProjectPath(project)}/project_files/auth_upload`}
-              />
+              <ProjectContentFields project={data.project} />
             </section>
           );
         },

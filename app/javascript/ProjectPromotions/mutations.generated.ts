@@ -4,14 +4,14 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { ProjectPromotionFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions = {};
+const defaultOptions = {} as const;
 export type PromoteProjectMutationVariables = Types.Exact<{
   projectId: Types.Scalars['ID'];
 }>;
 
 export type PromoteProjectMutationData = {
   __typename: 'Mutation';
-  promoteProject?: Types.Maybe<{
+  promoteProject?: {
     __typename: 'PromoteProjectPayload';
     projectPromotion: {
       __typename: 'ProjectPromotion';
@@ -20,11 +20,11 @@ export type PromoteProjectMutationData = {
       project: {
         __typename: 'Project';
         id: string;
-        title?: Types.Maybe<string>;
+        title?: string | null;
         brand: { __typename: 'Brand'; id: string; slug: string };
       };
     };
-  }>;
+  } | null;
 };
 
 export type UnpromoteProjectMutationVariables = Types.Exact<{
@@ -33,7 +33,7 @@ export type UnpromoteProjectMutationVariables = Types.Exact<{
 
 export type UnpromoteProjectMutationData = {
   __typename: 'Mutation';
-  unpromoteProject?: Types.Maybe<{
+  unpromoteProject?: {
     __typename: 'UnpromoteProjectPayload';
     projectPromotion: {
       __typename: 'ProjectPromotion';
@@ -42,11 +42,11 @@ export type UnpromoteProjectMutationData = {
       project: {
         __typename: 'Project';
         id: string;
-        title?: Types.Maybe<string>;
+        title?: string | null;
         brand: { __typename: 'Brand'; id: string; slug: string };
       };
     };
-  }>;
+  } | null;
 };
 
 export const PromoteProjectMutationDocument = gql`
@@ -83,10 +83,7 @@ export type PromoteProjectMutationMutationFn = Apollo.MutationFunction<
  * });
  */
 export function usePromoteProjectMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    PromoteProjectMutationData,
-    PromoteProjectMutationVariables
-  >,
+  baseOptions?: Apollo.MutationHookOptions<PromoteProjectMutationData, PromoteProjectMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<PromoteProjectMutationData, PromoteProjectMutationVariables>(
@@ -95,8 +92,7 @@ export function usePromoteProjectMutation(
   );
 }
 export type PromoteProjectMutationHookResult = ReturnType<typeof usePromoteProjectMutation>;
-export type PromoteProjectMutationMutationResult =
-  Apollo.MutationResult<PromoteProjectMutationData>;
+export type PromoteProjectMutationMutationResult = Apollo.MutationResult<PromoteProjectMutationData>;
 export type PromoteProjectMutationMutationOptions = Apollo.BaseMutationOptions<
   PromoteProjectMutationData,
   PromoteProjectMutationVariables
@@ -135,10 +131,7 @@ export type UnpromoteProjectMutationMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useUnpromoteProjectMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UnpromoteProjectMutationData,
-    UnpromoteProjectMutationVariables
-  >,
+  baseOptions?: Apollo.MutationHookOptions<UnpromoteProjectMutationData, UnpromoteProjectMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<UnpromoteProjectMutationData, UnpromoteProjectMutationVariables>(
@@ -147,8 +140,7 @@ export function useUnpromoteProjectMutation(
   );
 }
 export type UnpromoteProjectMutationHookResult = ReturnType<typeof useUnpromoteProjectMutation>;
-export type UnpromoteProjectMutationMutationResult =
-  Apollo.MutationResult<UnpromoteProjectMutationData>;
+export type UnpromoteProjectMutationMutationResult = Apollo.MutationResult<UnpromoteProjectMutationData>;
 export type UnpromoteProjectMutationMutationOptions = Apollo.BaseMutationOptions<
   UnpromoteProjectMutationData,
   UnpromoteProjectMutationVariables

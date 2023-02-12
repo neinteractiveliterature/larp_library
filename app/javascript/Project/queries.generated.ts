@@ -4,14 +4,14 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { ProjectHeadersFragmentDoc } from '../ProjectSearch/queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions = {};
+const defaultOptions = {} as const;
 export type ProjectFileFieldsFragment = {
   __typename: 'ProjectFile';
   id: string;
   url: string;
   filename: string;
   filesize: number;
-  filetype?: Types.Maybe<string>;
+  filetype?: string | null;
   position: number;
 };
 
@@ -20,7 +20,7 @@ export type ProjectLinkFieldsFragment = {
   id: string;
   url: string;
   title: string;
-  icon?: Types.Maybe<string>;
+  icon?: string | null;
   position: number;
 };
 
@@ -29,10 +29,10 @@ export type LicenseFieldsFragment = {
   id: string;
   name: string;
   url: string;
-  logoUrl?: Types.Maybe<string>;
-  dedicationHtml?: Types.Maybe<string>;
+  logoUrl?: string | null;
+  dedicationHtml?: string | null;
   discouraged: boolean;
-  discouragedReason?: Types.Maybe<string>;
+  discouragedReason?: string | null;
 };
 
 export type NewProjectFormQueryVariables = Types.Exact<{
@@ -47,47 +47,47 @@ export type NewProjectFormQueryData = {
     id: string;
     name: string;
     url: string;
-    logoUrl?: Types.Maybe<string>;
-    dedicationHtml?: Types.Maybe<string>;
+    logoUrl?: string | null;
+    dedicationHtml?: string | null;
     discouraged: boolean;
-    discouragedReason?: Types.Maybe<string>;
+    discouragedReason?: string | null;
   }>;
 };
 
 export type ProjectFieldsFragment = {
   __typename: 'Project';
   id: string;
-  description?: Types.Maybe<string>;
+  description?: string | null;
   currentUserCanEdit: boolean;
   currentUserCanDelete: boolean;
   currentUserCanUploadFiles: boolean;
   currentUserCanDeleteFiles: boolean;
-  title?: Types.Maybe<string>;
-  authors?: Types.Maybe<string>;
-  minPlayers?: Types.Maybe<number>;
-  maxPlayers?: Types.Maybe<number>;
-  minFacilitators?: Types.Maybe<number>;
-  maxFacilitators?: Types.Maybe<number>;
-  publicationYear?: Types.Maybe<number>;
-  lengthQuantity?: Types.Maybe<number>;
-  lengthUnits?: Types.Maybe<string>;
-  license?: Types.Maybe<{
+  title?: string | null;
+  authors?: string | null;
+  minPlayers?: number | null;
+  maxPlayers?: number | null;
+  minFacilitators?: number | null;
+  maxFacilitators?: number | null;
+  publicationYear?: number | null;
+  lengthQuantity?: number | null;
+  lengthUnits?: string | null;
+  license?: {
     __typename: 'License';
     id: string;
     name: string;
     url: string;
-    logoUrl?: Types.Maybe<string>;
-    dedicationHtml?: Types.Maybe<string>;
+    logoUrl?: string | null;
+    dedicationHtml?: string | null;
     discouraged: boolean;
-    discouragedReason?: Types.Maybe<string>;
-  }>;
+    discouragedReason?: string | null;
+  } | null;
   projectFiles: Array<{
     __typename: 'ProjectFile';
     id: string;
     url: string;
     filename: string;
     filesize: number;
-    filetype?: Types.Maybe<string>;
+    filetype?: string | null;
     position: number;
   }>;
   projectLinks: Array<{
@@ -95,7 +95,7 @@ export type ProjectFieldsFragment = {
     id: string;
     url: string;
     title: string;
-    icon?: Types.Maybe<string>;
+    icon?: string | null;
     position: number;
   }>;
   brand: { __typename: 'Brand'; id: string; name: string; slug: string };
@@ -103,14 +103,14 @@ export type ProjectFieldsFragment = {
     __typename: 'Tag';
     id: string;
     name: string;
-    tagCategory?: Types.Maybe<{
+    tagCategory?: {
       __typename: 'TagCategory';
       id: string;
       name: string;
-      color?: Types.Maybe<string>;
-      textColor?: Types.Maybe<string>;
-      icon?: Types.Maybe<string>;
-    }>;
+      color?: string | null;
+      textColor?: string | null;
+      icon?: string | null;
+    } | null;
   }>;
 };
 
@@ -123,37 +123,37 @@ export type ProjectPageQueryData = {
   project: {
     __typename: 'Project';
     id: string;
-    description?: Types.Maybe<string>;
+    description?: string | null;
     currentUserCanEdit: boolean;
     currentUserCanDelete: boolean;
     currentUserCanUploadFiles: boolean;
     currentUserCanDeleteFiles: boolean;
-    title?: Types.Maybe<string>;
-    authors?: Types.Maybe<string>;
-    minPlayers?: Types.Maybe<number>;
-    maxPlayers?: Types.Maybe<number>;
-    minFacilitators?: Types.Maybe<number>;
-    maxFacilitators?: Types.Maybe<number>;
-    publicationYear?: Types.Maybe<number>;
-    lengthQuantity?: Types.Maybe<number>;
-    lengthUnits?: Types.Maybe<string>;
-    license?: Types.Maybe<{
+    title?: string | null;
+    authors?: string | null;
+    minPlayers?: number | null;
+    maxPlayers?: number | null;
+    minFacilitators?: number | null;
+    maxFacilitators?: number | null;
+    publicationYear?: number | null;
+    lengthQuantity?: number | null;
+    lengthUnits?: string | null;
+    license?: {
       __typename: 'License';
       id: string;
       name: string;
       url: string;
-      logoUrl?: Types.Maybe<string>;
-      dedicationHtml?: Types.Maybe<string>;
+      logoUrl?: string | null;
+      dedicationHtml?: string | null;
       discouraged: boolean;
-      discouragedReason?: Types.Maybe<string>;
-    }>;
+      discouragedReason?: string | null;
+    } | null;
     projectFiles: Array<{
       __typename: 'ProjectFile';
       id: string;
       url: string;
       filename: string;
       filesize: number;
-      filetype?: Types.Maybe<string>;
+      filetype?: string | null;
       position: number;
     }>;
     projectLinks: Array<{
@@ -161,7 +161,7 @@ export type ProjectPageQueryData = {
       id: string;
       url: string;
       title: string;
-      icon?: Types.Maybe<string>;
+      icon?: string | null;
       position: number;
     }>;
     brand: { __typename: 'Brand'; id: string; name: string; slug: string };
@@ -169,14 +169,14 @@ export type ProjectPageQueryData = {
       __typename: 'Tag';
       id: string;
       name: string;
-      tagCategory?: Types.Maybe<{
+      tagCategory?: {
         __typename: 'TagCategory';
         id: string;
         name: string;
-        color?: Types.Maybe<string>;
-        textColor?: Types.Maybe<string>;
-        icon?: Types.Maybe<string>;
-      }>;
+        color?: string | null;
+        textColor?: string | null;
+        icon?: string | null;
+      } | null;
     }>;
   };
   licenses: Array<{
@@ -184,12 +184,20 @@ export type ProjectPageQueryData = {
     id: string;
     name: string;
     url: string;
-    logoUrl?: Types.Maybe<string>;
-    dedicationHtml?: Types.Maybe<string>;
+    logoUrl?: string | null;
+    dedicationHtml?: string | null;
     discouraged: boolean;
-    discouragedReason?: Types.Maybe<string>;
+    discouragedReason?: string | null;
   }>;
 };
+
+export type SignRequestQueryVariables = Types.Exact<{
+  httpMethod: Types.Scalars['String'];
+  url: Types.Scalars['String'];
+  headers: Types.Scalars['JSON'];
+}>;
+
+export type SignRequestQueryData = { __typename: 'Query'; presignS3Url: string };
 
 export const LicenseFieldsFragmentDoc = gql`
   fragment LicenseFieldsFragment on License {
@@ -280,10 +288,7 @@ export function useNewProjectFormQuery(
   baseOptions: Apollo.QueryHookOptions<NewProjectFormQueryData, NewProjectFormQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<NewProjectFormQueryData, NewProjectFormQueryVariables>(
-    NewProjectFormQueryDocument,
-    options,
-  );
+  return Apollo.useQuery<NewProjectFormQueryData, NewProjectFormQueryVariables>(NewProjectFormQueryDocument, options);
 }
 export function useNewProjectFormQueryLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<NewProjectFormQueryData, NewProjectFormQueryVariables>,
@@ -295,13 +300,8 @@ export function useNewProjectFormQueryLazyQuery(
   );
 }
 export type NewProjectFormQueryHookResult = ReturnType<typeof useNewProjectFormQuery>;
-export type NewProjectFormQueryLazyQueryHookResult = ReturnType<
-  typeof useNewProjectFormQueryLazyQuery
->;
-export type NewProjectFormQueryQueryResult = Apollo.QueryResult<
-  NewProjectFormQueryData,
-  NewProjectFormQueryVariables
->;
+export type NewProjectFormQueryLazyQueryHookResult = ReturnType<typeof useNewProjectFormQueryLazyQuery>;
+export type NewProjectFormQueryQueryResult = Apollo.QueryResult<NewProjectFormQueryData, NewProjectFormQueryVariables>;
 export const ProjectPageQueryDocument = gql`
   query ProjectPageQuery($projectId: ID!) {
     project(id: $projectId) {
@@ -336,23 +336,53 @@ export function useProjectPageQuery(
   baseOptions: Apollo.QueryHookOptions<ProjectPageQueryData, ProjectPageQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ProjectPageQueryData, ProjectPageQueryVariables>(
-    ProjectPageQueryDocument,
-    options,
-  );
+  return Apollo.useQuery<ProjectPageQueryData, ProjectPageQueryVariables>(ProjectPageQueryDocument, options);
 }
 export function useProjectPageQueryLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<ProjectPageQueryData, ProjectPageQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ProjectPageQueryData, ProjectPageQueryVariables>(
-    ProjectPageQueryDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<ProjectPageQueryData, ProjectPageQueryVariables>(ProjectPageQueryDocument, options);
 }
 export type ProjectPageQueryHookResult = ReturnType<typeof useProjectPageQuery>;
 export type ProjectPageQueryLazyQueryHookResult = ReturnType<typeof useProjectPageQueryLazyQuery>;
-export type ProjectPageQueryQueryResult = Apollo.QueryResult<
-  ProjectPageQueryData,
-  ProjectPageQueryVariables
->;
+export type ProjectPageQueryQueryResult = Apollo.QueryResult<ProjectPageQueryData, ProjectPageQueryVariables>;
+export const SignRequestQueryDocument = gql`
+  query SignRequestQuery($httpMethod: String!, $url: String!, $headers: JSON!) {
+    presignS3Url(httpMethod: $httpMethod, url: $url, headers: $headers)
+  }
+`;
+
+/**
+ * __useSignRequestQuery__
+ *
+ * To run a query within a React component, call `useSignRequestQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSignRequestQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSignRequestQuery({
+ *   variables: {
+ *      httpMethod: // value for 'httpMethod'
+ *      url: // value for 'url'
+ *      headers: // value for 'headers'
+ *   },
+ * });
+ */
+export function useSignRequestQuery(
+  baseOptions: Apollo.QueryHookOptions<SignRequestQueryData, SignRequestQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SignRequestQueryData, SignRequestQueryVariables>(SignRequestQueryDocument, options);
+}
+export function useSignRequestQueryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SignRequestQueryData, SignRequestQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<SignRequestQueryData, SignRequestQueryVariables>(SignRequestQueryDocument, options);
+}
+export type SignRequestQueryHookResult = ReturnType<typeof useSignRequestQuery>;
+export type SignRequestQueryLazyQueryHookResult = ReturnType<typeof useSignRequestQueryLazyQuery>;
+export type SignRequestQueryQueryResult = Apollo.QueryResult<SignRequestQueryData, SignRequestQueryVariables>;

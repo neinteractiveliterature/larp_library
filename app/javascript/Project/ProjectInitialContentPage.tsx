@@ -16,10 +16,7 @@ export default LoadQueryWrapper(useLoadProject, function ProjectInitialContentPa
   return (
     <>
       <h1>Content</h1>
-      <ProjectContentFields
-        project={data.project}
-        signerURL={`${generateProjectPath(data.project)}/project_files/auth_upload`}
-      />
+      <ProjectContentFields project={data.project} />
       <div className="mt-4">
         <Link to={generateProjectPath(data.project)} className="btn btn-primary">
           Finish and go to project page

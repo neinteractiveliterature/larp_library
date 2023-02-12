@@ -5,7 +5,7 @@ import { gql } from '@apollo/client';
 import { ProjectHeadersFragmentDoc } from '../ProjectSearch/queries.generated';
 import { TagFragmentDoc } from '../Tags/queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions = {};
+const defaultOptions = {} as const;
 export type HomePageQueryVariables = Types.Exact<{ [key: string]: never }>;
 
 export type HomePageQueryData = {
@@ -16,28 +16,28 @@ export type HomePageQueryData = {
     project: {
       __typename: 'Project';
       id: string;
-      title?: Types.Maybe<string>;
-      authors?: Types.Maybe<string>;
-      minPlayers?: Types.Maybe<number>;
-      maxPlayers?: Types.Maybe<number>;
-      minFacilitators?: Types.Maybe<number>;
-      maxFacilitators?: Types.Maybe<number>;
-      publicationYear?: Types.Maybe<number>;
-      lengthQuantity?: Types.Maybe<number>;
-      lengthUnits?: Types.Maybe<string>;
+      title?: string | null;
+      authors?: string | null;
+      minPlayers?: number | null;
+      maxPlayers?: number | null;
+      minFacilitators?: number | null;
+      maxFacilitators?: number | null;
+      publicationYear?: number | null;
+      lengthQuantity?: number | null;
+      lengthUnits?: string | null;
       brand: { __typename: 'Brand'; id: string; name: string; slug: string };
       tags: Array<{
         __typename: 'Tag';
         id: string;
         name: string;
-        tagCategory?: Types.Maybe<{
+        tagCategory?: {
           __typename: 'TagCategory';
           id: string;
           name: string;
-          color?: Types.Maybe<string>;
-          textColor?: Types.Maybe<string>;
-          icon?: Types.Maybe<string>;
-        }>;
+          color?: string | null;
+          textColor?: string | null;
+          icon?: string | null;
+        } | null;
       }>;
     };
   }>;
@@ -50,23 +50,20 @@ export type HomePageQueryData = {
         id: string;
         name: string;
         projects: { __typename: 'ProjectConnection'; totalCount: number };
-        tagCategory?: Types.Maybe<{
+        tagCategory?: {
           __typename: 'TagCategory';
           id: string;
           name: string;
-          color?: Types.Maybe<string>;
-          textColor?: Types.Maybe<string>;
-          icon?: Types.Maybe<string>;
-        }>;
+          color?: string | null;
+          textColor?: string | null;
+          icon?: string | null;
+        } | null;
       };
     }>;
   };
   tagCategories: {
     __typename: 'TagCategoryConnection';
-    edges: Array<{
-      __typename: 'TagCategoryEdge';
-      node: { __typename: 'TagCategory'; id: string; name: string };
-    }>;
+    edges: Array<{ __typename: 'TagCategoryEdge'; node: { __typename: 'TagCategory'; id: string; name: string } }>;
   };
 };
 
@@ -117,9 +114,7 @@ export const HomePageQueryDocument = gql`
  *   },
  * });
  */
-export function useHomePageQuery(
-  baseOptions?: Apollo.QueryHookOptions<HomePageQueryData, HomePageQueryVariables>,
-) {
+export function useHomePageQuery(baseOptions?: Apollo.QueryHookOptions<HomePageQueryData, HomePageQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<HomePageQueryData, HomePageQueryVariables>(HomePageQueryDocument, options);
 }
@@ -127,14 +122,8 @@ export function useHomePageQueryLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<HomePageQueryData, HomePageQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<HomePageQueryData, HomePageQueryVariables>(
-    HomePageQueryDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<HomePageQueryData, HomePageQueryVariables>(HomePageQueryDocument, options);
 }
 export type HomePageQueryHookResult = ReturnType<typeof useHomePageQuery>;
 export type HomePageQueryLazyQueryHookResult = ReturnType<typeof useHomePageQueryLazyQuery>;
-export type HomePageQueryQueryResult = Apollo.QueryResult<
-  HomePageQueryData,
-  HomePageQueryVariables
->;
+export type HomePageQueryQueryResult = Apollo.QueryResult<HomePageQueryData, HomePageQueryVariables>;

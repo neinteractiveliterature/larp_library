@@ -6,9 +6,9 @@ export type TagCategoryFragment = {
   __typename: 'TagCategory';
   id: string;
   name: string;
-  color?: Types.Maybe<string>;
-  textColor?: Types.Maybe<string>;
-  icon?: Types.Maybe<string>;
+  color?: string | null;
+  textColor?: string | null;
+  icon?: string | null;
 };
 
 export const TagCategoryFragmentDoc = gql`

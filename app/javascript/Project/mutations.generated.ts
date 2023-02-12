@@ -2,14 +2,11 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import {
-  ProjectFieldsFragmentDoc,
-  LicenseFieldsFragmentDoc,
-  ProjectFileFieldsFragmentDoc,
-  ProjectLinkFieldsFragmentDoc,
-} from './queries.generated';
+import { ProjectFieldsFragmentDoc } from './queries.generated';
+import { ProjectFileFieldsFragmentDoc } from './queries.generated';
+import { ProjectLinkFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions = {};
+const defaultOptions = {} as const;
 export type CreateProjectMutationVariables = Types.Exact<{
   brandId: Types.Scalars['ID'];
   projectAttributes: Types.ProjectAttributes;
@@ -17,42 +14,42 @@ export type CreateProjectMutationVariables = Types.Exact<{
 
 export type CreateProjectMutationData = {
   __typename: 'Mutation';
-  createProject?: Types.Maybe<{
+  createProject?: {
     __typename: 'CreateProjectPayload';
     project: {
       __typename: 'Project';
       id: string;
-      description?: Types.Maybe<string>;
+      description?: string | null;
       currentUserCanEdit: boolean;
       currentUserCanDelete: boolean;
       currentUserCanUploadFiles: boolean;
       currentUserCanDeleteFiles: boolean;
-      title?: Types.Maybe<string>;
-      authors?: Types.Maybe<string>;
-      minPlayers?: Types.Maybe<number>;
-      maxPlayers?: Types.Maybe<number>;
-      minFacilitators?: Types.Maybe<number>;
-      maxFacilitators?: Types.Maybe<number>;
-      publicationYear?: Types.Maybe<number>;
-      lengthQuantity?: Types.Maybe<number>;
-      lengthUnits?: Types.Maybe<string>;
-      license?: Types.Maybe<{
+      title?: string | null;
+      authors?: string | null;
+      minPlayers?: number | null;
+      maxPlayers?: number | null;
+      minFacilitators?: number | null;
+      maxFacilitators?: number | null;
+      publicationYear?: number | null;
+      lengthQuantity?: number | null;
+      lengthUnits?: string | null;
+      license?: {
         __typename: 'License';
         id: string;
         name: string;
         url: string;
-        logoUrl?: Types.Maybe<string>;
-        dedicationHtml?: Types.Maybe<string>;
+        logoUrl?: string | null;
+        dedicationHtml?: string | null;
         discouraged: boolean;
-        discouragedReason?: Types.Maybe<string>;
-      }>;
+        discouragedReason?: string | null;
+      } | null;
       projectFiles: Array<{
         __typename: 'ProjectFile';
         id: string;
         url: string;
         filename: string;
         filesize: number;
-        filetype?: Types.Maybe<string>;
+        filetype?: string | null;
         position: number;
       }>;
       projectLinks: Array<{
@@ -60,7 +57,7 @@ export type CreateProjectMutationData = {
         id: string;
         url: string;
         title: string;
-        icon?: Types.Maybe<string>;
+        icon?: string | null;
         position: number;
       }>;
       brand: { __typename: 'Brand'; id: string; name: string; slug: string };
@@ -68,17 +65,17 @@ export type CreateProjectMutationData = {
         __typename: 'Tag';
         id: string;
         name: string;
-        tagCategory?: Types.Maybe<{
+        tagCategory?: {
           __typename: 'TagCategory';
           id: string;
           name: string;
-          color?: Types.Maybe<string>;
-          textColor?: Types.Maybe<string>;
-          icon?: Types.Maybe<string>;
-        }>;
+          color?: string | null;
+          textColor?: string | null;
+          icon?: string | null;
+        } | null;
       }>;
     };
-  }>;
+  } | null;
 };
 
 export type UpdateProjectMutationVariables = Types.Exact<{
@@ -88,42 +85,42 @@ export type UpdateProjectMutationVariables = Types.Exact<{
 
 export type UpdateProjectMutationData = {
   __typename: 'Mutation';
-  updateProject?: Types.Maybe<{
+  updateProject?: {
     __typename: 'UpdateProjectPayload';
     project: {
       __typename: 'Project';
       id: string;
-      description?: Types.Maybe<string>;
+      description?: string | null;
       currentUserCanEdit: boolean;
       currentUserCanDelete: boolean;
       currentUserCanUploadFiles: boolean;
       currentUserCanDeleteFiles: boolean;
-      title?: Types.Maybe<string>;
-      authors?: Types.Maybe<string>;
-      minPlayers?: Types.Maybe<number>;
-      maxPlayers?: Types.Maybe<number>;
-      minFacilitators?: Types.Maybe<number>;
-      maxFacilitators?: Types.Maybe<number>;
-      publicationYear?: Types.Maybe<number>;
-      lengthQuantity?: Types.Maybe<number>;
-      lengthUnits?: Types.Maybe<string>;
-      license?: Types.Maybe<{
+      title?: string | null;
+      authors?: string | null;
+      minPlayers?: number | null;
+      maxPlayers?: number | null;
+      minFacilitators?: number | null;
+      maxFacilitators?: number | null;
+      publicationYear?: number | null;
+      lengthQuantity?: number | null;
+      lengthUnits?: string | null;
+      license?: {
         __typename: 'License';
         id: string;
         name: string;
         url: string;
-        logoUrl?: Types.Maybe<string>;
-        dedicationHtml?: Types.Maybe<string>;
+        logoUrl?: string | null;
+        dedicationHtml?: string | null;
         discouraged: boolean;
-        discouragedReason?: Types.Maybe<string>;
-      }>;
+        discouragedReason?: string | null;
+      } | null;
       projectFiles: Array<{
         __typename: 'ProjectFile';
         id: string;
         url: string;
         filename: string;
         filesize: number;
-        filetype?: Types.Maybe<string>;
+        filetype?: string | null;
         position: number;
       }>;
       projectLinks: Array<{
@@ -131,7 +128,7 @@ export type UpdateProjectMutationData = {
         id: string;
         url: string;
         title: string;
-        icon?: Types.Maybe<string>;
+        icon?: string | null;
         position: number;
       }>;
       brand: { __typename: 'Brand'; id: string; name: string; slug: string };
@@ -139,17 +136,17 @@ export type UpdateProjectMutationData = {
         __typename: 'Tag';
         id: string;
         name: string;
-        tagCategory?: Types.Maybe<{
+        tagCategory?: {
           __typename: 'TagCategory';
           id: string;
           name: string;
-          color?: Types.Maybe<string>;
-          textColor?: Types.Maybe<string>;
-          icon?: Types.Maybe<string>;
-        }>;
+          color?: string | null;
+          textColor?: string | null;
+          icon?: string | null;
+        } | null;
       }>;
     };
-  }>;
+  } | null;
 };
 
 export type DeleteProjectMutationVariables = Types.Exact<{
@@ -158,10 +155,7 @@ export type DeleteProjectMutationVariables = Types.Exact<{
 
 export type DeleteProjectMutationData = {
   __typename: 'Mutation';
-  deleteProject?: Types.Maybe<{
-    __typename: 'DeleteProjectPayload';
-    clientMutationId?: Types.Maybe<string>;
-  }>;
+  deleteProject?: { __typename: 'DeleteProjectPayload'; clientMutationId?: string | null } | null;
 };
 
 export type CompleteProjectFileUploadMutationVariables = Types.Exact<{
@@ -169,13 +163,13 @@ export type CompleteProjectFileUploadMutationVariables = Types.Exact<{
   url: Types.Scalars['String'];
   filename: Types.Scalars['String'];
   filesize: Types.Scalars['Int'];
-  filetype?: Types.Maybe<Types.Scalars['String']>;
+  filetype?: Types.InputMaybe<Types.Scalars['String']>;
   filepath: Types.Scalars['String'];
 }>;
 
 export type CompleteProjectFileUploadMutationData = {
   __typename: 'Mutation';
-  completeProjectFileUpload?: Types.Maybe<{
+  completeProjectFileUpload?: {
     __typename: 'CompleteProjectFileUploadPayload';
     projectFile: {
       __typename: 'ProjectFile';
@@ -183,10 +177,10 @@ export type CompleteProjectFileUploadMutationData = {
       url: string;
       filename: string;
       filesize: number;
-      filetype?: Types.Maybe<string>;
+      filetype?: string | null;
       position: number;
     };
-  }>;
+  } | null;
 };
 
 export type MoveProjectFileMutationVariables = Types.Exact<{
@@ -196,42 +190,42 @@ export type MoveProjectFileMutationVariables = Types.Exact<{
 
 export type MoveProjectFileMutationData = {
   __typename: 'Mutation';
-  moveProjectFile?: Types.Maybe<{
+  moveProjectFile?: {
     __typename: 'MoveProjectFilePayload';
     project: {
       __typename: 'Project';
       id: string;
-      description?: Types.Maybe<string>;
+      description?: string | null;
       currentUserCanEdit: boolean;
       currentUserCanDelete: boolean;
       currentUserCanUploadFiles: boolean;
       currentUserCanDeleteFiles: boolean;
-      title?: Types.Maybe<string>;
-      authors?: Types.Maybe<string>;
-      minPlayers?: Types.Maybe<number>;
-      maxPlayers?: Types.Maybe<number>;
-      minFacilitators?: Types.Maybe<number>;
-      maxFacilitators?: Types.Maybe<number>;
-      publicationYear?: Types.Maybe<number>;
-      lengthQuantity?: Types.Maybe<number>;
-      lengthUnits?: Types.Maybe<string>;
-      license?: Types.Maybe<{
+      title?: string | null;
+      authors?: string | null;
+      minPlayers?: number | null;
+      maxPlayers?: number | null;
+      minFacilitators?: number | null;
+      maxFacilitators?: number | null;
+      publicationYear?: number | null;
+      lengthQuantity?: number | null;
+      lengthUnits?: string | null;
+      license?: {
         __typename: 'License';
         id: string;
         name: string;
         url: string;
-        logoUrl?: Types.Maybe<string>;
-        dedicationHtml?: Types.Maybe<string>;
+        logoUrl?: string | null;
+        dedicationHtml?: string | null;
         discouraged: boolean;
-        discouragedReason?: Types.Maybe<string>;
-      }>;
+        discouragedReason?: string | null;
+      } | null;
       projectFiles: Array<{
         __typename: 'ProjectFile';
         id: string;
         url: string;
         filename: string;
         filesize: number;
-        filetype?: Types.Maybe<string>;
+        filetype?: string | null;
         position: number;
       }>;
       projectLinks: Array<{
@@ -239,7 +233,7 @@ export type MoveProjectFileMutationData = {
         id: string;
         url: string;
         title: string;
-        icon?: Types.Maybe<string>;
+        icon?: string | null;
         position: number;
       }>;
       brand: { __typename: 'Brand'; id: string; name: string; slug: string };
@@ -247,17 +241,17 @@ export type MoveProjectFileMutationData = {
         __typename: 'Tag';
         id: string;
         name: string;
-        tagCategory?: Types.Maybe<{
+        tagCategory?: {
           __typename: 'TagCategory';
           id: string;
           name: string;
-          color?: Types.Maybe<string>;
-          textColor?: Types.Maybe<string>;
-          icon?: Types.Maybe<string>;
-        }>;
+          color?: string | null;
+          textColor?: string | null;
+          icon?: string | null;
+        } | null;
       }>;
     };
-  }>;
+  } | null;
 };
 
 export type DeleteProjectFileMutationVariables = Types.Exact<{
@@ -266,10 +260,7 @@ export type DeleteProjectFileMutationVariables = Types.Exact<{
 
 export type DeleteProjectFileMutationData = {
   __typename: 'Mutation';
-  deleteProjectFile?: Types.Maybe<{
-    __typename: 'DeleteProjectFilePayload';
-    clientMutationId?: Types.Maybe<string>;
-  }>;
+  deleteProjectFile?: { __typename: 'DeleteProjectFilePayload'; clientMutationId?: string | null } | null;
 };
 
 export type CreateProjectLinkMutationVariables = Types.Exact<{
@@ -279,17 +270,17 @@ export type CreateProjectLinkMutationVariables = Types.Exact<{
 
 export type CreateProjectLinkMutationData = {
   __typename: 'Mutation';
-  createProjectLink?: Types.Maybe<{
+  createProjectLink?: {
     __typename: 'CreateProjectLinkPayload';
     projectLink: {
       __typename: 'ProjectLink';
       id: string;
       url: string;
       title: string;
-      icon?: Types.Maybe<string>;
+      icon?: string | null;
       position: number;
     };
-  }>;
+  } | null;
 };
 
 export type UpdateProjectLinkMutationVariables = Types.Exact<{
@@ -299,17 +290,17 @@ export type UpdateProjectLinkMutationVariables = Types.Exact<{
 
 export type UpdateProjectLinkMutationData = {
   __typename: 'Mutation';
-  updateProjectLink?: Types.Maybe<{
+  updateProjectLink?: {
     __typename: 'UpdateProjectLinkPayload';
     projectLink: {
       __typename: 'ProjectLink';
       id: string;
       url: string;
       title: string;
-      icon?: Types.Maybe<string>;
+      icon?: string | null;
       position: number;
     };
-  }>;
+  } | null;
 };
 
 export type MoveProjectLinkMutationVariables = Types.Exact<{
@@ -319,42 +310,42 @@ export type MoveProjectLinkMutationVariables = Types.Exact<{
 
 export type MoveProjectLinkMutationData = {
   __typename: 'Mutation';
-  moveProjectLink?: Types.Maybe<{
+  moveProjectLink?: {
     __typename: 'MoveProjectLinkPayload';
     project: {
       __typename: 'Project';
       id: string;
-      description?: Types.Maybe<string>;
+      description?: string | null;
       currentUserCanEdit: boolean;
       currentUserCanDelete: boolean;
       currentUserCanUploadFiles: boolean;
       currentUserCanDeleteFiles: boolean;
-      title?: Types.Maybe<string>;
-      authors?: Types.Maybe<string>;
-      minPlayers?: Types.Maybe<number>;
-      maxPlayers?: Types.Maybe<number>;
-      minFacilitators?: Types.Maybe<number>;
-      maxFacilitators?: Types.Maybe<number>;
-      publicationYear?: Types.Maybe<number>;
-      lengthQuantity?: Types.Maybe<number>;
-      lengthUnits?: Types.Maybe<string>;
-      license?: Types.Maybe<{
+      title?: string | null;
+      authors?: string | null;
+      minPlayers?: number | null;
+      maxPlayers?: number | null;
+      minFacilitators?: number | null;
+      maxFacilitators?: number | null;
+      publicationYear?: number | null;
+      lengthQuantity?: number | null;
+      lengthUnits?: string | null;
+      license?: {
         __typename: 'License';
         id: string;
         name: string;
         url: string;
-        logoUrl?: Types.Maybe<string>;
-        dedicationHtml?: Types.Maybe<string>;
+        logoUrl?: string | null;
+        dedicationHtml?: string | null;
         discouraged: boolean;
-        discouragedReason?: Types.Maybe<string>;
-      }>;
+        discouragedReason?: string | null;
+      } | null;
       projectFiles: Array<{
         __typename: 'ProjectFile';
         id: string;
         url: string;
         filename: string;
         filesize: number;
-        filetype?: Types.Maybe<string>;
+        filetype?: string | null;
         position: number;
       }>;
       projectLinks: Array<{
@@ -362,7 +353,7 @@ export type MoveProjectLinkMutationData = {
         id: string;
         url: string;
         title: string;
-        icon?: Types.Maybe<string>;
+        icon?: string | null;
         position: number;
       }>;
       brand: { __typename: 'Brand'; id: string; name: string; slug: string };
@@ -370,17 +361,17 @@ export type MoveProjectLinkMutationData = {
         __typename: 'Tag';
         id: string;
         name: string;
-        tagCategory?: Types.Maybe<{
+        tagCategory?: {
           __typename: 'TagCategory';
           id: string;
           name: string;
-          color?: Types.Maybe<string>;
-          textColor?: Types.Maybe<string>;
-          icon?: Types.Maybe<string>;
-        }>;
+          color?: string | null;
+          textColor?: string | null;
+          icon?: string | null;
+        } | null;
       }>;
     };
-  }>;
+  } | null;
 };
 
 export type DeleteProjectLinkMutationVariables = Types.Exact<{
@@ -389,10 +380,7 @@ export type DeleteProjectLinkMutationVariables = Types.Exact<{
 
 export type DeleteProjectLinkMutationData = {
   __typename: 'Mutation';
-  deleteProjectLink?: Types.Maybe<{
-    __typename: 'DeleteProjectLinkPayload';
-    clientMutationId?: Types.Maybe<string>;
-  }>;
+  deleteProjectLink?: { __typename: 'DeleteProjectLinkPayload'; clientMutationId?: string | null } | null;
 };
 
 export const CreateProjectDocument = gql`
@@ -429,16 +417,10 @@ export type CreateProjectMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useCreateProjectMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateProjectMutationData,
-    CreateProjectMutationVariables
-  >,
+  baseOptions?: Apollo.MutationHookOptions<CreateProjectMutationData, CreateProjectMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<CreateProjectMutationData, CreateProjectMutationVariables>(
-    CreateProjectDocument,
-    options,
-  );
+  return Apollo.useMutation<CreateProjectMutationData, CreateProjectMutationVariables>(CreateProjectDocument, options);
 }
 export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProjectMutation>;
 export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutationData>;
@@ -480,16 +462,10 @@ export type UpdateProjectMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useUpdateProjectMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateProjectMutationData,
-    UpdateProjectMutationVariables
-  >,
+  baseOptions?: Apollo.MutationHookOptions<UpdateProjectMutationData, UpdateProjectMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UpdateProjectMutationData, UpdateProjectMutationVariables>(
-    UpdateProjectDocument,
-    options,
-  );
+  return Apollo.useMutation<UpdateProjectMutationData, UpdateProjectMutationVariables>(UpdateProjectDocument, options);
 }
 export type UpdateProjectMutationHookResult = ReturnType<typeof useUpdateProjectMutation>;
 export type UpdateProjectMutationResult = Apollo.MutationResult<UpdateProjectMutationData>;
@@ -527,16 +503,10 @@ export type DeleteProjectMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useDeleteProjectMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteProjectMutationData,
-    DeleteProjectMutationVariables
-  >,
+  baseOptions?: Apollo.MutationHookOptions<DeleteProjectMutationData, DeleteProjectMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<DeleteProjectMutationData, DeleteProjectMutationVariables>(
-    DeleteProjectDocument,
-    options,
-  );
+  return Apollo.useMutation<DeleteProjectMutationData, DeleteProjectMutationVariables>(DeleteProjectDocument, options);
 }
 export type DeleteProjectMutationHookResult = ReturnType<typeof useDeleteProjectMutation>;
 export type DeleteProjectMutationResult = Apollo.MutationResult<DeleteProjectMutationData>;
@@ -605,16 +575,13 @@ export function useCompleteProjectFileUploadMutation(
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CompleteProjectFileUploadMutationData,
-    CompleteProjectFileUploadMutationVariables
-  >(CompleteProjectFileUploadDocument, options);
+  return Apollo.useMutation<CompleteProjectFileUploadMutationData, CompleteProjectFileUploadMutationVariables>(
+    CompleteProjectFileUploadDocument,
+    options,
+  );
 }
-export type CompleteProjectFileUploadMutationHookResult = ReturnType<
-  typeof useCompleteProjectFileUploadMutation
->;
-export type CompleteProjectFileUploadMutationResult =
-  Apollo.MutationResult<CompleteProjectFileUploadMutationData>;
+export type CompleteProjectFileUploadMutationHookResult = ReturnType<typeof useCompleteProjectFileUploadMutation>;
+export type CompleteProjectFileUploadMutationResult = Apollo.MutationResult<CompleteProjectFileUploadMutationData>;
 export type CompleteProjectFileUploadMutationOptions = Apollo.BaseMutationOptions<
   CompleteProjectFileUploadMutationData,
   CompleteProjectFileUploadMutationVariables
@@ -653,10 +620,7 @@ export type MoveProjectFileMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useMoveProjectFileMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    MoveProjectFileMutationData,
-    MoveProjectFileMutationVariables
-  >,
+  baseOptions?: Apollo.MutationHookOptions<MoveProjectFileMutationData, MoveProjectFileMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<MoveProjectFileMutationData, MoveProjectFileMutationVariables>(
@@ -700,10 +664,7 @@ export type DeleteProjectFileMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useDeleteProjectFileMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteProjectFileMutationData,
-    DeleteProjectFileMutationVariables
-  >,
+  baseOptions?: Apollo.MutationHookOptions<DeleteProjectFileMutationData, DeleteProjectFileMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<DeleteProjectFileMutationData, DeleteProjectFileMutationVariables>(
@@ -719,9 +680,7 @@ export type DeleteProjectFileMutationOptions = Apollo.BaseMutationOptions<
 >;
 export const CreateProjectLinkDocument = gql`
   mutation CreateProjectLink($projectId: ID!, $projectLinkAttributes: ProjectLinkAttributes!) {
-    createProjectLink(
-      input: { projectId: $projectId, projectLinkAttributes: $projectLinkAttributes }
-    ) {
+    createProjectLink(input: { projectId: $projectId, projectLinkAttributes: $projectLinkAttributes }) {
       projectLink {
         ...ProjectLinkFieldsFragment
       }
@@ -753,10 +712,7 @@ export type CreateProjectLinkMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useCreateProjectLinkMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateProjectLinkMutationData,
-    CreateProjectLinkMutationVariables
-  >,
+  baseOptions?: Apollo.MutationHookOptions<CreateProjectLinkMutationData, CreateProjectLinkMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<CreateProjectLinkMutationData, CreateProjectLinkMutationVariables>(
@@ -804,10 +760,7 @@ export type UpdateProjectLinkMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useUpdateProjectLinkMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateProjectLinkMutationData,
-    UpdateProjectLinkMutationVariables
-  >,
+  baseOptions?: Apollo.MutationHookOptions<UpdateProjectLinkMutationData, UpdateProjectLinkMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<UpdateProjectLinkMutationData, UpdateProjectLinkMutationVariables>(
@@ -855,10 +808,7 @@ export type MoveProjectLinkMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useMoveProjectLinkMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    MoveProjectLinkMutationData,
-    MoveProjectLinkMutationVariables
-  >,
+  baseOptions?: Apollo.MutationHookOptions<MoveProjectLinkMutationData, MoveProjectLinkMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<MoveProjectLinkMutationData, MoveProjectLinkMutationVariables>(
@@ -902,10 +852,7 @@ export type DeleteProjectLinkMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useDeleteProjectLinkMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteProjectLinkMutationData,
-    DeleteProjectLinkMutationVariables
-  >,
+  baseOptions?: Apollo.MutationHookOptions<DeleteProjectLinkMutationData, DeleteProjectLinkMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<DeleteProjectLinkMutationData, DeleteProjectLinkMutationVariables>(

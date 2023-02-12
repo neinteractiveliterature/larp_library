@@ -96,3 +96,9 @@ export const ProjectPageQuery = gql`
   ${ProjectFieldsFragment}
   ${LicenseFieldsFragment}
 `;
+
+export const SignRequestQuery = gql`
+  query SignRequestQuery($httpMethod: String!, $url: String!, $headers: JSON!) {
+    presignS3Url(httpMethod: $httpMethod, url: $url, headers: $headers)
+  }
+`;

@@ -4,9 +4,9 @@ import * as Types from '../graphqlTypes.generated';
 import { gql } from '@apollo/client';
 import { ProjectHeadersFragmentDoc } from '../ProjectSearch/queries.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions = {};
+const defaultOptions = {} as const;
 export type BrandsPageQueryVariables = Types.Exact<{
-  after?: Types.Maybe<Types.Scalars['String']>;
+  after?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 export type BrandsPageQueryData = {
@@ -14,14 +14,14 @@ export type BrandsPageQueryData = {
   brands: {
     __typename: 'BrandConnection';
     totalCount: number;
-    pageInfo: { __typename: 'PageInfo'; endCursor?: Types.Maybe<string> };
+    pageInfo: { __typename: 'PageInfo'; endCursor?: string | null };
     edges: Array<{
       __typename: 'BrandEdge';
       node: {
         __typename: 'Brand';
         id: string;
         name: string;
-        description?: Types.Maybe<string>;
+        description?: string | null;
         slug: string;
         projects: { __typename: 'ProjectConnection'; totalCount: number };
       };
@@ -32,9 +32,9 @@ export type BrandsPageQueryData = {
 export type BrandPageBrandFieldsFragment = {
   __typename: 'Brand';
   id: string;
-  approved?: Types.Maybe<boolean>;
+  approved?: boolean | null;
   name: string;
-  description?: Types.Maybe<string>;
+  description?: string | null;
   slug: string;
   currentUserCanEdit: boolean;
   currentUserCanCreateProjects: boolean;
@@ -42,7 +42,7 @@ export type BrandPageBrandFieldsFragment = {
 
 export type BrandPageQueryVariables = Types.Exact<{
   slug: Types.Scalars['String'];
-  projectsAfter?: Types.Maybe<Types.Scalars['String']>;
+  projectsAfter?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 export type BrandPageQueryData = {
@@ -50,44 +50,44 @@ export type BrandPageQueryData = {
   brand: {
     __typename: 'Brand';
     id: string;
-    approved?: Types.Maybe<boolean>;
+    approved?: boolean | null;
     name: string;
-    description?: Types.Maybe<string>;
+    description?: string | null;
     slug: string;
     currentUserCanEdit: boolean;
     currentUserCanCreateProjects: boolean;
     projects: {
       __typename: 'ProjectConnection';
       totalCount: number;
-      pageInfo: { __typename: 'PageInfo'; endCursor?: Types.Maybe<string> };
+      pageInfo: { __typename: 'PageInfo'; endCursor?: string | null };
       edges: Array<{
         __typename: 'ProjectEdge';
         node: {
           __typename: 'Project';
           id: string;
-          description?: Types.Maybe<string>;
-          title?: Types.Maybe<string>;
-          authors?: Types.Maybe<string>;
-          minPlayers?: Types.Maybe<number>;
-          maxPlayers?: Types.Maybe<number>;
-          minFacilitators?: Types.Maybe<number>;
-          maxFacilitators?: Types.Maybe<number>;
-          publicationYear?: Types.Maybe<number>;
-          lengthQuantity?: Types.Maybe<number>;
-          lengthUnits?: Types.Maybe<string>;
+          description?: string | null;
+          title?: string | null;
+          authors?: string | null;
+          minPlayers?: number | null;
+          maxPlayers?: number | null;
+          minFacilitators?: number | null;
+          maxFacilitators?: number | null;
+          publicationYear?: number | null;
+          lengthQuantity?: number | null;
+          lengthUnits?: string | null;
           brand: { __typename: 'Brand'; id: string; name: string; slug: string };
           tags: Array<{
             __typename: 'Tag';
             id: string;
             name: string;
-            tagCategory?: Types.Maybe<{
+            tagCategory?: {
               __typename: 'TagCategory';
               id: string;
               name: string;
-              color?: Types.Maybe<string>;
-              textColor?: Types.Maybe<string>;
-              icon?: Types.Maybe<string>;
-            }>;
+              color?: string | null;
+              textColor?: string | null;
+              icon?: string | null;
+            } | null;
           }>;
         };
       }>;
@@ -99,20 +99,20 @@ export type NewBrandQueryVariables = Types.Exact<{ [key: string]: never }>;
 
 export type NewBrandQueryData = {
   __typename: 'Query';
-  currentUser?: Types.Maybe<{
+  currentUser?: {
     __typename: 'User';
     id: string;
     name: string;
     brands: Array<{ __typename: 'Brand'; id: string; name: string; slug: string }>;
-  }>;
+  } | null;
 };
 
 export type BrandMembershipFieldsFragment = {
   __typename: 'BrandMembership';
   id: string;
   admin: boolean;
-  invitationEmail?: Types.Maybe<string>;
-  user?: Types.Maybe<{ __typename: 'User'; id: string; name: string; email?: Types.Maybe<string> }>;
+  invitationEmail?: string | null;
+  user?: { __typename: 'User'; id: string; name: string; email?: string | null } | null;
 };
 
 export type EditBrandQueryVariables = Types.Exact<{
@@ -124,25 +124,20 @@ export type EditBrandQueryData = {
   brand: {
     __typename: 'Brand';
     id: string;
-    approved?: Types.Maybe<boolean>;
+    approved?: boolean | null;
     name: string;
     slug: string;
-    description?: Types.Maybe<string>;
+    description?: string | null;
     currentUserCanManageMemberships: boolean;
     brandMemberships: Array<{
       __typename: 'BrandMembership';
       id: string;
       admin: boolean;
-      invitationEmail?: Types.Maybe<string>;
-      user?: Types.Maybe<{
-        __typename: 'User';
-        id: string;
-        name: string;
-        email?: Types.Maybe<string>;
-      }>;
+      invitationEmail?: string | null;
+      user?: { __typename: 'User'; id: string; name: string; email?: string | null } | null;
     }>;
   };
-  currentUser?: Types.Maybe<{ __typename: 'User'; id: string }>;
+  currentUser?: { __typename: 'User'; id: string } | null;
 };
 
 export type UnapprovedBrandsListPageQueryVariables = Types.Exact<{ [key: string]: never }>;
@@ -159,12 +154,7 @@ export type UnapprovedBrandsListPageQueryData = {
         name: string;
         slug: string;
         createdAt: any;
-        creator?: Types.Maybe<{
-          __typename: 'User';
-          id: string;
-          email?: Types.Maybe<string>;
-          name: string;
-        }>;
+        creator?: { __typename: 'User'; id: string; email?: string | null; name: string } | null;
       };
     }>;
   };
@@ -235,26 +225,17 @@ export function useBrandsPageQuery(
   baseOptions?: Apollo.QueryHookOptions<BrandsPageQueryData, BrandsPageQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<BrandsPageQueryData, BrandsPageQueryVariables>(
-    BrandsPageQueryDocument,
-    options,
-  );
+  return Apollo.useQuery<BrandsPageQueryData, BrandsPageQueryVariables>(BrandsPageQueryDocument, options);
 }
 export function useBrandsPageQueryLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<BrandsPageQueryData, BrandsPageQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<BrandsPageQueryData, BrandsPageQueryVariables>(
-    BrandsPageQueryDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<BrandsPageQueryData, BrandsPageQueryVariables>(BrandsPageQueryDocument, options);
 }
 export type BrandsPageQueryHookResult = ReturnType<typeof useBrandsPageQuery>;
 export type BrandsPageQueryLazyQueryHookResult = ReturnType<typeof useBrandsPageQueryLazyQuery>;
-export type BrandsPageQueryQueryResult = Apollo.QueryResult<
-  BrandsPageQueryData,
-  BrandsPageQueryVariables
->;
+export type BrandsPageQueryQueryResult = Apollo.QueryResult<BrandsPageQueryData, BrandsPageQueryVariables>;
 export const BrandPageQueryDocument = gql`
   query BrandPageQuery($slug: String!, $projectsAfter: String) {
     brand(slug: $slug) {
@@ -296,30 +277,19 @@ export const BrandPageQueryDocument = gql`
  *   },
  * });
  */
-export function useBrandPageQuery(
-  baseOptions: Apollo.QueryHookOptions<BrandPageQueryData, BrandPageQueryVariables>,
-) {
+export function useBrandPageQuery(baseOptions: Apollo.QueryHookOptions<BrandPageQueryData, BrandPageQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<BrandPageQueryData, BrandPageQueryVariables>(
-    BrandPageQueryDocument,
-    options,
-  );
+  return Apollo.useQuery<BrandPageQueryData, BrandPageQueryVariables>(BrandPageQueryDocument, options);
 }
 export function useBrandPageQueryLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<BrandPageQueryData, BrandPageQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<BrandPageQueryData, BrandPageQueryVariables>(
-    BrandPageQueryDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<BrandPageQueryData, BrandPageQueryVariables>(BrandPageQueryDocument, options);
 }
 export type BrandPageQueryHookResult = ReturnType<typeof useBrandPageQuery>;
 export type BrandPageQueryLazyQueryHookResult = ReturnType<typeof useBrandPageQueryLazyQuery>;
-export type BrandPageQueryQueryResult = Apollo.QueryResult<
-  BrandPageQueryData,
-  BrandPageQueryVariables
->;
+export type BrandPageQueryQueryResult = Apollo.QueryResult<BrandPageQueryData, BrandPageQueryVariables>;
 export const NewBrandQueryDocument = gql`
   query NewBrandQuery {
     currentUser {
@@ -349,9 +319,7 @@ export const NewBrandQueryDocument = gql`
  *   },
  * });
  */
-export function useNewBrandQuery(
-  baseOptions?: Apollo.QueryHookOptions<NewBrandQueryData, NewBrandQueryVariables>,
-) {
+export function useNewBrandQuery(baseOptions?: Apollo.QueryHookOptions<NewBrandQueryData, NewBrandQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<NewBrandQueryData, NewBrandQueryVariables>(NewBrandQueryDocument, options);
 }
@@ -359,17 +327,11 @@ export function useNewBrandQueryLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<NewBrandQueryData, NewBrandQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<NewBrandQueryData, NewBrandQueryVariables>(
-    NewBrandQueryDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<NewBrandQueryData, NewBrandQueryVariables>(NewBrandQueryDocument, options);
 }
 export type NewBrandQueryHookResult = ReturnType<typeof useNewBrandQuery>;
 export type NewBrandQueryLazyQueryHookResult = ReturnType<typeof useNewBrandQueryLazyQuery>;
-export type NewBrandQueryQueryResult = Apollo.QueryResult<
-  NewBrandQueryData,
-  NewBrandQueryVariables
->;
+export type NewBrandQueryQueryResult = Apollo.QueryResult<NewBrandQueryData, NewBrandQueryVariables>;
 export const EditBrandQueryDocument = gql`
   query EditBrandQuery($slug: String!) {
     brand(slug: $slug) {
@@ -407,30 +369,19 @@ export const EditBrandQueryDocument = gql`
  *   },
  * });
  */
-export function useEditBrandQuery(
-  baseOptions: Apollo.QueryHookOptions<EditBrandQueryData, EditBrandQueryVariables>,
-) {
+export function useEditBrandQuery(baseOptions: Apollo.QueryHookOptions<EditBrandQueryData, EditBrandQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<EditBrandQueryData, EditBrandQueryVariables>(
-    EditBrandQueryDocument,
-    options,
-  );
+  return Apollo.useQuery<EditBrandQueryData, EditBrandQueryVariables>(EditBrandQueryDocument, options);
 }
 export function useEditBrandQueryLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<EditBrandQueryData, EditBrandQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<EditBrandQueryData, EditBrandQueryVariables>(
-    EditBrandQueryDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<EditBrandQueryData, EditBrandQueryVariables>(EditBrandQueryDocument, options);
 }
 export type EditBrandQueryHookResult = ReturnType<typeof useEditBrandQuery>;
 export type EditBrandQueryLazyQueryHookResult = ReturnType<typeof useEditBrandQueryLazyQuery>;
-export type EditBrandQueryQueryResult = Apollo.QueryResult<
-  EditBrandQueryData,
-  EditBrandQueryVariables
->;
+export type EditBrandQueryQueryResult = Apollo.QueryResult<EditBrandQueryData, EditBrandQueryVariables>;
 export const UnapprovedBrandsListPageQueryDocument = gql`
   query UnapprovedBrandsListPageQuery {
     brands(unapproved: true) {
@@ -467,10 +418,7 @@ export const UnapprovedBrandsListPageQueryDocument = gql`
  * });
  */
 export function useUnapprovedBrandsListPageQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    UnapprovedBrandsListPageQueryData,
-    UnapprovedBrandsListPageQueryVariables
-  >,
+  baseOptions?: Apollo.QueryHookOptions<UnapprovedBrandsListPageQueryData, UnapprovedBrandsListPageQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<UnapprovedBrandsListPageQueryData, UnapprovedBrandsListPageQueryVariables>(
@@ -479,20 +427,15 @@ export function useUnapprovedBrandsListPageQuery(
   );
 }
 export function useUnapprovedBrandsListPageQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    UnapprovedBrandsListPageQueryData,
-    UnapprovedBrandsListPageQueryVariables
-  >,
+  baseOptions?: Apollo.LazyQueryHookOptions<UnapprovedBrandsListPageQueryData, UnapprovedBrandsListPageQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    UnapprovedBrandsListPageQueryData,
-    UnapprovedBrandsListPageQueryVariables
-  >(UnapprovedBrandsListPageQueryDocument, options);
+  return Apollo.useLazyQuery<UnapprovedBrandsListPageQueryData, UnapprovedBrandsListPageQueryVariables>(
+    UnapprovedBrandsListPageQueryDocument,
+    options,
+  );
 }
-export type UnapprovedBrandsListPageQueryHookResult = ReturnType<
-  typeof useUnapprovedBrandsListPageQuery
->;
+export type UnapprovedBrandsListPageQueryHookResult = ReturnType<typeof useUnapprovedBrandsListPageQuery>;
 export type UnapprovedBrandsListPageQueryLazyQueryHookResult = ReturnType<
   typeof useUnapprovedBrandsListPageQueryLazyQuery
 >;

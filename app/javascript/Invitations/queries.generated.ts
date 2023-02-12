@@ -3,7 +3,7 @@ import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions = {};
+const defaultOptions = {} as const;
 export type InvitationPageQueryVariables = Types.Exact<{
   brandSlug: Types.Scalars['String'];
   invitationToken: Types.Scalars['String'];
@@ -17,7 +17,7 @@ export type InvitationPageQueryData = {
     admin: boolean;
     brand: { __typename: 'Brand'; id: string; name: string; slug: string };
   };
-  currentUser?: Types.Maybe<{ __typename: 'User'; id: string }>;
+  currentUser?: { __typename: 'User'; id: string } | null;
 };
 
 export const InvitationPageQueryDocument = gql`
@@ -58,10 +58,7 @@ export function useInvitationPageQuery(
   baseOptions: Apollo.QueryHookOptions<InvitationPageQueryData, InvitationPageQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<InvitationPageQueryData, InvitationPageQueryVariables>(
-    InvitationPageQueryDocument,
-    options,
-  );
+  return Apollo.useQuery<InvitationPageQueryData, InvitationPageQueryVariables>(InvitationPageQueryDocument, options);
 }
 export function useInvitationPageQueryLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<InvitationPageQueryData, InvitationPageQueryVariables>,
@@ -73,10 +70,5 @@ export function useInvitationPageQueryLazyQuery(
   );
 }
 export type InvitationPageQueryHookResult = ReturnType<typeof useInvitationPageQuery>;
-export type InvitationPageQueryLazyQueryHookResult = ReturnType<
-  typeof useInvitationPageQueryLazyQuery
->;
-export type InvitationPageQueryQueryResult = Apollo.QueryResult<
-  InvitationPageQueryData,
-  InvitationPageQueryVariables
->;
+export type InvitationPageQueryLazyQueryHookResult = ReturnType<typeof useInvitationPageQueryLazyQuery>;
+export type InvitationPageQueryQueryResult = Apollo.QueryResult<InvitationPageQueryData, InvitationPageQueryVariables>;
