@@ -84,7 +84,6 @@ MIT License</a>."
   delegate :name, to: :brand, prefix: true
 
   validates :license, inclusion: { in: LICENSES.keys.map(&:to_s), allow_nil: true }
-  validates :brand, presence: true
   validate :cannot_have_files_without_license
 
   pg_search_scope :search,
@@ -129,7 +128,7 @@ MIT License</a>."
   end
 
   def tag_names=(new_tag_names)
-    new_tag_names = new_tag_names.reject(&:blank?)
+    new_tag_names = new_tag_names.compact_blank
     existing_tag_names = tag_names
 
     removed_tags = tags.where(name: (existing_tag_names - new_tag_names))
@@ -141,17 +140,13 @@ MIT License</a>."
     end
   end
 
-  def license_object
-    OpenStruct.new(LICENSES[license.to_sym]) if license.present?
-  end
-
   def license_id=(license_id)
     self.license = license_id
   end
 
   # Remove leading "A", "An", and "The" from titles
   def title_for_search
-    title.strip.sub(/\Athe\s+/i, "").sub(/\Aan?\s+/i, "")
+    (title || "").strip.sub(/\Athe\s+/i, "").sub(/\Aan?\s+/i, "")
   end
 
   def to_param
