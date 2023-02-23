@@ -12,7 +12,7 @@ gem "sprockets-rails"
 
 gem "listen"
 
-gem "devise", "~> 4.8.0"
+gem "devise", "~> 4.9.0"
 gem "rack-cas"
 gem "cancancan"
 gem "intercode_client"
