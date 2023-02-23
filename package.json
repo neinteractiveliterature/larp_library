@@ -19,7 +19,7 @@
     "@aws-sdk/util-hex-encoding": "^3.201.0",
     "@aws-sdk/util-utf8": "^3.254.0",
     "@codemirror/lang-markdown": "6.0.5",
-    "@dnd-kit/core": "6.0.7",
+    "@dnd-kit/core": "6.0.8",
     "@dnd-kit/sortable": "7.0.2",
     "@dnd-kit/utilities": "3.2.1",
     "@neinteractiveliterature/litform": "0.28.0",
