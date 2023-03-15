@@ -161,7 +161,7 @@ GEM
     graphql-client (0.18.0)
       activesupport (>= 3.0)
       graphql
-    graphql-rails_logger (1.2.3)
+    graphql-rails_logger (1.2.4)
       actionpack (> 5.0)
       activesupport (> 5.0)
       railties (> 5.0)
