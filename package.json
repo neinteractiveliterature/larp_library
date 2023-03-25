@@ -23,7 +23,7 @@
     "@dnd-kit/sortable": "7.0.2",
     "@dnd-kit/utilities": "3.2.1",
     "@neinteractiveliterature/litform": "0.28.0",
-    "@popperjs/core": "2.11.6",
+    "@popperjs/core": "2.11.7",
     "@rails/ujs": "7.0.4",
     "@types/react": "18.0.29",
     "assert": "2.0.0",
