@@ -93,7 +93,7 @@
     "prettier": "2.8.7",
     "typescript": "5.0.3",
     "webpack-bundle-analyzer": "4.8.0",
-    "webpack-dev-server": "4.13.1"
+    "webpack-dev-server": "4.13.2"
   },
   "browserslist": [
     "defaults"
