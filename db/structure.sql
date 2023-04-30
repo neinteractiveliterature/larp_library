@@ -395,7 +395,6 @@ ALTER SEQUENCE public.tags_id_seq OWNED BY public.tags.id;
 
 CREATE TABLE public.users (
     id integer NOT NULL,
-    username character varying DEFAULT ''::character varying NOT NULL,
     email character varying,
     firstname character varying,
     lastname character varying,
@@ -737,13 +736,6 @@ CREATE INDEX index_tags_on_tag_category_id ON public.tags USING btree (tag_categ
 
 
 --
--- Name: index_users_on_username; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_users_on_username ON public.users USING btree (username);
-
-
---
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -838,6 +830,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220520145832'),
 ('20220520150212'),
 ('20220521194451'),
-('20230212190415');
+('20230212190415'),
+('20230430193136');
 
 
