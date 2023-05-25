@@ -4,7 +4,7 @@ source "https://rubygems.org"
 
 gem "dotenv-rails", groups: %i[development test]
 
-gem "rails", "= 7.0.4.3"
+gem "rails", "= 7.0.5"
 gem "pg"
 
 gem "minipack"
