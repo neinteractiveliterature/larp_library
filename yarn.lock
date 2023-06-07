@@ -677,8 +677,8 @@ __metadata:
   linkType: hard
 
 "@aws-sdk/lib-storage@npm:^3.267.0":
-  version: 3.347.0
-  resolution: "@aws-sdk/lib-storage@npm:3.347.0"
+  version: 3.347.1
+  resolution: "@aws-sdk/lib-storage@npm:3.347.1"
   dependencies:
     "@aws-sdk/middleware-endpoint": 3.347.0
     "@aws-sdk/smithy-client": 3.347.0
@@ -689,7 +689,7 @@ __metadata:
   peerDependencies:
     "@aws-sdk/abort-controller": ^3.0.0
     "@aws-sdk/client-s3": ^3.0.0
-  checksum: 4389362df6362df38306fcbf5264aaceef620d161f2160132f742dd2228312f3a26054f9d36642d40940fcc535000b6ec200cea12e8dd39b1160d09d0a427a25
+  checksum: b6e50303392cbaa7e99c6d486067aa1daa4a34e561df6593c152e6e33a1f02e84d51732c72ac81744ceb803a816ec15d57c2ee98258236016dc42aa698bb790b
   languageName: node
   linkType: hard
 
