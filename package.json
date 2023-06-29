@@ -91,7 +91,7 @@
     "husky": "8.0.3",
     "lint-staged": "13.2.3",
     "prettier": "2.8.8",
-    "typescript": "5.1.5",
+    "typescript": "5.1.6",
     "webpack-bundle-analyzer": "4.9.0",
     "webpack-dev-server": "4.15.1"
   },
