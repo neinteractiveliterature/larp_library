@@ -4227,12 +4227,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prettier/plugin-ruby@npm:4.0.1":
-  version: 4.0.1
-  resolution: "@prettier/plugin-ruby@npm:4.0.1"
-  dependencies:
-    prettier: ">=3.0.0"
-  checksum: 7ee60aa4b376aa6a025d4b5bbe4899f73b51c1470c1d2ef382979bd9877e327511efa4d5a06e1cbb6bb2d99a83c910232516239d31f4e1782a69f296dd4e8292
+"@prettier/plugin-ruby@npm:4.0.2":
+  version: 4.0.2
+  resolution: "@prettier/plugin-ruby@npm:4.0.2"
+  peerDependencies:
+    prettier: ^3.0.0
+  checksum: d30a71fd5139a1030e33d0d330229444ed4c60b965b94952d4fb3352eeae90ba9f12cba5b30e8eb64f38da2776efbe3bb7489101faad00c14d53343b64e5a8ed
   languageName: node
   linkType: hard
 
@@ -10941,7 +10941,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:3.0.0, prettier@npm:>=3.0.0":
+"prettier@npm:3.0.0":
   version: 3.0.0
   resolution: "prettier@npm:3.0.0"
   bin:
@@ -11653,7 +11653,7 @@ __metadata:
     "@graphql-codegen/typescript-react-apollo": 3.3.7
     "@neinteractiveliterature/litform": 0.28.0
     "@popperjs/core": 2.11.8
-    "@prettier/plugin-ruby": 4.0.1
+    "@prettier/plugin-ruby": 4.0.2
     "@rails/ujs": 7.0.6
     "@types/codemirror": 5.60.8
     "@types/lodash": 4.14.195
