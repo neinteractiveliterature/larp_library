@@ -25,7 +25,7 @@
     "@neinteractiveliterature/litform": "0.28.0",
     "@popperjs/core": "2.11.8",
     "@rails/ujs": "7.0.6",
-    "@types/react": "18.2.15",
+    "@types/react": "18.2.16",
     "assert": "2.0.0",
     "bootstrap": "5.3.0",
     "bootstrap-icons": "1.10.5",
