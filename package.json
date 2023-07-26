@@ -27,7 +27,7 @@
     "@rails/ujs": "7.0.6",
     "@types/react": "18.2.16",
     "assert": "2.0.0",
-    "bootstrap": "5.3.0",
+    "bootstrap": "5.3.1",
     "bootstrap-icons": "1.10.5",
     "classnames": "2.3.2",
     "css-loader": "6.8.1",
