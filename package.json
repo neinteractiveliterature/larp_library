@@ -89,7 +89,7 @@
     "eslint-plugin-react-hooks": "4.6.0",
     "graphql-tag": "2.12.6",
     "husky": "8.0.3",
-    "lint-staged": "13.2.3",
+    "lint-staged": "13.3.0",
     "prettier": "3.0.1",
     "typescript": "5.1.6",
     "webpack-bundle-analyzer": "4.9.0",
