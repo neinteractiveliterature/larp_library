@@ -26,7 +26,7 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
   config.public_file_server.headers = {
     "Access-Control-Allow-Origin" => "*",
     "Cache-Control" => "public, max-age=15552000",
-    "Expires" => 1.year.from_now.to_formatted_s(:rfc822).to_s
+    "Expires" => 1.year.from_now.to_fs(:rfc822).to_s
   }
 
   # Compress CSS using a preprocessor.
@@ -82,7 +82,7 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
   config.active_support.deprecation = :notify
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+  config.log_formatter = Logger::Formatter.new
 
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
@@ -100,7 +100,7 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
   config.active_record.dump_schema_after_migration = false
 
   config.action_mailer.default_url_options = { host: "www.larplibrary.org", protocol: "https" }
-  config.action_mailer.delivery_method = :aws_sdk
+  config.action_mailer.delivery_method = :sesv2
 
   # Inserts middleware to perform automatic connection switching.
   # The `database_selector` hash is used to pass options to the DatabaseSelector
