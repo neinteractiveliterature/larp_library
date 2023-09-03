@@ -41,7 +41,7 @@ gem "acts_as_list"
 
 group :development do
   gem "graphiql-rails"
-  gem "prettier", "~> 3.1"
+  gem "prettier", "~> 4.0"
   gem "prettier_print"
   gem "rubocop"
   gem "rubocop-performance"
