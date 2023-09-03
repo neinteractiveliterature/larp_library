@@ -127,15 +127,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-crypto/ie11-detection@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@aws-crypto/ie11-detection@npm:4.0.0"
-  dependencies:
-    tslib: ^1.11.1
-  checksum: 8d5bb01c0ae2da2542e5998121e7f608be78313b01ad00653eeca879e09474b40a37245c421b968db1def72117acfe65b3f04d71136b4bc4e6a06e03aafb50e3
-  languageName: node
-  linkType: hard
-
 "@aws-crypto/sha1-browser@npm:3.0.0":
   version: 3.0.0
   resolution: "@aws-crypto/sha1-browser@npm:3.0.0"
@@ -167,19 +158,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-crypto/sha256-browser@npm:4.0.0":
-  version: 4.0.0
-  resolution: "@aws-crypto/sha256-browser@npm:4.0.0"
+"@aws-crypto/sha256-browser@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@aws-crypto/sha256-browser@npm:5.0.0"
   dependencies:
-    "@aws-crypto/ie11-detection": ^4.0.0
-    "@aws-crypto/sha256-js": ^4.0.0
-    "@aws-crypto/supports-web-crypto": ^4.0.0
-    "@aws-crypto/util": ^4.0.0
+    "@aws-crypto/sha256-js": ^5.0.0
+    "@aws-crypto/supports-web-crypto": ^5.0.0
+    "@aws-crypto/util": ^5.0.0
     "@aws-sdk/types": ^3.222.0
     "@aws-sdk/util-locate-window": ^3.0.0
     "@aws-sdk/util-utf8-browser": ^3.0.0
     tslib: ^1.11.1
-  checksum: 539ac52b73bb8e27bac065309f96ace5a9ddc4b76994f994d2dc5cb784c4cac89618d2d9d2a40d20703eade11cfd0aaa7486bf14d5c9c66aa9dffe183375bbaa
+  checksum: 2247a90d0fddd748c1c7dd46a41301e0ce7bb0b6061c89936dfd0d6b8c1e3402cf5ac14dd7d02c76f6de618e94809eabfe64a197501abb0649e556fa9194c051
   languageName: node
   linkType: hard
 
@@ -194,14 +184,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-crypto/sha256-js@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@aws-crypto/sha256-js@npm:4.0.0"
+"@aws-crypto/sha256-js@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "@aws-crypto/sha256-js@npm:5.0.0"
   dependencies:
-    "@aws-crypto/util": ^4.0.0
+    "@aws-crypto/util": ^5.0.0
     "@aws-sdk/types": ^3.222.0
     tslib: ^1.11.1
-  checksum: 672d05ec0c15b525d47af9d3442e9141f02e62e40b35c4609bf466faabca3fe5704cc5b6a175dc815a78e32e11af68b7cbc5d838158d748486e745f369b29cfb
+  checksum: 0c312132538abd4c1dc1b484e76df70a24c5106fd9fa79cdbdbdf1aec970806c0b7817601c03f370d0617b72a70c14c812572efdeef84b7d4efd0e7db19c38fd
   languageName: node
   linkType: hard
 
@@ -214,12 +204,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-crypto/supports-web-crypto@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@aws-crypto/supports-web-crypto@npm:4.0.0"
+"@aws-crypto/supports-web-crypto@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "@aws-crypto/supports-web-crypto@npm:5.0.0"
   dependencies:
     tslib: ^1.11.1
-  checksum: a07c56e6e480a314cdad9c36032001e6742bf20093f8349f24864a36c07d720f9bbef34d6cc24a699a3b881b5ef49f060329e12e24fe63a9038293f782e9aa6c
+  checksum: 0ccdef674984b08a7cb6ca25b2312bb05c1cc1453c433671f97bf7b5a352dacded67b256f9bb1332e1785077828538cf33fa86167b7a8bf58b8c5ff817ba79fe
   languageName: node
   linkType: hard
 
@@ -234,14 +224,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-crypto/util@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@aws-crypto/util@npm:4.0.0"
+"@aws-crypto/util@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "@aws-crypto/util@npm:5.0.0"
   dependencies:
     "@aws-sdk/types": ^3.222.0
     "@aws-sdk/util-utf8-browser": ^3.0.0
     tslib: ^1.11.1
-  checksum: 09c0c6d7791f33f0479e051b636be3fe6d67a8c24cce8419f0906f714457d5398b8071de0d447f61c7d5cf975bbc97ca0cd888551d40276878ae7d39fd298424
+  checksum: 3416ed5865ee95ffb78aaeb7ac301861a54aede2bdb0565fbaf6ef6a4635eba5e06ed36ea377fc3bf89a075c28f64830b108e5188042fcac5d5ebf9cff3175d2
   languageName: node
   linkType: hard
 
@@ -11937,7 +11927,7 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@apollo/client": 3.8.2
-    "@aws-crypto/sha256-browser": 4.0.0
+    "@aws-crypto/sha256-browser": 5.0.0
     "@aws-sdk/abort-controller": ^3.267.0
     "@aws-sdk/client-s3": ^3.267.0
     "@aws-sdk/is-array-buffer": ^3.201.0
