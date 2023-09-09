@@ -215,7 +215,7 @@ GEM
     minipack (0.3.6)
       actionview
       railties (>= 4.2)
-    minitest (5.18.1)
+    minitest (5.20.0)
     multi_xml (0.6.0)
     net-imap (0.3.7)
       date
@@ -339,7 +339,7 @@ GEM
     rubocop-performance (1.19.0)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    rubocop-rails (2.20.2)
+    rubocop-rails (2.21.0)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
