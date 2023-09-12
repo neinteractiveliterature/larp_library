@@ -4712,10 +4712,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/tinycolor2@npm:1.4.3":
-  version: 1.4.3
-  resolution: "@types/tinycolor2@npm:1.4.3"
-  checksum: 61984b2825d4ee902016ef24777787bb2fb9e4999ccd4f7e5a709442c00cf90ba4afa510b9c78f18dcc83c03305d597d5fe3825a6aad38354f95c68af70ebc1b
+"@types/tinycolor2@npm:1.4.4":
+  version: 1.4.4
+  resolution: "@types/tinycolor2@npm:1.4.4"
+  checksum: cf92f3b7c11750a4a8fe7ba2292fb9a795f5a0eeec39c69cf7e3fc3bbc3467a02c4eaf42d9eb258f63cd6a1c64448cfcf17301bacaa67e87cd0eacc93d25e12a
   languageName: node
   linkType: hard
 
@@ -11956,7 +11956,7 @@ __metadata:
     "@types/react": 18.2.21
     "@types/react-color": 3.0.6
     "@types/react-dom": 18.2.7
-    "@types/tinycolor2": 1.4.3
+    "@types/tinycolor2": 1.4.4
     "@types/uuid": 9.0.3
     "@typescript-eslint/eslint-plugin": 6.7.0
     "@typescript-eslint/parser": 6.7.0
