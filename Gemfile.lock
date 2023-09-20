@@ -224,7 +224,7 @@ GEM
       net-protocol
     net-protocol (0.2.1)
       timeout
-    net-smtp (0.3.3)
+    net-smtp (0.4.0)
       net-protocol
     nio4r (2.5.9)
     nokogiri (1.15.4)
@@ -385,7 +385,7 @@ GEM
     temple (0.10.2)
     thor (1.2.2)
     tilt (2.2.0)
-    timeout (0.3.2)
+    timeout (0.4.0)
     truncate_html (0.9.3)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
