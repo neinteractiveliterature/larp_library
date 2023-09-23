@@ -74,7 +74,7 @@
     "@graphql-codegen/typescript-react-apollo": "3.3.7",
     "@prettier/plugin-ruby": "4.0.2",
     "@types/codemirror": "5.60.10",
-    "@types/lodash": "4.14.198",
+    "@types/lodash": "4.14.199",
     "@types/react-color": "3.0.6",
     "@types/react-dom": "18.2.7",
     "@types/tinycolor2": "1.4.4",
