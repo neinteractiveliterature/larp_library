@@ -20,7 +20,7 @@ export type TagFragment = {
 };
 
 export type TagAutocompleteQueryVariables = Types.Exact<{
-  queryString?: Types.InputMaybe<Types.Scalars['String']>;
+  queryString?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 export type TagAutocompleteQueryData = {
@@ -47,7 +47,7 @@ export type TagAutocompleteQueryData = {
 };
 
 export type TagListPageQueryVariables = Types.Exact<{
-  after?: Types.InputMaybe<Types.Scalars['String']>;
+  after?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 export type TagListPageQueryData = {
@@ -76,7 +76,7 @@ export type TagListPageQueryData = {
 };
 
 export type EditTagQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 export type EditTagQueryData = {

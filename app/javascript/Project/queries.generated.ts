@@ -36,7 +36,7 @@ export type LicenseFieldsFragment = {
 };
 
 export type NewProjectFormQueryVariables = Types.Exact<{
-  slug: Types.Scalars['String'];
+  slug: Types.Scalars['String']['input'];
 }>;
 
 export type NewProjectFormQueryData = {
@@ -115,7 +115,7 @@ export type ProjectFieldsFragment = {
 };
 
 export type ProjectPageQueryVariables = Types.Exact<{
-  projectId: Types.Scalars['ID'];
+  projectId: Types.Scalars['ID']['input'];
 }>;
 
 export type ProjectPageQueryData = {
@@ -192,9 +192,9 @@ export type ProjectPageQueryData = {
 };
 
 export type SignRequestQueryVariables = Types.Exact<{
-  httpMethod: Types.Scalars['String'];
-  url: Types.Scalars['String'];
-  headers: Types.Scalars['JSON'];
+  httpMethod: Types.Scalars['String']['input'];
+  url: Types.Scalars['String']['input'];
+  headers: Types.Scalars['JSON']['input'];
 }>;
 
 export type SignRequestQueryData = { __typename: 'Query'; presignS3Url: string };

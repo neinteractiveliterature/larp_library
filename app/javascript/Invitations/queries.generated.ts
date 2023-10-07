@@ -5,8 +5,8 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type InvitationPageQueryVariables = Types.Exact<{
-  brandSlug: Types.Scalars['String'];
-  invitationToken: Types.Scalars['String'];
+  brandSlug: Types.Scalars['String']['input'];
+  invitationToken: Types.Scalars['String']['input'];
 }>;
 
 export type InvitationPageQueryData = {

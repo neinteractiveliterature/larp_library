@@ -6,7 +6,7 @@ import { ProjectPromotionFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type PromoteProjectMutationVariables = Types.Exact<{
-  projectId: Types.Scalars['ID'];
+  projectId: Types.Scalars['ID']['input'];
 }>;
 
 export type PromoteProjectMutationData = {
@@ -28,7 +28,7 @@ export type PromoteProjectMutationData = {
 };
 
 export type UnpromoteProjectMutationVariables = Types.Exact<{
-  projectId: Types.Scalars['ID'];
+  projectId: Types.Scalars['ID']['input'];
 }>;
 
 export type UnpromoteProjectMutationData = {

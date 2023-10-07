@@ -8,8 +8,9 @@ class BrandMembership < ApplicationRecord
 
   validates :user_id,
             uniqueness: {
+              scope: :brand_id,
               unless: :invitation_token,
-              message: "is already a member of this brand"
+              message: I18n.t("brand_membership.already_member_error")
             }
 
   def email=(email)

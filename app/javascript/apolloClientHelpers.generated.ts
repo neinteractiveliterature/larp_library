@@ -1,11 +1,14 @@
+/* eslint-disable */
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
 export type AbilityKeySpecifier = (
+  | 'canApproveBrands'
   | 'canCreateProjectPromotions'
   | 'canUpdateTagCategories'
   | 'canUpdateTags'
   | AbilityKeySpecifier
 )[];
 export type AbilityFieldPolicy = {
+  canApproveBrands?: FieldPolicy<any> | FieldReadFunction<any>;
   canCreateProjectPromotions?: FieldPolicy<any> | FieldReadFunction<any>;
   canUpdateTagCategories?: FieldPolicy<any> | FieldReadFunction<any>;
   canUpdateTags?: FieldPolicy<any> | FieldReadFunction<any>;

@@ -5,8 +5,8 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type AcceptBrandMembershipInvitationMutationVariables = Types.Exact<{
-  brandId: Types.Scalars['ID'];
-  invitationToken: Types.Scalars['String'];
+  brandId: Types.Scalars['ID']['input'];
+  invitationToken: Types.Scalars['String']['input'];
 }>;
 
 export type AcceptBrandMembershipInvitationMutationData = {

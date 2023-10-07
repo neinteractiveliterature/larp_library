@@ -11,6 +11,7 @@ export type AppLayoutQueryData = {
   currentUser?: { __typename: 'User'; id: string; admin?: boolean | null } | null;
   currentAbility: {
     __typename: 'Ability';
+    canApproveBrands: boolean;
     canCreateProjectPromotions: boolean;
     canUpdateTags: boolean;
     canUpdateTagCategories: boolean;
@@ -24,6 +25,7 @@ export const AppLayoutQueryDocument = gql`
       admin
     }
     currentAbility {
+      canApproveBrands
       canCreateProjectPromotions
       canUpdateTags
       canUpdateTagCategories

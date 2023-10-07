@@ -25,7 +25,7 @@ export type CreateTagCategoryMutationData = {
 };
 
 export type UpdateTagCategoryMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
   tagCategoryAttributes: Types.TagCategoryAttributes;
 }>;
 
@@ -45,7 +45,7 @@ export type UpdateTagCategoryMutationData = {
 };
 
 export type DeleteTagCategoryMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 export type DeleteTagCategoryMutationData = {

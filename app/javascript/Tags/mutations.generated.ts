@@ -30,7 +30,7 @@ export type CreateTagMutationData = {
 };
 
 export type UpdateTagMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
   tagAttributes: Types.TagAttributes;
 }>;
 
@@ -55,7 +55,7 @@ export type UpdateTagMutationData = {
 };
 
 export type DeleteTagMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 export type DeleteTagMutationData = {

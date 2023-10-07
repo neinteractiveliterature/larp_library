@@ -8,6 +8,7 @@ export const AppLayoutQuery = gql`
     }
 
     currentAbility {
+      canApproveBrands
       canCreateProjectPromotions
       canUpdateTags
       canUpdateTagCategories

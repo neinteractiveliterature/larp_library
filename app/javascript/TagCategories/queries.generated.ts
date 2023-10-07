@@ -7,7 +7,7 @@ import { TagFragmentDoc } from '../Tags/queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type TagCategoryAutocompleteQueryVariables = Types.Exact<{
-  queryString?: Types.InputMaybe<Types.Scalars['String']>;
+  queryString?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 export type TagCategoryAutocompleteQueryData = {
@@ -29,7 +29,7 @@ export type TagCategoryAutocompleteQueryData = {
 };
 
 export type TagCategoryListPageQueryVariables = Types.Exact<{
-  after?: Types.InputMaybe<Types.Scalars['String']>;
+  after?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 export type TagCategoryListPageQueryData = {
@@ -53,7 +53,7 @@ export type TagCategoryListPageQueryData = {
 };
 
 export type EditTagCategoryQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 export type EditTagCategoryQueryData = {

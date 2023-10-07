@@ -42,6 +42,13 @@ export default LoadQueryWrapper<AppLayoutQueryData, AppLayoutQueryVariables, App
                         <span className="caret"></span>
                       </a>
                       <ul className="dropdown-menu">
+                        {data.currentAbility.canApproveBrands && (
+                          <li>
+                            <Link to="/brands/unapproved" className="dropdown-item">
+                              Pending Creators
+                            </Link>
+                          </li>
+                        )}
                         {data.currentAbility.canCreateProjectPromotions && (
                           <li>
                             <Link to="/project_promotions" className="dropdown-item">

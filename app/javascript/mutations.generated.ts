@@ -5,7 +5,7 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type SetReturnUrlMutationVariables = Types.Exact<{
-  returnUrl: Types.Scalars['String'];
+  returnUrl: Types.Scalars['String']['input'];
 }>;
 
 export type SetReturnUrlMutationData = {

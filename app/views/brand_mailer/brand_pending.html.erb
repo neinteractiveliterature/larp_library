@@ -2,5 +2,5 @@
 
 <p>
   <%= @brand.creator.name %> has submitted a brand called <%= @brand.name %> for approval on Larp Library.
-  <%= link_to "To accept or reject it, go here.", unapproved_brands_url %>
+  <%= link_to "To accept or reject it, go here.", absolute_url("/brands/unapproved") %>
 </p>

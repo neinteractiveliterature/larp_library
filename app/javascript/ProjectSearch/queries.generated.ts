@@ -34,15 +34,15 @@ export type ProjectHeadersFragment = {
 };
 
 export type ProjectSearchQueryVariables = Types.Exact<{
-  queryString?: Types.InputMaybe<Types.Scalars['String']>;
-  tag?: Types.InputMaybe<Types.Scalars['String']>;
-  title?: Types.InputMaybe<Types.Scalars['String']>;
-  authors?: Types.InputMaybe<Types.Scalars['String']>;
-  playerCountUpperBound?: Types.InputMaybe<Types.Scalars['Int']>;
-  playerCountLowerBound?: Types.InputMaybe<Types.Scalars['Int']>;
-  facilitatorCountUpperBound?: Types.InputMaybe<Types.Scalars['Int']>;
-  facilitatorCountLowerBound?: Types.InputMaybe<Types.Scalars['Int']>;
-  after?: Types.InputMaybe<Types.Scalars['String']>;
+  queryString?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  tag?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  title?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  authors?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  playerCountUpperBound?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  playerCountLowerBound?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  facilitatorCountUpperBound?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  facilitatorCountLowerBound?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  after?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 export type ProjectSearchQueryData = {

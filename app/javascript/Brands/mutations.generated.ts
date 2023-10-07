@@ -2,8 +2,7 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { BrandPageBrandFieldsFragmentDoc } from './queries.generated';
-import { BrandMembershipFieldsFragmentDoc } from './queries.generated';
+import { BrandPageBrandFieldsFragmentDoc, BrandMembershipFieldsFragmentDoc } from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type CreateBrandMutationVariables = Types.Exact<{
@@ -28,7 +27,7 @@ export type CreateBrandMutationData = {
 };
 
 export type UpdateBrandMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
   brandAttributes: Types.BrandAttributes;
 }>;
 
@@ -50,7 +49,7 @@ export type UpdateBrandMutationData = {
 };
 
 export type ApproveBrandMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 export type ApproveBrandMutationData = {
@@ -71,9 +70,9 @@ export type ApproveBrandMutationData = {
 };
 
 export type InviteBrandMemberMutationVariables = Types.Exact<{
-  brandId: Types.Scalars['ID'];
-  email: Types.Scalars['String'];
-  admin: Types.Scalars['Boolean'];
+  brandId: Types.Scalars['ID']['input'];
+  email: Types.Scalars['String']['input'];
+  admin: Types.Scalars['Boolean']['input'];
 }>;
 
 export type InviteBrandMemberMutationData = {
@@ -91,7 +90,7 @@ export type InviteBrandMemberMutationData = {
 };
 
 export type DeleteBrandMembershipMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 export type DeleteBrandMembershipMutationData = {

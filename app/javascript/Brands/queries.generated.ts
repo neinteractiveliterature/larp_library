@@ -6,7 +6,7 @@ import { ProjectHeadersFragmentDoc } from '../ProjectSearch/queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type BrandsPageQueryVariables = Types.Exact<{
-  after?: Types.InputMaybe<Types.Scalars['String']>;
+  after?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 export type BrandsPageQueryData = {
@@ -41,8 +41,8 @@ export type BrandPageBrandFieldsFragment = {
 };
 
 export type BrandPageQueryVariables = Types.Exact<{
-  slug: Types.Scalars['String'];
-  projectsAfter?: Types.InputMaybe<Types.Scalars['String']>;
+  slug: Types.Scalars['String']['input'];
+  projectsAfter?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 export type BrandPageQueryData = {
@@ -116,7 +116,7 @@ export type BrandMembershipFieldsFragment = {
 };
 
 export type EditBrandQueryVariables = Types.Exact<{
-  slug: Types.Scalars['String'];
+  slug: Types.Scalars['String']['input'];
 }>;
 
 export type EditBrandQueryData = {

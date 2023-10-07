@@ -3,4 +3,4 @@ New brand: <%= @brand.name %>
 
 <%= @brand.creator.name %> has submitted a brand called <%= @brand.name %> for approval on Larp Library.
 
-To accept or reject it, go here: <%= unapproved_brands_url %>
+To accept or reject it, go here: <%= absolute_url("/brands/unapproved") %>

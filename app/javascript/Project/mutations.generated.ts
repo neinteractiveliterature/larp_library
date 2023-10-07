@@ -2,13 +2,15 @@
 import * as Types from '../graphqlTypes.generated';
 
 import { gql } from '@apollo/client';
-import { ProjectFieldsFragmentDoc } from './queries.generated';
-import { ProjectFileFieldsFragmentDoc } from './queries.generated';
-import { ProjectLinkFieldsFragmentDoc } from './queries.generated';
+import {
+  ProjectFieldsFragmentDoc,
+  ProjectFileFieldsFragmentDoc,
+  ProjectLinkFieldsFragmentDoc,
+} from './queries.generated';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type CreateProjectMutationVariables = Types.Exact<{
-  brandId: Types.Scalars['ID'];
+  brandId: Types.Scalars['ID']['input'];
   projectAttributes: Types.ProjectAttributes;
 }>;
 
@@ -79,7 +81,7 @@ export type CreateProjectMutationData = {
 };
 
 export type UpdateProjectMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
   projectAttributes: Types.ProjectAttributes;
 }>;
 
@@ -150,7 +152,7 @@ export type UpdateProjectMutationData = {
 };
 
 export type DeleteProjectMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 export type DeleteProjectMutationData = {
@@ -159,12 +161,12 @@ export type DeleteProjectMutationData = {
 };
 
 export type CompleteProjectFileUploadMutationVariables = Types.Exact<{
-  projectId: Types.Scalars['ID'];
-  url: Types.Scalars['String'];
-  filename: Types.Scalars['String'];
-  filesize: Types.Scalars['Int'];
-  filetype?: Types.InputMaybe<Types.Scalars['String']>;
-  filepath: Types.Scalars['String'];
+  projectId: Types.Scalars['ID']['input'];
+  url: Types.Scalars['String']['input'];
+  filename: Types.Scalars['String']['input'];
+  filesize: Types.Scalars['Int']['input'];
+  filetype?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  filepath: Types.Scalars['String']['input'];
 }>;
 
 export type CompleteProjectFileUploadMutationData = {
@@ -184,8 +186,8 @@ export type CompleteProjectFileUploadMutationData = {
 };
 
 export type MoveProjectFileMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
-  destinationIndex: Types.Scalars['Int'];
+  id: Types.Scalars['ID']['input'];
+  destinationIndex: Types.Scalars['Int']['input'];
 }>;
 
 export type MoveProjectFileMutationData = {
@@ -255,7 +257,7 @@ export type MoveProjectFileMutationData = {
 };
 
 export type DeleteProjectFileMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 export type DeleteProjectFileMutationData = {
@@ -264,7 +266,7 @@ export type DeleteProjectFileMutationData = {
 };
 
 export type CreateProjectLinkMutationVariables = Types.Exact<{
-  projectId: Types.Scalars['ID'];
+  projectId: Types.Scalars['ID']['input'];
   projectLinkAttributes: Types.ProjectLinkAttributes;
 }>;
 
@@ -284,7 +286,7 @@ export type CreateProjectLinkMutationData = {
 };
 
 export type UpdateProjectLinkMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
   projectLinkAttributes: Types.ProjectLinkAttributes;
 }>;
 
@@ -304,8 +306,8 @@ export type UpdateProjectLinkMutationData = {
 };
 
 export type MoveProjectLinkMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
-  destinationIndex: Types.Scalars['Int'];
+  id: Types.Scalars['ID']['input'];
+  destinationIndex: Types.Scalars['Int']['input'];
 }>;
 
 export type MoveProjectLinkMutationData = {
@@ -375,7 +377,7 @@ export type MoveProjectLinkMutationData = {
 };
 
 export type DeleteProjectLinkMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
+  id: Types.Scalars['ID']['input'];
 }>;
 
 export type DeleteProjectLinkMutationData = {

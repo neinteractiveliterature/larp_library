@@ -16,6 +16,8 @@ generates:
         Date: string
   app/javascript/apolloClientHelpers.generated.ts:
     plugins:
+      - add:
+          content: '/* eslint-disable */'
       - typescript-apollo-client-helpers
   app/javascript/:
     preset: near-operation-file
