@@ -18,6 +18,10 @@ gem "cancancan"
 gem "intercode_client"
 gem "omniauth-rails_csrf_protection"
 
+# Logging
+gem "cloudwatchlogger", github: "neinteractiveliterature/cloudwatchlogger", branch: "pass-logger-to-client"
+gem "lograge"
+
 gem "net-pop"
 gem "net-smtp"
 gem "net-imap"
