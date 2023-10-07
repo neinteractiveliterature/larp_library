@@ -29,6 +29,12 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
     "Expires" => 1.year.from_now.to_fs(:rfc822).to_s
   }
 
+  # Do not dump schema after migrations.
+  config.active_record.dump_schema_after_migration = false
+
+  config.action_mailer.default_url_options = { host: "www.larplibrary.org", protocol: "https" }
+  config.action_mailer.delivery_method = :sesv2
+
   # Compress CSS using a preprocessor.
   # config.assets.css_compressor = :sass
 
@@ -93,14 +99,6 @@ Rails.application.configure do # rubocop:disable Metrics/BlockLength
     logger.formatter = config.log_formatter
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
-
-  config.action_mailer.default_url_options = { host: "www.larplibrary.org", protocol: "https" }
-
-  # Do not dump schema after migrations.
-  config.active_record.dump_schema_after_migration = false
-
-  config.action_mailer.default_url_options = { host: "www.larplibrary.org", protocol: "https" }
-  config.action_mailer.delivery_method = :sesv2
 
   # Inserts middleware to perform automatic connection switching.
   # The `database_selector` hash is used to pass options to the DatabaseSelector
