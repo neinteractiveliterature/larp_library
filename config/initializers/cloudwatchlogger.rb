@@ -1,4 +1,8 @@
 # frozen_string_literal: true
+
+dyno_id = ENV.fetch("DYNO", nil)
+dyno_type = dyno_id&.split(".")&.first
+
 lograge_custom_options =
   lambda do |event|
     gc_stat = GC.stat
@@ -24,9 +28,6 @@ lograge_custom_options =
   end
 
 if ENV["CLOUDWATCH_LOG_GROUP"]
-  dyno_id = ENV.fetch("DYNO", nil)
-  dyno_type = dyno_id&.split(".")&.first
-
   Rails.application.configure do
     config.lograge.formatter = Lograge::Formatters::Raw.new
     config.lograge.enabled = true
