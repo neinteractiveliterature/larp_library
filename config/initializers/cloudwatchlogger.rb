@@ -24,8 +24,6 @@ lograge_custom_options =
   end
 
 if ENV["CLOUDWATCH_LOG_GROUP"]
-  Ahoy.logger = nil
-
   dyno_id = ENV.fetch("DYNO", nil)
   dyno_type = dyno_id&.split(".")&.first
 
