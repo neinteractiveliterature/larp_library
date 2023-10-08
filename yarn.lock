@@ -3787,10 +3787,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rails/ujs@npm:7.0.8":
-  version: 7.0.8
-  resolution: "@rails/ujs@npm:7.0.8"
-  checksum: 20e8e157e544849f28cd9dbd156354507701d9e4bb423d91fe10e6959d8d466f9d5f03cf6b4a69007cf9dd30d20d4a81c13a69d07b75898f1ed58ab1bc90dae3
+"@rails/ujs@npm:7.1.0":
+  version: 7.1.0
+  resolution: "@rails/ujs@npm:7.1.0"
+  checksum: 8eba6a97a0612529ac07160c20ae1697b32ed07ae147cfc71ae1e1e48f894235e351db64b0eee49771979bf0a46625d35b318f03cbf04530c87ddf722b4a9e13
   languageName: node
   linkType: hard
 
@@ -11986,7 +11986,7 @@ __metadata:
     "@neinteractiveliterature/litform": 0.28.0
     "@popperjs/core": 2.11.8
     "@prettier/plugin-ruby": 4.0.2
-    "@rails/ujs": 7.0.8
+    "@rails/ujs": 7.1.0
     "@types/codemirror": 5.60.10
     "@types/lodash": 4.14.199
     "@types/react": 18.2.25
