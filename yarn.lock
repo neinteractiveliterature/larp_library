@@ -158,18 +158,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-crypto/sha256-browser@npm:5.1.0":
-  version: 5.1.0
-  resolution: "@aws-crypto/sha256-browser@npm:5.1.0"
+"@aws-crypto/sha256-browser@npm:5.2.0":
+  version: 5.2.0
+  resolution: "@aws-crypto/sha256-browser@npm:5.2.0"
   dependencies:
-    "@aws-crypto/sha256-js": ^5.1.0
-    "@aws-crypto/supports-web-crypto": ^5.1.0
-    "@aws-crypto/util": ^5.1.0
+    "@aws-crypto/sha256-js": ^5.2.0
+    "@aws-crypto/supports-web-crypto": ^5.2.0
+    "@aws-crypto/util": ^5.2.0
     "@aws-sdk/types": ^3.222.0
     "@aws-sdk/util-locate-window": ^3.0.0
     "@smithy/util-utf8": ^2.0.0
     tslib: ^2.6.2
-  checksum: 09dfcd6cff98b5f21929e60e25fde1696d094a6cfbf45ef0440cca393da8f5ab7055f50750a1d66f6e8e75e0f3dddfbbbfeb96399880a20d6290f561c0d30714
+  checksum: 773f12f2026d82a6bb4a23a8f491894a6d32525bd9b8bfbc12896526cf11882a7607a671c478c45f9cd7d6ba1caaed48a62b67c6f725244bd83a1275108f46c7
   languageName: node
   linkType: hard
 
@@ -184,14 +184,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-crypto/sha256-js@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "@aws-crypto/sha256-js@npm:5.1.0"
+"@aws-crypto/sha256-js@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "@aws-crypto/sha256-js@npm:5.2.0"
   dependencies:
-    "@aws-crypto/util": ^5.1.0
+    "@aws-crypto/util": ^5.2.0
     "@aws-sdk/types": ^3.222.0
     tslib: ^2.6.2
-  checksum: 68ab39344bbaa1e8213170e8728e1f084992344cabbbe6a9531ce52f68829a9b45f640bab07756f6a4205ba66c4efdcc619b2c8da4d10c60574772d8b556120d
+  checksum: 007fbe0436d714d0d0d282e2b61c90e45adcb9ad75eac9ac7ba03d32b56624afd09b2a9ceb4d659661cf17c51d74d1900ab6b00eacafc002da1101664955ca53
   languageName: node
   linkType: hard
 
@@ -204,12 +204,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-crypto/supports-web-crypto@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "@aws-crypto/supports-web-crypto@npm:5.1.0"
+"@aws-crypto/supports-web-crypto@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "@aws-crypto/supports-web-crypto@npm:5.2.0"
   dependencies:
     tslib: ^2.6.2
-  checksum: 0bc01e273782a507598e7a1edbcb00a598e8a228f99c3ffc17c8d59b7a71ebb91c070a00569b68a57715428063ed04aa9a6eb53aaeceaa6d7e88cddcc98fdaa9
+  checksum: 6ffc21de48b2b2c3e918193101d7e8fe949d47b37688892e1c39eaedaa938be80c0f404fe1c874c30cce16781026777a53bf47d5d90143ca91d0feb7c4a6f830
   languageName: node
   linkType: hard
 
@@ -224,14 +224,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-crypto/util@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "@aws-crypto/util@npm:5.1.0"
+"@aws-crypto/util@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "@aws-crypto/util@npm:5.2.0"
   dependencies:
     "@aws-sdk/types": ^3.222.0
     "@smithy/util-utf8": ^2.0.0
     tslib: ^2.6.2
-  checksum: 707b590ab49f85da064359266ffe840729f76700d4294094e2e18e3337b1c00010571f83eddc8fcc1ecd6a2ec51bcc15d5bc4ccdd7ceb22e14f2ed43cf63f5d2
+  checksum: f0f81d9d2771c59946cfec48b86cb23d39f78a966c4a1f89d4753abdc3cb38de06f907d1e6450059b121d48ac65d612ab88bdb70014553a077fc3dabddfbf8d6
   languageName: node
   linkType: hard
 
@@ -11959,7 +11959,7 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@apollo/client": 3.8.6
-    "@aws-crypto/sha256-browser": 5.1.0
+    "@aws-crypto/sha256-browser": 5.2.0
     "@aws-sdk/abort-controller": ^3.267.0
     "@aws-sdk/client-s3": ^3.267.0
     "@aws-sdk/is-array-buffer": ^3.201.0
