@@ -75,7 +75,7 @@
     "@prettier/plugin-ruby": "4.0.2",
     "@types/codemirror": "5.60.11",
     "@types/lodash": "4.14.200",
-    "@types/react-color": "3.0.7",
+    "@types/react-color": "3.0.8",
     "@types/react-dom": "18.2.13",
     "@types/tinycolor2": "1.4.4",
     "@types/uuid": "9.0.5",
