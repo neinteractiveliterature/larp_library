@@ -4552,10 +4552,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:4.14.199":
-  version: 4.14.199
-  resolution: "@types/lodash@npm:4.14.199"
-  checksum: e68d1fcbbfce953ed87b296a628573f62939227bcda0c934954e862b421e8a34c5e71cad6fea27b9980567909e6a4698f09025692958e36d64ea9ed99ec6fb2e
+"@types/lodash@npm:4.14.200":
+  version: 4.14.200
+  resolution: "@types/lodash@npm:4.14.200"
+  checksum: 6471f8bb5da692a6ecf03a8da4935bfbc341e67ee9bcb4f5730bfacff0c367232548f0a01e8ac5ea18c6fe78fb085d502494e33ccb47a7ee87cbdee03b47d00d
   languageName: node
   linkType: hard
 
@@ -11990,7 +11990,7 @@ __metadata:
     "@prettier/plugin-ruby": 4.0.2
     "@rails/ujs": 7.1.1
     "@types/codemirror": 5.60.11
-    "@types/lodash": 4.14.199
+    "@types/lodash": 4.14.200
     "@types/react": 18.2.28
     "@types/react-color": 3.0.7
     "@types/react-dom": 18.2.13
