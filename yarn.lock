@@ -4401,12 +4401,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/codemirror@npm:5.60.10":
-  version: 5.60.10
-  resolution: "@types/codemirror@npm:5.60.10"
+"@types/codemirror@npm:5.60.11":
+  version: 5.60.11
+  resolution: "@types/codemirror@npm:5.60.11"
   dependencies:
     "@types/tern": "*"
-  checksum: c5977db03939f2a208f0ec7958be70b4fb205dd3f3122b2175ff28287a5424da95f9030b2838c61d37e6278ec53795861dec12439967c1e1da885b2b2a65b299
+  checksum: b8900e3b941bf054e9322d362e1e2facd3cf1281b456d672f992acc47bd3f5611ff46282e46188e7925f84e92d3ee534381e878f5a5ca4d705e6af7d201ec246
   languageName: node
   linkType: hard
 
@@ -11989,7 +11989,7 @@ __metadata:
     "@popperjs/core": 2.11.8
     "@prettier/plugin-ruby": 4.0.2
     "@rails/ujs": 7.1.1
-    "@types/codemirror": 5.60.10
+    "@types/codemirror": 5.60.11
     "@types/lodash": 4.14.199
     "@types/react": 18.2.28
     "@types/react-color": 3.0.7
