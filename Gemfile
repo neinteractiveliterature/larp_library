@@ -19,7 +19,7 @@ gem "intercode_client"
 gem "omniauth-rails_csrf_protection"
 
 # Logging
-gem "cloudwatchlogger", github: "neinteractiveliterature/cloudwatchlogger", branch: "pass-logger-to-client"
+gem "cloudwatchlogger", github: "zshannon/cloudwatchlogger", branch: "master"
 gem "lograge"
 
 gem "net-pop"
