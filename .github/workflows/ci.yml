@@ -11,17 +11,17 @@ jobs:
     name: graphql-codegen-tsc
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: install node
-      uses: actions/setup-node@v3
-      with:
-        cache: yarn
-    - name: yarn install
-      run: yarn install
-    - name: graphql-codegen
-      run: yarn run graphql:codegen
-    - name: tsc on resulting generated files
-      run: yarn run tsc --noEmit
+      - uses: actions/checkout@v3
+      - name: install node
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+      - name: yarn install
+        run: yarn install
+      - name: graphql-codegen
+        run: yarn run graphql:codegen
+      - name: tsc on resulting generated files
+        run: yarn run tsc --noEmit
   minitest:
     name: minitest
     runs-on: ubuntu-latest
@@ -30,7 +30,7 @@ jobs:
       RAILS_ENV: test
     services:
       postgres:
-        image: postgres:14
+        image: postgres:15
         env:
           POSTGRES_PASSWORD: postgres
         options: >-
@@ -46,6 +46,12 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+      - name: Upgrade postgres client utilities
+        run: |
+          sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
+          sudo apt-get update
+          sudo apt-get install postgresql-client -y
       - name: Database setup
         run: bundle exec rails db:create db:migrate
       - name: Run tests
@@ -65,51 +71,51 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up webpack cache
-      uses: actions/cache@v3
-      id: webpack-cache # use this to check for `cache-hit` (`steps.webpack-cache.outputs.cache-hit != 'true'`)
-      with:
-        path: build-cache
-        key: ${{ runner.os }}-dockerimage-webpack-${{ github.ref }}
-        restore-keys: |
-          ${{ runner.os }}-dockerimage-webpack-${{ github.ref }}-
-          ${{ runner.os }}-dockerimage-webpack-
-    - name: install node
-      uses: actions/setup-node@v3
-      with:
-        cache: yarn
-    - name: yarn install
-      run: yarn install
-    - name: Log in to registry
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-    - name: Build webpack bundle
-      run: yarn run build
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v2
-    - name: Set up Docker Buildx
-      id: buildx
-      uses: docker/setup-buildx-action@master
-    - name: Read .ruby-version
-      id: ruby-version
-      run: echo "ruby-version=$(cat .ruby-version)" >> $GITHUB_OUTPUT
-    - name: Read .node-version
-      id: node-version
-      run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
-    - name: Build (and push to Docker Hub, if on main)
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
-        platforms: linux/amd64
-        target: production
-        tags: |
-          ghcr.io/neinteractiveliterature/larp_library:${{ github.sha }}
-        build-args: |
-          RUBY_VERSION=${{ steps.ruby-version.outputs.ruby-version }}
-          NODE_VERSION=${{ steps.node-version.outputs.node-version }}
-        cache-from: type=gha,scope=${{ github.workflow }}
-        cache-to: type=gha,mode=max,scope=${{ github.workflow }}
+      - uses: actions/checkout@v3
+      - name: Set up webpack cache
+        uses: actions/cache@v3
+        id: webpack-cache # use this to check for `cache-hit` (`steps.webpack-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: build-cache
+          key: ${{ runner.os }}-dockerimage-webpack-${{ github.ref }}
+          restore-keys: |
+            ${{ runner.os }}-dockerimage-webpack-${{ github.ref }}-
+            ${{ runner.os }}-dockerimage-webpack-
+      - name: install node
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+      - name: yarn install
+        run: yarn install
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Build webpack bundle
+        run: yarn run build
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@master
+      - name: Read .ruby-version
+        id: ruby-version
+        run: echo "ruby-version=$(cat .ruby-version)" >> $GITHUB_OUTPUT
+      - name: Read .node-version
+        id: node-version
+        run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
+      - name: Build (and push to Docker Hub, if on main)
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
+          platforms: linux/amd64
+          target: production
+          tags: |
+            ghcr.io/neinteractiveliterature/larp_library:${{ github.sha }}
+          build-args: |
+            RUBY_VERSION=${{ steps.ruby-version.outputs.ruby-version }}
+            NODE_VERSION=${{ steps.node-version.outputs.node-version }}
+          cache-from: type=gha,scope=${{ github.workflow }}
+          cache-to: type=gha,mode=max,scope=${{ github.workflow }}
   update-release-draft:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
