@@ -3789,12 +3789,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prettier/plugin-ruby@npm:4.0.2":
-  version: 4.0.2
-  resolution: "@prettier/plugin-ruby@npm:4.0.2"
+"@prettier/plugin-ruby@npm:4.0.3":
+  version: 4.0.3
+  resolution: "@prettier/plugin-ruby@npm:4.0.3"
   peerDependencies:
     prettier: ^3.0.0
-  checksum: d30a71fd5139a1030e33d0d330229444ed4c60b965b94952d4fb3352eeae90ba9f12cba5b30e8eb64f38da2776efbe3bb7489101faad00c14d53343b64e5a8ed
+  checksum: f768a421dcb7c55fe0f11262b166d0ed197a3a859fdac67441d8e95e8d8f92c394686420ab9c236eaa1356674e6e3cb2dcae4d0d12f93a37e1e921a6fbab443a
   languageName: node
   linkType: hard
 
@@ -11997,7 +11997,7 @@ __metadata:
     "@graphql-codegen/typescript-react-apollo": 4.1.0
     "@neinteractiveliterature/litform": 0.28.0
     "@popperjs/core": 2.11.8
-    "@prettier/plugin-ruby": 4.0.2
+    "@prettier/plugin-ruby": 4.0.3
     "@rails/ujs": 7.1.2
     "@types/codemirror": 5.60.14
     "@types/lodash": 4.14.202
