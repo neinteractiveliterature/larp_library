@@ -53,9 +53,11 @@ ENV LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libjemalloc.so.2
 FROM ${TARGETARCH}_jemalloc as production
 ARG NODE_VERSION
 ARG TARGETARCH
+ARG REVISION
 
 ENV RAILS_ENV production
 ENV NODE_ENV production
+ENV REVISION ${REVISION}
 
 USER root
 RUN useradd -ms /bin/bash www

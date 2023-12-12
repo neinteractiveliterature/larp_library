@@ -1,0 +1,40 @@
+# fly.toml app configuration file generated for larp-library on 2023-12-12T10:43:31-08:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "larp-library"
+primary_region = "iad"
+swap_size_mb = 512
+
+[build]
+image = "neinteractiveliterature/larp_library:latest"
+
+[deploy]
+release_command = "bundle exec rails release:perform"
+
+[env]
+ASSETS_HOST = "assets.larplibrary.org"
+CLOUDWATCH_LOG_GROUP = "larp_library_production"
+INTERCODE_URL = "https://www.neilhosting.net"
+LANG = "en"
+PORT = 8080
+RACK_ENV = "production"
+RAILS_ENV = "production"
+RAILS_LOG_TO_STDOUT = "enabled"
+RAILS_MAX_THREADS = "4"
+RAILS_SERVE_STATIC_FILES = "enabled"
+ROLLBAR_CLIENT_ACCESS_TOKEN = "6f641698f7534a4e85bb632b75f111bc"
+
+[http_service]
+auto_start_machines = true
+auto_stop_machines = true
+force_https = true
+internal_port = 8080
+min_machines_running = 0
+processes = ["app"]
+
+[[vm]]
+cpu_kind = "shared"
+cpus = 1
+memory_mb = 512
