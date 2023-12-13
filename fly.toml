@@ -27,11 +27,8 @@ RAILS_SERVE_STATIC_FILES = "enabled"
 ROLLBAR_CLIENT_ACCESS_TOKEN = "6f641698f7534a4e85bb632b75f111bc"
 
 [http_service]
-auto_start_machines = true
-auto_stop_machines = true
 force_https = true
 internal_port = 8080
-min_machines_running = 0
 processes = ["app"]
 
 [[vm]]
