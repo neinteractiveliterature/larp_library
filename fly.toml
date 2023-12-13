@@ -8,7 +8,7 @@ primary_region = "iad"
 swap_size_mb = 512
 
 [build]
-image = "neinteractiveliterature/larp_library:latest"
+image = "ghcr.io/neinteractiveliterature/larp_library:latest"
 
 [deploy]
 release_command = "bundle exec rails release:perform"
