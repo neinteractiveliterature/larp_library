@@ -6198,10 +6198,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:2.3.3, classnames@npm:^2.3.1":
-  version: 2.3.3
-  resolution: "classnames@npm:2.3.3"
-  checksum: 3b9732dde0acdb9f8a6680eab54b34e567e9049769046aeeca270220fee806e0320e8c32bc2223b1a6f3fef7982ce98055719ff2a3d0183775ccc5646de39451
+"classnames@npm:2.4.0, classnames@npm:^2.3.1":
+  version: 2.4.0
+  resolution: "classnames@npm:2.4.0"
+  checksum: 0f11a5cbae9f32716106775d8964e865b928646879cb411a1dbac711c801ca663113b96f06cbb85d3718e514ab744aa46f1fbef7856e7d1b4f5094480349a0a9
   languageName: node
   linkType: hard
 
@@ -12041,7 +12041,7 @@ __metadata:
     babel-plugin-graphql-tag: "npm:3.3.0"
     bootstrap: "npm:5.3.2"
     bootstrap-icons: "npm:1.11.2"
-    classnames: "npm:2.3.3"
+    classnames: "npm:2.4.0"
     css-loader: "npm:6.8.1"
     css-minimizer-webpack-plugin: "npm:5.0.1"
     eslint: "npm:8.56.0"
