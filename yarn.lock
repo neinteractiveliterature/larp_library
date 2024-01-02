@@ -4636,13 +4636,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-color@npm:3.0.10":
-  version: 3.0.10
-  resolution: "@types/react-color@npm:3.0.10"
+"@types/react-color@npm:3.0.11":
+  version: 3.0.11
+  resolution: "@types/react-color@npm:3.0.11"
   dependencies:
     "@types/react": "npm:*"
     "@types/reactcss": "npm:*"
-  checksum: 209d19fd5ad91541e59ea6627aa4988cf55d4b982dc46614b294581b7487135fcefa7b3ca64234125f93d79b9ce7d4452157f4aabca1087865cab76328d25b29
+  checksum: c683e7222da449fc68953710bd8e95c9748d12c223f89d78891878f813a4560bca18663ee431658e47aa41cfd7f36b2ab1e61f04007e9e8acd4878b75236b653
   languageName: node
   linkType: hard
 
@@ -12029,7 +12029,7 @@ __metadata:
     "@types/codemirror": "npm:5.60.15"
     "@types/lodash": "npm:4.14.202"
     "@types/react": "npm:18.2.46"
-    "@types/react-color": "npm:3.0.10"
+    "@types/react-color": "npm:3.0.11"
     "@types/react-dom": "npm:18.2.18"
     "@types/tinycolor2": "npm:1.4.6"
     "@types/uuid": "npm:9.0.7"
