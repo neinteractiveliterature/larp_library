@@ -28,7 +28,7 @@
     "@types/react": "18.2.46",
     "assert": "2.1.0",
     "bootstrap": "5.3.2",
-    "bootstrap-icons": "1.11.2",
+    "bootstrap-icons": "1.11.3",
     "classnames": "2.5.1",
     "css-loader": "6.8.1",
     "css-minimizer-webpack-plugin": "5.0.1",
