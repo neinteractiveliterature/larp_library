@@ -51,7 +51,7 @@
     "regenerator-runtime": "0.14.1",
     "sass": "1.69.7",
     "sass-loader": "13.3.3",
-    "style-loader": "3.3.3",
+    "style-loader": "3.3.4",
     "tinycolor2": "1.6.0",
     "uuid": "9.0.1",
     "webpack": "5.89.0",
