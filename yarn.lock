@@ -2469,18 +2469,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-markdown@npm:6.2.3":
-  version: 6.2.3
-  resolution: "@codemirror/lang-markdown@npm:6.2.3"
+"@codemirror/lang-markdown@npm:6.2.4":
+  version: 6.2.4
+  resolution: "@codemirror/lang-markdown@npm:6.2.4"
   dependencies:
     "@codemirror/autocomplete": "npm:^6.7.1"
     "@codemirror/lang-html": "npm:^6.0.0"
     "@codemirror/language": "npm:^6.3.0"
     "@codemirror/state": "npm:^6.0.0"
     "@codemirror/view": "npm:^6.0.0"
-    "@lezer/common": "npm:^1.0.0"
+    "@lezer/common": "npm:^1.2.1"
     "@lezer/markdown": "npm:^1.0.0"
-  checksum: 3021554e42ff32d0197edab2ed4d504ea66694762fb36d0771be85a5f0d1f241168937327035e65a75af7cbe772069e7bf4b258eda147a82581b6c03ba961ac0
+  checksum: ceaf6b8ca430c3df5b11a4df0133b74ea16b77d5cc02594d137a3add226731adaa55db7f9bb1604c704d8e93ec7979b1d0198cffdf21c2ef8846bce51574dfc0
   languageName: node
   linkType: hard
 
@@ -3592,10 +3592,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/common@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "@lezer/common@npm:1.0.1"
-  checksum: dbe8328e48ffcc220af99bb5e1ea1547599d51d6d2aa6c2cd1976be166be4e46539865240e96a8ec7caa16865077c899d3277eb5af181d11fb2615479cb2fb0d
+"@lezer/common@npm:^1.0.0, @lezer/common@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@lezer/common@npm:1.2.1"
+  checksum: b362ed2e97664e4b36b3dbff49b52d1bfc5accc0152b577fefd46e585d012ff685d1fd336d75d80066e01c0505b1135d4cf69be5e330b5bfec2e2650c437bcae
   languageName: node
   linkType: hard
 
@@ -12011,7 +12011,7 @@ __metadata:
     "@babel/preset-env": "npm:7.23.8"
     "@babel/preset-react": "npm:7.23.3"
     "@babel/preset-typescript": "npm:7.23.3"
-    "@codemirror/lang-markdown": "npm:6.2.3"
+    "@codemirror/lang-markdown": "npm:6.2.4"
     "@dnd-kit/core": "npm:6.1.0"
     "@dnd-kit/sortable": "npm:7.0.2"
     "@dnd-kit/utilities": "npm:3.2.2"
