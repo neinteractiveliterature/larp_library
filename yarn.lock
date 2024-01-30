@@ -7817,12 +7817,12 @@ __metadata:
   linkType: hard
 
 "follow-redirects@npm:^1.0.0":
-  version: 1.15.0
-  resolution: "follow-redirects@npm:1.15.0"
+  version: 1.15.5
+  resolution: "follow-redirects@npm:1.15.5"
   peerDependenciesMeta:
     debug:
       optional: true
-  checksum: 10/080bdf42a4379b038bb62dfa8b6f412780b9b4f6cc518ee5ef7c002307295afa977e0cd8d6627ff847aa03b6578d0f6e38e4a5d23e577e4a5025f019ccd3853f
+  checksum: 10/d467f13c1c6aa734599b8b369cd7a625b20081af358f6204ff515f6f4116eb440de9c4e0c49f10798eeb0df26c95dd05d5e0d9ddc5786ab1a8a8abefe92929b4
   languageName: node
   linkType: hard
 
