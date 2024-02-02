@@ -2972,9 +2972,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/typescript-react-apollo@npm:4.1.0":
-  version: 4.1.0
-  resolution: "@graphql-codegen/typescript-react-apollo@npm:4.1.0"
+"@graphql-codegen/typescript-react-apollo@npm:4.2.0":
+  version: 4.2.0
+  resolution: "@graphql-codegen/typescript-react-apollo@npm:4.2.0"
   dependencies:
     "@graphql-codegen/plugin-helpers": "npm:^3.0.0"
     "@graphql-codegen/visitor-plugin-common": "npm:2.13.1"
@@ -2984,7 +2984,7 @@ __metadata:
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     graphql-tag: ^2.0.0
-  checksum: 10/10660055bfe563c96a02bde3f620d9d0f6f3bb9e1b6ac177f6367236731efec33b504f4c1061a26011f4c4cf38494f9cff1356d804bb65e933e7e46787a53b4e
+  checksum: 10/ef1df7d6b37786a27f680bd90caf04af50404c68927457fb143b0190d20786913337ec095a96a293012642286b795ec6df395ee2c9818dc069e058377c3736fe
   languageName: node
   linkType: hard
 
@@ -12044,7 +12044,7 @@ __metadata:
     "@graphql-codegen/near-operation-file-preset": "npm:3.0.0"
     "@graphql-codegen/typescript-apollo-client-helpers": "npm:3.0.0"
     "@graphql-codegen/typescript-operations": "npm:4.0.1"
-    "@graphql-codegen/typescript-react-apollo": "npm:4.1.0"
+    "@graphql-codegen/typescript-react-apollo": "npm:4.2.0"
     "@neinteractiveliterature/litform": "npm:0.28.0"
     "@popperjs/core": "npm:2.11.8"
     "@prettier/plugin-ruby": "npm:4.0.4"
