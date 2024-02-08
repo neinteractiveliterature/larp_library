@@ -71,7 +71,7 @@
     "@graphql-codegen/near-operation-file-preset": "3.0.0",
     "@graphql-codegen/typescript-apollo-client-helpers": "3.0.0",
     "@graphql-codegen/typescript-operations": "4.1.2",
-    "@graphql-codegen/typescript-react-apollo": "4.2.0",
+    "@graphql-codegen/typescript-react-apollo": "4.3.0",
     "@prettier/plugin-ruby": "4.0.4",
     "@types/codemirror": "5.60.15",
     "@types/lodash": "4.14.202",
