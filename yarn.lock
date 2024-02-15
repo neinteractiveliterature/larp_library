@@ -22,9 +22,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.9.4":
-  version: 3.9.4
-  resolution: "@apollo/client@npm:3.9.4"
+"@apollo/client@npm:3.9.5":
+  version: 3.9.5
+  resolution: "@apollo/client@npm:3.9.5"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
     "@wry/caches": "npm:^1.0.0"
@@ -34,7 +34,7 @@ __metadata:
     hoist-non-react-statics: "npm:^3.3.2"
     optimism: "npm:^0.18.0"
     prop-types: "npm:^15.7.2"
-    rehackt: "npm:0.0.4"
+    rehackt: "npm:0.0.5"
     response-iterator: "npm:^0.2.6"
     symbol-observable: "npm:^4.0.0"
     ts-invariant: "npm:^0.10.3"
@@ -55,7 +55,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 10/0f17e9e29a7450c9b7b0498e0959ab0ab6837fe90475f0bd081a080c19e64e81edb663fcdc918e4c39dd013bda14fc798a82db5dd427ea2098ae697abad94d46
+  checksum: 10/359b980928fe476c14b38b81aa3713fb6ef525d902caa67e218b7393d76f88433a1dad1b515908ab10bfe7ddec68461f5fbb3dc53bdd6ce185ab57984e7c9028
   languageName: node
   linkType: hard
 
@@ -12043,9 +12043,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rehackt@npm:0.0.4":
-  version: 0.0.4
-  resolution: "rehackt@npm:0.0.4"
+"rehackt@npm:0.0.5":
+  version: 0.0.5
+  resolution: "rehackt@npm:0.0.5"
   peerDependencies:
     "@types/react": "*"
     react: "*"
@@ -12054,7 +12054,7 @@ __metadata:
       optional: true
     react:
       optional: true
-  checksum: 10/f2811c24847f7a03935c3b2093a01439f883550f6022e6d220574d0f4333fc24dd1bd746bb579038723eef1c48a2ce3002dd91aea9c2e15d2bd105ed6786f8c1
+  checksum: 10/a7536eaeb47ba46bc29fa050c7cbf80860809689c893c6177664efbbdca641a1996185ea6602fb76473f0e2b145c1f3e9c27a5e738054d69809b6c39046fe269
   languageName: node
   linkType: hard
 
@@ -12297,7 +12297,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@apollo/client": "npm:3.9.4"
+    "@apollo/client": "npm:3.9.5"
     "@aws-crypto/sha256-browser": "npm:5.2.0"
     "@aws-sdk/abort-controller": "npm:^3.267.0"
     "@aws-sdk/client-s3": "npm:^3.267.0"
