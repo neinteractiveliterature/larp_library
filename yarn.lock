@@ -12379,7 +12379,7 @@ __metadata:
     webpack: "npm:5.90.2"
     webpack-bundle-analyzer: "npm:4.10.1"
     webpack-cli: "npm:5.1.4"
-    webpack-dev-server: "npm:5.0.1"
+    webpack-dev-server: "npm:5.0.2"
     webpack-manifest-plugin: "npm:5.0.0"
   languageName: unknown
   linkType: soft
@@ -14071,9 +14071,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:5.0.1":
-  version: 5.0.1
-  resolution: "webpack-dev-server@npm:5.0.1"
+"webpack-dev-server@npm:5.0.2":
+  version: 5.0.2
+  resolution: "webpack-dev-server@npm:5.0.2"
   dependencies:
     "@types/bonjour": "npm:^3.5.13"
     "@types/connect-history-api-fallback": "npm:^1.5.4"
@@ -14114,7 +14114,7 @@ __metadata:
       optional: true
   bin:
     webpack-dev-server: bin/webpack-dev-server.js
-  checksum: 10/69931595b37a767dd953da4144ff97d0a69deb15ff662e6b272eaf73b9726cfdeddc12fe564800ad662a3f6d2591d49b6723d9fef57c5e1a17e8b92d2002c21d
+  checksum: 10/f47205b56a562c72083ad979fceb499dc60ef35a75a72b6fbcbccd258b6b304ab3a977877dc6ce68aa5fb90cee8ab9387e22ceb8e374a019e3d4ce77ad0c9493
   languageName: node
   linkType: hard
 
