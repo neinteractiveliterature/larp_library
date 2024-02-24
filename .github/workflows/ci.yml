@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: install node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           cache: yarn
       - name: yarn install
@@ -82,7 +82,7 @@ jobs:
             ${{ runner.os }}-dockerimage-webpack-${{ github.ref }}-
             ${{ runner.os }}-dockerimage-webpack-
       - name: install node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           cache: yarn
       - name: yarn install
