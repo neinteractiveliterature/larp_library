@@ -73,7 +73,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up webpack cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: webpack-cache # use this to check for `cache-hit` (`steps.webpack-cache.outputs.cache-hit != 'true'`)
         with:
           path: build-cache
