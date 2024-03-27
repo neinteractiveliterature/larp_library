@@ -187,7 +187,8 @@ GEM
       activesupport (>= 6.1)
     graphiql-rails (1.10.0)
       railties
-    graphql (2.0.27)
+    graphql (2.3.0)
+      base64
     graphql-client (0.18.0)
       activesupport (>= 3.0)
       graphql
