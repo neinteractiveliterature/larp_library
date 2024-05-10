@@ -140,7 +140,7 @@ GEM
     base64 (0.2.0)
     bcrypt (3.1.20)
     benchmark (0.3.0)
-    bigdecimal (3.1.7)
+    bigdecimal (3.1.8)
     bindata (2.5.0)
     builder (3.2.4)
     byebug (11.1.3)
@@ -201,7 +201,7 @@ GEM
       thor
       tilt
     hashie (5.0.0)
-    i18n (1.14.4)
+    i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     intercode_client (0.1.1)
       graphql-client
@@ -245,7 +245,7 @@ GEM
     marcel (1.0.2)
     method_source (1.0.0)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.5)
+    mini_portile2 (2.8.6)
     minipack (0.3.6)
       actionview
       railties (>= 4.2)
@@ -265,7 +265,7 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.5.9)
-    nokogiri (1.16.3)
+    nokogiri (1.16.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     oauth2 (2.0.9)
@@ -275,14 +275,14 @@ GEM
       rack (>= 1.2, < 4)
       snaky_hash (~> 2.0)
       version_gem (~> 1.1)
-    omniauth (2.1.0)
+    omniauth (2.1.2)
       hashie (>= 3.4.6)
       rack (>= 2.2.3)
       rack-protection
     omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
       omniauth (~> 2.0)
-    omniauth-rails_csrf_protection (1.0.1)
+    omniauth-rails_csrf_protection (1.0.2)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
     orm_adapter (0.5.0)
@@ -313,7 +313,7 @@ GEM
       addressable (~> 2.3)
       nokogiri (~> 1.5)
       rack (>= 1.3)
-    rack-protection (3.0.2)
+    rack-protection (3.0.6)
       rack
     rack-session (1.0.2)
       rack (< 3)
