@@ -287,7 +287,7 @@ GEM
       omniauth (~> 2.0)
     orm_adapter (0.5.0)
     parallel (1.24.0)
-    parser (3.3.1.0)
+    parser (3.3.2.0)
       ast (~> 2.4.1)
       racc
     pg (1.5.6)
@@ -370,7 +370,7 @@ GEM
       strscan (>= 3.0.9)
     rollbar (3.5.2)
     rouge (3.30.0)
-    rubocop (1.64.0)
+    rubocop (1.64.1)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -498,7 +498,7 @@ DEPENDENCIES
   truncate_html
 
 RUBY VERSION
-   ruby 3.3.1p55
+   ruby 3.3.2p78
 
 BUNDLED WITH
    2.3.26
