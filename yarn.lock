@@ -22,9 +22,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.10.6":
-  version: 3.10.6
-  resolution: "@apollo/client@npm:3.10.6"
+"@apollo/client@npm:3.10.7":
+  version: 3.10.7
+  resolution: "@apollo/client@npm:3.10.7"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
     "@wry/caches": "npm:^1.0.0"
@@ -55,7 +55,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 10/15ccdd7fab632f467a0a5ea381a4129fcf6d3cad37e3f9b95b53651cfc8bfb6ff0b1aec8acb3e2c7cd82b76ede5da5c5152a27efb511f0e777b6aa40df8db288
+  checksum: 10/f14c84f775220adf15a7c9098043654b7ca941345bd287e8665955c3c4936ac8ce26a4d6ecab9d5872836e93eff139e515f2cc4735b6631255484f338ed06aa8
   languageName: node
   linkType: hard
 
@@ -12454,7 +12454,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@apollo/client": "npm:3.10.6"
+    "@apollo/client": "npm:3.10.7"
     "@aws-crypto/sha256-browser": "npm:5.2.0"
     "@aws-sdk/abort-controller": "npm:^3.267.0"
     "@aws-sdk/client-s3": "npm:^3.267.0"
