@@ -32,10 +32,7 @@ function TagSelector<IsMulti extends boolean, IsCreatable extends boolean>({
   const apolloClient = useApolloClient();
 
   const queryTags = async (queryString: string) => {
-    const result = await apolloClient.query<
-      TagAutocompleteQueryData,
-      TagAutocompleteQueryVariables
-    >({
+    const result = await apolloClient.query<TagAutocompleteQueryData, TagAutocompleteQueryVariables>({
       query: TagAutocompleteQueryDocument,
       variables: { queryString },
       fetchPolicy: 'network-only',
@@ -50,10 +47,9 @@ function TagSelector<IsMulti extends boolean, IsCreatable extends boolean>({
     value,
     getOptionValue: (option: TagFragment) => option.name ?? '',
     getOptionLabel: (option: TagFragment) => option.name ?? '',
-    // eslint-disable-next-line react/display-name
+
     formatOptionLabel: (option: TagFragment) => <Tag tag={option} />,
-    filterOption: (option, rawInput) =>
-      option.data.name.toUpperCase().startsWith(rawInput.toUpperCase()),
+    filterOption: (option, rawInput) => option.data.name.toUpperCase().startsWith(rawInput.toUpperCase()),
     styles: {
       container: (provided) => ({
         ...provided,

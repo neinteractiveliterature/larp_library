@@ -8,7 +8,7 @@ import { ObjectCannedACL, S3Client } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import { createRequestSigner } from './uploadSigning';
 import { useApolloClient } from '@apollo/client';
-import { getApplyMd5BodyChecksumPlugin, resolveMd5BodyChecksumConfig } from '@aws-sdk/middleware-apply-body-checksum';
+import { getApplyMd5BodyChecksumPlugin, resolveMd5BodyChecksumConfig } from '@smithy/middleware-apply-body-checksum';
 import { AbortController } from '@aws-sdk/abort-controller';
 
 export type S3UploadFile = {

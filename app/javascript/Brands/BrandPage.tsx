@@ -29,7 +29,6 @@ export default function BrandPage(): JSX.Element {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const { brand } = data!;
 
   return (
@@ -46,10 +45,7 @@ export default function BrandPage(): JSX.Element {
             </Link>
           )}
           {brand.currentUserCanEdit && (
-            <Link
-              to={`${generateBrandPath(brand)}/edit`}
-              className="btn btn-outline-secondary ms-2"
-            >
+            <Link to={`${generateBrandPath(brand)}/edit`} className="btn btn-outline-secondary ms-2">
               Admin
             </Link>
           )}
