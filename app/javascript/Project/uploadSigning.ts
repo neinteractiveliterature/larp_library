@@ -6,9 +6,9 @@ import {
   RequestSigner,
   QueryParameterBag,
 } from '@aws-sdk/types';
-import { toHex } from '@aws-sdk/util-hex-encoding';
-import { toUint8Array } from '@aws-sdk/util-utf8';
-import { isArrayBuffer } from '@aws-sdk/is-array-buffer';
+import { toHex } from '@smithy/util-hex-encoding';
+import { toUint8Array } from '@smithy/util-utf8';
+import { isArrayBuffer } from '@smithy/is-array-buffer';
 import { Sha256 } from '@aws-crypto/sha256-browser';
 import { formatUrl } from '@aws-sdk/util-format-url';
 import { SignRequestQueryData, SignRequestQueryVariables } from './queries.generated';

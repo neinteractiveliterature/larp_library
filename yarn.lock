@@ -179,16 +179,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/abort-controller@npm:^3.370.0":
-  version: 3.370.0
-  resolution: "@aws-sdk/abort-controller@npm:3.370.0"
-  dependencies:
-    "@aws-sdk/types": "npm:3.370.0"
-    tslib: "npm:^2.5.0"
-  checksum: 10/14721d79b1c7115a073e2e09e11787d6a6aeb8cce25ab5776f315f375fedad3a7390dd0e028f608507eb31b6d01e448663f19c3333b64edf2d4ca842d7d76a8e
-  languageName: node
-  linkType: hard
-
 "@aws-sdk/client-s3@npm:^3.654.0":
   version: 3.654.0
   resolution: "@aws-sdk/client-s3@npm:3.654.0"
@@ -528,15 +518,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/is-array-buffer@npm:3.310.0, @aws-sdk/is-array-buffer@npm:^3.310.0":
-  version: 3.310.0
-  resolution: "@aws-sdk/is-array-buffer@npm:3.310.0"
-  dependencies:
-    tslib: "npm:^2.5.0"
-  checksum: 10/5d4ed0d6ce00eed0dea61f5ce7ea23ae691ef2fa8c0eea88e0c334fd533483c4892110adb7ae671e7e5c7b26c1b7dcad5560e388fa04947d92e689ffef942340
-  languageName: node
-  linkType: hard
-
 "@aws-sdk/lib-storage@npm:^3.654.0":
   version: 3.654.0
   resolution: "@aws-sdk/lib-storage@npm:3.654.0"
@@ -734,16 +715,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/types@npm:3.370.0":
-  version: 3.370.0
-  resolution: "@aws-sdk/types@npm:3.370.0"
-  dependencies:
-    "@smithy/types": "npm:^1.1.0"
-    tslib: "npm:^2.5.0"
-  checksum: 10/b1326dbb08356816982564d88bb95c58059a804e9b119ba498a2bfa65f7a61dcf167d1136329b832199a5d472aff18d4e86b9cd55929de1a9150be2e44c5d1c7
-  languageName: node
-  linkType: hard
-
 "@aws-sdk/types@npm:3.654.0, @aws-sdk/types@npm:^3.222.0, @aws-sdk/types@npm:^3.654.0":
   version: 3.654.0
   resolution: "@aws-sdk/types@npm:3.654.0"
@@ -760,16 +731,6 @@ __metadata:
   dependencies:
     tslib: "npm:^2.6.2"
   checksum: 10/b1a7f93b4f47136ee8d71bcbbd2d5d19581007f0684aff252d3bee6b9ccc7c56e765255bb1bea847171b40cdbd2eca0fb102f24cba857d1c79c54747e8ee0855
-  languageName: node
-  linkType: hard
-
-"@aws-sdk/util-buffer-from@npm:3.310.0":
-  version: 3.310.0
-  resolution: "@aws-sdk/util-buffer-from@npm:3.310.0"
-  dependencies:
-    "@aws-sdk/is-array-buffer": "npm:3.310.0"
-    tslib: "npm:^2.5.0"
-  checksum: 10/bb160d9e7eae5ad1c0858c2d2e861d9fadbf6696dbea608bfafbe8bd5d55b8e5c7eca447bef954d63ef2ba5b0acaf79df9aba8d1016c2727ac0227c30d8a7ac3
   languageName: node
   linkType: hard
 
@@ -794,15 +755,6 @@ __metadata:
     "@smithy/types": "npm:^3.4.2"
     tslib: "npm:^2.6.2"
   checksum: 10/284ae7ea358bdcced78d2235c19551fac4a8726906fe6de13feb49d68397907719e47882c2aa006b69a40fb8163ae28addc9d8f0a143b69f655a3db931961740
-  languageName: node
-  linkType: hard
-
-"@aws-sdk/util-hex-encoding@npm:^3.310.0":
-  version: 3.310.0
-  resolution: "@aws-sdk/util-hex-encoding@npm:3.310.0"
-  dependencies:
-    tslib: "npm:^2.5.0"
-  checksum: 10/9ec0388c9667d4d616c61530be88422a315e3d92bf93b941d6f6d8339d6e703f4cacb2e11402658d716b1166e90d0fddb497284220e11075a0c17821c468c44b
   languageName: node
   linkType: hard
 
@@ -841,16 +793,6 @@ __metadata:
     aws-crt:
       optional: true
   checksum: 10/6735787ce7347b644640e8ef2b54ee6a4ae31d36c0da1aec821b9c908c58ed38bc695242639850b20cdc4b51030ec4be1c393c24330c0fd4146e740c52b8b91c
-  languageName: node
-  linkType: hard
-
-"@aws-sdk/util-utf8@npm:^3.310.0":
-  version: 3.310.0
-  resolution: "@aws-sdk/util-utf8@npm:3.310.0"
-  dependencies:
-    "@aws-sdk/util-buffer-from": "npm:3.310.0"
-    tslib: "npm:^2.5.0"
-  checksum: 10/88bf031527a1fe99712b4e2cb00bc47436b39aa29ce0ceeace3bd0bc7d436d14940f190c249b9a69e684f8d3f01f96847848f5d8ebab7e3103c0084c1e609ce4
   languageName: node
   linkType: hard
 
@@ -4302,15 +4244,6 @@ __metadata:
     "@smithy/util-stream": "npm:^3.1.6"
     tslib: "npm:^2.6.2"
   checksum: 10/5b3f8992459270294d5a9010700b1956c42c1188ee36f83894033bc53a03b4b4189da0850fbcdd38060330eef0b6ce94749b36a7a516ec88fc8b1dce25414081
-  languageName: node
-  linkType: hard
-
-"@smithy/types@npm:^1.1.0":
-  version: 1.2.0
-  resolution: "@smithy/types@npm:1.2.0"
-  dependencies:
-    tslib: "npm:^2.5.0"
-  checksum: 10/48691d980844540ee3bd12f6b4ed0a8139da4dde6571b8ff2fd9d1c62edb3c8dbf3db66a7c74e269bea01ac28f7d8a4b464f9141100512e6b5982d7cf4108998
   languageName: node
   linkType: hard
 
@@ -12323,14 +12256,10 @@ __metadata:
   dependencies:
     "@apollo/client": "npm:3.10.8"
     "@aws-crypto/sha256-browser": "npm:5.2.0"
-    "@aws-sdk/abort-controller": "npm:^3.370.0"
     "@aws-sdk/client-s3": "npm:^3.654.0"
-    "@aws-sdk/is-array-buffer": "npm:^3.310.0"
     "@aws-sdk/lib-storage": "npm:^3.654.0"
     "@aws-sdk/types": "npm:^3.654.0"
     "@aws-sdk/util-format-url": "npm:^3.654.0"
-    "@aws-sdk/util-hex-encoding": "npm:^3.310.0"
-    "@aws-sdk/util-utf8": "npm:^3.310.0"
     "@babel/cli": "npm:7.25.6"
     "@babel/core": "npm:7.25.2"
     "@babel/plugin-syntax-dynamic-import": "npm:7.8.3"
@@ -12354,7 +12283,10 @@ __metadata:
     "@popperjs/core": "npm:2.11.8"
     "@prettier/plugin-ruby": "npm:4.0.4"
     "@rails/ujs": "npm:7.1.400"
+    "@smithy/is-array-buffer": "npm:^3.0.0"
     "@smithy/middleware-apply-body-checksum": "npm:^3.0.8"
+    "@smithy/util-hex-encoding": "npm:^3.0.0"
+    "@smithy/util-utf8": "npm:^3.0.0"
     "@types/codemirror": "npm:5.60.15"
     "@types/lodash": "npm:4.17.7"
     "@types/react": "npm:18.3.3"
