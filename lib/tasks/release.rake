@@ -18,7 +18,7 @@ namespace :release do
     }
 
     request = Net::HTTP::Post.new(uri.request_uri)
-    request.body = ::JSON.dump(params)
+    request.body = JSON.dump(params)
 
     Net::HTTP.start(uri.host, uri.port, :ENV, use_ssl: true) do |http|
       response = http.request(request)

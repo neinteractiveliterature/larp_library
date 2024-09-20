@@ -42,12 +42,12 @@ module Types
       scope = scope.where(brand_id: brand_id) if brand_id.present?
       scope = scope.search_title(title) if title.present?
       scope = scope.search_authors(authors) if authors.present?
-      scope = scope.where("max_players >= ?", player_count_upper_bound) if player_count_upper_bound.present?
-      scope = scope.where("min_players <= ?", player_count_lower_bound) if player_count_lower_bound.present?
+      scope = scope.where(max_players: player_count_upper_bound..) if player_count_upper_bound.present?
+      scope = scope.where(min_players: ..player_count_lower_bound) if player_count_lower_bound.present?
       scope =
-        scope.where("max_facilitators >= ?", facilitator_count_upper_bound) if facilitator_count_upper_bound.present?
+        scope.where(max_facilitators: facilitator_count_upper_bound..) if facilitator_count_upper_bound.present?
       scope =
-        scope.where("min_facilitators <= ?", facilitator_count_lower_bound) if facilitator_count_lower_bound.present?
+        scope.where(min_facilitators: ..facilitator_count_lower_bound) if facilitator_count_lower_bound.present?
 
       query_string.present? ? scope.search(query_string) : scope.order(:title_for_ordering)
     end

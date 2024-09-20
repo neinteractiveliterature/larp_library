@@ -1,39 +1,40 @@
+# frozen_string_literal: true
 ruby File.read(File.expand_path(".ruby-version", __dir__)).strip
 
 source "https://rubygems.org"
 
 gem "dotenv-rails", groups: %i[development test]
 
-gem "rails", "7.2.1"
 gem "pg"
+gem "rails", "7.2.1"
 
 gem "minipack"
 gem "sprockets-rails"
 
 gem "listen"
 
-gem "devise", "~> 4.9.0"
-gem "rack-cas"
 gem "cancancan"
+gem "devise", "~> 4.9.0"
 gem "intercode_client"
 gem "omniauth-rails_csrf_protection"
+gem "rack-cas"
 
 # Logging
 gem "cloudwatchlogger", github: "zshannon/cloudwatchlogger", branch: "master"
 gem "lograge"
 
+gem "net-imap"
 gem "net-pop"
 gem "net-smtp"
-gem "net-imap"
 
 gem "aws-sdk-s3"
 gem "aws-sigv4"
 
 gem "graphql"
 
+gem "color"
 gem "redcarpet"
 gem "truncate_html"
-gem "color"
 
 gem "pg_search"
 
@@ -55,11 +56,11 @@ end
 
 group :development, :test do
   gem "byebug"
-  gem "spring"
-  gem "pry-rails"
-  gem "factory_bot_rails"
   gem "database_cleaner"
+  gem "factory_bot_rails"
   gem "graphql-rails_logger"
+  gem "pry-rails"
+  gem "spring"
 end
 
 group :production do
