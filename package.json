@@ -49,7 +49,7 @@
     "react-waypoint": "10.3.0",
     "regenerator-runtime": "0.14.1",
     "sass": "1.79.2",
-    "sass-loader": "13.3.3",
+    "sass-loader": "16.0.2",
     "style-loader": "4.0.0",
     "tinycolor2": "1.6.0",
     "uuid": "10.0.0",
