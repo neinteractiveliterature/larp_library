@@ -377,7 +377,7 @@ GEM
     reverse_markdown (2.1.1)
       nokogiri
     rexml (3.3.7)
-    rollbar (3.5.2)
+    rollbar (3.6.0)
     rouge (3.30.0)
     rubocop (1.66.1)
       json (~> 2.3)
