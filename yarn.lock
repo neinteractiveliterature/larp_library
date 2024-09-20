@@ -11975,9 +11975,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-select@npm:5.8.0":
-  version: 5.8.0
-  resolution: "react-select@npm:5.8.0"
+"react-select@npm:5.8.1":
+  version: 5.8.1
+  resolution: "react-select@npm:5.8.1"
   dependencies:
     "@babel/runtime": "npm:^7.12.0"
     "@emotion/cache": "npm:^11.4.0"
@@ -11991,7 +11991,7 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 10/04d3639ea1872a9e4d9080ece1947432fc595403c0a740f671a1b7f7dd2639288cb133ec7a2b1ac20fad69fd303d696c2f924763405e0e1d93b847e54df9e966
+  checksum: 10/53168b156435c5bef7c271ae7ebe67bff912e568dd1638f37859ea0d76cbd273d422714b6cb9669aa811d3fb44bda0f666b5e397a90a76ac2888a9b0ab47495a
   languageName: node
   linkType: hard
 
@@ -12502,7 +12502,7 @@ __metadata:
     react-popper: "npm:2.3.0"
     react-router: "npm:6.26.2"
     react-router-dom: "npm:6.26.2"
-    react-select: "npm:5.8.0"
+    react-select: "npm:5.8.1"
     react-waypoint: "npm:10.3.0"
     regenerator-runtime: "npm:0.14.1"
     sass: "npm:1.79.2"
