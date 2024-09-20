@@ -256,7 +256,7 @@ GEM
     mutex_m (0.2.0)
     net-http (0.4.1)
       uri
-    net-imap (0.4.14)
+    net-imap (0.4.16)
       date
       net-protocol
     net-pop (0.1.2)
@@ -496,7 +496,7 @@ DEPENDENCIES
   truncate_html
 
 RUBY VERSION
-   ruby 3.3.3p89
+   ruby 3.3.5p100
 
 BUNDLED WITH
    2.3.26
