@@ -744,23 +744,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/types@npm:3.654.0, @aws-sdk/types@npm:^3.654.0":
+"@aws-sdk/types@npm:3.654.0, @aws-sdk/types@npm:^3.222.0, @aws-sdk/types@npm:^3.654.0":
   version: 3.654.0
   resolution: "@aws-sdk/types@npm:3.654.0"
   dependencies:
     "@smithy/types": "npm:^3.4.2"
     tslib: "npm:^2.6.2"
   checksum: 10/4ca626a090704fa1af063ae4b4209498dea70d576bd05abd3a904bc375b6880496a716c88b6d5e9085731ba203bd7b6e158d997adc6ce02a83573a48d7683790
-  languageName: node
-  linkType: hard
-
-"@aws-sdk/types@npm:^3.222.0":
-  version: 3.598.0
-  resolution: "@aws-sdk/types@npm:3.598.0"
-  dependencies:
-    "@smithy/types": "npm:^3.1.0"
-    tslib: "npm:^2.6.2"
-  checksum: 10/29384fbe79ec8693cae00b3082379559e7bbea5fd70de1705e94e93ed1ec57ddb930bb41102f9b229869a9a7ba790deeb1161bc81e2f87a031d37dff2fa73dd0
   languageName: node
   linkType: hard
 
@@ -4359,15 +4349,6 @@ __metadata:
   dependencies:
     tslib: "npm:^2.5.0"
   checksum: 10/48691d980844540ee3bd12f6b4ed0a8139da4dde6571b8ff2fd9d1c62edb3c8dbf3db66a7c74e269bea01ac28f7d8a4b464f9141100512e6b5982d7cf4108998
-  languageName: node
-  linkType: hard
-
-"@smithy/types@npm:^3.1.0":
-  version: 3.3.0
-  resolution: "@smithy/types@npm:3.3.0"
-  dependencies:
-    tslib: "npm:^2.6.2"
-  checksum: 10/a463df41df8aca5926ccd4d235202ffffe898a816df0ed01f7576dbb1785c6956b3eb085d3be867569d81db8a03a0d08b1b1edb21d5d87073b61d559572a4c35
   languageName: node
   linkType: hard
 
@@ -8821,12 +8802,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:9.0.11":
-  version: 9.0.11
-  resolution: "husky@npm:9.0.11"
+"husky@npm:9.1.6":
+  version: 9.1.6
+  resolution: "husky@npm:9.1.6"
   bin:
-    husky: bin.mjs
-  checksum: 10/8a9b7cb9dc8494b470b3b47b386e65d579608c6206da80d3cc8b71d10e37947264af3dfe00092368dad9673b51d2a5ee87afb4b2291e77ba9e7ec1ac36e56cd1
+    husky: bin.js
+  checksum: 10/421ccd8850378231aaefd70dbe9e4f1549b84ffe3a6897f93a202242bbc04e48bd498169aef43849411105d9fcf7c192b757d42661e28d06b934a609a4eb8771
   languageName: node
   linkType: hard
 
@@ -12566,7 +12547,7 @@ __metadata:
     graphql: "npm:16.9.0"
     graphql-tag: "npm:2.12.6"
     history: "npm:5.3.0"
-    husky: "npm:9.0.11"
+    husky: "npm:9.1.6"
     lint-staged: "npm:15.2.7"
     lodash: "npm:4.17.21"
     luxon: "npm:3.4.4"
