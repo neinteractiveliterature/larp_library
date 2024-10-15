@@ -6,7 +6,7 @@ source "https://rubygems.org"
 gem "dotenv-rails", groups: %i[development test]
 
 gem "pg"
-gem "rails", "7.2.1"
+gem "rails", "7.2.1.1"
 
 gem "minipack"
 gem "sprockets-rails"
