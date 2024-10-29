@@ -3656,10 +3656,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rails/ujs@npm:7.1.400":
-  version: 7.1.400
-  resolution: "@rails/ujs@npm:7.1.400"
-  checksum: 10/ac7cbc9b27bc596417dee3ec7b0f4255bae1a1a09d9e7a9c3ddc6b6fe74f68aa0631238e1fc486ce5f678e8ca6330ecd1a4b33fe423f7aec7babf8c623474c40
+"@rails/ujs@npm:7.1.402":
+  version: 7.1.402
+  resolution: "@rails/ujs@npm:7.1.402"
+  checksum: 10/b7ca3105233a9924edc149b8c42f444396b737f0ac29d1ab4b5e1d9bf56b42fbc3e9be9e72435feede4812d0198b82ade9b382aa5d11c009b2c50ca8e3beaa00
   languageName: node
   linkType: hard
 
@@ -12255,7 +12255,7 @@ __metadata:
     "@neinteractiveliterature/litform": "npm:0.28.0"
     "@popperjs/core": "npm:2.11.8"
     "@prettier/plugin-ruby": "npm:4.0.4"
-    "@rails/ujs": "npm:7.1.400"
+    "@rails/ujs": "npm:7.1.402"
     "@smithy/is-array-buffer": "npm:^3.0.0"
     "@smithy/middleware-apply-body-checksum": "npm:^3.0.8"
     "@smithy/util-hex-encoding": "npm:^3.0.0"
