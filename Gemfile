@@ -3,7 +3,7 @@ ruby File.read(File.expand_path(".ruby-version", __dir__)).strip
 
 source "https://rubygems.org"
 
-gem "dotenv-rails", groups: %i[development test]
+gem "dotenv-rails", require: "dotenv/load", groups: %i[development test]
 
 gem "pg"
 gem "rails", "7.2.2"
