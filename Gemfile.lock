@@ -82,7 +82,7 @@ GEM
       minitest (>= 5.1)
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
-    acts_as_list (1.2.3)
+    acts_as_list (1.2.4)
       activerecord (>= 6.1)
       activesupport (>= 6.1)
     addressable (2.8.1)
@@ -406,7 +406,7 @@ GEM
       rubocop (>= 1.52.0, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
     ruby-progressbar (1.13.0)
-    securerandom (0.3.1)
+    securerandom (0.3.2)
     snaky_hash (2.0.1)
       hashie
       version_gem (~> 1.1, >= 1.1.1)
