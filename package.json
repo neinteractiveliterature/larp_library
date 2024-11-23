@@ -14,7 +14,7 @@
     "@aws-sdk/lib-storage": "^3.654.0",
     "@aws-sdk/util-format-url": "^3.654.0",
     "@codemirror/lang-markdown": "6.2.5",
-    "@dnd-kit/core": "6.1.0",
+    "@dnd-kit/core": "6.2.0",
     "@dnd-kit/sortable": "8.0.0",
     "@dnd-kit/utilities": "3.2.2",
     "@neinteractiveliterature/litform": "0.28.0",
