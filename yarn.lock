@@ -4752,13 +4752,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:18.3.12":
-  version: 18.3.12
-  resolution: "@types/react@npm:18.3.12"
+"@types/react@npm:*, @types/react@npm:18.3.13":
+  version: 18.3.13
+  resolution: "@types/react@npm:18.3.13"
   dependencies:
     "@types/prop-types": "npm:*"
     csstype: "npm:^3.0.2"
-  checksum: 10/c9bbdfeacd5347d2240e0d2cb5336bc57dbc1b9ff557b6c4024b49df83419e4955553518169d3736039f1b62608e15b35762a6c03d49bd86e33add4b43b19033
+  checksum: 10/4f2b851cabdb68430b50998ad18f206edaea5b3c651d92e3573d86b7ac740224a91b7ca63176fa70e1defc78459faf518e5d2f58e1ba2839b1f12365dab70de2
   languageName: node
   linkType: hard
 
@@ -12351,7 +12351,7 @@ __metadata:
     "@smithy/util-utf8": "npm:^3.0.0"
     "@types/codemirror": "npm:5.60.15"
     "@types/lodash": "npm:4.17.13"
-    "@types/react": "npm:18.3.12"
+    "@types/react": "npm:18.3.13"
     "@types/react-color": "npm:3.0.12"
     "@types/react-dom": "npm:18.3.1"
     "@types/tinycolor2": "npm:1.4.6"
