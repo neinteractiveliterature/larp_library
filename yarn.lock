@@ -2312,9 +2312,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dnd-kit/core@npm:6.3.0":
-  version: 6.3.0
-  resolution: "@dnd-kit/core@npm:6.3.0"
+"@dnd-kit/core@npm:6.3.1":
+  version: 6.3.1
+  resolution: "@dnd-kit/core@npm:6.3.1"
   dependencies:
     "@dnd-kit/accessibility": "npm:^3.1.1"
     "@dnd-kit/utilities": "npm:^3.2.2"
@@ -2322,7 +2322,7 @@ __metadata:
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 10/1e91f4628acc4b5fe513e66f2d5886fc16e64894cb23db19e53e3709cbd581d266673311bc7572f6326b6364653a664c5dca220b3cff159816b8e1091b68f031
+  checksum: 10/a5ae6fa8404765712aa80e308f58cb79bac9a306c274ec8272c405c2a59dd277d24b966348fe8ca6340bb3f0d75f90b8a021fa781edcf65255114d3cf2bef891
   languageName: node
   linkType: hard
 
@@ -12329,7 +12329,7 @@ __metadata:
     "@babel/preset-react": "npm:7.26.3"
     "@babel/preset-typescript": "npm:7.26.0"
     "@codemirror/lang-markdown": "npm:6.2.5"
-    "@dnd-kit/core": "npm:6.3.0"
+    "@dnd-kit/core": "npm:6.3.1"
     "@dnd-kit/sortable": "npm:8.0.0"
     "@dnd-kit/utilities": "npm:3.2.2"
     "@eslint/compat": "npm:^1.1.1"
