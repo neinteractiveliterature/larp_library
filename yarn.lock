@@ -22,9 +22,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.12.0":
-  version: 3.12.0
-  resolution: "@apollo/client@npm:3.12.0"
+"@apollo/client@npm:3.12.2":
+  version: 3.12.2
+  resolution: "@apollo/client@npm:3.12.2"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
     "@wry/caches": "npm:^1.0.0"
@@ -43,8 +43,8 @@ __metadata:
   peerDependencies:
     graphql: ^15.0.0 || ^16.0.0
     graphql-ws: ^5.5.5
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || >=19.0.0-rc <19.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || >=19.0.0-rc <19.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || >=19.0.0-rc
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || >=19.0.0-rc
     subscriptions-transport-ws: ^0.9.0 || ^0.11.0
   peerDependenciesMeta:
     graphql-ws:
@@ -55,7 +55,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 10/e5f7671b8d031f776c91ce852058f084a7233691d28424d91de0563b10e205f3b9e8066d428d1e5ee20c646c48b6afc851add1cd4fc8b74b05ae319d5365423f
+  checksum: 10/5a896266bfe01cdb30c67d944b18a88a0a243d185c716fab3bb9be13a4c958ff1ed7679aacfa093a11fb3e92d5ed89a48de07e22098b955f6d4da32c0b84cdc9
   languageName: node
   linkType: hard
 
@@ -12316,7 +12316,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@apollo/client": "npm:3.12.0"
+    "@apollo/client": "npm:3.12.2"
     "@aws-crypto/sha256-browser": "npm:5.2.0"
     "@aws-sdk/client-s3": "npm:^3.654.0"
     "@aws-sdk/lib-storage": "npm:^3.654.0"
