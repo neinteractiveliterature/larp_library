@@ -19,7 +19,7 @@
     "@dnd-kit/utilities": "3.2.2",
     "@neinteractiveliterature/litform": "0.28.0",
     "@popperjs/core": "2.11.8",
-    "@rails/ujs": "7.1.500",
+    "@rails/ujs": "7.1.501",
     "@smithy/is-array-buffer": "^3.0.0",
     "@smithy/middleware-apply-body-checksum": "^3.0.8",
     "@smithy/util-hex-encoding": "^3.0.0",
