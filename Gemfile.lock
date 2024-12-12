@@ -229,7 +229,7 @@ GEM
       json-jwt
       omniauth-oauth2
     io-console (0.7.2)
-    irb (1.14.1)
+    irb (1.14.2)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jaro_winkler (1.5.6)
