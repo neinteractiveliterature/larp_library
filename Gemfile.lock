@@ -400,7 +400,7 @@ GEM
     rexml (3.3.9)
     rollbar (3.6.0)
     rouge (3.30.0)
-    rubocop (1.69.1)
+    rubocop (1.69.2)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
