@@ -24,7 +24,7 @@
     "@smithy/middleware-apply-body-checksum": "^3.0.8",
     "@smithy/util-hex-encoding": "^3.0.0",
     "@smithy/util-utf8": "^3.0.0",
-    "@types/react": "18.3.16",
+    "@types/react": "18.3.17",
     "assert": "2.1.0",
     "bootstrap": "5.3.3",
     "bootstrap-icons": "1.11.3",
