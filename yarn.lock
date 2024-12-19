@@ -5188,7 +5188,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webpack-cli/serve@npm:2.0.5, @webpack-cli/serve@npm:^2.0.5":
+"@webpack-cli/serve@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@webpack-cli/serve@npm:3.0.0"
+  peerDependencies:
+    webpack: 5.x.x
+    webpack-cli: 5.x.x
+  peerDependenciesMeta:
+    webpack-dev-server:
+      optional: true
+  checksum: 10/9fcf52e08d7f59b220d1574ae0503723d4eb8a8a762854e0c9f58ad06607f4f32dda722c81461988f54233ae79380708ca9d49b6c962e42bed571c6a54096de6
+  languageName: node
+  linkType: hard
+
+"@webpack-cli/serve@npm:^2.0.5":
   version: 2.0.5
   resolution: "@webpack-cli/serve@npm:2.0.5"
   peerDependencies:
@@ -12343,7 +12356,7 @@ __metadata:
     "@types/uuid": "npm:10.0.0"
     "@typescript-eslint/eslint-plugin": "npm:8.18.1"
     "@typescript-eslint/parser": "npm:8.18.1"
-    "@webpack-cli/serve": "npm:2.0.5"
+    "@webpack-cli/serve": "npm:3.0.0"
     assert: "npm:2.1.0"
     babel-loader: "npm:9.2.1"
     babel-plugin-graphql-tag: "npm:3.3.0"
