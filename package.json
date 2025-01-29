@@ -22,7 +22,7 @@
     "@rails/ujs": "7.1.501",
     "@smithy/is-array-buffer": "^3.0.0",
     "@smithy/middleware-apply-body-checksum": "^3.0.8",
-    "@smithy/util-hex-encoding": "^3.0.0",
+    "@smithy/util-hex-encoding": "^4.0.0",
     "@smithy/util-utf8": "^3.0.0",
     "@types/react": "18.3.18",
     "assert": "2.1.0",
