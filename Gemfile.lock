@@ -402,7 +402,7 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    reverse_markdown (2.1.1)
+    reverse_markdown (3.0.0)
       nokogiri
     rexml (3.4.1)
     rollbar (3.6.2)
@@ -436,9 +436,9 @@ GEM
     snaky_hash (2.0.1)
       hashie
       version_gem (~> 1.1, >= 1.1.1)
-    solargraph (0.54.1)
+    solargraph (0.54.2)
       backport (~> 1.2)
-      benchmark
+      benchmark (~> 0.4)
       bundler (~> 2.0)
       diff-lcs (~> 1.4)
       jaro_winkler (~> 1.6)
@@ -449,7 +449,7 @@ GEM
       ostruct (~> 0.6)
       parser (~> 3.0)
       rbs (~> 3.3)
-      reverse_markdown (>= 2.0, < 4)
+      reverse_markdown (~> 3.0)
       rubocop (~> 1.38)
       thor (~> 1.0)
       tilt (~> 2.0)
