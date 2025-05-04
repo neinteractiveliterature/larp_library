@@ -5934,10 +5934,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bootstrap-icons@npm:1.11.4":
-  version: 1.11.4
-  resolution: "bootstrap-icons@npm:1.11.4"
-  checksum: 10/331e7329f35baa877b43a7776b14fd0cffd5bac80bb8df5c30cbde594c49ed0658130795c2bacb178b7bc319bd9d5a8b9d507cb757dc32d6a2a2021865372361
+"bootstrap-icons@npm:1.12.1":
+  version: 1.12.1
+  resolution: "bootstrap-icons@npm:1.12.1"
+  checksum: 10/cd6e9b86782f18492f54788e643bb803280a7337a1903cb6779c2516ead37e66c0bb28acc1ad85efe9d5388f82b235f45418680bf70a8bd63541e1b8c0546b4b
   languageName: node
   linkType: hard
 
@@ -12580,7 +12580,7 @@ __metadata:
     babel-loader: "npm:10.0.0"
     babel-plugin-graphql-tag: "npm:3.3.0"
     bootstrap: "npm:5.3.5"
-    bootstrap-icons: "npm:1.11.4"
+    bootstrap-icons: "npm:1.12.1"
     classnames: "npm:2.5.1"
     css-loader: "npm:7.1.2"
     css-minimizer-webpack-plugin: "npm:7.0.2"
