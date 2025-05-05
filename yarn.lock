@@ -5941,12 +5941,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bootstrap@npm:5.3.5":
-  version: 5.3.5
-  resolution: "bootstrap@npm:5.3.5"
+"bootstrap@npm:5.3.6":
+  version: 5.3.6
+  resolution: "bootstrap@npm:5.3.6"
   peerDependencies:
     "@popperjs/core": ^2.11.8
-  checksum: 10/ea03a50f7a2cdfb55e48309dc6b567e138cfd7ef84d2e5aa164da99152c31913c2a27cc5b4f05b960d4c52577c31a8c6240669004df60b7acf4651cdfb791912
+  checksum: 10/843773c43c2aa51da6e6e5d8d117b29a9f834a7f64471c907ff9dc77c918802d107d139602f86b5899b58d39b352fb91e5317f3f184ce4d60b3264fd30bc62d7
   languageName: node
   linkType: hard
 
@@ -12579,7 +12579,7 @@ __metadata:
     assert: "npm:2.1.0"
     babel-loader: "npm:10.0.0"
     babel-plugin-graphql-tag: "npm:3.3.0"
-    bootstrap: "npm:5.3.5"
+    bootstrap: "npm:5.3.6"
     bootstrap-icons: "npm:1.12.1"
     classnames: "npm:2.5.1"
     css-loader: "npm:7.1.2"
