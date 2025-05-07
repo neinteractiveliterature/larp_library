@@ -10,17 +10,9 @@ import { createRequestSigner } from './uploadSigning';
 import { useApolloClient } from '@apollo/client';
 import { getApplyMd5BodyChecksumPlugin, resolveMd5BodyChecksumConfig } from '@smithy/middleware-apply-body-checksum';
 
-export type S3UploadFile = {
-  id: number;
-  url: string;
-  filename: string;
-  filesize: number;
-  filetype: string;
-};
+export type S3UploadFile = { id: number; url: string; filename: string; filesize: number; filetype: string };
 
-export type S3UploadProps = {
-  project: Pick<Project, 'id'>;
-};
+export type S3UploadProps = { project: Pick<Project, 'id'> };
 
 function S3Upload({ project }: S3UploadProps): JSX.Element {
   const { awsRegion, bucketName } = useContext(S3ConfigurationContext);
@@ -36,6 +28,7 @@ function S3Upload({ project }: S3UploadProps): JSX.Element {
     const client = new S3Client({
       signer: requestSigner,
       region: awsRegion,
+      credentials: { accessKeyId: 'ANONYMOUS', secretAccessKey: 'ANONYMOUS' },
     });
     client.middlewareStack.use(getApplyMd5BodyChecksumPlugin(resolveMd5BodyChecksumConfig(client.config)));
     client.config.logger = console;
