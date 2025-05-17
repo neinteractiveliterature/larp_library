@@ -6297,7 +6297,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:2.5.1, classnames@npm:^2.3.1":
+"classnames@npm:2.5.1, classnames@npm:^2.3.1, classnames@npm:^2.5.1":
   version: 2.5.1
   resolution: "classnames@npm:2.5.1"
   checksum: 10/58eb394e8817021b153bb6e7d782cfb667e4ab390cb2e9dac2fc7c6b979d1cc2b2a733093955fc5c94aa79ef5c8c89f11ab77780894509be6afbb91dddd79d15
@@ -11682,7 +11682,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-bootstrap4-modal@npm:2.0.0, react-bootstrap4-modal@npm:^2.0.0":
+"react-bootstrap4-modal@npm:3.0.10":
+  version: 3.0.10
+  resolution: "react-bootstrap4-modal@npm:3.0.10"
+  dependencies:
+    classnames: "npm:^2.5.1"
+  peerDependencies:
+    react: ">= 18"
+    react-dom: ">= 18"
+  checksum: 10/60a4d9cb64c4eebe5f189ca90b8e9bee92fec24e8a37f81e73ea54e38bbaa8da71e276f45acda8e8df2a107de8b22ed3a05defc7d11eb5ea00b3b7efb75801d8
+  languageName: node
+  linkType: hard
+
+"react-bootstrap4-modal@npm:^2.0.0":
   version: 2.0.0
   resolution: "react-bootstrap4-modal@npm:2.0.0"
   dependencies:
@@ -12318,7 +12330,7 @@ __metadata:
     prettier: "npm:3.5.3"
     process: "npm:0.11.10"
     react: "npm:18.3.1"
-    react-bootstrap4-modal: "npm:2.0.0"
+    react-bootstrap4-modal: "npm:3.0.10"
     react-color: "npm:2.19.3"
     react-dom: "npm:18.3.1"
     react-markdown: "npm:9.1.0"
