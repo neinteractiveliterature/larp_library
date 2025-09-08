@@ -12359,7 +12359,7 @@ __metadata:
     react-select: "npm:5.10.2"
     react-waypoint: "npm:10.3.0"
     regenerator-runtime: "npm:0.14.1"
-    sass: "npm:1.91.0"
+    sass: "npm:1.92.1"
     sass-loader: "npm:16.0.5"
     style-loader: "npm:4.0.0"
     tinycolor2: "npm:1.6.0"
@@ -12476,9 +12476,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:1.91.0":
-  version: 1.91.0
-  resolution: "sass@npm:1.91.0"
+"sass@npm:1.92.1":
+  version: 1.92.1
+  resolution: "sass@npm:1.92.1"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     chokidar: "npm:^4.0.0"
@@ -12489,7 +12489,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10/b28751b6e49fa53ac75267119cef33e6f88dcd91173c1f7d61243bb828a5e1793276752562c0bfdd1a7e2d2d7728ddf75f54654d28da8c3cbd3ce94bd051e63e
+  checksum: 10/ded47fd238d20a826bf3c5d129b4849100abae6fafe525a082d936b5793d7fd59a914134a302f0a6780efb5b26fdc2d1f1bfa37d8a9302ba632cad5e67675eec
   languageName: node
   linkType: hard
 
