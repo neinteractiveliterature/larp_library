@@ -4568,6 +4568,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/util-hex-encoding@npm:^4.0.0":
+  version: 4.1.0
+  resolution: "@smithy/util-hex-encoding@npm:4.1.0"
+  dependencies:
+    tslib: "npm:^2.6.2"
+  checksum: 10/dc66a330ba5e4a7e034c75ff6bf823e7a3dd9df3283511f0e5e95797063f3a82cd1d68d1bdb2353b33502e7a2ae6806ae195a964c2e3339547e972d917c78ea4
+  languageName: node
+  linkType: hard
+
 "@smithy/util-middleware@npm:^3.0.11":
   version: 3.0.11
   resolution: "@smithy/util-middleware@npm:3.0.11"
@@ -12246,7 +12255,7 @@ __metadata:
     "@rails/ujs": "npm:7.1.502"
     "@smithy/is-array-buffer": "npm:^3.0.0"
     "@smithy/middleware-apply-body-checksum": "npm:^3.0.8"
-    "@smithy/util-hex-encoding": "npm:^3.0.0"
+    "@smithy/util-hex-encoding": "npm:^4.0.0"
     "@smithy/util-utf8": "npm:^3.0.0"
     "@types/codemirror": "npm:5.60.16"
     "@types/lodash": "npm:4.17.20"
