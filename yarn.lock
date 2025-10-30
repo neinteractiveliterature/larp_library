@@ -4241,6 +4241,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/is-array-buffer@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "@smithy/is-array-buffer@npm:4.2.0"
+  dependencies:
+    tslib: "npm:^2.6.2"
+  checksum: 10/fdc097ce6a8b241565e2d56460ec289730bcd734dcde17c23d1eaaa0996337f897217166276a3fd82491fe9fd17447aadf62e8d9056b3d2b9daf192b4b668af9
+  languageName: node
+  linkType: hard
+
 "@smithy/md5-js@npm:^3.0.11":
   version: 3.0.11
   resolution: "@smithy/md5-js@npm:3.0.11"
@@ -4252,15 +4261,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smithy/middleware-apply-body-checksum@npm:^3.0.8":
-  version: 3.0.13
-  resolution: "@smithy/middleware-apply-body-checksum@npm:3.0.13"
+"@smithy/middleware-apply-body-checksum@npm:^4.0.0":
+  version: 4.3.4
+  resolution: "@smithy/middleware-apply-body-checksum@npm:4.3.4"
   dependencies:
-    "@smithy/is-array-buffer": "npm:^3.0.0"
-    "@smithy/protocol-http": "npm:^4.1.8"
-    "@smithy/types": "npm:^3.7.2"
+    "@smithy/is-array-buffer": "npm:^4.2.0"
+    "@smithy/protocol-http": "npm:^5.3.4"
+    "@smithy/types": "npm:^4.8.1"
     tslib: "npm:^2.6.2"
-  checksum: 10/76f51b1c11f394a2ad4a8c13cd191cd92104288106ade1960a39842c6e2d287603bf9e5f25c031b3b9f1d1524cc4473799e59d33c866fc3641d442a4d05e83ef
+  checksum: 10/8bc55740619bd523a8fbf262ece7949b9f74befeac994b233a6398bb8c33029cf2cf146af95a8b062c86b8d2b6b57eeeeee5efa81e7b72504ee07073832454a1
   languageName: node
   linkType: hard
 
@@ -4373,6 +4382,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/protocol-http@npm:^5.3.4":
+  version: 5.3.4
+  resolution: "@smithy/protocol-http@npm:5.3.4"
+  dependencies:
+    "@smithy/types": "npm:^4.8.1"
+    tslib: "npm:^2.6.2"
+  checksum: 10/0511273544fa930912151baf7a5abccea384b9bfde0640f6afb924a1f2aa1257897b590cf09efb5fa33fb0720bbc2b22cba9d748d0786e1423e87bc5e2cb6792
+  languageName: node
+  linkType: hard
+
 "@smithy/querystring-builder@npm:^3.0.11":
   version: 3.0.11
   resolution: "@smithy/querystring-builder@npm:3.0.11"
@@ -4450,6 +4469,15 @@ __metadata:
   dependencies:
     tslib: "npm:^2.6.2"
   checksum: 10/7a40dcb7f858367a07456c5ae7e7eec89ea9efb7e511e521c105a9568e1e89add875b25e63df19bebdaa77af89f0e5fc691b9f408d077bedb10586a764133e41
+  languageName: node
+  linkType: hard
+
+"@smithy/types@npm:^4.8.1":
+  version: 4.8.1
+  resolution: "@smithy/types@npm:4.8.1"
+  dependencies:
+    tslib: "npm:^2.6.2"
+  checksum: 10/d77c9becf39279631b83e403dc910b802b9141913b4c9514b8a310edd8651b170a27dc2893a83f1c3309671b4bf0d5dc429f7013f38490740b3cc9c43d27864a
   languageName: node
   linkType: hard
 
@@ -12256,7 +12284,7 @@ __metadata:
     "@prettier/plugin-ruby": "npm:4.0.4"
     "@rails/ujs": "npm:7.1.600"
     "@smithy/is-array-buffer": "npm:^3.0.0"
-    "@smithy/middleware-apply-body-checksum": "npm:^3.0.8"
+    "@smithy/middleware-apply-body-checksum": "npm:^4.0.0"
     "@smithy/util-hex-encoding": "npm:^3.0.0"
     "@smithy/util-utf8": "npm:^3.0.0"
     "@types/codemirror": "npm:5.60.17"
