@@ -285,7 +285,7 @@ GEM
     minipack (0.3.6)
       actionview
       railties (>= 4.2)
-    minitest (5.26.1)
+    minitest (5.26.2)
     multi_json (1.15.0)
     multi_xml (0.6.0)
     net-http (0.5.0)
@@ -439,7 +439,7 @@ GEM
       lint_roller (~> 1.1)
       rubocop (>= 1.75.0, < 2.0)
       rubocop-ast (>= 1.47.1, < 2.0)
-    rubocop-rails (2.34.0)
+    rubocop-rails (2.34.1)
       activesupport (>= 4.2.0)
       lint_roller (~> 1.1)
       rack (>= 1.1)
