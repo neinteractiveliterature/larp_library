@@ -12330,7 +12330,7 @@ __metadata:
     typescript: "npm:5.9.3"
     uuid: "npm:10.0.0"
     webpack: "npm:5.103.0"
-    webpack-bundle-analyzer: "npm:5.0.1"
+    webpack-bundle-analyzer: "npm:5.1.0"
     webpack-cli: "npm:5.1.4"
     webpack-dev-server: "npm:5.2.2"
     webpack-manifest-plugin: "npm:5.0.1"
@@ -13852,9 +13852,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-bundle-analyzer@npm:5.0.1":
-  version: 5.0.1
-  resolution: "webpack-bundle-analyzer@npm:5.0.1"
+"webpack-bundle-analyzer@npm:5.1.0":
+  version: 5.1.0
+  resolution: "webpack-bundle-analyzer@npm:5.1.0"
   dependencies:
     "@discoveryjs/json-ext": "npm:0.5.7"
     acorn: "npm:^8.0.4"
@@ -13869,7 +13869,7 @@ __metadata:
     ws: "npm:^7.3.1"
   bin:
     webpack-bundle-analyzer: lib/bin/analyzer.js
-  checksum: 10/17d7ce1031f558bed5b2014ff53f3ee1f012fd4bda7b5089cd1bf94785948d9cfaab0aba16d6653725c7269a50abc13823ab85aa32c60cab9b70f64b2ff8977d
+  checksum: 10/d7d9642642e869cdbb874b0ec178f7689c57c957bc649a380c070c0583f0f426607c21fcb97669bb489657575bed82843efff206a4a0977c311dfd1d7070ee01
   languageName: node
   linkType: hard
 
