@@ -290,7 +290,7 @@ GEM
     multi_xml (0.6.0)
     net-http (0.5.0)
       uri
-    net-imap (0.6.0)
+    net-imap (0.6.2)
       date
       net-protocol
     net-pop (0.1.2)
