@@ -12538,7 +12538,7 @@ __metadata:
     webpack-bundle-analyzer: "npm:5.2.0"
     webpack-cli: "npm:5.1.4"
     webpack-dev-server: "npm:5.2.3"
-    webpack-manifest-plugin: "npm:5.0.1"
+    webpack-manifest-plugin: "npm:6.0.1"
   languageName: unknown
   linkType: soft
 
@@ -13018,13 +13018,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-list-map@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "source-list-map@npm:2.0.1"
-  checksum: 10/3918ffba5fe8447bc816800026fe707aab233d9d05a3487225d880e23b7e37ed455b4e1b844e05644f6ecc7c9b837c0cc32da54dd37f77c993370ebcdb049246
-  languageName: node
-  linkType: hard
-
 "source-map-js@npm:>=0.6.2 <2.0.0, source-map-js@npm:^1.0.1, source-map-js@npm:^1.2.1":
   version: 1.2.1
   resolution: "source-map-js@npm:1.2.1"
@@ -13049,7 +13042,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map@npm:^0.6.0, source-map@npm:^0.6.1":
+"source-map@npm:^0.6.0":
   version: 0.6.1
   resolution: "source-map@npm:0.6.1"
   checksum: 10/59ef7462f1c29d502b3057e822cdbdae0b0e565302c4dd1a95e11e793d8d9d62006cdc10e0fd99163ca33ff2071360cf50ee13f90440806e7ed57d81cba2f7ff
@@ -14188,15 +14181,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-manifest-plugin@npm:5.0.1":
-  version: 5.0.1
-  resolution: "webpack-manifest-plugin@npm:5.0.1"
+"webpack-manifest-plugin@npm:6.0.1":
+  version: 6.0.1
+  resolution: "webpack-manifest-plugin@npm:6.0.1"
   dependencies:
     tapable: "npm:^2.0.0"
-    webpack-sources: "npm:^2.2.0"
+    webpack-sources: "npm:^3.3.3"
   peerDependencies:
     webpack: ^5.75.0
-  checksum: 10/590355d177e58d5ea2fd1c3abbc6fb66cac3a52df2a499a197cde8a3493d37fcce64e6e2e755e084f04e8f618a5e42b2618a81756063fa8b2f7d7527e5dcdad1
+  checksum: 10/b520e9483200d8263a1dc8021e22258e289503b25a65ed1b1b4814bda261b70e52b7a469ab9d6ba64e6a87cd58a276c3856d590f774e3a8cf1898ae4ee559c16
   languageName: node
   linkType: hard
 
@@ -14207,16 +14200,6 @@ __metadata:
     clone-deep: "npm:^4.0.1"
     wildcard: "npm:^2.0.0"
   checksum: 10/c22812671a93d938bed21c02461d0efb0a7ec0b0f5e7cf28853b2c428a9ad947a26076e97243b1d9cb1cc5a3f92f24e467fc442f03f6e583d082bb3f3f460baf
-  languageName: node
-  linkType: hard
-
-"webpack-sources@npm:^2.2.0":
-  version: 2.3.1
-  resolution: "webpack-sources@npm:2.3.1"
-  dependencies:
-    source-list-map: "npm:^2.0.1"
-    source-map: "npm:^0.6.1"
-  checksum: 10/0c4bb91f2899205648da25b68edf4495a360692af2c426cde98b188367478c93d5e33e2b08665e070ac0ece59ade8d52175da656a212b44701ce4a271ca66695
   languageName: node
   linkType: hard
 
