@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: install node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           cache: yarn
       - name: yarn install
@@ -86,7 +86,7 @@ jobs:
             ${{ runner.os }}-dockerimage-webpack-${{ github.ref }}-
             ${{ runner.os }}-dockerimage-webpack-
       - name: install node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           cache: yarn
       - name: yarn install
