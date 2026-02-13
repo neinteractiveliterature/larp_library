@@ -211,12 +211,15 @@ GEM
     faraday-net_http (3.4.2)
       net-http (~> 0.5)
     ffi (1.17.3)
+    fiber-storage (0.1.2)
     globalid (1.2.1)
       activesupport (>= 6.1)
     graphiql-rails (1.10.5)
       railties
-    graphql (2.0.32)
+    graphql (2.5.19)
       base64
+      fiber-storage
+      logger
     graphql-client (0.18.0)
       activesupport (>= 3.0)
       graphql
