@@ -4424,6 +4424,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/is-array-buffer@npm:^4.0.0":
+  version: 4.2.0
+  resolution: "@smithy/is-array-buffer@npm:4.2.0"
+  dependencies:
+    tslib: "npm:^2.6.2"
+  checksum: 10/fdc097ce6a8b241565e2d56460ec289730bcd734dcde17c23d1eaaa0996337f897217166276a3fd82491fe9fd17447aadf62e8d9056b3d2b9daf192b4b668af9
+  languageName: node
+  linkType: hard
+
 "@smithy/md5-js@npm:^3.0.11":
   version: 3.0.11
   resolution: "@smithy/md5-js@npm:3.0.11"
@@ -12481,7 +12490,7 @@ __metadata:
     "@popperjs/core": "npm:2.11.8"
     "@prettier/plugin-ruby": "npm:4.0.4"
     "@rails/ujs": "npm:7.1.600"
-    "@smithy/is-array-buffer": "npm:^3.0.0"
+    "@smithy/is-array-buffer": "npm:^4.0.0"
     "@smithy/middleware-apply-body-checksum": "npm:^3.0.8"
     "@smithy/util-hex-encoding": "npm:^3.0.0"
     "@smithy/util-utf8": "npm:^3.0.0"
