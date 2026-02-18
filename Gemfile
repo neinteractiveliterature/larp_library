@@ -14,7 +14,7 @@ gem "sprockets-rails"
 gem "listen"
 
 gem "cancancan"
-gem "devise", "~> 4.9.0"
+gem "devise", "~> 5.0.0"
 gem "intercode_client"
 gem "omniauth-rails_csrf_protection"
 gem "rack-cas"
