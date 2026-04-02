@@ -9,11 +9,6 @@
 # Local config files
 /.env.*.local
 
-# yalc stuff
-/yalc.lock
-/yal.sig
-/.yalc
-
 # Build artifacts
 /public/packs
 /public/assets
