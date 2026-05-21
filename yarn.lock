@@ -4309,6 +4309,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/core@npm:^3.24.3":
+  version: 3.24.3
+  resolution: "@smithy/core@npm:3.24.3"
+  dependencies:
+    "@aws-crypto/crc32": "npm:5.2.0"
+    "@smithy/types": "npm:^4.14.2"
+    tslib: "npm:^2.6.2"
+  checksum: 10/9c0e5dc6fbfb8b51dc23631585e4851dc604c8cab6ca2ee8190c45844ccaec1d040af416a4d656620196f303b4acdadf6dbefaaffba81658fc66db7be2f39dea
+  languageName: node
+  linkType: hard
+
 "@smithy/credential-provider-imds@npm:^3.2.8":
   version: 3.2.8
   resolution: "@smithy/credential-provider-imds@npm:3.2.8"
@@ -4450,6 +4461,16 @@ __metadata:
   dependencies:
     tslib: "npm:^2.6.2"
   checksum: 10/cab1fd4033d9863dcd95ff058463eb591574bd47e6b61e36aaaf4c0d0da9ed966a54e1d33ec4db7d67aa85df7d274203e934e04dbb40323d01ef4815f63997fc
+  languageName: node
+  linkType: hard
+
+"@smithy/is-array-buffer@npm:^4.0.0":
+  version: 4.3.3
+  resolution: "@smithy/is-array-buffer@npm:4.3.3"
+  dependencies:
+    "@smithy/core": "npm:^3.24.3"
+    tslib: "npm:^2.6.2"
+  checksum: 10/817f47bdd1993716f4aeef979dcb39590e8db60860f131b6682e225e675494dcd76b4214ecffe6a2dfcad23f44e7e233048a960931f3eef6f4842214887d951d
   languageName: node
   linkType: hard
 
@@ -4662,6 +4683,15 @@ __metadata:
   dependencies:
     tslib: "npm:^2.6.2"
   checksum: 10/7a40dcb7f858367a07456c5ae7e7eec89ea9efb7e511e521c105a9568e1e89add875b25e63df19bebdaa77af89f0e5fc691b9f408d077bedb10586a764133e41
+  languageName: node
+  linkType: hard
+
+"@smithy/types@npm:^4.14.2":
+  version: 4.14.2
+  resolution: "@smithy/types@npm:4.14.2"
+  dependencies:
+    tslib: "npm:^2.6.2"
+  checksum: 10/bd5b81b5b35f129e443e571adb2d856fdeb4e216966272600635c6b5ec951b8392e63f977d1464cfe7c0e0d3f6c931730720803933f97891f2a2aa2c76cde15f
   languageName: node
   linkType: hard
 
@@ -12530,7 +12560,7 @@ __metadata:
     "@popperjs/core": "npm:2.11.8"
     "@prettier/plugin-ruby": "npm:4.0.4"
     "@rails/ujs": "npm:7.1.600"
-    "@smithy/is-array-buffer": "npm:^3.0.0"
+    "@smithy/is-array-buffer": "npm:^4.0.0"
     "@smithy/middleware-apply-body-checksum": "npm:^3.0.8"
     "@smithy/util-hex-encoding": "npm:^3.0.0"
     "@smithy/util-utf8": "npm:^3.0.0"
