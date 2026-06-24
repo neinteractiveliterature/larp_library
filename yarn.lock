@@ -4309,6 +4309,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/core@npm:^3.25.1":
+  version: 3.25.1
+  resolution: "@smithy/core@npm:3.25.1"
+  dependencies:
+    "@aws-crypto/crc32": "npm:5.2.0"
+    "@smithy/types": "npm:^4.15.0"
+    tslib: "npm:^2.6.2"
+  checksum: 10/72c298974c80133a5218f73882a31bd27157e0fc1773f32a29197c90c2122f42feb97871782e977f450cf0114467ab771496a57f2060d24406db79df71f593a4
+  languageName: node
+  linkType: hard
+
 "@smithy/credential-provider-imds@npm:^3.2.8":
   version: 3.2.8
   resolution: "@smithy/credential-provider-imds@npm:3.2.8"
@@ -4665,6 +4676,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/types@npm:^4.15.0":
+  version: 4.15.0
+  resolution: "@smithy/types@npm:4.15.0"
+  dependencies:
+    tslib: "npm:^2.6.2"
+  checksum: 10/e41a84ec3eb9feb45040ccd541b1cacf0fc2375297802886459cb9311ff361080978c08ef98e9ad69f41d80ad212279d682a8fe30a993381b2f1dd376c1006c3
+  languageName: node
+  linkType: hard
+
 "@smithy/url-parser@npm:^3.0.11":
   version: 3.0.11
   resolution: "@smithy/url-parser@npm:3.0.11"
@@ -4845,6 +4865,16 @@ __metadata:
     "@smithy/util-buffer-from": "npm:^3.0.0"
     tslib: "npm:^2.6.2"
   checksum: 10/1aead297d835af419f75e0c3113c021aa0da671110d1b498035530d5f35d8030092cad5147edaa7ca458aafe27c9383399ccd8176d342942465a2d8357e5cbf4
+  languageName: node
+  linkType: hard
+
+"@smithy/util-utf8@npm:^4.0.0":
+  version: 4.4.1
+  resolution: "@smithy/util-utf8@npm:4.4.1"
+  dependencies:
+    "@smithy/core": "npm:^3.25.1"
+    tslib: "npm:^2.6.2"
+  checksum: 10/fd2aa726033b1595fc7ee5173a3153a5537967b86a4481d4c08b9d7a464feadf96d6cc02ee0d0141e10c15a23396e4cf4311c124ba220e0d620bc00f6b6be4c7
   languageName: node
   linkType: hard
 
@@ -12513,7 +12543,7 @@ __metadata:
     "@smithy/is-array-buffer": "npm:^3.0.0"
     "@smithy/middleware-apply-body-checksum": "npm:^3.0.8"
     "@smithy/util-hex-encoding": "npm:^3.0.0"
-    "@smithy/util-utf8": "npm:^3.0.0"
+    "@smithy/util-utf8": "npm:^4.0.0"
     "@types/codemirror": "npm:5.60.17"
     "@types/lodash": "npm:4.17.24"
     "@types/react": "npm:18.3.26"
