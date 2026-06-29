@@ -11802,12 +11802,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:3.8.4":
-  version: 3.8.4
-  resolution: "prettier@npm:3.8.4"
+"prettier@npm:3.9.1":
+  version: 3.9.1
+  resolution: "prettier@npm:3.9.1"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 10/54684a3cc6689238692b29fab541c01934af7677be94c02293ba49981a1ac121c8bebe2a865f0c3b963e99d208f847c53aed354cc0ce8750e2d45791d64506c5
+  checksum: 10/1b4317674aa9e90ff79c347fd19f91bb305df98b3122e7131d6815291707781305c45a13cd982474c2f74ed748f2fd0a9aa094f9856609ed1b6f092de8152058
   languageName: node
   linkType: hard
 
@@ -12576,7 +12576,7 @@ __metadata:
     lodash: "npm:4.18.1"
     luxon: "npm:3.7.2"
     mini-css-extract-plugin: "npm:2.10.2"
-    prettier: "npm:3.8.4"
+    prettier: "npm:3.9.1"
     process: "npm:0.11.10"
     react: "npm:18.3.1"
     react-bootstrap4-modal: "npm:2.0.0"
