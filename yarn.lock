@@ -4549,6 +4549,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/core@npm:^3.29.4":
+  version: 3.29.4
+  resolution: "@smithy/core@npm:3.29.4"
+  dependencies:
+    "@smithy/types": "npm:^4.16.1"
+    tslib: "npm:^2.6.2"
+  checksum: 10/f2fc697df27e7a347a4a0a975112024a4c42ce520c350da76cb2254a087cd674ee079da8da2b789a5acff0fb8d971493b1cac47c4b33b598d9d741a8445cd8e3
+  languageName: node
+  linkType: hard
+
 "@smithy/credential-provider-imds@npm:^3.2.8":
   version: 3.2.8
   resolution: "@smithy/credential-provider-imds@npm:3.2.8"
@@ -4704,15 +4714,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smithy/middleware-apply-body-checksum@npm:^3.0.8":
-  version: 3.0.13
-  resolution: "@smithy/middleware-apply-body-checksum@npm:3.0.13"
+"@smithy/middleware-apply-body-checksum@npm:^4.0.0":
+  version: 4.5.9
+  resolution: "@smithy/middleware-apply-body-checksum@npm:4.5.9"
   dependencies:
-    "@smithy/is-array-buffer": "npm:^3.0.0"
-    "@smithy/protocol-http": "npm:^4.1.8"
-    "@smithy/types": "npm:^3.7.2"
+    "@smithy/core": "npm:^3.29.4"
+    "@smithy/types": "npm:^4.16.1"
     tslib: "npm:^2.6.2"
-  checksum: 10/76f51b1c11f394a2ad4a8c13cd191cd92104288106ade1960a39842c6e2d287603bf9e5f25c031b3b9f1d1524cc4473799e59d33c866fc3641d442a4d05e83ef
+  checksum: 10/487631851c3a415af11749329650d0af57c5c691cb814608839fe9670af3f6cad80f689b5b99471201290c6842dc664bc93995c2f1f83c680e2ad28f28935118
   languageName: node
   linkType: hard
 
@@ -4902,6 +4911,15 @@ __metadata:
   dependencies:
     tslib: "npm:^2.6.2"
   checksum: 10/7a40dcb7f858367a07456c5ae7e7eec89ea9efb7e511e521c105a9568e1e89add875b25e63df19bebdaa77af89f0e5fc691b9f408d077bedb10586a764133e41
+  languageName: node
+  linkType: hard
+
+"@smithy/types@npm:^4.16.1":
+  version: 4.16.1
+  resolution: "@smithy/types@npm:4.16.1"
+  dependencies:
+    tslib: "npm:^2.6.2"
+  checksum: 10/23651203f2e8800b2b2311ef163ddec166d91e15b30fa1c877be352aeef8ae7cc7b0189f99e07b0dcd52160b10adfb3fa4ca32c38a2d7195fc5428b8986d5201
   languageName: node
   linkType: hard
 
@@ -12611,7 +12629,7 @@ __metadata:
     "@prettier/plugin-ruby": "npm:4.0.4"
     "@rails/ujs": "npm:7.1.600"
     "@smithy/is-array-buffer": "npm:^3.0.0"
-    "@smithy/middleware-apply-body-checksum": "npm:^3.0.8"
+    "@smithy/middleware-apply-body-checksum": "npm:^4.0.0"
     "@smithy/util-hex-encoding": "npm:^3.0.0"
     "@smithy/util-utf8": "npm:^3.0.0"
     "@types/codemirror": "npm:5.60.17"
