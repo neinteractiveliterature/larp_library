@@ -4549,6 +4549,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/core@npm:^3.29.4":
+  version: 3.29.4
+  resolution: "@smithy/core@npm:3.29.4"
+  dependencies:
+    "@smithy/types": "npm:^4.16.1"
+    tslib: "npm:^2.6.2"
+  checksum: 10/f2fc697df27e7a347a4a0a975112024a4c42ce520c350da76cb2254a087cd674ee079da8da2b789a5acff0fb8d971493b1cac47c4b33b598d9d741a8445cd8e3
+  languageName: node
+  linkType: hard
+
 "@smithy/credential-provider-imds@npm:^3.2.8":
   version: 3.2.8
   resolution: "@smithy/credential-provider-imds@npm:3.2.8"
@@ -4905,6 +4915,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/types@npm:^4.16.1":
+  version: 4.16.1
+  resolution: "@smithy/types@npm:4.16.1"
+  dependencies:
+    tslib: "npm:^2.6.2"
+  checksum: 10/23651203f2e8800b2b2311ef163ddec166d91e15b30fa1c877be352aeef8ae7cc7b0189f99e07b0dcd52160b10adfb3fa4ca32c38a2d7195fc5428b8986d5201
+  languageName: node
+  linkType: hard
+
 "@smithy/url-parser@npm:^3.0.11":
   version: 3.0.11
   resolution: "@smithy/url-parser@npm:3.0.11"
@@ -5019,6 +5038,16 @@ __metadata:
   dependencies:
     tslib: "npm:^2.6.2"
   checksum: 10/d9f8c4c676410ca51bdbcec5d986883bad0028e26b098fc50e2b57bc81e8a5ce20e160786d08c8552ca0ba662c88ca16f33857ff24a0d183174325b2b40e3c8f
+  languageName: node
+  linkType: hard
+
+"@smithy/util-hex-encoding@npm:^4.0.0":
+  version: 4.4.9
+  resolution: "@smithy/util-hex-encoding@npm:4.4.9"
+  dependencies:
+    "@smithy/core": "npm:^3.29.4"
+    tslib: "npm:^2.6.2"
+  checksum: 10/28553ee50c7116f479782c8839346d2a60f18df28fa10452d410aad429e0aa17b731e2977278bb9544b9b514e25198900e73557329ce741e9d19b3233d20ef18
   languageName: node
   linkType: hard
 
@@ -12612,7 +12641,7 @@ __metadata:
     "@rails/ujs": "npm:7.1.600"
     "@smithy/is-array-buffer": "npm:^3.0.0"
     "@smithy/middleware-apply-body-checksum": "npm:^3.0.8"
-    "@smithy/util-hex-encoding": "npm:^3.0.0"
+    "@smithy/util-hex-encoding": "npm:^4.0.0"
     "@smithy/util-utf8": "npm:^3.0.0"
     "@types/codemirror": "npm:5.60.17"
     "@types/lodash": "npm:4.17.24"
