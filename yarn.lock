@@ -5125,12 +5125,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/codemirror@npm:5.60.17":
-  version: 5.60.17
-  resolution: "@types/codemirror@npm:5.60.17"
+"@types/codemirror@npm:5.60.18":
+  version: 5.60.18
+  resolution: "@types/codemirror@npm:5.60.18"
   dependencies:
     "@types/tern": "npm:*"
-  checksum: 10/972e70898206ebb7baf72dd4afb3352fc9e18943c5c6598615065bd1c5a0fc1d8a766d0cc353a689a216611af018d55efe4ba938f3578a98df01623f0474f75e
+  checksum: 10/d6f31828d56e333e135bb70dd79b39b9e3397469258783ed5153929f537e876e2faba136fffe13f7be2d9d5d1b85d920660eb5a11028b70d5acf65cf670de1e2
   languageName: node
   linkType: hard
 
@@ -12584,7 +12584,7 @@ __metadata:
     "@smithy/middleware-apply-body-checksum": "npm:^3.0.8"
     "@smithy/util-hex-encoding": "npm:^3.0.0"
     "@smithy/util-utf8": "npm:^3.0.0"
-    "@types/codemirror": "npm:5.60.17"
+    "@types/codemirror": "npm:5.60.18"
     "@types/lodash": "npm:4.17.24"
     "@types/react": "npm:18.3.26"
     "@types/react-color": "npm:3.0.13"
