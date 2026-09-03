@@ -15,17 +15,12 @@
     <% end -%>
     <%= stylesheet_bundle_tag 'application' %>
     <%= javascript_bundle_tag 'application', defer: true %>
-    <script type="application/javascript">
-      if (typeof(Rollbar) !== 'undefined') {
-        Rollbar.configure({
-          payload: {
-            person: {
-              id: <%= current_user&.id.to_json.html_safe %>
-            }
-          }
-        });
-      }
-    </script>
+    <% if ENV['SENTRY_DSN'].present? -%>
+      <script type="application/javascript">
+        window.larpLibrarySentryDsn = <%=raw ENV['SENTRY_DSN'].to_json %>;
+        window.larpLibraryCurrentUserId = <%= current_user&.id.to_json.html_safe %>;
+      </script>
+    <% end -%>
     <%= csrf_meta_tags %>
 
   </head>

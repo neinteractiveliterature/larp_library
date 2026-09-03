@@ -436,7 +436,6 @@ GEM
     reverse_markdown (3.0.2)
       nokogiri
     rexml (3.4.4)
-    rollbar (3.8.0)
     rouge (3.30.0)
     rubocop (1.90.0)
       json (>= 2.3)
@@ -464,6 +463,13 @@ GEM
       rubocop-ast (>= 1.44.0, < 2.0)
     ruby-progressbar (1.13.0)
     securerandom (0.4.1)
+    sentry-rails (7.0.0)
+      railties (>= 5.2.0)
+      sentry-ruby (~> 7.0.0)
+    sentry-ruby (7.0.0)
+      bigdecimal
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      logger
     snaky_hash (2.0.6)
       hashie (>= 0.1.0, < 6)
       version_gem (>= 1.1.8, < 3)
@@ -583,10 +589,11 @@ DEPENDENCIES
   rack-cas
   rails (= 7.2.3.2)
   redcarpet
-  rollbar
   rubocop
   rubocop-performance
   rubocop-rails
+  sentry-rails (~> 7.0)
+  sentry-ruby (~> 7.0)
   solargraph
   spring
   sprockets-rails

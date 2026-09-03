@@ -1,4 +1,5 @@
 import '../setPublicPath';
+import '../initSentry';
 import 'regenerator-runtime/runtime';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
