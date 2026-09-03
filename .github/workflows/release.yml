@@ -43,9 +43,11 @@ jobs:
         id: slack
         uses: slackapi/slack-github-action@v4.0.0
         with:
-          channel-id: ${{ secrets.SlackReleaseNotificationChannelID }}
+          method: chat.postMessage
+          token: ${{ secrets.SlackToken }}
           payload: |
             {
+              "channel": "${{ secrets.SlackReleaseNotificationChannelID }}",
               "text": "Larp Library ${{ github.event.release.name }} released to production",
               "unfurl_links": false,
               "blocks": [
@@ -66,5 +68,3 @@ jobs:
                 }
               ]
             }
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SlackToken }}
