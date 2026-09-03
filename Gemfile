@@ -38,7 +38,8 @@ gem "truncate_html"
 
 gem "pg_search"
 
-gem "rollbar"
+gem "sentry-rails", "~> 7.0"
+gem "sentry-ruby", "~> 7.0"
 
 gem "aws-sdk-rails"
 
