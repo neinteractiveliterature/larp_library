@@ -4556,6 +4556,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/core@npm:^3.33.2":
+  version: 3.33.3
+  resolution: "@smithy/core@npm:3.33.3"
+  dependencies:
+    "@smithy/types": "npm:^4.17.2"
+    tslib: "npm:^2.6.2"
+  checksum: 10/76d67070bada0a32bfe44f2c07e0c871675990d3ff7f7574c749df036ae3b4bc63a374513637b0b16fc153dbf01d66af565b875dced77cfbd45e975a4f4d0059
+  languageName: node
+  linkType: hard
+
 "@smithy/credential-provider-imds@npm:^3.2.8":
   version: 3.2.8
   resolution: "@smithy/credential-provider-imds@npm:3.2.8"
@@ -4912,6 +4922,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@smithy/types@npm:^4.17.2":
+  version: 4.17.2
+  resolution: "@smithy/types@npm:4.17.2"
+  dependencies:
+    tslib: "npm:^2.6.2"
+  checksum: 10/e54500bb56a12a6f92374d6095834af04f19868e5178836b21fdcbce0c0fef0570dede2a39777b9d3330075d55096db206867f73ddf4dfe530d1b392f8d0aea9
+  languageName: node
+  linkType: hard
+
 "@smithy/url-parser@npm:^3.0.11":
   version: 3.0.11
   resolution: "@smithy/url-parser@npm:3.0.11"
@@ -5092,6 +5111,16 @@ __metadata:
     "@smithy/util-buffer-from": "npm:^3.0.0"
     tslib: "npm:^2.6.2"
   checksum: 10/1aead297d835af419f75e0c3113c021aa0da671110d1b498035530d5f35d8030092cad5147edaa7ca458aafe27c9383399ccd8176d342942465a2d8357e5cbf4
+  languageName: node
+  linkType: hard
+
+"@smithy/util-utf8@npm:^4.0.0":
+  version: 4.5.2
+  resolution: "@smithy/util-utf8@npm:4.5.2"
+  dependencies:
+    "@smithy/core": "npm:^3.33.2"
+    tslib: "npm:^2.6.2"
+  checksum: 10/25c7bb62e1ba300a6df8bbbc878920241c89353dfc6cb74dc10110b43e95e80446ea44ffb8cf7f4f1482a5ca85a666f8902d40f07a596f3909a8bfefc897b79f
   languageName: node
   linkType: hard
 
@@ -12601,7 +12630,7 @@ __metadata:
     "@smithy/is-array-buffer": "npm:^3.0.0"
     "@smithy/middleware-apply-body-checksum": "npm:^3.0.8"
     "@smithy/util-hex-encoding": "npm:^3.0.0"
-    "@smithy/util-utf8": "npm:^3.0.0"
+    "@smithy/util-utf8": "npm:^4.0.0"
     "@types/codemirror": "npm:5.60.18"
     "@types/lodash": "npm:4.17.25"
     "@types/react": "npm:18.3.26"
