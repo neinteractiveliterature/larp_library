@@ -93,7 +93,7 @@
     "globals": "^17.0.0",
     "graphql-tag": "2.12.7",
     "husky": "9.1.7",
-    "lint-staged": "17.5.1",
+    "lint-staged": "17.6.0",
     "prettier": "3.9.9",
     "typescript": "5.9.3",
     "webpack-bundle-analyzer": "5.4.0",
