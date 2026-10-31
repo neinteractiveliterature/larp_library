@@ -1,9 +1,16 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import ruby from 'vite-plugin-ruby';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 export default defineConfig(({ command }) => ({
-  plugins: [react(), ruby()],
+  plugins: [
+    react(),
+    ruby(),
+    // @aws-sdk/lib-storage pulls in stream-browserify/readable-stream, which expect Node's `global`, `process` and
+    // `Buffer`. Webpack shimmed these automatically; Vite doesn't.
+    nodePolyfills(),
+  ],
   css: {
     preprocessorOptions: {
       scss: {
