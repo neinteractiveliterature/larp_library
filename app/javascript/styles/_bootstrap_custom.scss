@@ -1,7 +1,17 @@
 @import './fonts';
 
-$font-family-base: Lato, Trebuchet MS, Helvetica, Bitstream Vera Sans, sans-serif;
-$font-family-serif: Lora, georgia, times new roman, times, serif;
+$font-family-base:
+  Lato,
+  Trebuchet MS,
+  Helvetica,
+  Bitstream Vera Sans,
+  sans-serif;
+$font-family-serif:
+  Lora,
+  georgia,
+  times new roman,
+  times,
+  serif;
 $headings-font-family: $font-family-serif;
 $font-size-base: 0.9rem;
 $brand-primary: #cc4444;
@@ -10,7 +20,7 @@ $gray-base: #444;
 $hr-border: $gray-base;
 $input-bg: #fff;
 
-@import '~bootstrap/scss/bootstrap';
+@import 'bootstrap/scss/bootstrap';
 
 // Port Bootstrap 4 link behavior to Bootstrap 5
 a,

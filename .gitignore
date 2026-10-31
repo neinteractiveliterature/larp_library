@@ -39,6 +39,8 @@
 /dist
 /public/packs
 /public/packs-test
+/public/vite-dev
+/public/vite-test
 /node_modules
 /yarn-error.log
 yarn-debug.log*

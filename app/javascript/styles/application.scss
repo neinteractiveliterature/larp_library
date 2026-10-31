@@ -1,14 +1,4 @@
-/*
-Any CSS added to this file or imported from this file, e.g. `@import '../stylesheets/my-css.css'`,
-will be included in the "application" pack. Any CSS imported from application.js or as part of the
-application.js dependency graph, e.g. `import '../stylesheets/my-css.css'` will also be included
-in the "application" pack.
-
-To reference this file, add <%= stylesheet_pack_tag 'application' %> to the appropriate
-layout file, like app/views/layouts/application.html.erb
-*/
-
-@import 'styles/bootstrap_custom';
+@import './bootstrap_custom';
 @import 'bootstrap-icons/font/bootstrap-icons.css';
 
 #topbar {
@@ -36,11 +26,7 @@ layout file, like app/views/layouts/application.html.erb
 
 #mainnav {
   background-color: $brand-primary;
-  background: linear-gradient(
-    to bottom,
-    lighten($brand-primary, 7.5%),
-    darken($brand-primary, 7.5%)
-  );
+  background: linear-gradient(to bottom, lighten($brand-primary, 7.5%), darken($brand-primary, 7.5%));
 
   min-height: 79px;
   width: 100%;

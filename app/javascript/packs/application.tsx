@@ -1,9 +1,8 @@
-import '../setPublicPath';
 import '../initSentry';
-import 'regenerator-runtime/runtime';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
+import '../styles/application.scss';
 import 'bootstrap/js/dist/alert';
 import 'bootstrap/js/dist/dropdown';
 import AppWrapper from '../AppWrapper';
