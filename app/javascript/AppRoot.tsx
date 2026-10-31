@@ -8,32 +8,27 @@ const PageComponentImports: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [pageName: string]: () => Promise<{ default: React.ComponentType<any> }>;
 } = {
-  AboutPage: () => import(/* webpackChunkName: "AboutPage" */ './StaticPages/AboutPage'),
-  BrandPage: () => import(/* webpackChunkName: "BrandPage" */ './Brands/BrandPage'),
-  BrandListPage: () => import(/* webpackChunkName: "BrandListPage" */ './Brands/BrandListPage'),
-  EditBrandPage: () => import(/* webpackChunkName: "EditBrandPage" */ './Brands/EditBrandPage'),
-  EditProjectPage: () => import(/* webpackChunkName: "EditProjectPage" */ './Project/EditProjectPage'),
-  EditTagPage: () => import(/* webpackChunkName: "EditTagPage" */ './Tags/EditTagPage'),
-  EditTagCategoryPage: () =>
-    import(/* webpackChunkName: "EditTagCategoryPage" */ './TagCategories/EditTagCategoryPage'),
-  LicensingPage: () => import(/* webpackChunkName: "LicensingPage" */ './StaticPages/LicensingPage'),
-  NewBrandPage: () => import(/* webpackChunkName: "NewBrandPage" */ './Brands/NewBrandPage'),
-  NewProjectPage: () => import(/* webpackChunkName: "NewProjectPage" */ './Project/NewProjectPage'),
-  NewTagPage: () => import(/* webpackChunkName: "NewTagPage" */ './Tags/NewTagPage'),
-  NewTagCategoryPage: () => import(/* webpackChunkName: "NewTagCategoryPage" */ './TagCategories/NewTagCategoryPage'),
-  HomePage: () => import(/* webpackChunkName: "HomePage" */ './HomePage/HomePage'),
-  InvitationPage: () => import(/* webpackChunkName: "InvitationPage" */ './Invitations/InvitationPage'),
-  ProjectInitialContentPage: () =>
-    import(/* webpackChunkName: "ProjectInitialContentPage" */ './Project/ProjectInitialContentPage'),
-  ProjectPromotionsPage: () =>
-    import(/* webpackChunkName: "ProjectPromotionsPage" */ './ProjectPromotions/ProjectPromotionsPage'),
-  ProjectPage: () => import(/* webpackChunkName: "ProjectPage" */ './Project/ProjectPage'),
-  ProjectSearchPage: () => import(/* webpackChunkName: "ProjectSearchPage" */ './ProjectSearch/ProjectSearchPage'),
-  TagListPage: () => import(/* webpackChunkName: "TagListPage" */ './Tags/TagListPage'),
-  TagCategoryListPage: () =>
-    import(/* webpackChunkName: "TagCategoryListPage" */ './TagCategories/TagCategoryListPage'),
-  UnapprovedBrandsListPage: () =>
-    import(/* webpackChunkName: "UnapprovedBrandsListPage" */ './Brands/UnapprovedBrandsListPage'),
+  AboutPage: () => import('./StaticPages/AboutPage'),
+  BrandPage: () => import('./Brands/BrandPage'),
+  BrandListPage: () => import('./Brands/BrandListPage'),
+  EditBrandPage: () => import('./Brands/EditBrandPage'),
+  EditProjectPage: () => import('./Project/EditProjectPage'),
+  EditTagPage: () => import('./Tags/EditTagPage'),
+  EditTagCategoryPage: () => import('./TagCategories/EditTagCategoryPage'),
+  LicensingPage: () => import('./StaticPages/LicensingPage'),
+  NewBrandPage: () => import('./Brands/NewBrandPage'),
+  NewProjectPage: () => import('./Project/NewProjectPage'),
+  NewTagPage: () => import('./Tags/NewTagPage'),
+  NewTagCategoryPage: () => import('./TagCategories/NewTagCategoryPage'),
+  HomePage: () => import('./HomePage/HomePage'),
+  InvitationPage: () => import('./Invitations/InvitationPage'),
+  ProjectInitialContentPage: () => import('./Project/ProjectInitialContentPage'),
+  ProjectPromotionsPage: () => import('./ProjectPromotions/ProjectPromotionsPage'),
+  ProjectPage: () => import('./Project/ProjectPage'),
+  ProjectSearchPage: () => import('./ProjectSearch/ProjectSearchPage'),
+  TagListPage: () => import('./Tags/TagListPage'),
+  TagCategoryListPage: () => import('./TagCategories/TagCategoryListPage'),
+  UnapprovedBrandsListPage: () => import('./Brands/UnapprovedBrandsListPage'),
 };
 
 const PageComponents = mapValues(PageComponentImports, (importFunction) => React.lazy(importFunction));
