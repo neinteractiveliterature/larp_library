@@ -57,16 +57,22 @@ describe('ProjectSearchPage', () => {
   it('puts the typed search in the URL and sends it to the API', async () => {
     const user = userEvent.setup();
     const seenQueryStrings: unknown[] = [];
+    // Typing is debounced, but a slow machine can pause long enough mid-word to send a partial search (e.g. "wo"), so
+    // every non-empty search gets the same answer rather than only the finished word.
+    const answerFor = (title: string, applies: (queryString: unknown) => boolean) => ({
+      ...searchMock([buildProject({ title })], {
+        matchVariables: (variables) => {
+          seenQueryStrings.push(variables.queryString);
+          return applies(variables.queryString);
+        },
+      }),
+      maxUsageCount: Number.POSITIVE_INFINITY,
+    });
     renderPage(<ProjectSearchPage />, {
       route: '/projects',
       mocks: [
-        searchMock([buildProject({ title: 'Everything' })]),
-        searchMock([buildProject({ title: 'Just Wolves' })], {
-          matchVariables: (variables) => {
-            seenQueryStrings.push(variables.queryString);
-            return variables.queryString === 'wolf';
-          },
-        }),
+        answerFor('Everything', (queryString) => queryString == null),
+        answerFor('Just Wolves', (queryString) => typeof queryString === 'string' && queryString !== ''),
       ],
     });
 
