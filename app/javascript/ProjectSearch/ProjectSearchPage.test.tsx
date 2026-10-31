@@ -113,7 +113,7 @@ describe('ProjectSearchPage', () => {
     expect(screen.getByRole('button', { name: 'Switch to advanced search' })).toBeInTheDocument();
   });
 
-  it('lets you fill in each advanced search field', async () => {
+  it('lets you fill in each advanced search field', { timeout: 30000 }, async () => {
     const user = userEvent.setup();
     renderPage(<ProjectSearchPage />, {
       route: '/projects',

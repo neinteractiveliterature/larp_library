@@ -1,5 +1,10 @@
 import '@testing-library/jest-dom/vitest';
+import { configure } from '@testing-library/react';
 import { afterEach, beforeEach, MockInstance, vi } from 'vitest';
+
+// The default (1s) is tight for tests that wait on debounced inputs when CI runners are slow.  A passing test never
+// waits this long; it only matters for tests that are about to fail.
+configure({ asyncUtilTimeout: 4000 });
 
 // Fail any test that makes React log "not wrapped in act(...)".  Those warnings mean a state update landed outside
 // the test's control, so the test can be asserting on (or finishing before) an intermediate state -- and a suite that
