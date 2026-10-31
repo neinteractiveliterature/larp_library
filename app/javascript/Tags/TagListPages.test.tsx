@@ -85,12 +85,7 @@ describe('TagCategoryListPage', () => {
     expect(screen.getAllByRole('link', { name: 'New tag category' })).toHaveLength(2);
   });
 
-  // KNOWN BUG: useLarpLibraryApolloClient's typePolicies has relayStylePagination() for Query.brands, projects and
-  // tags, but not tagCategories.  fetchMore therefore caches the second page under a different key and the list never
-  // grows.  It's latent only because there are fewer categories than the page size (25).  Adding
-  // `tagCategories: relayStylePagination()` to Query.fields should fix it; when it does, this test will start failing
-  // because `it.fails` expects a failure, and it should be changed to a plain `it`.
-  it.fails('pages in more categories when scrolled to the end', async () => {
+  it('pages in more categories when scrolled to the end', async () => {
     const user = userEvent.setup();
     const firstPage = Array.from({ length: 5 }, (_, i) => buildTagCategory({ name: `Cat ${i + 1}` }));
     renderPage(<TagCategoryListPage />, {

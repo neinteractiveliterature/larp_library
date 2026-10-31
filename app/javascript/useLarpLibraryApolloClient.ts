@@ -32,6 +32,7 @@ export const typePolicies: TypedTypePolicies = {
     fields: {
       brands: relayStylePagination(),
       projects: relayStylePagination(),
+      tagCategories: relayStylePagination(),
       tags: relayStylePagination(),
     },
   },

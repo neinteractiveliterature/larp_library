@@ -128,3 +128,23 @@ export function buildConnection<T extends { id: string }>(
     edges: nodes.map((node) => ({ __typename: 'Edge' as const, node })),
   };
 }
+
+/** Everything ProjectFieldsFragment selects: what the project page, edit page and project mutations return */
+export function buildProjectFields(overrides: Record<string, unknown> = {}) {
+  return {
+    ...buildProjectHeaders({
+      id: '7',
+      title: 'The Big Larp',
+      brand: { __typename: 'Brand' as const, id: 'b1', name: 'Acme', slug: 'acme' },
+    }),
+    description: 'About the larp.',
+    currentUserCanEdit: true,
+    currentUserCanDelete: true,
+    currentUserCanUploadFiles: true,
+    currentUserCanDeleteFiles: true,
+    license: buildLicense({ id: 'lic-1', name: 'CC BY' }) as ReturnType<typeof buildLicense> | null,
+    projectFiles: [] as ReturnType<typeof buildProjectFile>[],
+    projectLinks: [] as ReturnType<typeof buildProjectLink>[],
+    ...overrides,
+  };
+}

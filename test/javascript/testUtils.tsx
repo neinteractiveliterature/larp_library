@@ -11,10 +11,10 @@ import { S3ConfigurationContext } from '../../app/javascript/S3ConfigurationCont
 
 export type { MockedResponse };
 
-/** Renders the current URL (path + search) so tests can assert on navigation */
+/** Renders the current URL (path, search and hash) so tests can assert on navigation */
 export function LocationDisplay() {
   const location = useLocation();
-  return <div data-testid="location">{`${location.pathname}${location.search}`}</div>;
+  return <div data-testid="location">{`${location.pathname}${location.search}${location.hash}`}</div>;
 }
 
 export type RenderPageOptions = {
@@ -54,4 +54,28 @@ export function renderPage(
       </S3ConfigurationContext.Provider>
     </MockedProvider>,
   );
+}
+
+/**
+ * Opens a react-select (given its combobox input) and picks the option with the given text.  Options that load
+ * asynchronously are awaited, so this works for AsyncSelect too.
+ *
+ * Tests find the select by role (`screen.getByRole('combobox')`) rather than by label, because the app passes `id` to
+ * react-select, which puts it on the container element and not the input, so the form labels don't actually label it.
+ */
+export async function selectReactSelectOption(
+  user: ReturnType<typeof import('@testing-library/user-event').default.setup>,
+  combobox: HTMLElement,
+  optionText: string | RegExp,
+  { typeText }: { typeText?: string } = {},
+) {
+  const { screen } = await import('@testing-library/react');
+  await user.click(combobox);
+  // selects that don't preload their options only show them once something has been typed
+  if (typeText) {
+    await user.type(combobox, typeText);
+  } else {
+    await user.keyboard('{ArrowDown}');
+  }
+  await user.click(await screen.findByText(optionText, { selector: '[class*="-menu"] *' }));
 }
