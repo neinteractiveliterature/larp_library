@@ -39,6 +39,37 @@ jobs:
         run: yarn install
       - name: oxlint
         run: yarn run lint
+  vitest:
+    name: vitest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: install node
+        uses: actions/setup-node@v7
+        with:
+          cache: yarn
+      - name: yarn install
+        run: yarn install
+      - name: vitest
+        run: COVERAGE=true yarn run test
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: always() # always run even if the previous step fails
+        with:
+          check_name: 'Vitest Report'
+          report_paths: 'test/reports/TEST-vitest.xml'
+      - name: Archive HTML test reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vitest-reports
+          path: test/html_reports
+      - name: Archive coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vitest-coverage
+          path: coverage
   minitest:
     name: minitest
     runs-on: ubuntu-latest
@@ -141,6 +172,7 @@ jobs:
     needs:
       - graphql-codegen-tsc
       - lint
+      - vitest
       - minitest
       - docker-build
     outputs:

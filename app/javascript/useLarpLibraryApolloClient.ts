@@ -1,11 +1,5 @@
 import { useMemo, RefObject } from 'react';
-import {
-  ApolloClient,
-  ApolloLink,
-  InMemoryCache,
-  NormalizedCacheObject,
-  HttpLink,
-} from '@apollo/client';
+import { ApolloClient, ApolloLink, InMemoryCache, NormalizedCacheObject, HttpLink } from '@apollo/client';
 import { TypedTypePolicies } from './apolloClientHelpers.generated';
 import { useAuthHeadersLink, useErrorHandlerLink } from '@neinteractiveliterature/litform';
 import { relayStylePagination } from '@apollo/client/utilities';
@@ -25,7 +19,7 @@ export function useLarpLibraryApolloLink(
   return link;
 }
 
-const typePolicies: TypedTypePolicies = {
+export const typePolicies: TypedTypePolicies = {
   Brand: {
     fields: {
       projects: relayStylePagination(),
