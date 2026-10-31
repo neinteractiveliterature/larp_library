@@ -50,3 +50,8 @@ yarn-debug.log*
 /*.sql.gz
 /stats.json
 /workspaceConfiguration
+
+# Frontend test output
+/coverage
+/test/reports
+/test/html_reports

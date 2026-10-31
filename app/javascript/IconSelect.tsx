@@ -48,7 +48,7 @@ function IconSelect({ value, onChange, id }: IconSelectProps): JSX.Element {
 
   return (
     <Select
-      id={id}
+      inputId={id}
       isClearable
       isMulti={false}
       options={filteredOptions}

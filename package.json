@@ -4,7 +4,10 @@
     "graphql:codegen": "graphql-codegen --config codegen.yml",
     "start": "vite",
     "prepare": "husky install",
-    "lint": "oxlint"
+    "lint": "oxlint",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@apollo/client": "3.14.1",
@@ -55,6 +58,10 @@
     "@graphql-codegen/typescript-react-apollo": "4.3.2",
     "@oxlint/migrate": "^1.90.0",
     "@prettier/plugin-ruby": "4.0.4",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "^14.6.1",
     "@types/codemirror": "5.60.18",
     "@types/lodash": "4.17.27",
     "@types/react-color": "3.0.13",
@@ -62,15 +69,19 @@
     "@types/tinycolor2": "1.4.6",
     "@types/uuid": "10.0.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "@vitest/coverage-v8": "^4",
+    "@vitest/ui": "^4",
     "graphql-tag": "2.12.7",
     "husky": "9.1.7",
+    "jsdom": "^29",
     "lint-staged": "17.6.0",
     "oxlint": "^1.90.0",
     "prettier": "3.9.10",
     "typescript": "5.9.3",
     "vite": "^8",
     "vite-plugin-node-polyfills": "^0.28.0",
-    "vite-plugin-ruby": "^5.2.6"
+    "vite-plugin-ruby": "^5.2.6",
+    "vitest": "^4"
   },
   "browserslist": [
     "defaults"

@@ -19,10 +19,7 @@ function TagCategorySelector({ value, onChange, id }: TagCategorySelectorProps):
   const apolloClient = useApolloClient();
 
   const queryTagCategories = async (queryString: string) => {
-    const result = await apolloClient.query<
-      TagCategoryAutocompleteQueryData,
-      TagCategoryAutocompleteQueryVariables
-    >({
+    const result = await apolloClient.query<TagCategoryAutocompleteQueryData, TagCategoryAutocompleteQueryVariables>({
       query: TagCategoryAutocompleteQueryDocument,
       variables: { queryString },
     });
@@ -32,7 +29,7 @@ function TagCategorySelector({ value, onChange, id }: TagCategorySelectorProps):
 
   return (
     <AsyncSelect<TagCategoryFragment>
-      id={id}
+      inputId={id}
       isClearable
       defaultOptions={true} // preload tag categories for blank query
       loadOptions={(inputValue: string) => queryTagCategories(inputValue)}

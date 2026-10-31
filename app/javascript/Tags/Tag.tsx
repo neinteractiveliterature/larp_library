@@ -43,6 +43,7 @@ function Tag({ tag, linkTo, onDismiss }: TagProps): JSX.Element {
         <button
           type="button"
           className="tag-dismiss-button"
+          aria-label={`Remove ${tag.name}`}
           style={{ color: tag.tagCategory?.textColor ?? '#FFFFFF' }}
           onClick={() => {
             onDismiss();
