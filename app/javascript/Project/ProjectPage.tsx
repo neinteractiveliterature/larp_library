@@ -2,7 +2,7 @@ import { LoadQueryWrapper, useGraphQLConfirm } from '@neinteractiveliterature/li
 import sortBy from 'lodash/sortBy';
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { useMemo } from 'react';
 import ProjectHeaders from '../ProjectSearch/ProjectHeaders';
 import { generateProjectPath } from '../URLGenerators';
@@ -25,14 +25,8 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
   const [deleteProject] = useDeleteProjectMutation();
   const navigate = useNavigate();
 
-  const sortedFiles = useMemo(
-    () => sortBy(project.projectFiles, (file) => file.position),
-    [project.projectFiles],
-  );
-  const sortedLinks = useMemo(
-    () => sortBy(project.projectLinks, (link) => link.position),
-    [project.projectLinks],
-  );
+  const sortedFiles = useMemo(() => sortBy(project.projectFiles, (file) => file.position), [project.projectFiles]);
+  const sortedLinks = useMemo(() => sortBy(project.projectLinks, (link) => link.position), [project.projectLinks]);
 
   const hasLinksAndFiles = project.projectLinks.length > 0 && project.projectFiles.length > 0;
 
@@ -52,10 +46,7 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
           <ul className="list-inline">
             {project.currentUserCanEdit && (
               <li className="list-inline-item">
-                <Link
-                  to={`${generateProjectPath(project)}/edit#properties`}
-                  className="btn btn-primary"
-                >
+                <Link to={`${generateProjectPath(project)}/edit#properties`} className="btn btn-primary">
                   Edit project
                 </Link>
               </li>
@@ -86,10 +77,7 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
                   {project.projectFiles.length > 0 && !hasLinksAndFiles ? 'Downloads' : 'Content'}
                 </h2>
                 {project.currentUserCanEdit && (
-                  <Link
-                    to={`${generateProjectPath(project)}/edit#content`}
-                    className="btn btn-primary ms-3"
-                  >
+                  <Link to={`${generateProjectPath(project)}/edit#content`} className="btn btn-primary ms-3">
                     Edit
                   </Link>
                 )}

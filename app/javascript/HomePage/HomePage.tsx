@@ -2,7 +2,7 @@ import { LoadQueryWrapper } from '@neinteractiveliterature/litform/lib';
 import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import ProjectHeaders from '../ProjectSearch/ProjectHeaders';
 import Tag from '../Tags/Tag';
 import { generateProjectSearchPath } from '../URLGenerators';

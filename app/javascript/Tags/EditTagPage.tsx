@@ -1,13 +1,9 @@
-import {
-  ErrorDisplay,
-  LoadQueryWrapper,
-  useGraphQLConfirm,
-} from '@neinteractiveliterature/litform/lib';
+import { ErrorDisplay, LoadQueryWrapper, useGraphQLConfirm } from '@neinteractiveliterature/litform/lib';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import TagFormFields from './TagFormFields';
 import { useEditTagQuery } from './queries.generated';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useDeleteTagMutation, useUpdateTagMutation } from './mutations.generated';
 import buildTagAttributes from './buildTagAttributes';
 
@@ -43,8 +39,7 @@ export default LoadQueryWrapper(useEditTagQueryFromParams, function EditTagPage(
           <h1>Editing tag: {tag.name}</h1>
           <p>
             <Link to={`/projects?tag=${tag.name}`}>
-              Used by {tag.projects.totalCount}{' '}
-              {tag.projects.totalCount === 1 ? 'project' : 'projects'}
+              Used by {tag.projects.totalCount} {tag.projects.totalCount === 1 ? 'project' : 'projects'}
             </Link>
           </p>
         </div>
@@ -68,12 +63,7 @@ export default LoadQueryWrapper(useEditTagQueryFromParams, function EditTagPage(
 
       <TagFormFields tag={tag} onChange={setTag} />
 
-      <button
-        type="button"
-        className="btn btn-primary"
-        disabled={updatingTag}
-        onClick={saveChanges}
-      >
+      <button type="button" className="btn btn-primary" disabled={updatingTag} onClick={saveChanges}>
         Save changes
       </button>
 
