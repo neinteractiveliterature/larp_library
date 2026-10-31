@@ -6,7 +6,7 @@ import { BrandsPageQueryDocument } from './queries.generated';
 import { buildBrand, buildConnection, resetFixtureIds } from '../../../test/javascript/fixtures';
 import { MockedResponse, renderPage } from '../../../test/javascript/testUtils';
 
-vi.mock('react-waypoint', () => import('../../../test/javascript/mockWaypoint'));
+vi.mock('../Waypoint', () => import('../../../test/javascript/mockWaypoint'));
 
 function brandWithProjects(overrides: Record<string, unknown> = {}, projectCount = 3) {
   return { ...buildBrand(overrides), projects: { __typename: 'Connection', totalCount: projectCount } };

@@ -1,8 +1,4 @@
-import {
-  BootstrapFormInput,
-  FormGroupWithLabel,
-  usePropertySetters,
-} from '@neinteractiveliterature/litform';
+import { BootstrapFormInput, FormGroupWithLabel, usePropertySetters } from '@neinteractiveliterature/litform';
 import React from 'react';
 import ColorPicker from '../ColorPicker';
 import { TagCategory } from '../graphqlTypes.generated';
@@ -15,10 +11,7 @@ export type TagCategoryFormFieldsProps = {
   onChange: React.Dispatch<React.SetStateAction<TagCategoryFormTagCategory>>;
 };
 
-export default function TagCategoryFormFields({
-  tagCategory,
-  onChange,
-}: TagCategoryFormFieldsProps): JSX.Element {
+export default function TagCategoryFormFields({ tagCategory, onChange }: TagCategoryFormFieldsProps): JSX.Element {
   const [setName, setColor, setIcon] = usePropertySetters(onChange, 'name', 'color', 'icon');
 
   return (
@@ -32,11 +25,7 @@ export default function TagCategoryFormFields({
         helpText={
           <>
             Use{' '}
-            <a
-              href="https://icons.getbootstrap.com/#icons"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
+            <a href="https://icons.getbootstrap.com/#icons" target="_blank" rel="noreferrer noopener">
               Bootstrap Icons icon names
             </a>
           </>

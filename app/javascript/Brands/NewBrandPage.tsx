@@ -1,4 +1,5 @@
-import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform/lib';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
 import sortBy from 'lodash/sortBy';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';

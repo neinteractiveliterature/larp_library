@@ -2,13 +2,13 @@ import {
   useConfirm,
   useModal,
   buildOptimisticArrayForMove,
-  deleteObjectFromReferenceArrayUpdater,
   useArrayBasicSortableHandlers,
   useMatchWidthStyle,
+  ModalData,
 } from '@neinteractiveliterature/litform';
+import { deleteObjectFromReferenceArrayUpdater } from '@neinteractiveliterature/litform-apollo';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { ModalData } from '@neinteractiveliterature/litform/dist/useModal';
 import { useMemo, useCallback } from 'react';
 import { Project, ProjectLink } from '../graphqlTypes.generated';
 import { getSortableStyle, useSortableDndSensors } from '../SortableUtils';
@@ -39,13 +39,7 @@ function EditProjectLink({ project, link, editProjectLinkModal }: EditProjectLin
     <li key={link.id} className="d-flex" style={style}>
       <div className="me-2">
         <span className="visually-hidden">Drag to reorder</span>
-        <i
-          style={{ cursor: 'grab' }}
-          className="bi-grip-vertical"
-          ref={setNodeRef}
-          {...attributes}
-          {...listeners}
-        />
+        <i style={{ cursor: 'grab' }} className="bi-grip-vertical" ref={setNodeRef} {...attributes} {...listeners} />
       </div>
       <div className="flex-grow-1">
         <ProjectLinkDisplay link={link} />
@@ -141,11 +135,7 @@ function EditProjectLinksCard({ project }: EditProjectLinksCardProps): JSX.Eleme
   );
 
   const sensors = useSortableDndSensors();
-  const { draggingItem, ...sortableHandlers } = useArrayBasicSortableHandlers(
-    sortedLinks,
-    moveLink,
-    'id',
-  );
+  const { draggingItem, ...sortableHandlers } = useArrayBasicSortableHandlers(sortedLinks, moveLink, 'id');
   const [matchWidthRef, matchWidthStyle] = useMatchWidthStyle<HTMLDivElement>();
 
   return (
@@ -154,10 +144,7 @@ function EditProjectLinksCard({ project }: EditProjectLinksCardProps): JSX.Eleme
         <div className="card-header">Links</div>
         <div className="card-body">
           <ul className="list-unstyled">
-            <SortableContext
-              items={sortedLinks.map((link) => link.id)}
-              strategy={verticalListSortingStrategy}
-            >
+            <SortableContext items={sortedLinks.map((link) => link.id)} strategy={verticalListSortingStrategy}>
               {sortedLinks.map((link) => (
                 <EditProjectLink
                   link={link}
@@ -169,20 +156,12 @@ function EditProjectLinksCard({ project }: EditProjectLinksCardProps): JSX.Eleme
             </SortableContext>
           </ul>
 
-          <button
-            type="button"
-            className="btn btn-outline-success"
-            onClick={() => addProjectLinkModal.open()}
-          >
+          <button type="button" className="btn btn-outline-success" onClick={() => addProjectLinkModal.open()}>
             Add link
           </button>
         </div>
       </div>
-      <AddProjectLinkModal
-        visible={addProjectLinkModal.visible}
-        close={addProjectLinkModal.close}
-        project={project}
-      />
+      <AddProjectLinkModal visible={addProjectLinkModal.visible} close={addProjectLinkModal.close} project={project} />
       <EditProjectLinkModal
         visible={editProjectLinkModal.visible}
         close={editProjectLinkModal.close}

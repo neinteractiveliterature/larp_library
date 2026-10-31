@@ -1,4 +1,4 @@
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform/lib';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
 import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 import { useMemo } from 'react';

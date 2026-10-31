@@ -1,4 +1,5 @@
-import { ErrorDisplay, LoadQueryWrapper, useGraphQLConfirm } from '@neinteractiveliterature/litform/lib';
+import { ErrorDisplay, useGraphQLConfirm } from '@neinteractiveliterature/litform';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import TagFormFields from './TagFormFields';

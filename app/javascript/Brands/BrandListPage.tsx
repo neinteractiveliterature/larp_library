@@ -1,6 +1,6 @@
 import { PageLoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 import React from 'react';
-import { Waypoint } from 'react-waypoint';
+import { Waypoint } from '../Waypoint';
 import BrandCard from './BrandCard';
 import { useBrandsPageQuery } from './queries.generated';
 

@@ -1,39 +1,14 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 function absolutePath(relativePath: string) {
   return fileURLToPath(new URL(relativePath, import.meta.url));
 }
 
-// litform's published files point at sourcemaps whose sources aren't shipped, and Vite logs a warning for every file.
-// Strip the sourceMappingURL comments so test output stays readable.
-const stripLitformSourcemaps = {
-  name: 'strip-litform-sourcemaps',
-  enforce: 'pre' as const,
-  load(id: string) {
-    if (id.includes('/node_modules/@neinteractiveliterature/litform/') && /\.m?js$/.test(id)) {
-      return readFileSync(id, 'utf8').replace(/\/\/# sourceMappingURL=.*$/gm, '');
-    }
-    return undefined;
-  },
-};
-
 // Deliberately separate from vite.config.mts: tests don't need vite-plugin-ruby or the asset-host build hooks
 export default defineConfig({
-  plugins: [stripLitformSourcemaps, react()],
-  resolve: {
-    // Resolve packages the way the browser build does.  litform ships both a CommonJS build (main: dist) and an ES module
-    // build (module: lib), and the app mixes `@neinteractiveliterature/litform` and `.../litform/lib` imports; without
-    // this they resolve to two separate copies of the library, with two separate React contexts (e.g. Confirm).
-    mainFields: ['module'],
-    alias: [
-      // litform ships its own nested uuid@8, a CommonJS package whose ESM wrapper doesn't survive being processed by
-      // Vite ("Cannot read properties of undefined (reading 'v1')").  Use the app's copy instead.
-      { find: /^uuid$/, replacement: absolutePath('./node_modules/uuid') },
-    ],
-  },
+  plugins: [react()],
   test: {
     coverage: {
       enabled: process.env['COVERAGE'] ? true : false,
@@ -79,6 +54,9 @@ export default defineConfig({
     ],
     server: {
       deps: {
+        // litform's ES build imports "@apollo/client/link/error" as a directory, which Node's ESM resolver rejects but
+        // Vite's accepts, so litform has to go through Vite.
+        //
         // The Testing Library packages have to be processed together so that they all share one copy of
         // @testing-library/dom.  Otherwise user-event ends up with its own copy, which React Testing Library hasn't
         // configured to wrap events in act(), and every user interaction logs "not wrapped in act(...)" warnings.

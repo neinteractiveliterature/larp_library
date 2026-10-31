@@ -1,7 +1,5 @@
-import {
-  ErrorDisplay,
-  addNewObjectToReferenceArrayUpdater,
-} from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import { addNewObjectToReferenceArrayUpdater } from '@neinteractiveliterature/litform-apollo';
 import { useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
 

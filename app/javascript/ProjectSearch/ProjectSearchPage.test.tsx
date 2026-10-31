@@ -6,7 +6,7 @@ import { ProjectSearchQueryDocument } from './queries.generated';
 import { buildConnection, buildProjectHeaders, buildTag, resetFixtureIds } from '../../../test/javascript/fixtures';
 import { MockedResponse, renderPage } from '../../../test/javascript/testUtils';
 
-vi.mock('react-waypoint', () => import('../../../test/javascript/mockWaypoint'));
+vi.mock('../Waypoint', () => import('../../../test/javascript/mockWaypoint'));
 
 function buildProject(overrides: Record<string, unknown> = {}) {
   return { ...buildProjectHeaders(), description: 'A **fun** larp.', ...overrides };

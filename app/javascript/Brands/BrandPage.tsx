@@ -3,7 +3,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router';
 import { Link } from 'react-router';
-import { Waypoint } from 'react-waypoint';
+import { Waypoint } from '../Waypoint';
 import ProjectCard from '../ProjectSearch/ProjectCard';
 import { generateBrandPath } from '../URLGenerators';
 import { useBrandPageQuery } from './queries.generated';

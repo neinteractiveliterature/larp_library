@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { Waypoint } from 'react-waypoint';
+import { Waypoint } from '../Waypoint';
 import { useTagListPageQuery } from './queries.generated';
 import Tag from './Tag';
 

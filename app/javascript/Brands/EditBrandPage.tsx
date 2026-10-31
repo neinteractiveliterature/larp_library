@@ -1,12 +1,14 @@
 import {
   BootstrapFormCheckbox,
   BootstrapFormInput,
-  addNewObjectToReferenceArrayUpdater,
-  deleteObjectFromReferenceArrayUpdater,
   ErrorDisplay,
-  LoadQueryWrapper,
   useGraphQLConfirm,
 } from '@neinteractiveliterature/litform';
+import {
+  addNewObjectToReferenceArrayUpdater,
+  deleteObjectFromReferenceArrayUpdater,
+  LoadQueryWrapper,
+} from '@neinteractiveliterature/litform-apollo';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { generateBrandPath } from '../URLGenerators';

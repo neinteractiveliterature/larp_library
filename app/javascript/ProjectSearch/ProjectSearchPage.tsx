@@ -1,7 +1,6 @@
-import { PageLoadingIndicator } from '@neinteractiveliterature/litform/lib';
-import { ErrorDisplay } from '@neinteractiveliterature/litform/lib';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import React, { useState } from 'react';
-import { Waypoint } from 'react-waypoint';
+import { Waypoint } from '../Waypoint';
 import { useProjectSearchQuery } from './queries.generated';
 import ProjectCard from './ProjectCard';
 import SimpleProjectSearchControls from './SimpleProjectSearchControls';

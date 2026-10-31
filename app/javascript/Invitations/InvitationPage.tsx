@@ -1,5 +1,6 @@
 import { useApolloClient } from '@apollo/client';
-import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { useSignIn } from '../SignInButton';
 import { generateBrandPath } from '../URLGenerators';

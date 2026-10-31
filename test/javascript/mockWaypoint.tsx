@@ -1,13 +1,13 @@
-import { Waypoint as WaypointProps } from 'react-waypoint';
+import type { WaypointProps } from '../../app/javascript/Waypoint';
 
 /**
- * react-waypoint relies on real scrolling and layout, neither of which jsdom has.  Tests that cover infinite scroll
- * mock the module with this stand-in (`vi.mock('react-waypoint', () => import('.../mockWaypoint'))`), which renders a
- * button that fires `onEnter` when clicked, i.e. "the user scrolled to the end of the list".
+ * The real Waypoint needs IntersectionObserver, which jsdom doesn't have.  Tests that cover infinite scroll mock the
+ * module with this stand-in (`vi.mock('../Waypoint', () => import('.../mockWaypoint'))`), which renders a button that
+ * fires `onEnter` when clicked, i.e. "the user scrolled to the end of the list".
  */
-export function Waypoint({ onEnter }: Pick<WaypointProps.WaypointProps, 'onEnter'>) {
+export function Waypoint({ onEnter }: WaypointProps) {
   return (
-    <button type="button" data-testid="waypoint" onClick={() => onEnter?.({} as WaypointProps.CallbackArgs)}>
+    <button type="button" data-testid="waypoint" onClick={() => onEnter()}>
       Load more
     </button>
   );

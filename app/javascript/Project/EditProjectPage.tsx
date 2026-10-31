@@ -1,5 +1,5 @@
-import { Tabs, useTabsWithRouter } from '@neinteractiveliterature/litform/dist';
-import { ErrorDisplay, LoadQueryWrapper } from '@neinteractiveliterature/litform/lib';
+import { ErrorDisplay, Tabs, useTabsWithRouter } from '@neinteractiveliterature/litform';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
 import { useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router';
 import { generateProjectPath } from '../URLGenerators';
