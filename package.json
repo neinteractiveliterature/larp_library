@@ -75,6 +75,7 @@
     "prettier": "3.9.10",
     "typescript": "5.9.3",
     "vite": "^8",
+    "vite-plugin-node-polyfills": "^0.28.0",
     "vite-plugin-ruby": "^5.2.6"
   },
   "browserslist": [
