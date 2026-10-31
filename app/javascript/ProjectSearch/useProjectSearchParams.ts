@@ -1,7 +1,7 @@
 import { notEmpty, parseIntOrNull } from '@neinteractiveliterature/litform';
 import pickBy from 'lodash/pickBy';
 import { useCallback, useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import stringPresence from '../stringPresence';
 import { ProjectSearchQueryVariables } from './queries.generated';
 
@@ -15,18 +15,13 @@ function useSearchParams<T>(
   const location = useLocation();
   const navigate = useNavigate();
   const urlSearchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
-  const paramsObject = useMemo<T>(
-    () => decodeParamsObject(urlSearchParams),
-    [urlSearchParams, decodeParamsObject],
-  );
+  const paramsObject = useMemo<T>(() => decodeParamsObject(urlSearchParams), [urlSearchParams, decodeParamsObject]);
 
   const setParamsObject = useCallback(
     (newParams: Partial<T>) => {
       const mergedParams = { ...paramsObject, ...newParams };
       const paramsForUrl = encodeParamsObject(mergedParams);
-      const compactedParams = pickBy(paramsForUrl, (value): value is string =>
-        notEmpty(stringPresence(value)),
-      );
+      const compactedParams = pickBy(paramsForUrl, (value): value is string => notEmpty(stringPresence(value)));
       const newUrlSearchParams = new URLSearchParams(compactedParams);
       if (newUrlSearchParams.toString() !== location.search.replace(/^\?/, '')) {
         navigate(`${path}?${newUrlSearchParams.toString()}`, { replace: true });
@@ -44,14 +39,10 @@ function decodeProjectSearchParams(urlSearchParams: URLSearchParams): ProjectSea
     tag: stringPresence(urlSearchParams.get('tag')),
     title: stringPresence(urlSearchParams.get('title')),
     authors: stringPresence(urlSearchParams.get('authors')),
-    playerCountLowerBound:
-      parseIntOrNull(urlSearchParams.get('player_count_lower') ?? '') ?? undefined,
-    playerCountUpperBound:
-      parseIntOrNull(urlSearchParams.get('player_count_upper') ?? '') ?? undefined,
-    facilitatorCountLowerBound:
-      parseIntOrNull(urlSearchParams.get('facilitator_count_lower') ?? '') ?? undefined,
-    facilitatorCountUpperBound:
-      parseIntOrNull(urlSearchParams.get('facilitator_count_upper') ?? '') ?? undefined,
+    playerCountLowerBound: parseIntOrNull(urlSearchParams.get('player_count_lower') ?? '') ?? undefined,
+    playerCountUpperBound: parseIntOrNull(urlSearchParams.get('player_count_upper') ?? '') ?? undefined,
+    facilitatorCountLowerBound: parseIntOrNull(urlSearchParams.get('facilitator_count_lower') ?? '') ?? undefined,
+    facilitatorCountUpperBound: parseIntOrNull(urlSearchParams.get('facilitator_count_upper') ?? '') ?? undefined,
   };
 }
 

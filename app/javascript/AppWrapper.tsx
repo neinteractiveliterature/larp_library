@@ -2,7 +2,7 @@ import { ApolloProvider } from '@apollo/client';
 import { Suspense, useRef } from 'react';
 import { Confirm, ErrorBoundary, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import useLarpLibraryApolloClient from './useLarpLibraryApolloClient';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 
 function AppWrapper<P extends JSX.IntrinsicAttributes>(
   WrappedComponent: React.ComponentType<P>,

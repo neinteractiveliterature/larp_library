@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { TagFragment } from './queries.generated';
 
 export type TagProps = {
@@ -33,11 +33,7 @@ function Tag({ tag, linkTo, onDismiss }: TagProps): JSX.Element {
       }}
     >
       {linkTo ? (
-        <Link
-          to={linkTo}
-          className="link-unstyled"
-          style={{ color: tag.tagCategory?.textColor ?? '#FFFFFF' }}
-        >
+        <Link to={linkTo} className="link-unstyled" style={{ color: tag.tagCategory?.textColor ?? '#FFFFFF' }}>
           {innerContent}
         </Link>
       ) : (

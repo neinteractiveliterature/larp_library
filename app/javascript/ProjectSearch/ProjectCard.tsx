@@ -1,5 +1,5 @@
 import ReactMarkdown from 'react-markdown';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Project } from '../graphqlTypes.generated';
 import { MarkdownLink } from '../MarkdownLink';
 import { generateProjectPath } from '../URLGenerators';

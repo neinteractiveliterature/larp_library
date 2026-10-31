@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Waypoint } from 'react-waypoint';
 import { useTagListPageQuery } from './queries.generated';
 import Tag from './Tag';

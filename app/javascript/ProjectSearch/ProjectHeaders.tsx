@@ -1,7 +1,7 @@
 import sortBy from 'lodash/sortBy';
 import uniq from 'lodash/uniq';
 import { ReactNode, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Brand, Project } from '../graphqlTypes.generated';
 import { TagFragment } from '../Tags/queries.generated';
 import Tag from '../Tags/Tag';
@@ -37,12 +37,8 @@ function ProjectHeaders({
   hideAuthors,
   hideBrandAndYear,
 }: ProjectHeadersProps): JSX.Element {
-  const renderTitle =
-    providedRenderTitle ?? ((title: ReactNode) => <h2 className="m-0">{title}</h2>);
-  const sortedTags = useMemo(
-    () => sortBy(project.tags, (tag) => tag.name.toLowerCase()),
-    [project.tags],
-  );
+  const renderTitle = providedRenderTitle ?? ((title: ReactNode) => <h2 className="m-0">{title}</h2>);
+  const sortedTags = useMemo(() => sortBy(project.tags, (tag) => tag.name.toLowerCase()), [project.tags]);
 
   return (
     <>
@@ -72,9 +68,7 @@ function ProjectHeaders({
             <em>By {project.authors}</em>
           </li>
         )}
-        {(project.minPlayers ||
-          project.maxPlayers ||
-          (project.lengthQuantity && project.lengthUnits)) && (
+        {(project.minPlayers || project.maxPlayers || (project.lengthQuantity && project.lengthUnits)) && (
           <li>
             <ul className="list-inline">
               {(project.minPlayers != null || project.maxPlayers != null) && (
@@ -92,17 +86,13 @@ function ProjectHeaders({
                   {uniq([project.minFacilitators, project.maxFacilitators])
                     .filter((count) => count != null)
                     .join(' - ')}{' '}
-                  {(project.maxFacilitators ?? project.minFacilitators) == 1
-                    ? 'facilitator/GM'
-                    : 'facilitators/GMs'}
+                  {(project.maxFacilitators ?? project.minFacilitators) == 1 ? 'facilitator/GM' : 'facilitators/GMs'}
                 </li>
               )}
               {project.lengthQuantity && project.lengthUnits && (
                 <li className="list-inline-item">
                   <i className="bi-clock"></i> {project.lengthQuantity}{' '}
-                  {project.lengthQuantity === 1
-                    ? project.lengthUnits.replace(/s$/, '')
-                    : project.lengthUnits}
+                  {project.lengthQuantity === 1 ? project.lengthUnits.replace(/s$/, '') : project.lengthUnits}
                 </li>
               )}
             </ul>

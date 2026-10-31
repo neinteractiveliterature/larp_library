@@ -8,7 +8,7 @@ import {
   useGraphQLConfirm,
 } from '@neinteractiveliterature/litform';
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { generateBrandPath } from '../URLGenerators';
 import BrandFormFields from './BrandFormFields';
 import {
@@ -34,8 +34,7 @@ export default LoadQueryWrapper(useEditBrandQueryFromParams, function EditBrandP
   const [inviteUserAdmin, setInviteUserAdmin] = useState(false);
   const [inviteBrandMember, { loading: invitingBrandMember, error: inviteBrandMemberError }] =
     useInviteBrandMemberMutation();
-  const [updateBrand, { loading: updatingBrand, error: updateBrandError }] =
-    useUpdateBrandMutation();
+  const [updateBrand, { loading: updatingBrand, error: updateBrandError }] = useUpdateBrandMutation();
   const [deleteBrandMembership] = useDeleteBrandMembershipMutation();
   const navigate = useNavigate();
   const confirm = useGraphQLConfirm();
@@ -69,7 +68,7 @@ export default LoadQueryWrapper(useEditBrandQueryFromParams, function EditBrandP
     setInviteUserEmail('');
   };
 
-  const removeMembership = async (membership: typeof data['brand']['brandMemberships'][number]) => {
+  const removeMembership = async (membership: (typeof data)['brand']['brandMemberships'][number]) => {
     await deleteBrandMembership({
       variables: { id: membership.id },
       update: deleteObjectFromReferenceArrayUpdater(brand, 'brandMemberships', membership),
@@ -83,12 +82,7 @@ export default LoadQueryWrapper(useEditBrandQueryFromParams, function EditBrandP
       <section className="mb-4">
         <h2>Settings</h2>
         <BrandFormFields brand={brand} onChange={setBrand} />
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={saveSettings}
-          disabled={updatingBrand}
-        >
+        <button type="button" className="btn btn-primary" onClick={saveSettings} disabled={updatingBrand}>
           Save changes
         </button>
         <ErrorDisplay graphQLError={updateBrandError} />
@@ -98,9 +92,7 @@ export default LoadQueryWrapper(useEditBrandQueryFromParams, function EditBrandP
 
       <div className="membership">
         <h2>Membership</h2>
-        <p>
-          All members can create, edit and delete published projects. Admins can access this page.
-        </p>
+        <p>All members can create, edit and delete published projects. Admins can access this page.</p>
         <table className="table">
           <thead>
             <tr>
@@ -117,8 +109,7 @@ export default LoadQueryWrapper(useEditBrandQueryFromParams, function EditBrandP
                     <>{membership.user?.email}</>
                   ) : (
                     <>
-                      <i className="bi-envelope-fill" /> Invitation sent to{' '}
-                      {membership.invitationEmail}
+                      <i className="bi-envelope-fill" /> Invitation sent to {membership.invitationEmail}
                     </>
                   )}
                 </td>
@@ -134,25 +125,24 @@ export default LoadQueryWrapper(useEditBrandQueryFromParams, function EditBrandP
                   )}
                 </td>
                 <td className="text-end">
-                  {data.brand.currentUserCanManageMemberships &&
-                    membership.user?.id !== data.currentUser?.id && (
-                      <button
-                        type="button"
-                        className="btn btn-danger"
-                        onClick={() =>
-                          confirm({
-                            action: () => removeMembership(membership),
-                            prompt: `Are you sure you want to remove ${
-                              membership.user?.email ?? membership.invitationEmail
-                            }’s
+                  {data.brand.currentUserCanManageMemberships && membership.user?.id !== data.currentUser?.id && (
+                    <button
+                      type="button"
+                      className="btn btn-danger"
+                      onClick={() =>
+                        confirm({
+                          action: () => removeMembership(membership),
+                          prompt: `Are you sure you want to remove ${
+                            membership.user?.email ?? membership.invitationEmail
+                          }’s
                               membership from ${brand.name}?  This will revoke any privileges they
                               have on ${brand.name} projects.`,
-                          })
-                        }
-                      >
-                        Remove
-                      </button>
-                    )}
+                        })
+                      }
+                    >
+                      Remove
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

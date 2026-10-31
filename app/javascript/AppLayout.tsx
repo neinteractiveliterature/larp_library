@@ -1,6 +1,6 @@
 import { LoadQueryWrapper, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { ReactNode, Suspense } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { AppLayoutQueryData, AppLayoutQueryVariables, useAppLayoutQuery } from './queries.generated';
 import { SignInButton } from './SignInButton';
 import { SignOutButton } from './SignOutButton';

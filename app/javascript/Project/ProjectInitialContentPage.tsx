@@ -1,5 +1,5 @@
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import { generateProjectPath } from '../URLGenerators';
 import ProjectContentFields from './ProjectContentFields';
 import { useProjectPageQuery } from './queries.generated';

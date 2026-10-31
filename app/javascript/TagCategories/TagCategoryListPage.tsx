@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Waypoint } from 'react-waypoint';
 import { useTagCategoryListPageQuery } from './queries.generated';
 import TagCategory from './TagCategory';
@@ -8,8 +8,7 @@ export default function TagCategoryListPage(): JSX.Element {
     fetchPolicy: 'network-only',
   });
 
-  const tagCategories =
-    loading || error || !data ? [] : data.tagCategories.edges.map((edge) => edge.node);
+  const tagCategories = loading || error || !data ? [] : data.tagCategories.edges.map((edge) => edge.node);
 
   return (
     <>
@@ -22,10 +21,7 @@ export default function TagCategoryListPage(): JSX.Element {
       <ul className="list-unstyled my-4">
         {tagCategories.map((tagCategory, index) => (
           <div className="mb-1" key={tagCategory.id}>
-            <TagCategory
-              tagCategory={tagCategory}
-              linkTo={`/tag_categories/${tagCategory.id}/edit`}
-            />
+            <TagCategory tagCategory={tagCategory} linkTo={`/tag_categories/${tagCategory.id}/edit`} />
             {index === tagCategories.length - 5 && (
               <Waypoint
                 onEnter={() => {
