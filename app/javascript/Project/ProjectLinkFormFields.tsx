@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import { BootstrapFormInput, FormGroupWithLabel, usePropertySetters } from '@neinteractiveliterature/litform';
 import { ProjectLink } from '../graphqlTypes.generated';
 import IconSelect from '../IconSelect';

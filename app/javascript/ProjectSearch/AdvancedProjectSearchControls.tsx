@@ -5,7 +5,7 @@ import {
   parseIntOrNull,
   useDebouncedState,
 } from '@neinteractiveliterature/litform';
-import { useId } from 'react';
+import { useId, type JSX } from 'react';
 import TagSelector from '../Tags/TagSelector';
 import { ProjectSearchQueryData } from './queries.generated';
 import useProjectSearchParams from './useProjectSearchParams';

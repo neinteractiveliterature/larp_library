@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import { Link } from 'react-router';
 import { Waypoint } from '../Waypoint';
 import { useTagCategoryListPageQuery } from './queries.generated';

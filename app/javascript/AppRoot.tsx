@@ -1,5 +1,5 @@
 import mapValues from 'lodash/mapValues';
-import React from 'react';
+import React, { type JSX } from 'react';
 import { Route, Routes } from 'react-router';
 import AppLayout from './AppLayout';
 import { S3ConfigurationContext, S3ConfigurationContextValue } from './S3ConfigurationContext';

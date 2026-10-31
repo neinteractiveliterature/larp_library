@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/client';
-import { Suspense, useRef } from 'react';
+import { Suspense, useRef, type JSX } from 'react';
 import { Confirm, ErrorBoundary, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import useLarpLibraryApolloClient from './useLarpLibraryApolloClient';
 import { BrowserRouter } from 'react-router';

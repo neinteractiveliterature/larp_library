@@ -9,7 +9,7 @@ import {
 import { deleteObjectFromReferenceArrayUpdater } from '@neinteractiveliterature/litform-apollo';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, type JSX } from 'react';
 import { Project, ProjectLink } from '../graphqlTypes.generated';
 import { getSortableStyle, useSortableDndSensors } from '../SortableUtils';
 import AddProjectLinkModal from './AddProjectLinkModal';

@@ -5,7 +5,7 @@ import {
   FormGroupWithLabel,
   BootstrapFormSelect,
 } from '@neinteractiveliterature/litform';
-import React from 'react';
+import React, { type JSX } from 'react';
 import { License, Project } from '../graphqlTypes.generated';
 import MarkdownEditor from '../MarkdownEditor';
 import { TagFragment } from '../Tags/queries.generated';

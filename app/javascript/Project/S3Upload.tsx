@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState, type JSX } from 'react';
 import { useCompleteProjectFileUploadMutation } from './mutations.generated';
 import { S3ConfigurationContext } from '../S3ConfigurationContext';
 import { ProjectFileFieldsFragment } from './queries';

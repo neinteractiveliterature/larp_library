@@ -1,6 +1,6 @@
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { addNewObjectToReferenceArrayUpdater } from '@neinteractiveliterature/litform-apollo';
-import { useState } from 'react';
+import { useState, type JSX } from 'react';
 import Modal from 'react-bootstrap4-modal';
 
 import { Project, ProjectLink } from '../graphqlTypes.generated';

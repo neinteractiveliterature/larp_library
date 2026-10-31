@@ -1,5 +1,5 @@
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 import Modal from 'react-bootstrap4-modal';
 
 import { ProjectLink } from '../graphqlTypes.generated';
@@ -12,11 +12,7 @@ export type EditProjectLinkModalProps = {
   initialProjectLink?: ProjectLinkFormProjectLink & Pick<ProjectLink, 'id'>;
 };
 
-function EditProjectLinkModal({
-  initialProjectLink,
-  visible,
-  close,
-}: EditProjectLinkModalProps): JSX.Element {
+function EditProjectLinkModal({ initialProjectLink, visible, close }: EditProjectLinkModalProps): JSX.Element {
   const [updateProjectLink, { loading, error }] = useUpdateProjectLinkMutation();
   const [projectLink, setProjectLink] = useState<ProjectLinkFormProjectLink>(
     initialProjectLink ?? { title: '', url: '' },

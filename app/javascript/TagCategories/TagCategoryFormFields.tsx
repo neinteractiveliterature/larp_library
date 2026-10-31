@@ -1,5 +1,5 @@
 import { BootstrapFormInput, FormGroupWithLabel, usePropertySetters } from '@neinteractiveliterature/litform';
-import React from 'react';
+import React, { type JSX } from 'react';
 import ColorPicker from '../ColorPicker';
 import { TagCategory } from '../graphqlTypes.generated';
 import IconSelect from '../IconSelect';

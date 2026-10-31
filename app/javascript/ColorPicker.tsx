@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import { ChromePicker, ColorResult } from 'react-color';
 import tinycolor2 from 'tinycolor2';
 

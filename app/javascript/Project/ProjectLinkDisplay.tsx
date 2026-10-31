@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import { ProjectLink } from '../graphqlTypes.generated';
 
 export type ProjectLinkDisplayProps = {

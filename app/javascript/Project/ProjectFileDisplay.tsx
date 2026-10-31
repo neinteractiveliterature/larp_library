@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import { ProjectPageQueryData } from './queries.generated';
 
 function getIconForMimeType(mimeType: string | null | undefined): string {
