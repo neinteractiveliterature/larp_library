@@ -1,4 +1,5 @@
-import { LoadQueryWrapper, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
 import { ReactNode, Suspense } from 'react';
 import { Link } from 'react-router';
 import { AppLayoutQueryData, AppLayoutQueryVariables, useAppLayoutQuery } from './queries.generated';

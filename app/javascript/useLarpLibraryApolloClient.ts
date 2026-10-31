@@ -1,7 +1,7 @@
 import { useMemo, RefObject } from 'react';
 import { ApolloClient, ApolloLink, InMemoryCache, NormalizedCacheObject, HttpLink } from '@apollo/client';
 import { TypedTypePolicies } from './apolloClientHelpers.generated';
-import { useAuthHeadersLink, useErrorHandlerLink } from '@neinteractiveliterature/litform';
+import { useAuthHeadersLink, useErrorHandlerLink } from '@neinteractiveliterature/litform-apollo';
 import { relayStylePagination } from '@apollo/client/utilities';
 
 export function useLarpLibraryApolloLink(

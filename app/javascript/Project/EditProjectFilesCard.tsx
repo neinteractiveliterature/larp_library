@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
 import {
   buildOptimisticArrayForMove,
-  deleteObjectFromReferenceArrayUpdater,
   useArrayBasicSortableHandlers,
   useGraphQLConfirm,
   useMatchWidthStyle,
 } from '@neinteractiveliterature/litform';
+import { deleteObjectFromReferenceArrayUpdater } from '@neinteractiveliterature/litform-apollo';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useDeleteProjectFileMutation, useMoveProjectFileMutation } from './mutations.generated';
@@ -86,10 +86,7 @@ export type EditProjectFilesCardProps = Omit<S3UploadProps, 'projectId'> & {
   project: ProjectPageQueryData['project'];
 };
 
-function EditProjectFilesCard({
-  project,
-  ...s3UploadProps
-}: EditProjectFilesCardProps): JSX.Element {
+function EditProjectFilesCard({ project, ...s3UploadProps }: EditProjectFilesCardProps): JSX.Element {
   const [moveProjectFile] = useMoveProjectFileMutation();
   const sortedFiles = useMemo(
     () => [...project.projectFiles].sort((a, b) => a.position - b.position),
@@ -120,11 +117,7 @@ function EditProjectFilesCard({
   );
 
   const sensors = useSortableDndSensors();
-  const { draggingItem, ...sortableHandlers } = useArrayBasicSortableHandlers(
-    sortedFiles,
-    moveFile,
-    'id',
-  );
+  const { draggingItem, ...sortableHandlers } = useArrayBasicSortableHandlers(sortedFiles, moveFile, 'id');
   const [matchWidthRef, matchWidthStyle] = useMatchWidthStyle<HTMLDivElement>();
 
   return (
@@ -133,10 +126,7 @@ function EditProjectFilesCard({
         <div className="card-header">Files</div>
         <div className="card-body">
           <ul className="list-unstyled">
-            <SortableContext
-              items={sortedFiles.map((file) => file.id)}
-              strategy={verticalListSortingStrategy}
-            >
+            <SortableContext items={sortedFiles.map((file) => file.id)} strategy={verticalListSortingStrategy}>
               {sortedFiles.map((file) => (
                 <EditProjectFile file={file} project={project} key={file.id} />
               ))}
@@ -146,9 +136,7 @@ function EditProjectFilesCard({
           {project.license != null && project.currentUserCanUploadFiles ? (
             <S3Upload project={project} {...s3UploadProps} />
           ) : (
-            <div>
-              Attaching files is disabled for this project because it does not specify a license.
-            </div>
+            <div>Attaching files is disabled for this project because it does not specify a license.</div>
           )}
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { ErrorDisplay } from '@neinteractiveliterature/litform/lib';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import buildTagAttributes from './buildTagAttributes';

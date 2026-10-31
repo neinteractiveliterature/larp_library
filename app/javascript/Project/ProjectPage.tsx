@@ -1,4 +1,5 @@
-import { LoadQueryWrapper, useGraphQLConfirm } from '@neinteractiveliterature/litform/lib';
+import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
 import sortBy from 'lodash/sortBy';
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router';

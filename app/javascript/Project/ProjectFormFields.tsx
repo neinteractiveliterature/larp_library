@@ -34,11 +34,7 @@ export type ProjectFormProps = {
   licenseOptions: NonNullable<ProjectFormProject['license']>[];
 };
 
-export default function ProjectFormFields({
-  project,
-  onChange,
-  licenseOptions,
-}: ProjectFormProps): JSX.Element {
+export default function ProjectFormFields({ project, onChange, licenseOptions }: ProjectFormProps): JSX.Element {
   const [
     setTitle,
     setAuthors,
@@ -78,9 +74,7 @@ export default function ProjectFormFields({
         onTextChange={(text) => setPublicationYear(parseIntOrNull(text))}
       />
       <FormGroupWithLabel label="Tags">
-        {(id) => (
-          <TagSelector isMulti isCreatable value={project.tags} onChange={setTags} id={id} />
-        )}
+        {(id) => <TagSelector isMulti isCreatable value={project.tags} onChange={setTags} id={id} />}
       </FormGroupWithLabel>
       <FormGroupWithLabel
         label={
@@ -154,9 +148,7 @@ export default function ProjectFormFields({
       <BootstrapFormSelect
         label="License"
         value={project.license?.id ?? '_unspecified'}
-        onValueChange={(licenseId) =>
-          setLicense(licenseOptions.find((license) => license.id === licenseId))
-        }
+        onValueChange={(licenseId) => setLicense(licenseOptions.find((license) => license.id === licenseId))}
       >
         {licenseOptions.map((license) => (
           <option key={license.id} value={license.id}>
@@ -166,8 +158,8 @@ export default function ProjectFormFields({
         ))}
         <option disabled>---</option>
         <option value="_unspecified">
-          Other license/prefer not to specify (you won’t be able to upload files, only link out to
-          somewhere else on the web)
+          Other license/prefer not to specify (you won’t be able to upload files, only link out to somewhere else on the
+          web)
         </option>
       </BootstrapFormSelect>
     </>

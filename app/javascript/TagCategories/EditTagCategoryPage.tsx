@@ -1,8 +1,5 @@
-import {
-  ErrorDisplay,
-  LoadQueryWrapper,
-  useGraphQLConfirm,
-} from '@neinteractiveliterature/litform/lib';
+import { ErrorDisplay, useGraphQLConfirm } from '@neinteractiveliterature/litform';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import TagCategoryFormFields from './TagCategoryFormFields';
@@ -76,12 +73,7 @@ export default LoadQueryWrapper(useEditTagQueryFromParams, function EditTagCateg
 
       <TagCategoryFormFields tagCategory={tagCategory} onChange={setTagCategory} />
 
-      <button
-        type="button"
-        className="btn btn-primary"
-        disabled={updatingTagCategory}
-        onClick={saveChanges}
-      >
+      <button type="button" className="btn btn-primary" disabled={updatingTagCategory} onClick={saveChanges}>
         Save changes
       </button>
 

@@ -1,8 +1,4 @@
-import {
-  BootstrapFormInput,
-  FormGroupWithLabel,
-  usePropertySetters,
-} from '@neinteractiveliterature/litform';
+import { BootstrapFormInput, FormGroupWithLabel, usePropertySetters } from '@neinteractiveliterature/litform';
 import { ProjectLink } from '../graphqlTypes.generated';
 import IconSelect from '../IconSelect';
 
@@ -25,11 +21,7 @@ function ProjectLinkFormFields({ projectLink, onChange }: ProjectLinkFormProps):
         helpText={
           <>
             Use{' '}
-            <a
-              href="https://icons.getbootstrap.com/#icons"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
+            <a href="https://icons.getbootstrap.com/#icons" target="_blank" rel="noreferrer noopener">
               Bootstrap Icons icon names
             </a>
           </>

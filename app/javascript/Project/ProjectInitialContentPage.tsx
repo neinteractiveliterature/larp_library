@@ -1,4 +1,4 @@
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform';
+import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
 import { Link, useParams } from 'react-router';
 import { generateProjectPath } from '../URLGenerators';
 import ProjectContentFields from './ProjectContentFields';

@@ -9,7 +9,7 @@ import { ApproveBrandDocument } from './mutations.generated';
 import { buildBrand, buildConnection, buildProjectHeaders, resetFixtureIds } from '../../../test/javascript/fixtures';
 import { MockedResponse, renderPage } from '../../../test/javascript/testUtils';
 
-vi.mock('react-waypoint', () => import('../../../test/javascript/mockWaypoint'));
+vi.mock('../Waypoint', () => import('../../../test/javascript/mockWaypoint'));
 
 function brandPageMock(
   brand: ReturnType<typeof buildBrand>,

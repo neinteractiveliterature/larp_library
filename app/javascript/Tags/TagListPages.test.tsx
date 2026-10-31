@@ -8,7 +8,7 @@ import { TagCategoryListPageQueryDocument } from '../TagCategories/queries.gener
 import { buildConnection, buildTag, buildTagCategory, resetFixtureIds } from '../../../test/javascript/fixtures';
 import { MockedResponse, renderPage } from '../../../test/javascript/testUtils';
 
-vi.mock('react-waypoint', () => import('../../../test/javascript/mockWaypoint'));
+vi.mock('../Waypoint', () => import('../../../test/javascript/mockWaypoint'));
 
 function pagedMock(
   query: MockedResponse['request']['query'],
