@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/client';
-import React from 'react';
+import React, { type JSX } from 'react';
 import AsyncSelect from 'react-select/async';
 import {
   TagCategoryAutocompleteQueryData,

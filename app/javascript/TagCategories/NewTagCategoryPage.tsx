@@ -1,5 +1,5 @@
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
-import { useState } from 'react';
+import { useState, type JSX } from 'react';
 import { useNavigate } from 'react-router';
 import buildTagCategoryAttributes from './buildTagCategoryAttributes';
 import { useCreateTagCategoryMutation } from './mutations.generated';

@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import Tag, { TagProps } from '../Tags/Tag';
 import { TagCategoryFragment } from './TagCategoryFragment.generated';
 

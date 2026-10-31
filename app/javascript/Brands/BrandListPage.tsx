@@ -1,5 +1,5 @@
 import { PageLoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
-import React from 'react';
+import React, { type JSX } from 'react';
 import { Waypoint } from '../Waypoint';
 import BrandCard from './BrandCard';
 import { useBrandsPageQuery } from './queries.generated';

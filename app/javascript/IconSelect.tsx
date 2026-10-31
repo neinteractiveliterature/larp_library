@@ -1,6 +1,6 @@
 import Select from 'react-select';
 import IconsData from 'bootstrap-icons/font/bootstrap-icons.json';
-import React, { useState } from 'react';
+import React, { useState, type JSX } from 'react';
 import escapeRegExp from 'lodash/escapeRegExp';
 
 type IconOption = { label: string; value: string };

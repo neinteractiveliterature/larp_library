@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 
 import AppRoot from './AppRoot';
 import { AppLayoutQueryDocument } from './queries.generated';
@@ -149,7 +149,9 @@ describe('AppRoot', () => {
     );
 
     expect(await screen.findByText('Please wait, redirecting...')).toBeInTheDocument();
-    await vi.waitFor(() => expect(submitted).toEqual(['/users/auth/intercode']));
+    // Testing Library's waitFor (not vi.waitFor) tells React that async updates are expected while it waits; the sign-in
+    // mutation finishes during this wait
+    await waitFor(() => expect(submitted).toEqual(['/users/auth/intercode']));
     vi.restoreAllMocks();
     document.querySelectorAll('form').forEach((form) => form.remove());
   });

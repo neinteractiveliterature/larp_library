@@ -1,6 +1,6 @@
 import sortBy from 'lodash/sortBy';
 import uniq from 'lodash/uniq';
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useMemo, type JSX } from 'react';
 import { Link } from 'react-router';
 import { Brand, Project } from '../graphqlTypes.generated';
 import { TagFragment } from '../Tags/queries.generated';

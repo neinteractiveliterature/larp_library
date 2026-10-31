@@ -1,5 +1,5 @@
 import { ErrorDisplay, LoadingIndicator } from '@neinteractiveliterature/litform';
-import React from 'react';
+import React, { type JSX } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router';
 import { Link } from 'react-router';

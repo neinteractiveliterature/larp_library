@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import { SearchInput, useDebouncedState } from '@neinteractiveliterature/litform';
 import Tag from '../Tags/Tag';
 import { ProjectSearchQueryData } from './queries.generated';
@@ -7,9 +8,7 @@ export type SimpleProjectSearchControlsProps = {
   data: ProjectSearchQueryData | null | undefined;
 };
 
-export default function SimpleProjectSearchControls({
-  data,
-}: SimpleProjectSearchControlsProps): JSX.Element {
+export default function SimpleProjectSearchControls({ data }: SimpleProjectSearchControlsProps): JSX.Element {
   const [projectSearchParams, setProjectSearchParams] = useProjectSearchParams();
   const [transientQueryString, setTransientQueryString] = useDebouncedState(
     projectSearchParams.queryString,

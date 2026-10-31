@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/client';
-import React from 'react';
+import React, { type JSX } from 'react';
 import { GroupBase } from 'react-select';
 import AsyncSelect, { AsyncProps } from 'react-select/async';
 import AsyncCreatableSelect, { AsyncCreatableProps } from 'react-select/async-creatable';

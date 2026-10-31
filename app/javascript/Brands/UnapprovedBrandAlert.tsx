@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import { Brand } from '../graphqlTypes.generated';
 
 export type UnapprovedBrandAlertProps = {
@@ -18,8 +19,8 @@ export default function UnapprovedBrandAlert({ brand }: UnapprovedBrandAlertProp
           <i className="bi-exclamation-triangle-fill" />
         </div>
         <div>
-          {brand.name} is pending approval by a Larp Library admin. You can create projects and add
-          members, but the projects will not be viewable until an admin approves it.
+          {brand.name} is pending approval by a Larp Library admin. You can create projects and add members, but the
+          projects will not be viewable until an admin approves it.
         </div>
       </div>
     </div>

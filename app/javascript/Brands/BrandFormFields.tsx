@@ -1,5 +1,5 @@
 import { BootstrapFormInput, FormGroupWithLabel, usePropertySetters } from '@neinteractiveliterature/litform';
-import React from 'react';
+import React, { type JSX } from 'react';
 import { Brand } from '../graphqlTypes.generated';
 import MarkdownEditor from '../MarkdownEditor';
 

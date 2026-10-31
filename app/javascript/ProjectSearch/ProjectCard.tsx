@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router';
 import { Project } from '../graphqlTypes.generated';

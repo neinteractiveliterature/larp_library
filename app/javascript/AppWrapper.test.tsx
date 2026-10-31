@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import { useApolloClient } from '@apollo/client';
 import { render, screen } from '@testing-library/react';
 import { useLocation } from 'react-router';

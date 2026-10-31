@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import EditProjectLinksCard from './EditProjectLinksCard';
 import EditProjectFilesCard from './EditProjectFilesCard';
 import { ProjectFieldsFragment } from './queries.generated';
@@ -7,10 +8,7 @@ export type ProjectContentFieldsProps = Omit<S3UploadProps, 'projectId'> & {
   project: ProjectFieldsFragment;
 };
 
-export default function ProjectContentFields({
-  project,
-  ...s3UploadProps
-}: ProjectContentFieldsProps): JSX.Element {
+export default function ProjectContentFields({ project, ...s3UploadProps }: ProjectContentFieldsProps): JSX.Element {
   return (
     <>
       <div className="alert alert-info">
@@ -20,10 +18,9 @@ export default function ProjectContentFields({
           </div>
           <div>
             <p>
-              This is where you provide your content for people to download. This can be anything
-              used for running your larp - text, music, videos, software, etc. You can either link
-              to the content hosted elsewhere on the web, or upload files here and Larp Library will
-              host them for you.
+              This is where you provide your content for people to download. This can be anything used for running your
+              larp - text, music, videos, software, etc. You can either link to the content hosted elsewhere on the web,
+              or upload files here and Larp Library will host them for you.
             </p>
 
             <p className="mb-0">
@@ -35,8 +32,7 @@ export default function ProjectContentFields({
                 </a>{' '}
                 for your larp.
               </strong>{' '}
-              This isn’t required if you’re hosting the content elsewhere and linking to it from
-              here.
+              This isn’t required if you’re hosting the content elsewhere and linking to it from here.
             </p>
           </div>
         </div>
