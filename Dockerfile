@@ -10,7 +10,7 @@ USER root
 RUN useradd www
 WORKDIR /usr/src/larp_library
 
-RUN apt-get update && apt-get install -y git build-essential shared-mime-info libpq-dev && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y git build-essential shared-mime-info libpq-dev libyaml-dev && rm -rf /var/lib/apt/lists/*
 
 COPY --chown=www:www Gemfile Gemfile.lock .ruby-version /usr/src/larp_library/
 RUN bundle config set without 'development test' \
