@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+#
+# Replaces the local larp_library_development database with a copy of production.
+#
+# Usage:
+#   bin/load_production_database              # dump production from RDS, then load it
+#   bin/load_production_database dump.sql     # load an existing plain-SQL dump
+#
+# To dump from RDS, set these environment variables (nothing is stored in the repo):
+#   PROD_PGHOST      RDS endpoint hostname (must be reachable from this machine)
+#   PROD_PGUSER      database user
+#   PROD_PGPASSWORD  database password
+#   PROD_PGDATABASE  database name
+#   PROD_PGPORT      optional, defaults to 5432
+#
+# The dump is kept at tmp/production_dump.sql so you can reload it without re-downloading.
+# It contains real user data: tmp/ is gitignored, but don't share it.
+
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+LOCAL_USER="${LOCAL_PGUSER:-postgres}"
+DEV_DB=larp_library_development
+TMP_DB=larp_library_production_tmp
+DUMP_FILE="${1:-}"
+
+if [[ -z "$DUMP_FILE" ]]; then
+  for var in PROD_PGHOST PROD_PGUSER PROD_PGPASSWORD PROD_PGDATABASE; do
+    if [[ -z "${!var:-}" ]]; then
+      echo "$var must be set to dump from RDS (or pass the path of an existing dump file)" >&2
+      exit 1
+    fi
+  done
+
+  DUMP_FILE=tmp/production_dump.sql
+  mkdir -p tmp
+
+  echo "Dumping $PROD_PGDATABASE from $PROD_PGHOST"
+  # Write to a temp file first so a failed dump never clobbers a previous good one
+  if ! PGPASSWORD="$PROD_PGPASSWORD" PGSSLMODE=verify-full PGSSLROOTCERT=rds-global-bundle.pem pg_dump \
+    --host "$PROD_PGHOST" \
+    --port "${PROD_PGPORT:-5432}" \
+    --username "$PROD_PGUSER" \
+    --dbname "$PROD_PGDATABASE" \
+    --no-owner --no-privileges \
+    --file "$DUMP_FILE.partial"; then
+    rm -f "$DUMP_FILE.partial"
+    echo "pg_dump failed" >&2
+    exit 1
+  fi
+  mv "$DUMP_FILE.partial" "$DUMP_FILE"
+fi
+
+if [[ ! -f "$DUMP_FILE" ]]; then
+  echo "Dump file not found: $DUMP_FILE" >&2
+  exit 1
+fi
+
+echo "Loading $DUMP_FILE into local Postgres"
+dropdb -U "$LOCAL_USER" -w --if-exists "$TMP_DB"
+createdb -U "$LOCAL_USER" -w "$TMP_DB"
+psql -U "$LOCAL_USER" -w -d "$TMP_DB" -v ON_ERROR_STOP=1 -q -f "$DUMP_FILE" > /dev/null
+
+echo "Replacing $DEV_DB with production data"
+dropdb -U "$LOCAL_USER" -w --if-exists -f "$DEV_DB"
+createdb -U "$LOCAL_USER" -w -T "$TMP_DB" "$DEV_DB"
+dropdb -U "$LOCAL_USER" -w "$TMP_DB"
+
+echo "Done. Run bin/rails db:migrate if this branch has migrations production doesn't."
