@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import ruby from 'vite-plugin-ruby';
 
 export default defineConfig(({ command }) => ({
