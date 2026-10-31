@@ -13,8 +13,9 @@
         window.larpLibraryAssetsHost = <%=raw ENV['ASSETS_HOST'].to_json %>;
       </script>
     <% end -%>
-    <%= stylesheet_bundle_tag 'application' %>
-    <%= javascript_bundle_tag 'application', defer: true %>
+    <%= vite_client_tag %>
+    <%= vite_react_refresh_tag %>
+    <%= vite_javascript_tag 'application.tsx' %>
     <% if ENV['SENTRY_DSN'].present? -%>
       <script type="application/javascript">
         window.larpLibrarySentryDsn = <%=raw ENV['SENTRY_DSN'].to_json %>;

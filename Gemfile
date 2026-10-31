@@ -8,7 +8,6 @@ gem "dotenv-rails", require: "dotenv/load", groups: %i[development test]
 gem "pg"
 gem "rails", "7.2.4"
 
-gem "minipack"
 gem "sprockets-rails"
 
 gem "listen"
@@ -67,3 +66,5 @@ end
 group :production do
   gem "puma"
 end
+
+gem "vite_rails", "~> 3.11"
