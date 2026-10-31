@@ -1,4 +1,4 @@
-import { act, screen, within } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import ProjectInitialContentPage from './ProjectInitialContentPage';
@@ -7,6 +7,8 @@ import {
   CreateProjectLinkDocument,
   DeleteProjectFileDocument,
   DeleteProjectLinkDocument,
+  MoveProjectFileDocument,
+  MoveProjectLinkDocument,
   UpdateProjectLinkDocument,
 } from './mutations.generated';
 import { ProjectPageQueryDocument } from './queries.generated';
@@ -343,5 +345,171 @@ describe('project files', () => {
     const bar = within(screen.getByRole('progressbar')).getByText('0% Complete');
     expect(bar).toBeInTheDocument();
     consoleError.mockRestore();
+  });
+});
+
+/**
+ * dnd-kit works out where a dragged item can go from the on-screen positions of the sortable items, and jsdom has no
+ * layout (every rect is all zeros).  Report the drag handles as a vertical stack of 50px rows, and give every other
+ * element a nominal size (dnd-kit measures the floating drag overlay, among others, and a zero-size item can never
+ * overlap the row it is being dragged to).
+ */
+function stubSortableLayout() {
+  const realGetBoundingClientRect = Element.prototype.getBoundingClientRect;
+  const rectAt = (top: number) => ({
+    x: 0,
+    y: top,
+    width: 20,
+    height: 50,
+    top,
+    left: 0,
+    right: 20,
+    bottom: top + 50,
+    toJSON: () => ({}),
+  });
+  vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (this: Element) {
+    const index = [...document.querySelectorAll('[aria-roledescription="sortable"]')].indexOf(this);
+    return index !== -1 ? rectAt(index * 50) : rectAt(realGetBoundingClientRect.call(this).top);
+  });
+}
+
+const sortableHandles = () => [...document.querySelectorAll<HTMLElement>('[aria-roledescription="sortable"]')];
+const isDragging = () => document.querySelector('[style*="grabbing"]') != null;
+
+describe('reordering by dragging', () => {
+  beforeEach(() => {
+    resetFixtureIds();
+    stubSortableLayout();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('moves a link with the keyboard', async () => {
+    const user = userEvent.setup();
+    let moved: unknown;
+    const reordered = [
+      buildProjectLink({ id: 'link-2', title: 'Second', position: 1, url: 'https://example.com/2' }),
+      buildProjectLink({ id: 'link-1', title: 'First', position: 2, url: 'https://example.com/1' }),
+      buildProjectLink({ id: 'link-3', title: 'Third', position: 3, url: 'https://example.com/3' }),
+    ];
+    renderContentPage(
+      buildProjectFields({
+        projectLinks: [
+          buildProjectLink({ id: 'link-1', title: 'First', position: 1, url: 'https://example.com/1' }),
+          buildProjectLink({ id: 'link-2', title: 'Second', position: 2, url: 'https://example.com/2' }),
+          buildProjectLink({ id: 'link-3', title: 'Third', position: 3, url: 'https://example.com/3' }),
+        ],
+      }),
+      [
+        {
+          request: { query: MoveProjectLinkDocument },
+          variableMatcher: (variables) => {
+            moved = variables;
+            return true;
+          },
+          result: {
+            data: {
+              moveProjectLink: {
+                __typename: 'MoveProjectLinkPayload',
+                project: buildProjectFields({ projectLinks: reordered }),
+              },
+            },
+          },
+        },
+      ],
+    );
+
+    await screen.findByRole('link', { name: 'First' });
+    act(() => sortableHandles()[0].focus());
+    await user.keyboard('[Space]');
+    // while dragging, a preview of the dragged link floats along with the cursor
+    await waitFor(() => expect(isDragging()).toBe(true));
+    await user.keyboard('[ArrowDown]');
+
+    await waitFor(() => expect(moved).toEqual({ id: 'link-1', destinationIndex: 1 }));
+    await user.keyboard('[Space]');
+    await waitFor(() => expect(isDragging()).toBe(false));
+    await waitFor(() =>
+      expect(screen.getAllByRole('link', { name: /First|Second|Third/ }).map((a) => a.textContent?.trim())).toEqual([
+        'Second',
+        'First',
+        'Third',
+      ]),
+    );
+  });
+
+  it('moves nothing when a drag is cancelled', async () => {
+    const user = userEvent.setup();
+    renderContentPage(
+      buildProjectFields({
+        projectLinks: [
+          buildProjectLink({ id: 'link-1', title: 'First', position: 1 }),
+          buildProjectLink({ id: 'link-2', title: 'Second', position: 2 }),
+        ],
+      }),
+    );
+
+    await screen.findByRole('link', { name: 'First' });
+    act(() => sortableHandles()[0].focus());
+    await user.keyboard('[Space]');
+    await waitFor(() => expect(isDragging()).toBe(true));
+    await user.keyboard('[Escape]');
+
+    await waitFor(() => expect(isDragging()).toBe(false));
+    expect(screen.getAllByRole('link', { name: /First|Second/ }).map((a) => a.textContent?.trim())).toEqual([
+      'First',
+      'Second',
+    ]);
+  });
+
+  it('moves a file with the keyboard', async () => {
+    const user = userEvent.setup();
+    let moved: unknown;
+    const file = (id: string, filename: string, position: number) =>
+      buildProjectFile({ id, filename, position, filesize: 1024 });
+    renderContentPage(
+      buildProjectFields({
+        projectFiles: [file('file-1', 'a.pdf', 1), file('file-2', 'b.pdf', 2), file('file-3', 'c.pdf', 3)],
+      }),
+      [
+        {
+          request: { query: MoveProjectFileDocument },
+          variableMatcher: (variables) => {
+            moved = variables;
+            return true;
+          },
+          result: {
+            data: {
+              moveProjectFile: {
+                __typename: 'MoveProjectFilePayload',
+                project: buildProjectFields({
+                  projectFiles: [file('file-2', 'b.pdf', 1), file('file-1', 'a.pdf', 2), file('file-3', 'c.pdf', 3)],
+                }),
+              },
+            },
+          },
+        },
+      ],
+    );
+
+    await screen.findByRole('link', { name: /a\.pdf/ });
+    // the first file: down one place
+    act(() => sortableHandles()[0].focus());
+    await user.keyboard('[Space]');
+    await waitFor(() => expect(isDragging()).toBe(true));
+    await user.keyboard('[ArrowDown]');
+
+    await waitFor(() => expect(moved).toEqual({ id: 'file-1', destinationIndex: 1 }));
+    await user.keyboard('[Space]');
+    await waitFor(() => expect(isDragging()).toBe(false));
+    await waitFor(() =>
+      expect(screen.getAllByRole('link', { name: /\.pdf/ }).map((a) => a.textContent?.trim())).toEqual([
+        'b.pdf',
+        'a.pdf',
+        'c.pdf',
+      ]),
+    );
   });
 });

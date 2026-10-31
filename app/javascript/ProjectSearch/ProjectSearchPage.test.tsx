@@ -96,8 +96,7 @@ describe('ProjectSearchPage', () => {
     });
 
     await screen.findByText('Hordey');
-    // the dismiss button is icon-only and has no accessible name, so it can only be found by its class
-    await user.click(document.querySelector('.tag-dismiss-button')!);
+    await user.click(screen.getByRole('button', { name: 'Remove horde' }));
 
     await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent(/^\/projects\??$/));
   });
