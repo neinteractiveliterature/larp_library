@@ -54,12 +54,9 @@ describe('AppWrapper', () => {
     expect(AppWrapper(Anonymous).displayName).toEqual('AppWrapper<unknown>');
   });
 
-  // KNOWN BUG: litform's ErrorBoundary defaults to placement="before", which renders the error *and then renders the
-  // children again*.  When a child threw while rendering, that re-render throws again, so the error escapes the
-  // boundary and the page goes blank.  Passing placement="replace" to the ErrorBoundary in AppWrapper fixes it (checked
-  // by hand); when that's done this test will start failing, because `it.fails` expects a failure, and should become a
-  // plain `it`.
-  it.fails('shows an error instead of a blank page when the wrapped component crashes', async () => {
+  // litform's ErrorBoundary defaults to placement="before", which renders the children again after the error; if a
+  // child threw while rendering, that re-render throws too and the error escapes.  AppWrapper asks for "replace".
+  it('shows an error instead of a blank page when the wrapped component crashes', async () => {
     // React logs the error, re-reports it as a window "error" event in development, and litform's ErrorBoundary logs
     // it too; keep all of that from filling the test output
     vi.spyOn(console, 'error').mockImplementation(() => {});

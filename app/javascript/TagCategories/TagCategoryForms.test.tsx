@@ -36,11 +36,17 @@ describe('NewTagCategoryPage', () => {
 
     expect(screen.getByRole('heading', { name: 'Create a new tag category' })).toBeInTheDocument();
     await user.type(screen.getByLabelText('Name'), 'Structure');
-    await selectReactSelectOption(user, screen.getByRole('combobox'), 'bank', { typeText: 'bank' });
+    await selectReactSelectOption(user, screen.getByLabelText('Icon'), 'bank', { typeText: 'bank' });
     await user.click(screen.getByRole('button', { name: 'Create tag category' }));
 
     await vi.waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/tag_categories'));
     expect(sent).toEqual({ tagCategoryAttributes: { name: 'Structure', color: undefined, icon: 'bank' } });
+  });
+
+  it('labels the icon select, so clicking the label or using a screen reader reaches the field', () => {
+    renderPage(<NewTagCategoryPage />, { route: '/tag_categories/new' });
+
+    expect(screen.getByLabelText('Icon')).toBe(screen.getByRole('combobox'));
   });
 
   it('shows the error if creating fails', async () => {

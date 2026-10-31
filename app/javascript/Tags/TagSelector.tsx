@@ -42,7 +42,7 @@ function TagSelector<IsMulti extends boolean, IsCreatable extends boolean>({
   };
 
   const commonProps: AsyncProps<TagFragment, IsMulti, GroupBase<TagFragment>> = {
-    id,
+    inputId: id,
     loadOptions: (inputValue: string) => queryTags(inputValue),
     value,
     getOptionValue: (option: TagFragment) => option.name ?? '',

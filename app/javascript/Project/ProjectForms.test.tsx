@@ -91,7 +91,7 @@ describe('NewProjectPage', () => {
     await user.type(screen.getByLabelText('Game length'), '3');
     await user.selectOptions(screen.getByLabelText('Length units'), 'days');
     await user.selectOptions(screen.getByLabelText('License'), 'CC BY');
-    await selectReactSelectOption(user, screen.getAllByRole('combobox')[0], 'brand-new', { typeText: 'brand-new' });
+    await selectReactSelectOption(user, screen.getByLabelText('Tags'), 'brand-new', { typeText: 'brand-new' });
     await vi.waitFor(() => expect(document.querySelector('.cm-editor')).toBeInTheDocument());
     setDescription('A *great* larp.');
     await user.click(screen.getByRole('button', { name: 'Save project' }));

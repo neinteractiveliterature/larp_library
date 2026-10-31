@@ -56,7 +56,7 @@ describe('NewTagPage', () => {
 
     expect(screen.getByRole('heading', { name: 'Create a new tag' })).toBeInTheDocument();
     await user.type(screen.getByLabelText('Name'), 'comedy');
-    await selectReactSelectOption(user, screen.getByRole('combobox'), 'Genre');
+    await selectReactSelectOption(user, screen.getByLabelText('Category'), 'Genre');
     await user.click(screen.getByRole('button', { name: 'Create tag' }));
 
     await vi.waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/tags'));
@@ -204,6 +204,7 @@ describe('TagSelector', () => {
     const [value, setValue] = useState<unknown>(initial);
     return (
       <>
+        <label htmlFor="tag-selector">Tags</label>
         <TagSelector
           id="tag-selector"
           isMulti={isMulti}
@@ -233,7 +234,7 @@ describe('TagSelector', () => {
       mocks: [tagAutocompleteMock(allTags())],
     });
 
-    await selectReactSelectOption(user, screen.getByRole('combobox'), 'comedy', { typeText: 'co' });
+    await selectReactSelectOption(user, screen.getByLabelText('Tags'), 'comedy', { typeText: 'co' });
 
     expect(values).toEqual([expect.objectContaining({ id: 't2', name: 'comedy' })]);
     expect(await screen.findByText('comedy')).toBeInTheDocument();
@@ -245,8 +246,8 @@ describe('TagSelector', () => {
       mocks: [tagAutocompleteMock(allTags())],
     });
 
-    await user.click(screen.getByRole('combobox'));
-    await user.type(screen.getByRole('combobox'), 'he');
+    await user.click(screen.getByLabelText('Tags'));
+    await user.type(screen.getByLabelText('Tags'), 'he');
 
     expect(await screen.findByText('heist')).toBeInTheDocument();
     expect(screen.queryByText('horde')).not.toBeInTheDocument();
@@ -261,7 +262,7 @@ describe('TagSelector', () => {
       mocks: [tagAutocompleteMock(allTags())],
     });
 
-    await user.click(await screen.findByRole('combobox'));
+    await user.click(await screen.findByLabelText('Tags'));
     await user.keyboard('{Backspace}');
 
     expect(values).toEqual([null]);
@@ -274,8 +275,8 @@ describe('TagSelector', () => {
       mocks: [tagAutocompleteMock(allTags())],
     });
 
-    await selectReactSelectOption(user, screen.getByRole('combobox'), 'horde', { typeText: 'ho' });
-    await selectReactSelectOption(user, screen.getByRole('combobox'), 'heist', { typeText: 'he' });
+    await selectReactSelectOption(user, screen.getByLabelText('Tags'), 'horde', { typeText: 'ho' });
+    await selectReactSelectOption(user, screen.getByLabelText('Tags'), 'heist', { typeText: 'he' });
 
     expect(values.at(-1)).toEqual([expect.objectContaining({ id: 't1' }), expect.objectContaining({ id: 't3' })]);
   });
@@ -288,7 +289,7 @@ describe('TagSelector', () => {
     });
 
     // the "create" option is rendered with the same Tag badge as real options, so it shows just the new name
-    await selectReactSelectOption(user, screen.getByRole('combobox'), 'brand-new', { typeText: 'brand-new' });
+    await selectReactSelectOption(user, screen.getByLabelText('Tags'), 'brand-new', { typeText: 'brand-new' });
 
     expect(values.at(-1)).toEqual([expect.objectContaining({ __typename: 'Tag', name: 'brand-new' })]);
   });
@@ -300,7 +301,7 @@ describe('TagSelector', () => {
       mocks: [tagAutocompleteMock(allTags())],
     });
 
-    await selectReactSelectOption(user, screen.getByRole('combobox'), 'solo-tag', { typeText: 'solo-tag' });
+    await selectReactSelectOption(user, screen.getByLabelText('Tags'), 'solo-tag', { typeText: 'solo-tag' });
 
     expect(values.at(-1)).toEqual(expect.objectContaining({ __typename: 'Tag', name: 'solo-tag' }));
   });

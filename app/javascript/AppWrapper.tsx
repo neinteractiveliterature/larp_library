@@ -21,7 +21,7 @@ function AppWrapper<P extends JSX.IntrinsicAttributes>(
     }
 
     return (
-      <ErrorBoundary>
+      <ErrorBoundary placement="replace">
         <Confirm>
           <ApolloProvider client={apolloClient}>
             <BrowserRouter>

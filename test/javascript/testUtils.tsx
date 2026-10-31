@@ -57,11 +57,8 @@ export function renderPage(
 }
 
 /**
- * Opens a react-select (given its combobox input) and picks the option with the given text.  Options that load
- * asynchronously are awaited, so this works for AsyncSelect too.
- *
- * Tests find the select by role (`screen.getByRole('combobox')`) rather than by label, because the app passes `id` to
- * react-select, which puts it on the container element and not the input, so the form labels don't actually label it.
+ * Opens a react-select (given its combobox input, e.g. from `screen.getByLabelText(...)`) and picks the option with the
+ * given text.  Options that load asynchronously are awaited, so this works for AsyncSelect too.
  */
 export async function selectReactSelectOption(
   user: ReturnType<typeof import('@testing-library/user-event').default.setup>,
