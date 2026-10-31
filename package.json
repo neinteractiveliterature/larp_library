@@ -3,7 +3,8 @@
     "build": "vite build",
     "graphql:codegen": "graphql-codegen --config codegen.yml",
     "start": "vite",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "oxlint"
   },
   "dependencies": {
     "@apollo/client": "3.14.1",
@@ -46,15 +47,13 @@
   },
   "devDependencies": {
     "@aws-sdk/types": "^3.654.0",
-    "@eslint/compat": "^2.0.0",
-    "@eslint/eslintrc": "^3.1.0",
-    "@eslint/js": "^10.0.0",
     "@graphql-codegen/add": "6.0.0",
     "@graphql-codegen/cli": "6.0.0",
     "@graphql-codegen/near-operation-file-preset": "5.0.0",
     "@graphql-codegen/typescript-apollo-client-helpers": "4.0.0",
     "@graphql-codegen/typescript-operations": "5.0.0",
     "@graphql-codegen/typescript-react-apollo": "4.3.2",
+    "@oxlint/migrate": "^1.90.0",
     "@prettier/plugin-ruby": "4.0.4",
     "@types/codemirror": "5.60.18",
     "@types/lodash": "4.17.27",
@@ -62,16 +61,11 @@
     "@types/react-dom": "18.3.7",
     "@types/tinycolor2": "1.4.6",
     "@types/uuid": "10.0.0",
-    "@typescript-eslint/eslint-plugin": "8.72.1",
-    "@typescript-eslint/parser": "8.72.1",
     "@vitejs/plugin-react": "^6.1.2",
-    "eslint": "10.14.0",
-    "eslint-plugin-react": "7.37.5",
-    "eslint-plugin-react-hooks": "5.2.0",
-    "globals": "^17.0.0",
     "graphql-tag": "2.12.7",
     "husky": "9.1.7",
     "lint-staged": "17.6.0",
+    "oxlint": "^1.90.0",
     "prettier": "3.9.10",
     "typescript": "5.9.3",
     "vite": "^8",
@@ -82,7 +76,7 @@
     "defaults"
   ],
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
+    "*.{js,jsx,ts,tsx,mjs,mts}": "oxlint --fix",
     "*.{js,jsx,ts,tsx,css,md}": "prettier --write",
     "*.{rb,rake}": "bundle exec rubocop -a"
   },

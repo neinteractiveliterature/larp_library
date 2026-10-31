@@ -48,6 +48,5 @@ yarn-debug.log*
 *.pgdump
 /*.sql
 /*.sql.gz
-/.eslintcache
 /stats.json
 /workspaceConfiguration
