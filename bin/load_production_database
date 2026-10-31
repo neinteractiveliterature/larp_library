@@ -6,12 +6,10 @@
 #   bin/load_production_database              # dump production from RDS, then load it
 #   bin/load_production_database dump.sql     # load an existing plain-SQL dump
 #
-# To dump from RDS, set these environment variables (nothing is stored in the repo):
-#   PROD_PGHOST      RDS endpoint hostname (must be reachable from this machine)
-#   PROD_PGUSER      database user
-#   PROD_PGPASSWORD  database password
-#   PROD_PGDATABASE  database name
-#   PROD_PGPORT      optional, defaults to 5432
+# To dump from RDS, set DATABASE_URL to the production connection string (nothing is stored in the repo):
+#   DATABASE_URL=postgres://user:password@host:5432/dbname bin/load_production_database
+# Set it inline like that rather than exporting it, since Rails also reads DATABASE_URL.
+# SSL defaults to verify-full against rds-global-bundle.pem; sslmode/sslrootcert in the URL override that.
 #
 # The dump is kept at tmp/production_dump.sql so you can reload it without re-downloading.
 # It contains real user data: tmp/ is gitignored, but don't share it.
@@ -26,23 +24,18 @@ TMP_DB=larp_library_production_tmp
 DUMP_FILE="${1:-}"
 
 if [[ -z "$DUMP_FILE" ]]; then
-  for var in PROD_PGHOST PROD_PGUSER PROD_PGPASSWORD PROD_PGDATABASE; do
-    if [[ -z "${!var:-}" ]]; then
-      echo "$var must be set to dump from RDS (or pass the path of an existing dump file)" >&2
-      exit 1
-    fi
-  done
+  if [[ -z "${DATABASE_URL:-}" ]]; then
+    echo "DATABASE_URL must be set to dump from RDS (or pass the path of an existing dump file)" >&2
+    exit 1
+  fi
 
   DUMP_FILE=tmp/production_dump.sql
   mkdir -p tmp
 
-  echo "Dumping $PROD_PGDATABASE from $PROD_PGHOST"
+  echo "Dumping production database"
   # Write to a temp file first so a failed dump never clobbers a previous good one
-  if ! PGPASSWORD="$PROD_PGPASSWORD" PGSSLMODE=verify-full PGSSLROOTCERT=rds-global-bundle.pem pg_dump \
-    --host "$PROD_PGHOST" \
-    --port "${PROD_PGPORT:-5432}" \
-    --username "$PROD_PGUSER" \
-    --dbname "$PROD_PGDATABASE" \
+  if ! PGSSLMODE=verify-full PGSSLROOTCERT=rds-global-bundle.pem pg_dump \
+    --dbname "$DATABASE_URL" \
     --no-owner --no-privileges \
     --file "$DUMP_FILE.partial"; then
     rm -f "$DUMP_FILE.partial"
