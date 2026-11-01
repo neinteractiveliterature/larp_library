@@ -1,42 +1,35 @@
-import { useApolloClient } from '@apollo/client';
 import React, { type JSX } from 'react';
 import AsyncSelect from 'react-select/async';
-import {
-  TagCategoryAutocompleteQueryData,
-  TagCategoryAutocompleteQueryDocument,
-  TagCategoryAutocompleteQueryVariables,
-} from './queries.generated';
+import type { TagCategoryData } from '../projectData';
 import TagCategory from './TagCategory';
-import { TagCategoryFragment } from './TagCategoryFragment.generated';
 
 export type TagCategorySelectorProps = {
-  value: TagCategoryFragment | null | undefined;
-  onChange: React.Dispatch<React.SetStateAction<TagCategoryFragment | null | undefined>>;
+  value: TagCategoryData | null | undefined;
+  onChange: React.Dispatch<React.SetStateAction<TagCategoryData | null | undefined>>;
   id?: string;
 };
 
+async function queryTagCategories(queryString: string): Promise<TagCategoryData[]> {
+  const response = await fetch(`/tag_categories/autocomplete?q=${encodeURIComponent(queryString)}`, {
+    headers: { Accept: 'application/json' },
+  });
+  if (!response.ok) {
+    throw new Error(`Could not load tag categories (${response.status})`);
+  }
+  return response.json();
+}
+
 function TagCategorySelector({ value, onChange, id }: TagCategorySelectorProps): JSX.Element {
-  const apolloClient = useApolloClient();
-
-  const queryTagCategories = async (queryString: string) => {
-    const result = await apolloClient.query<TagCategoryAutocompleteQueryData, TagCategoryAutocompleteQueryVariables>({
-      query: TagCategoryAutocompleteQueryDocument,
-      variables: { queryString },
-    });
-
-    return result.data.tagCategories.edges.map((edge) => edge.node);
-  };
-
   return (
-    <AsyncSelect<TagCategoryFragment>
+    <AsyncSelect<TagCategoryData>
       inputId={id}
       isClearable
       defaultOptions={true} // preload tag categories for blank query
-      loadOptions={(inputValue: string) => queryTagCategories(inputValue)}
+      loadOptions={queryTagCategories}
       value={value}
       onChange={(newValue) => onChange(newValue)}
-      getOptionValue={(option) => option.name ?? ''}
-      getOptionLabel={(option) => option.name ?? ''}
+      getOptionValue={(option) => option.name}
+      getOptionLabel={(option) => option.name}
       formatOptionLabel={(option) => <TagCategory tagCategory={option} />}
       styles={{
         container: (provided) => ({
@@ -46,8 +39,8 @@ function TagCategorySelector({ value, onChange, id }: TagCategorySelectorProps):
         singleValue: (provided, state) => {
           return {
             ...provided,
-            color: state.data.textColor ?? '#FFFFFF',
-            backgroundColor: state.data.color ?? '#777777',
+            color: state.data.textColor,
+            backgroundColor: state.data.color,
           };
         },
       }}

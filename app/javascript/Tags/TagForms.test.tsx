@@ -1,28 +1,24 @@
 import { useState } from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { data, redirect } from 'react-router';
 
-import * as EditTagPage from './EditTagPage';
-import * as NewTagPage from './NewTagPage';
+import EditTagPage from './EditTagPage';
+import NewTagPage from './NewTagPage';
 import TagSelector from './TagSelector';
-import { CreateTagDocument, DeleteTagDocument, UpdateTagDocument } from './mutations.generated';
-import { EditTagQueryDocument, TagAutocompleteQueryDocument, TagFragment } from './queries.generated';
-import { TagCategoryAutocompleteQueryDocument } from '../TagCategories/queries.generated';
-import { buildConnection, buildTag, buildTagCategory, resetFixtureIds } from '../../../test/javascript/fixtures';
+import { TagAutocompleteQueryDocument, TagFragment } from './queries.generated';
+import type { TagCategoryData } from '../projectData';
+import { buildConnection, buildTag, resetFixtureIds } from '../../../test/javascript/fixtures';
 import {
   MockedResponse,
+  mockFetchJson,
   renderPage,
   renderRouteModule,
   selectReactSelectOption,
 } from '../../../test/javascript/testUtils';
 
-function categoryAutocompleteMock(categories: ReturnType<typeof buildTagCategory>[]): MockedResponse {
-  return {
-    request: { query: TagCategoryAutocompleteQueryDocument },
-    variableMatcher: () => true,
-    maxUsageCount: Number.POSITIVE_INFINITY,
-    result: { data: { tagCategories: buildConnection(categories) } },
-  };
+function tagCategory(id: number, name: string): TagCategoryData {
+  return { id, name, color: '#777777', textColor: '#ffffff', icon: 'tag' };
 }
 
 function tagAutocompleteMock(
@@ -37,101 +33,85 @@ function tagAutocompleteMock(
   };
 }
 
+/** The action stand-in tests give a page: it records the JSON the page submitted, and then does what the test asks */
+function recordingAction(respond: () => unknown = () => redirect('/tags')) {
+  const submitted: unknown[] = [];
+  const action = async ({ request }: { request: Request }) => {
+    submitted.push(await request.json());
+    return respond();
+  };
+  return { action, submitted };
+}
+
 describe('NewTagPage', () => {
   beforeEach(() => resetFixtureIds());
+  afterEach(() => vi.restoreAllMocks());
+
+  const genre = tagCategory(1, 'Genre');
+  const element = tagCategory(2, 'Element');
+
+  function renderNewTagPage(action: ReturnType<typeof recordingAction>['action']) {
+    mockFetchJson(() => [genre, element]);
+    return renderRouteModule({ default: NewTagPage, loader: () => null, action }, { route: '/tags/new' });
+  }
 
   it('creates a tag in the chosen category and returns to the tag list', async () => {
     const user = userEvent.setup();
-    const genre = buildTagCategory({ id: 'cat-1', name: 'Genre' });
-    let sentAttributes: unknown;
-    renderRouteModule(NewTagPage, {
-      route: '/tags/new',
-      path: '/tags/new',
-      mocks: [
-        categoryAutocompleteMock([genre, buildTagCategory({ id: 'cat-2', name: 'Element' })]),
-        {
-          request: { query: CreateTagDocument },
-          variableMatcher: () => true,
-          result: (variables: { tagAttributes: unknown }) => {
-            sentAttributes = variables.tagAttributes;
-            return { data: { createTag: { __typename: 'CreateTagPayload', tag: buildTag({ name: 'comedy' }) } } };
-          },
-        },
-      ],
-    });
+    const { action, submitted } = recordingAction();
+    renderNewTagPage(action);
 
-    expect(screen.getByRole('heading', { name: 'Create a new tag' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Create a new tag' })).toBeInTheDocument();
     await user.type(screen.getByLabelText('Name'), 'comedy');
     await selectReactSelectOption(user, screen.getByLabelText('Category'), 'Genre');
     await user.click(screen.getByRole('button', { name: 'Create tag' }));
 
     await vi.waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/tags'));
-    expect(sentAttributes).toEqual({ name: 'comedy', tagCategoryId: 'cat-1' });
+    expect(submitted).toEqual([{ tagAttributes: { name: 'comedy', tagCategoryId: 1 } }]);
   });
 
   it('can create a tag without a category', async () => {
     const user = userEvent.setup();
-    let sentAttributes: unknown;
-    renderRouteModule(NewTagPage, {
-      route: '/tags/new',
-      path: '/tags/new',
-      mocks: [
-        categoryAutocompleteMock([]),
-        {
-          request: { query: CreateTagDocument },
-          variableMatcher: () => true,
-          result: (variables: { tagAttributes: unknown }) => {
-            sentAttributes = variables.tagAttributes;
-            return { data: { createTag: { __typename: 'CreateTagPayload', tag: buildTag() } } };
-          },
-        },
-      ],
-    });
+    const { action, submitted } = recordingAction();
+    renderNewTagPage(action);
 
-    await user.type(screen.getByLabelText('Name'), 'loose');
+    await user.type(await screen.findByLabelText('Name'), 'loose');
     await user.click(screen.getByRole('button', { name: 'Create tag' }));
 
-    await vi.waitFor(() => expect(sentAttributes).toEqual({ name: 'loose', tagCategoryId: undefined }));
+    await vi.waitFor(() => expect(submitted).toEqual([{ tagAttributes: { name: 'loose', tagCategoryId: null } }]));
   });
 
-  it('shows the error if creating the tag fails', async () => {
+  it('shows what the server says is wrong, and stays on the page', async () => {
     const user = userEvent.setup();
-    renderRouteModule(NewTagPage, {
-      route: '/tags/new',
-      path: '/tags/new',
-      mocks: [
-        categoryAutocompleteMock([]),
-        {
-          request: { query: CreateTagDocument },
-          variableMatcher: () => true,
-          error: new Error('name has already been taken'),
-        },
-      ],
-    });
+    const { action } = recordingAction(() => data({ errors: ["Name can't be blank"] }, { status: 422 }));
+    renderNewTagPage(action);
 
-    await user.type(screen.getByLabelText('Name'), 'dupe');
-    await user.click(screen.getByRole('button', { name: 'Create tag' }));
+    await user.click(await screen.findByRole('button', { name: 'Create tag' }));
 
-    expect(await screen.findByText(/name has already been taken/)).toBeInTheDocument();
+    expect(await screen.findByText(/Name can't be blank/)).toBeInTheDocument();
     expect(screen.getByTestId('location')).toHaveTextContent('/tags/new');
   });
 });
 
 describe('EditTagPage', () => {
   beforeEach(() => resetFixtureIds());
+  afterEach(() => vi.restoreAllMocks());
 
-  function editTagMock(tag: ReturnType<typeof buildTag>, projectCount: number): MockedResponse {
-    return {
-      request: { query: EditTagQueryDocument, variables: { id: tag.id } },
-      result: { data: { tag: { ...tag, projects: { __typename: 'Connection', totalCount: projectCount } } } },
-    };
+  const genre = tagCategory(1, 'Genre');
+  const horde = { id: 5, name: 'horde', tagCategory: genre };
+
+  function renderEditTagPage(
+    { projectCount = 3, tag = horde }: { projectCount?: number; tag?: typeof horde } = {},
+    action: ReturnType<typeof recordingAction>['action'] = recordingAction().action,
+  ) {
+    mockFetchJson(() => [genre]);
+    return renderRouteModule(
+      { default: EditTagPage, loader: () => ({ tag, projectCount }), action },
+      { route: '/tags/5/edit', path: '/tags/:tagId/edit' },
+    );
   }
 
-  const renderEditTagPage = (mocks: MockedResponse[]) =>
-    renderRouteModule(EditTagPage, { mocks, route: '/tags/5/edit', path: '/tags/:tagId/edit' });
-
   it('shows the tag and how many projects use it', async () => {
-    renderEditTagPage([editTagMock(buildTag({ id: '5', name: 'horde' }), 3), categoryAutocompleteMock([])]);
+    renderEditTagPage();
 
     expect(await screen.findByRole('heading', { name: 'Editing tag: horde' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Used by 3 projects' })).toHaveAttribute('href', '/projects?tag=horde');
@@ -139,58 +119,45 @@ describe('EditTagPage', () => {
   });
 
   it('uses the singular for a tag used by one project', async () => {
-    renderEditTagPage([editTagMock(buildTag({ id: '5', name: 'horde' }), 1), categoryAutocompleteMock([])]);
+    renderEditTagPage({ projectCount: 1 });
 
     expect(await screen.findByRole('link', { name: 'Used by 1 project' })).toBeInTheDocument();
   });
 
   it('saves changes and returns to the tag list', async () => {
     const user = userEvent.setup();
-    const category = buildTagCategory({ id: 'cat-1', name: 'Genre' });
-    let sent: unknown;
-    renderEditTagPage([
-      editTagMock(buildTag({ id: '5', name: 'horde', tagCategory: category }), 3),
-      categoryAutocompleteMock([category]),
-      {
-        request: { query: UpdateTagDocument },
-        variableMatcher: () => true,
-        result: (variables: unknown) => {
-          sent = variables;
-          return {
-            data: { updateTag: { __typename: 'UpdateTagPayload', tag: buildTag({ id: '5', name: 'hordes' }) } },
-          };
-        },
-      },
-    ]);
+    const { action, submitted } = recordingAction();
+    renderEditTagPage({}, action);
 
     await user.type(await screen.findByLabelText('Name'), 's');
     await user.click(screen.getByRole('button', { name: 'Save changes' }));
 
     await vi.waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/tags'));
-    expect(sent).toEqual({ id: '5', tagAttributes: { name: 'hordes', tagCategoryId: 'cat-1' } });
+    expect(submitted).toEqual([{ intent: 'save', tagAttributes: { name: 'hordes', tagCategoryId: 1 } }]);
+  });
+
+  it('shows what the server says is wrong with the changes', async () => {
+    const user = userEvent.setup();
+    const { action } = recordingAction(() => data({ errors: ['Tag category does not exist'] }, { status: 422 }));
+    renderEditTagPage({}, action);
+
+    await user.click(await screen.findByRole('button', { name: 'Save changes' }));
+
+    expect(await screen.findByText(/Tag category does not exist/)).toBeInTheDocument();
+    expect(screen.getByTestId('location')).toHaveTextContent('/tags/5/edit');
   });
 
   it('deletes the tag after confirmation', async () => {
     const user = userEvent.setup();
-    let deleted = false;
-    renderEditTagPage([
-      editTagMock(buildTag({ id: '5', name: 'horde' }), 0),
-      categoryAutocompleteMock([]),
-      {
-        request: { query: DeleteTagDocument, variables: { id: '5' } },
-        result: () => {
-          deleted = true;
-          return { data: { deleteTag: { __typename: 'DeleteTagPayload', clientMutationId: null } } };
-        },
-      },
-    ]);
+    const { action, submitted } = recordingAction();
+    renderEditTagPage({}, action);
 
     await user.click(await screen.findByRole('button', { name: 'Delete tag' }));
     expect(await screen.findByText('Are you sure you want to delete the tag horde?')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'OK', hidden: true }));
 
     await vi.waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/tags'));
-    expect(deleted).toBe(true);
+    expect(submitted).toEqual([{ intent: 'delete' }]);
   });
 });
 

@@ -1,48 +1,55 @@
-import { ErrorDisplay, useGraphQLConfirm } from '@neinteractiveliterature/litform';
+import { useConfirm } from '@neinteractiveliterature/litform';
 import { useState, type FormEvent } from 'react';
-import { Form, redirect, useFetcher } from 'react-router';
-import { appContext } from '../appContext';
-import { loadQuery } from '../loadQuery';
-import { getApolloActionError, withApolloErrors } from '../actionHelpers';
-import type { TagCategoryAttributes } from '../graphqlTypes.generated';
+import { data, Form, redirect, useFetcher } from 'react-router';
+import ActionErrorDisplay from '../ActionErrorDisplay';
 import { formatPageTitle } from '../pageTitle';
+import { abilityContext } from '../server/lib/authContext';
+import { requireAbility } from '../server/lib/authorization.server';
+import { readDbContext } from '../server/lib/dbContext';
+import { deleteTagCategory, findTagCategory, updateTagCategory } from '../server/lib/tagCategories.server';
 import Tag from '../Tags/Tag';
 import buildTagCategoryAttributes from './buildTagCategoryAttributes';
-import { DeleteTagCategoryDocument, UpdateTagCategoryDocument } from './mutations.generated';
-import { EditTagCategoryQueryDocument } from './queries.generated';
 import TagCategoryFormFields from './TagCategoryFormFields';
 import type { Route } from './+types/EditTagCategoryPage';
 
-export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
-  const { apolloClient } = context.get(appContext);
-  return loadQuery(apolloClient, EditTagCategoryQueryDocument, { id: params.tagCategoryId });
+function parseTagCategoryId(tagCategoryId: string): number {
+  if (!/^\d+$/.test(tagCategoryId)) {
+    throw new Response(null, { status: 404, statusText: 'Not Found' });
+  }
+  return Number(tagCategoryId);
 }
 
-type EditTagCategoryActionBody =
-  { intent: 'save'; tagCategoryAttributes: TagCategoryAttributes } | { intent: 'delete' };
+export async function loader({ context, params }: Route.LoaderArgs) {
+  requireAbility(context.get(abilityContext), 'update', 'TagCategory');
 
-export async function clientAction({ context, params, request }: Route.ClientActionArgs) {
-  const { apolloClient } = context.get(appContext);
-  const body = (await request.json()) as EditTagCategoryActionBody;
+  const found = await findTagCategory(context.get(readDbContext), parseTagCategoryId(params.tagCategoryId));
+  if (!found) {
+    throw new Response(null, { status: 404, statusText: 'Not Found' });
+  }
+  return found;
+}
 
-  return withApolloErrors(async () => {
-    if (body.intent === 'delete') {
-      await apolloClient.mutate({ mutation: DeleteTagCategoryDocument, variables: { id: params.tagCategoryId } });
-    } else {
-      await apolloClient.mutate({
-        mutation: UpdateTagCategoryDocument,
-        variables: { id: params.tagCategoryId, tagCategoryAttributes: body.tagCategoryAttributes },
-      });
-    }
+export async function action({ context, params, request }: Route.ActionArgs) {
+  const ability = context.get(abilityContext);
+  const tagCategoryId = parseTagCategoryId(params.tagCategoryId);
+  const body = await request.json();
+
+  if (body.intent === 'delete') {
+    await deleteTagCategory(ability, tagCategoryId);
     return redirect('/tag_categories');
-  });
+  }
+
+  const result = await updateTagCategory(ability, tagCategoryId, body.tagCategoryAttributes);
+  return result.ok ? redirect('/tag_categories') : data({ errors: result.errors }, { status: 422 });
 }
 
-export default function EditTagCategoryPage({ loaderData: data }: Route.ComponentProps) {
-  const [tagCategory, setTagCategory] = useState(data.tagCategory);
-  const saveFetcher = useFetcher<typeof clientAction>();
-  const deleteFetcher = useFetcher<typeof clientAction>();
-  const confirm = useGraphQLConfirm();
+export default function EditTagCategoryPage({
+  loaderData: { tagCategory: loadedTagCategory, tags },
+}: Route.ComponentProps) {
+  const [tagCategory, setTagCategory] = useState(loadedTagCategory);
+  const saveFetcher = useFetcher<typeof action>();
+  const deleteFetcher = useFetcher<typeof action>();
+  const confirm = useConfirm();
 
   const saveSubmitted = (event: FormEvent) => {
     event.preventDefault();
@@ -62,7 +69,7 @@ export default function EditTagCategoryPage({ loaderData: data }: Route.Componen
         <div className="flex-grow-1">
           <h1>Editing tag category: {tagCategory.name}</h1>
           <ul className="list-inline">
-            {tagCategory.tags.map((tag) => (
+            {tags.map((tag) => (
               <li className="list-inline-item" key={tag.id}>
                 <Tag tag={tag} linkTo={`/tags/${tag.id}/edit`} />
               </li>
@@ -77,13 +84,13 @@ export default function EditTagCategoryPage({ loaderData: data }: Route.Componen
             onClick={() =>
               confirm({
                 action: deleteConfirmed,
-                prompt: `Are you sure you want to delete the tag category ${data.tagCategory.name}?`,
+                prompt: `Are you sure you want to delete the tag category ${loadedTagCategory.name}?`,
               })
             }
           >
             Delete tag category
           </button>
-          <ErrorDisplay graphQLError={getApolloActionError(deleteFetcher.data)} />
+          <ActionErrorDisplay data={deleteFetcher.data} />
         </div>
       </header>
 
@@ -94,7 +101,7 @@ export default function EditTagCategoryPage({ loaderData: data }: Route.Componen
           Save changes
         </button>
 
-        <ErrorDisplay graphQLError={getApolloActionError(saveFetcher.data)} />
+        <ActionErrorDisplay data={saveFetcher.data} />
       </Form>
     </>
   );

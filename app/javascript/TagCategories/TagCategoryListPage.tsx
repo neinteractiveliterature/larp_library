@@ -1,27 +1,16 @@
-import { useQuery } from '@apollo/client';
 import type { JSX } from 'react';
 import { Link } from 'react-router';
-import { appContext } from '../appContext';
-import { loadQuery } from '../loadQuery';
-import { Waypoint } from '../Waypoint';
-import { TagCategoryListPageQueryDocument } from './queries.generated';
-import TagCategory from './TagCategory';
 import { pageTitle } from '../pageTitle';
+import { readDbContext } from '../server/lib/dbContext';
+import { listTagCategories } from '../server/lib/tagCategories.server';
+import TagCategory from './TagCategory';
 import type { Route } from './+types/TagCategoryListPage';
 
-// The first page of the list is loaded here, before the route renders.  The component then reads it back from the Apollo
-// cache with a query hook, which is what lets it page in more with fetchMore.
-export async function clientLoader({ context }: Route.ClientLoaderArgs) {
-  const { apolloClient } = context.get(appContext);
-  await loadQuery(apolloClient, TagCategoryListPageQueryDocument);
-  return null;
+export async function loader({ context }: Route.LoaderArgs) {
+  return { tagCategories: await listTagCategories(context.get(readDbContext)) };
 }
 
-export default function TagCategoryListPage(): JSX.Element {
-  const { data, fetchMore } = useQuery(TagCategoryListPageQueryDocument);
-
-  const tagCategories = !data ? [] : data.tagCategories.edges.map((edge) => edge.node);
-
+export default function TagCategoryListPage({ loaderData: { tagCategories } }: Route.ComponentProps): JSX.Element {
   return (
     <>
       <h1>Tag categories</h1>
@@ -31,22 +20,9 @@ export default function TagCategoryListPage(): JSX.Element {
       </Link>
 
       <ul className="list-unstyled my-4">
-        {tagCategories.map((tagCategory, index) => (
+        {tagCategories.map((tagCategory) => (
           <div className="mb-1" key={tagCategory.id}>
             <TagCategory tagCategory={tagCategory} linkTo={`/tag_categories/${tagCategory.id}/edit`} />
-            {index === tagCategories.length - 5 && (
-              <Waypoint
-                onEnter={() => {
-                  if (data && data.tagCategories.edges.length < data.tagCategories.totalCount) {
-                    fetchMore({
-                      variables: {
-                        after: data.tagCategories.pageInfo.endCursor,
-                      },
-                    });
-                  }
-                }}
-              />
-            )}
           </div>
         ))}
       </ul>

@@ -105,6 +105,7 @@ export type RouteModuleUnderTest = {
   // Server loaders and middleware only read the router context (the signed-in user and what they may do), so tests run
   // them like client ones, with those values supplied by the harness
   loader?: LoaderFunction;
+  action?: ActionFunction;
   middleware?: MiddlewareFunction[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ErrorBoundary?: ComponentType<any>;
@@ -148,7 +149,7 @@ export function routeFromModule(
     Component: withRouteProps(module),
     ErrorBoundary: withErrorBoundaryProps(module, props.id),
     loader: module.clientLoader ?? module.loader,
-    action: module.clientAction,
+    action: module.clientAction ?? module.action,
     middleware: module.clientMiddleware ?? module.middleware,
   } as RouteObject;
 }
@@ -225,4 +226,18 @@ export function renderRouteModule(
 /** The module, with an ErrorBoundary like the layout route's, so a failed loader or action shows its message */
 export function withRouteErrorDisplay(module: RouteModuleUnderTest): RouteModuleUnderTest {
   return { ...module, ErrorBoundary: ({ error }: { error: unknown }) => <RouteErrorDisplay error={error} /> };
+}
+
+/**
+ * Replaces `fetch` with one that answers requests for JSON (the pickers' autocomplete routes) from `answer`, which is given
+ * the URL that was asked for. Restore it with `vi.restoreAllMocks()`.
+ */
+export function mockFetchJson(answer: (url: URL) => unknown) {
+  return vi.spyOn(globalThis, 'fetch').mockImplementation(async (input) => {
+    const url = new URL(
+      typeof input === 'string' ? input : input instanceof URL ? input.href : input.url,
+      'http://localhost',
+    );
+    return Response.json(answer(url));
+  });
 }

@@ -1,46 +1,52 @@
-import { ErrorDisplay, useGraphQLConfirm } from '@neinteractiveliterature/litform';
+import { useConfirm } from '@neinteractiveliterature/litform';
 import { useState, type FormEvent } from 'react';
-import { Form, Link, redirect, useFetcher } from 'react-router';
-import { appContext } from '../appContext';
-import { loadQuery } from '../loadQuery';
-import { getApolloActionError, withApolloErrors } from '../actionHelpers';
-import type { TagAttributes } from '../graphqlTypes.generated';
+import { data, Form, Link, redirect, useFetcher } from 'react-router';
+import ActionErrorDisplay from '../ActionErrorDisplay';
 import { formatPageTitle } from '../pageTitle';
+import { abilityContext } from '../server/lib/authContext';
+import { requireAbility } from '../server/lib/authorization.server';
+import { readDbContext } from '../server/lib/dbContext';
+import { deleteTag, findTagForEditing, updateTag } from '../server/lib/tags.server';
 import buildTagAttributes from './buildTagAttributes';
-import { DeleteTagDocument, UpdateTagDocument } from './mutations.generated';
-import { EditTagQueryDocument } from './queries.generated';
 import TagFormFields from './TagFormFields';
 import type { Route } from './+types/EditTagPage';
 
-export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
-  const { apolloClient } = context.get(appContext);
-  return loadQuery(apolloClient, EditTagQueryDocument, { id: params.tagId });
+function parseTagId(tagId: string): number {
+  if (!/^\d+$/.test(tagId)) {
+    throw new Response(null, { status: 404, statusText: 'Not Found' });
+  }
+  return Number(tagId);
 }
 
-type EditTagActionBody = { intent: 'save'; tagAttributes: TagAttributes } | { intent: 'delete' };
+export async function loader({ context, params }: Route.LoaderArgs) {
+  requireAbility(context.get(abilityContext), 'update', 'Tag');
 
-export async function clientAction({ context, params, request }: Route.ClientActionArgs) {
-  const { apolloClient } = context.get(appContext);
-  const body = (await request.json()) as EditTagActionBody;
+  const found = await findTagForEditing(context.get(readDbContext), parseTagId(params.tagId));
+  if (!found) {
+    throw new Response(null, { status: 404, statusText: 'Not Found' });
+  }
+  return found;
+}
 
-  return withApolloErrors(async () => {
-    if (body.intent === 'delete') {
-      await apolloClient.mutate({ mutation: DeleteTagDocument, variables: { id: params.tagId } });
-    } else {
-      await apolloClient.mutate({
-        mutation: UpdateTagDocument,
-        variables: { id: params.tagId, tagAttributes: body.tagAttributes },
-      });
-    }
+export async function action({ context, params, request }: Route.ActionArgs) {
+  const ability = context.get(abilityContext);
+  const tagId = parseTagId(params.tagId);
+  const body = await request.json();
+
+  if (body.intent === 'delete') {
+    await deleteTag(ability, tagId);
     return redirect('/tags');
-  });
+  }
+
+  const result = await updateTag(ability, tagId, body.tagAttributes);
+  return result.ok ? redirect('/tags') : data({ errors: result.errors }, { status: 422 });
 }
 
-export default function EditTagPage({ loaderData: data }: Route.ComponentProps) {
-  const [tag, setTag] = useState(data.tag);
-  const saveFetcher = useFetcher<typeof clientAction>();
-  const deleteFetcher = useFetcher<typeof clientAction>();
-  const confirm = useGraphQLConfirm();
+export default function EditTagPage({ loaderData: { tag: loadedTag, projectCount } }: Route.ComponentProps) {
+  const [tag, setTag] = useState(loadedTag);
+  const saveFetcher = useFetcher<typeof action>();
+  const deleteFetcher = useFetcher<typeof action>();
+  const confirm = useConfirm();
 
   const saveSubmitted = (event: FormEvent) => {
     event.preventDefault();
@@ -61,7 +67,7 @@ export default function EditTagPage({ loaderData: data }: Route.ComponentProps) 
           <h1>Editing tag: {tag.name}</h1>
           <p>
             <Link to={`/projects?tag=${tag.name}`}>
-              Used by {tag.projects.totalCount} {tag.projects.totalCount === 1 ? 'project' : 'projects'}
+              Used by {projectCount} {projectCount === 1 ? 'project' : 'projects'}
             </Link>
           </p>
         </div>
@@ -73,13 +79,13 @@ export default function EditTagPage({ loaderData: data }: Route.ComponentProps) 
             onClick={() =>
               confirm({
                 action: deleteConfirmed,
-                prompt: `Are you sure you want to delete the tag ${data.tag.name}?`,
+                prompt: `Are you sure you want to delete the tag ${loadedTag.name}?`,
               })
             }
           >
             Delete tag
           </button>
-          <ErrorDisplay graphQLError={getApolloActionError(deleteFetcher.data)} />
+          <ActionErrorDisplay data={deleteFetcher.data} />
         </div>
       </header>
 
@@ -90,7 +96,7 @@ export default function EditTagPage({ loaderData: data }: Route.ComponentProps) 
           Save changes
         </button>
 
-        <ErrorDisplay graphQLError={getApolloActionError(saveFetcher.data)} />
+        <ActionErrorDisplay data={saveFetcher.data} />
       </Form>
     </>
   );

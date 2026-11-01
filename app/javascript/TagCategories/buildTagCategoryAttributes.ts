@@ -1,12 +1,10 @@
-import { TagCategoryFormFieldsProps } from './TagCategoryFormFields';
-import { TagCategoryAttributes } from '../graphqlTypes.generated';
+import type { TagCategoryFormFieldsProps } from './TagCategoryFormFields';
 
-export default function buildTagCategoryAttributes(
-  tagCategory: TagCategoryFormFieldsProps['tagCategory'],
-): TagCategoryAttributes {
+/** What the form sends to the server for a tag category */
+export default function buildTagCategoryAttributes(tagCategory: TagCategoryFormFieldsProps['tagCategory']) {
   return {
     name: tagCategory.name,
-    color: tagCategory.color,
-    icon: tagCategory.icon,
+    color: tagCategory.color ?? null,
+    icon: tagCategory.icon ?? null,
   };
 }

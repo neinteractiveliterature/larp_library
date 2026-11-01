@@ -134,3 +134,13 @@ export async function loadAbility(
   );
   return buildAbility(user, { ...options, memberships });
 }
+
+/**
+ * Throws a 403 unless the ability allows this. For authorization failures the user can't do anything about (as opposed to
+ * mistakes in what they submitted, which an action returns as errors), so it ends up in the route's error boundary.
+ */
+export function requireAbility(ability: AppAbility, action: Action, subjectToCheck: Parameters<AppAbility['can']>[1]) {
+  if (!ability.can(action, subjectToCheck)) {
+    throw new Response('You are not allowed to do that', { status: 403, statusText: 'Forbidden' });
+  }
+}

@@ -1,16 +1,16 @@
 import { BootstrapFormInput, FormGroupWithLabel, usePropertySetters } from '@neinteractiveliterature/litform';
 import React, { type JSX } from 'react';
-import { Tag } from '../graphqlTypes.generated';
-import { TagCategoryFragment } from '../TagCategories/TagCategoryFragment.generated';
+import type { TagCategoryData } from '../projectData';
 import TagCategorySelector from '../TagCategories/TagCategorySelector';
 
-type TagFormTag = Pick<Tag, 'name'> & {
-  tagCategory?: TagCategoryFragment | null;
+export type TagFormValues = {
+  name: string;
+  tagCategory?: TagCategoryData | null;
 };
 
 export type TagFormFieldsProps = {
-  tag: TagFormTag;
-  onChange: React.Dispatch<React.SetStateAction<TagFormTag>>;
+  tag: TagFormValues;
+  onChange: React.Dispatch<React.SetStateAction<TagFormValues>>;
 };
 
 export default function TagFormFields({ tag, onChange }: TagFormFieldsProps): JSX.Element {
