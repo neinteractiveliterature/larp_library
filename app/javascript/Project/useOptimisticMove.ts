@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import type { FetcherWithComponents } from 'react-router';
 
-type MovePayload = { id: string; destinationIndex: number };
+type MovePayload = { id: number; destinationIndex: number };
 
 function isMovePayload(json: unknown, intent: string): json is MovePayload {
   return (
@@ -10,7 +10,7 @@ function isMovePayload(json: unknown, intent: string): json is MovePayload {
     'intent' in json &&
     json.intent === intent &&
     'id' in json &&
-    typeof json.id === 'string' &&
+    typeof json.id === 'number' &&
     'destinationIndex' in json &&
     typeof json.destinationIndex === 'number'
   );
@@ -21,7 +21,7 @@ function isMovePayload(json: unknown, intent: string): json is MovePayload {
  * where it was while waiting for the server.  `fetcher` is the one that submits `{ intent, id, destinationIndex }`; once
  * it's idle again the page's reloaded data is the truth.
  */
-export function useOptimisticMove<T extends { id: string }>(
+export function useOptimisticMove<T extends { id: number }>(
   sortedItems: T[],
   fetcher: FetcherWithComponents<unknown>,
   intent: 'moveFile' | 'moveLink',

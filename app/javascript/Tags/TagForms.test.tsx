@@ -5,12 +5,9 @@ import { data, redirect } from 'react-router';
 
 import EditTagPage from './EditTagPage';
 import NewTagPage from './NewTagPage';
-import TagSelector from './TagSelector';
-import { TagAutocompleteQueryDocument, TagFragment } from './queries.generated';
+import TagSelector, { type TagOption } from './TagSelector';
 import type { TagCategoryData } from '../projectData';
-import { buildConnection, buildTag, resetFixtureIds } from '../../../test/javascript/fixtures';
 import {
-  MockedResponse,
   mockFetchJson,
   renderPage,
   renderRouteModule,
@@ -19,18 +16,6 @@ import {
 
 function tagCategory(id: number, name: string): TagCategoryData {
   return { id, name, color: '#777777', textColor: '#ffffff', icon: 'tag' };
-}
-
-function tagAutocompleteMock(
-  tags: ReturnType<typeof buildTag>[],
-  matchQueryString: (queryString: string | undefined) => boolean = () => true,
-): MockedResponse {
-  return {
-    request: { query: TagAutocompleteQueryDocument },
-    variableMatcher: (variables) => matchQueryString(variables.queryString),
-    maxUsageCount: Number.POSITIVE_INFINITY,
-    result: { data: { tags: buildConnection(tags) } },
-  };
 }
 
 /** The action stand-in tests give a page: it records the JSON the page submitted, and then does what the test asks */
@@ -44,7 +29,6 @@ function recordingAction(respond: () => unknown = () => redirect('/tags')) {
 }
 
 describe('NewTagPage', () => {
-  beforeEach(() => resetFixtureIds());
   afterEach(() => vi.restoreAllMocks());
 
   const genre = tagCategory(1, 'Genre');
@@ -93,7 +77,6 @@ describe('NewTagPage', () => {
 });
 
 describe('EditTagPage', () => {
-  beforeEach(() => resetFixtureIds());
   afterEach(() => vi.restoreAllMocks());
 
   const genre = tagCategory(1, 'Genre');
@@ -162,7 +145,18 @@ describe('EditTagPage', () => {
 });
 
 describe('TagSelector', () => {
-  beforeEach(() => resetFixtureIds());
+  afterEach(() => vi.restoreAllMocks());
+
+  /** The tags the server would offer, and the queries it was asked */
+  function serveTags(tags: TagOption[]) {
+    const queries: string[] = [];
+    mockFetchJson((url) => {
+      expect(url.pathname).toEqual('/tags/autocomplete');
+      queries.push(url.searchParams.get('q') ?? '');
+      return tags;
+    });
+    return queries;
+  }
 
   function Harness<IsMulti extends boolean, IsCreatable extends boolean>({
     isMulti,
@@ -172,7 +166,7 @@ describe('TagSelector', () => {
   }: {
     isMulti: IsMulti;
     isCreatable: IsCreatable;
-    initial: TagFragment[] | TagFragment | null;
+    initial: TagOption[] | TagOption | null;
     onValue: (value: unknown) => void;
   }) {
     const [value, setValue] = useState<unknown>(initial);
@@ -195,30 +189,28 @@ describe('TagSelector', () => {
     );
   }
 
-  const allTags = () => [
-    buildTag({ id: 't1', name: 'horde' }),
-    buildTag({ id: 't2', name: 'comedy' }),
-    buildTag({ id: 't3', name: 'heist' }),
+  const allTags = (): TagOption[] => [
+    { id: 1, name: 'horde' },
+    { id: 2, name: 'comedy' },
+    { id: 3, name: 'heist' },
   ];
 
   it('picks a single tag', async () => {
     const user = userEvent.setup();
     const values: unknown[] = [];
-    renderPage(<Harness isMulti={false} isCreatable={false} initial={null} onValue={(v) => values.push(v)} />, {
-      mocks: [tagAutocompleteMock(allTags())],
-    });
+    serveTags(allTags());
+    renderPage(<Harness isMulti={false} isCreatable={false} initial={null} onValue={(v) => values.push(v)} />);
 
     await selectReactSelectOption(user, screen.getByLabelText('Tags'), 'comedy', { typeText: 'co' });
 
-    expect(values).toEqual([expect.objectContaining({ id: 't2', name: 'comedy' })]);
+    expect(values).toEqual([expect.objectContaining({ id: 2, name: 'comedy' })]);
     expect(await screen.findByText('comedy')).toBeInTheDocument();
   });
 
   it('only offers tags that start with what was typed', async () => {
     const user = userEvent.setup();
-    renderPage(<Harness isMulti={false} isCreatable={false} initial={null} onValue={() => {}} />, {
-      mocks: [tagAutocompleteMock(allTags())],
-    });
+    serveTags(allTags());
+    renderPage(<Harness isMulti={false} isCreatable={false} initial={null} onValue={() => {}} />);
 
     await user.click(screen.getByLabelText('Tags'));
     await user.type(screen.getByLabelText('Tags'), 'he');
@@ -232,9 +224,8 @@ describe('TagSelector', () => {
     const user = userEvent.setup();
     const values: unknown[] = [];
     const [horde] = allTags();
-    renderPage(<Harness isMulti={false} isCreatable={false} initial={horde} onValue={(v) => values.push(v)} />, {
-      mocks: [tagAutocompleteMock(allTags())],
-    });
+    serveTags(allTags());
+    renderPage(<Harness isMulti={false} isCreatable={false} initial={horde} onValue={(v) => values.push(v)} />);
 
     await user.click(await screen.findByLabelText('Tags'));
     await user.keyboard('{Backspace}');
@@ -245,38 +236,35 @@ describe('TagSelector', () => {
   it('picks several tags', async () => {
     const user = userEvent.setup();
     const values: unknown[] = [];
-    renderPage(<Harness isMulti isCreatable={false} initial={[]} onValue={(v) => values.push(v)} />, {
-      mocks: [tagAutocompleteMock(allTags())],
-    });
+    serveTags(allTags());
+    renderPage(<Harness isMulti isCreatable={false} initial={[]} onValue={(v) => values.push(v)} />);
 
     await selectReactSelectOption(user, screen.getByLabelText('Tags'), 'horde', { typeText: 'ho' });
     await selectReactSelectOption(user, screen.getByLabelText('Tags'), 'heist', { typeText: 'he' });
 
-    expect(values.at(-1)).toEqual([expect.objectContaining({ id: 't1' }), expect.objectContaining({ id: 't3' })]);
+    expect(values.at(-1)).toEqual([expect.objectContaining({ id: 1 }), expect.objectContaining({ id: 3 })]);
   });
 
   it('creates a new tag from what was typed, when creatable', async () => {
     const user = userEvent.setup();
     const values: unknown[] = [];
-    renderPage(<Harness isMulti isCreatable initial={[]} onValue={(v) => values.push(v)} />, {
-      mocks: [tagAutocompleteMock(allTags())],
-    });
+    serveTags(allTags());
+    renderPage(<Harness isMulti isCreatable initial={[]} onValue={(v) => values.push(v)} />);
 
     // the "create" option is rendered with the same Tag badge as real options, so it shows just the new name
     await selectReactSelectOption(user, screen.getByLabelText('Tags'), 'brand-new', { typeText: 'brand-new' });
 
-    expect(values.at(-1)).toEqual([expect.objectContaining({ __typename: 'Tag', name: 'brand-new' })]);
+    expect(values.at(-1)).toEqual([expect.objectContaining({ name: 'brand-new' })]);
   });
 
   it('creates a single new tag, when creatable', async () => {
     const user = userEvent.setup();
     const values: unknown[] = [];
-    renderPage(<Harness isMulti={false} isCreatable initial={null} onValue={(v) => values.push(v)} />, {
-      mocks: [tagAutocompleteMock(allTags())],
-    });
+    serveTags(allTags());
+    renderPage(<Harness isMulti={false} isCreatable initial={null} onValue={(v) => values.push(v)} />);
 
     await selectReactSelectOption(user, screen.getByLabelText('Tags'), 'solo-tag', { typeText: 'solo-tag' });
 
-    expect(values.at(-1)).toEqual(expect.objectContaining({ __typename: 'Tag', name: 'solo-tag' }));
+    expect(values.at(-1)).toEqual(expect.objectContaining({ name: 'solo-tag' }));
   });
 });

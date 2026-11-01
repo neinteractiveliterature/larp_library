@@ -1,87 +1,66 @@
 import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { EditorView } from '@codemirror/view';
+import { data, redirect } from 'react-router';
 
-import * as EditProjectPage from './EditProjectPage';
-import * as NewProjectPage from './NewProjectPage';
-import * as ProjectInitialContentPage from './ProjectInitialContentPage';
-import { CreateProjectDocument, UpdateProjectDocument } from './mutations.generated';
-import { NewProjectFormQueryDocument, ProjectPageQueryDocument } from './queries.generated';
-import { TagAutocompleteQueryDocument } from '../Tags/queries.generated';
-import {
-  buildConnection,
-  buildLicense,
-  buildProjectFields,
-  buildProjectFile,
-  buildProjectLink,
-  buildTag,
-  resetFixtureIds,
-} from '../../../test/javascript/fixtures';
-import { MockedResponse, renderRouteModule, selectReactSelectOption } from '../../../test/javascript/testUtils';
+import EditProjectPage from './EditProjectPage';
+import NewProjectPage from './NewProjectPage';
+import ProjectInitialContentPage from './ProjectInitialContentPage';
+import { buildFile, buildLink, buildProject } from '../../../test/javascript/projectFixtures';
+import { mockFetchJson, renderRouteModule, selectReactSelectOption } from '../../../test/javascript/testUtils';
 
 function setDescription(text: string) {
   const view = EditorView.findFromDOM(document.querySelector('.cm-editor') as HTMLElement)!;
   act(() => view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: text } }));
 }
 
-const licenses = [
-  buildLicense({ id: 'lic-1', name: 'CC BY' }),
-  buildLicense({ id: 'lic-2', name: 'CC BY-NC', discouraged: true, discouragedReason: 'non-commercial only' }),
-];
-
-const noTagResults: MockedResponse = {
-  request: { query: TagAutocompleteQueryDocument },
-  variableMatcher: () => true,
-  maxUsageCount: Number.POSITIVE_INFINITY,
-  result: { data: { tags: buildConnection([] as { id: string }[]) } },
+// Real licenses, since that's the list the forms offer
+const CC_BY = { id: 'cc40_by', name: 'Creative Commons Attribution 4.0 International' };
+const CC_BY_NC = {
+  id: 'cc40_by_nc',
+  option:
+    'Creative Commons Attribution-NonCommercial 4.0 International (discouraged, see our licensing page for details)',
 };
 
-describe('NewProjectPage', () => {
-  beforeEach(() => resetFixtureIds());
+type SubmittedBody = Record<string, unknown>;
 
-  const newProjectMock: MockedResponse = {
-    request: { query: NewProjectFormQueryDocument, variables: { slug: 'acme' } },
-    // React Router reloads the page's data after an action, so the query can be asked again
-    maxUsageCount: Number.POSITIVE_INFINITY,
-    result: { data: { brand: { __typename: 'Brand', id: 'b1' }, licenses } },
+/** The action stand-in tests give a page: it records the JSON the page submitted, and then does what the test asks */
+function recordingAction(respond: () => unknown) {
+  const submitted: SubmittedBody[] = [];
+  const action = async ({ request }: { request: Request }) => {
+    submitted.push(await request.json());
+    return respond();
   };
+  return { action, submitted };
+}
 
-  const renderNewProjectPage = (mocks: MockedResponse[]) =>
-    renderRouteModule(NewProjectPage, {
-      mocks: [newProjectMock, noTagResults, ...mocks],
-      route: '/brands/acme/projects/new',
-      path: '/brands/:brandSlug/projects/new',
-    });
+describe('NewProjectPage', () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  function renderNewProjectPage(
+    respond: () => unknown = () => redirect('/brands/acme/projects/55-my-new-larp/initial_content'),
+  ) {
+    mockFetchJson(() => []);
+    const { action, submitted } = recordingAction(respond);
+    renderRouteModule(
+      { default: NewProjectPage, loader: () => ({ brand: { id: 5, name: 'Acme', slug: 'acme' } }), action },
+      { route: '/brands/acme/projects/new', path: '/brands/:brandSlug/projects/new' },
+    );
+    return { submitted };
+  }
 
   it('offers the licenses, marking discouraged ones with the reason', async () => {
-    renderNewProjectPage([]);
+    renderNewProjectPage();
 
     const select = await screen.findByLabelText('License');
-    expect(within(select).getByRole('option', { name: 'CC BY' })).toBeInTheDocument();
-    expect(within(select).getByRole('option', { name: 'CC BY-NC (non-commercial only)' })).toBeInTheDocument();
+    expect(within(select).getByRole('option', { name: CC_BY.name })).toBeInTheDocument();
+    expect(within(select).getByRole('option', { name: CC_BY_NC.option })).toBeInTheDocument();
     expect(within(select).getByRole('option', { name: /Other license\/prefer not to specify/ })).toBeInTheDocument();
   });
 
   it('creates the project and continues to adding its content', async () => {
     const user = userEvent.setup();
-    let sent: Record<string, unknown> | undefined;
-    renderNewProjectPage([
-      {
-        request: { query: CreateProjectDocument },
-        variableMatcher: () => true,
-        result: (variables: Record<string, unknown>) => {
-          sent = variables;
-          return {
-            data: {
-              createProject: {
-                __typename: 'CreateProjectPayload',
-                project: buildProjectFields({ id: '55', title: 'My New Larp' }),
-              },
-            },
-          };
-        },
-      },
-    ]);
+    const { submitted } = renderNewProjectPage();
 
     await user.type(await screen.findByLabelText('Title'), 'My New Larp');
     await user.type(screen.getByLabelText('Authors'), 'Pat Author');
@@ -92,7 +71,7 @@ describe('NewProjectPage', () => {
     await user.type(screen.getByLabelText('Maximum facilitator/GM count'), '2');
     await user.type(screen.getByLabelText('Game length'), '3');
     await user.selectOptions(screen.getByLabelText('Length units'), 'days');
-    await user.selectOptions(screen.getByLabelText('License'), 'CC BY');
+    await user.selectOptions(screen.getByLabelText('License'), CC_BY.name);
     await selectReactSelectOption(user, screen.getByLabelText('Tags'), 'brand-new', { typeText: 'brand-new' });
     await waitFor(() => expect(document.querySelector('.cm-editor')).toBeInTheDocument());
     setDescription('A *great* larp.');
@@ -101,73 +80,67 @@ describe('NewProjectPage', () => {
     await waitFor(() =>
       expect(screen.getByTestId('location')).toHaveTextContent('/brands/acme/projects/55-my-new-larp/initial_content'),
     );
-    expect(sent).toEqual({
-      brandId: 'b1',
-      projectAttributes: {
-        title: 'My New Larp',
-        authors: 'Pat Author',
-        publicationYear: 2025,
-        minPlayers: 4,
-        maxPlayers: 8,
-        minFacilitators: 1,
-        maxFacilitators: 2,
-        lengthQuantity: 3,
-        lengthUnits: 'days',
-        licenseId: 'lic-1',
-        tagNames: ['brand-new'],
-        description: 'A *great* larp.',
-      },
-    });
-  });
-
-  it('shows the error if saving fails', async () => {
-    const user = userEvent.setup();
-    renderNewProjectPage([
+    expect(submitted).toEqual([
       {
-        request: { query: CreateProjectDocument },
-        variableMatcher: () => true,
-        // the page doesn't catch the failed mutation, so the browser logs an unhandled rejection as well
-        error: new Error('title is required'),
+        brandId: 5,
+        projectAttributes: {
+          title: 'My New Larp',
+          authors: 'Pat Author',
+          publicationYear: 2025,
+          minPlayers: 4,
+          maxPlayers: 8,
+          minFacilitators: 1,
+          maxFacilitators: 2,
+          lengthQuantity: 3,
+          lengthUnits: 'days',
+          licenseId: CC_BY.id,
+          tagNames: ['brand-new'],
+          description: 'A *great* larp.',
+        },
       },
     ]);
+  });
+
+  it('shows what the server says is wrong, and stays on the page', async () => {
+    const user = userEvent.setup();
+    renderNewProjectPage(() => data({ errors: ['License is not included in the list'] }, { status: 422 }));
 
     await user.click(await screen.findByRole('button', { name: 'Save project' }));
 
-    expect(await screen.findByText(/title is required/)).toBeInTheDocument();
+    expect(await screen.findByText(/License is not included in the list/)).toBeInTheDocument();
     expect(screen.getByTestId('location')).toHaveTextContent('/brands/acme/projects/new');
   });
 });
 
 describe('EditProjectPage', () => {
-  beforeEach(() => resetFixtureIds());
+  afterEach(() => vi.restoreAllMocks());
 
   const project = () =>
-    buildProjectFields({
+    buildProject({
       title: 'The Big Larp',
       authors: 'Pat Author',
       minPlayers: 6,
       maxPlayers: 12,
-      projectFiles: [buildProjectFile({ filename: 'rules.pdf' })],
-      projectLinks: [buildProjectLink({ title: 'Official site' })],
-      tags: [buildTag({ name: 'comedy' })],
+      projectFiles: [buildFile({ filename: 'rules.pdf' })],
+      projectLinks: [buildLink({ title: 'Official site' })],
+      tags: [{ id: 1, name: 'comedy', tagCategory: null }],
     });
 
-  const projectMock = (): MockedResponse => ({
-    request: { query: ProjectPageQueryDocument, variables: { projectId: '7-the-big-larp' } },
-    // React Router reloads the page's data after an action, so the query can be asked again
-    maxUsageCount: Number.POSITIVE_INFINITY,
-    result: { data: { project: project(), licenses } },
-  });
-
-  const renderEditProjectPage = (mocks: MockedResponse[], route = '/brands/acme/projects/7-the-big-larp/edit') =>
-    renderRouteModule(EditProjectPage, {
-      mocks: [projectMock(), noTagResults, ...mocks],
-      route,
-      path: '/brands/:brandSlug/projects/:projectId/edit',
-    });
+  function renderEditProjectPage(
+    respond: () => unknown = () => ({ saved: true }),
+    route = '/brands/acme/projects/7-the-big-larp/edit',
+  ) {
+    mockFetchJson(() => []);
+    const { action, submitted } = recordingAction(respond);
+    renderRouteModule(
+      { default: EditProjectPage, loader: () => ({ project: project() }), action },
+      { route, path: '/brands/:brandSlug/projects/:projectId/edit' },
+    );
+    return { submitted };
+  }
 
   it('shows the current properties of the project', async () => {
-    renderEditProjectPage([]);
+    renderEditProjectPage();
 
     expect(await screen.findByRole('heading', { name: 'Editing project “The Big Larp”' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Back to project page/ })).toHaveAttribute(
@@ -178,81 +151,61 @@ describe('EditProjectPage', () => {
     expect(screen.getAllByLabelText('Title')[0]).toHaveValue('The Big Larp');
     expect(screen.getByLabelText('Authors')).toHaveValue('Pat Author');
     expect(screen.getByLabelText('Minimum player count')).toHaveValue(6);
-    expect(screen.getByLabelText('License')).toHaveValue('lic-1');
+    expect(screen.getByLabelText('License')).toHaveValue(CC_BY.id);
     expect(screen.getByText('comedy')).toBeInTheDocument();
   });
 
   it('saves changes to the properties', async () => {
     const user = userEvent.setup();
-    let sent: Record<string, unknown> | undefined;
-    renderEditProjectPage([
-      {
-        request: { query: UpdateProjectDocument },
-        variableMatcher: () => true,
-        result: (variables: Record<string, unknown>) => {
-          sent = variables;
-          return { data: { updateProject: { __typename: 'UpdateProjectPayload', project: project() } } };
-        },
-      },
-    ]);
+    const { submitted } = renderEditProjectPage();
 
     await user.type((await screen.findAllByLabelText('Title'))[0], ' II');
-    await user.selectOptions(screen.getByLabelText('License'), 'CC BY-NC (non-commercial only)');
+    await user.selectOptions(screen.getByLabelText('License'), CC_BY_NC.option);
     await user.click(screen.getByRole('button', { name: 'Save changes' }));
 
     expect(await screen.findByRole('button', { name: /Saved!/ })).toBeInTheDocument();
-    expect(sent).toEqual({
-      id: '7',
-      projectAttributes: expect.objectContaining({
-        title: 'The Big Larp II',
-        licenseId: 'lic-2',
-        authors: 'Pat Author',
-        tagNames: ['comedy'],
-      }),
-    });
+    expect(submitted).toEqual([
+      {
+        projectId: 7,
+        projectAttributes: expect.objectContaining({
+          title: 'The Big Larp II',
+          licenseId: CC_BY_NC.id,
+          authors: 'Pat Author',
+          tagNames: ['comedy'],
+        }),
+      },
+    ]);
   });
 
   it('can clear the license', async () => {
     const user = userEvent.setup();
-    let sent: Record<string, unknown> | undefined;
-    renderEditProjectPage([
-      {
-        request: { query: UpdateProjectDocument },
-        variableMatcher: () => true,
-        result: (variables: Record<string, unknown>) => {
-          sent = variables;
-          return { data: { updateProject: { __typename: 'UpdateProjectPayload', project: project() } } };
-        },
-      },
-    ]);
+    const { submitted } = renderEditProjectPage();
 
     await user.selectOptions(await screen.findByLabelText('License'), '_unspecified');
     await user.click(screen.getByRole('button', { name: 'Save changes' }));
 
     await waitFor(() =>
-      expect(sent).toEqual({ id: '7', projectAttributes: expect.objectContaining({ licenseId: null }) }),
+      expect(submitted).toEqual([{ projectId: 7, projectAttributes: expect.objectContaining({ licenseId: null }) }]),
     );
   });
 
-  it('shows the error if saving fails', async () => {
+  it('shows what the server says is wrong with the changes', async () => {
     const user = userEvent.setup();
-    renderEditProjectPage([
-      {
-        request: { query: UpdateProjectDocument },
-        variableMatcher: () => true,
-        // the page doesn't catch the failed mutation, so the browser logs an unhandled rejection as well
-        error: new Error('title is too long'),
-      },
-    ]);
+    renderEditProjectPage(() =>
+      data({ errors: ['License is required because this project has downloadable files'] }, { status: 422 }),
+    );
 
     await user.click(await screen.findByRole('button', { name: 'Save changes' }));
 
-    expect(await screen.findByText(/title is too long/)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/License is required because this project has downloadable files/),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Saved!/ })).not.toBeInTheDocument();
   });
 
   it('switches to the content tab, which shows the files and links', async () => {
     const user = userEvent.setup();
-    renderEditProjectPage([]);
+    renderEditProjectPage();
 
     const contentTab = await screen.findByRole('link', { name: 'Project content' });
     expect(contentTab).not.toHaveClass('active');
@@ -268,7 +221,7 @@ describe('EditProjectPage', () => {
   });
 
   it('opens straight to the content tab when linked there', async () => {
-    renderEditProjectPage([], '/brands/acme/projects/7-the-big-larp/edit#content');
+    renderEditProjectPage(undefined, '/brands/acme/projects/7-the-big-larp/edit#content');
 
     expect(await screen.findByRole('link', { name: 'Project content' })).toHaveClass('active');
     expect(screen.getByRole('link', { name: 'Project properties' })).not.toHaveClass('active');
@@ -276,21 +229,14 @@ describe('EditProjectPage', () => {
 });
 
 describe('ProjectInitialContentPage', () => {
-  beforeEach(() => resetFixtureIds());
-
   it('lets you add content and then finish', async () => {
-    renderRouteModule(ProjectInitialContentPage, {
-      route: '/brands/acme/projects/7-the-big-larp/initial_content',
-      path: '/brands/:brandSlug/projects/:projectId/initial_content',
-      mocks: [
-        {
-          request: { query: ProjectPageQueryDocument, variables: { projectId: '7-the-big-larp' } },
-          // React Router reloads the page's data after an action, so the query can be asked again
-          maxUsageCount: Number.POSITIVE_INFINITY,
-          result: { data: { project: buildProjectFields(), licenses } },
-        },
-      ],
-    });
+    renderRouteModule(
+      { default: ProjectInitialContentPage, loader: () => ({ project: buildProject() }) },
+      {
+        route: '/brands/acme/projects/7-the-big-larp/initial_content',
+        path: '/brands/:brandSlug/projects/:projectId/initial_content',
+      },
+    );
 
     expect(await screen.findByRole('heading', { name: 'Content' })).toBeInTheDocument();
     expect(screen.getByText('Files')).toBeInTheDocument();

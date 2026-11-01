@@ -1,8 +1,8 @@
 import type { JSX } from 'react';
-import { ProjectLink } from '../graphqlTypes.generated';
+import type { ProjectLinkData } from '../server/lib/projects.server';
 
 export type ProjectLinkDisplayProps = {
-  link: Pick<ProjectLink, 'url' | 'icon' | 'title'>;
+  link: Pick<ProjectLinkData, 'url' | 'icon' | 'title'>;
 };
 
 export function ProjectLinkDisplay({ link }: ProjectLinkDisplayProps): JSX.Element {

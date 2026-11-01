@@ -1,5 +1,5 @@
 import type { JSX } from 'react';
-import { ProjectPageQueryData } from './queries.generated';
+import type { ProjectFileData } from '../server/lib/projects.server';
 
 function getIconForMimeType(mimeType: string | null | undefined): string {
   if (mimeType == null) {
@@ -39,7 +39,7 @@ function numberToHumanSize(size: number) {
 }
 
 export type ProjectFileDisplayProps = {
-  file: ProjectPageQueryData['project']['projectFiles'][number];
+  file: Pick<ProjectFileData, 'url' | 'filename' | 'filetype' | 'filesize'>;
 };
 
 export default function ProjectFileDisplay({ file }: ProjectFileDisplayProps): JSX.Element {

@@ -1,67 +1,60 @@
-import { appContext } from '../appContext';
-import { withApolloErrors } from '../actionHelpers';
-import type { ProjectLinkAttributes } from '../graphqlTypes.generated';
+import { data } from 'react-router';
+import { abilityContext } from '../server/lib/authContext';
 import {
-  CreateProjectLinkDocument,
-  DeleteProjectFileDocument,
-  DeleteProjectLinkDocument,
-  MoveProjectFileDocument,
-  MoveProjectLinkDocument,
-  UpdateProjectLinkDocument,
-} from './mutations.generated';
+  createProjectLink,
+  deleteProjectLink,
+  moveProjectLink,
+  updateProjectLink,
+} from '../server/lib/projectLinks.server';
+import { deleteProjectFile, moveProjectFile } from '../server/lib/projectFiles.server';
 import type { Route } from './+types/ProjectContentRoute';
 
 /**
- * A route with no page of its own: the actions behind the file and link cards on a project's content tab, which the
- * project edit page and the initial content page both show.  The cards submit to it with fetchers, and React Router
- * reloads the page they're on afterward.
+ * A route with no page of its own: the actions behind the file and link cards on a project's content tab, which the project
+ * edit page and the initial content page both show.  The cards submit to it with fetchers, and React Router reloads the page
+ * they're on afterward.
  */
 export type ProjectContentActionBody =
-  | { intent: 'deleteFile'; id: string }
-  | { intent: 'moveFile'; id: string; destinationIndex: number }
-  | { intent: 'createLink'; projectId: string; projectLinkAttributes: ProjectLinkAttributes }
-  | { intent: 'updateLink'; id: string; projectLinkAttributes: ProjectLinkAttributes }
-  | { intent: 'deleteLink'; id: string }
-  | { intent: 'moveLink'; id: string; destinationIndex: number };
+  | { intent: 'deleteFile'; id: number }
+  | { intent: 'moveFile'; id: number; destinationIndex: number }
+  | { intent: 'createLink'; projectId: number; projectLinkAttributes: ProjectLinkAttributes }
+  | { intent: 'updateLink'; id: number; projectLinkAttributes: ProjectLinkAttributes }
+  | { intent: 'deleteLink'; id: number }
+  | { intent: 'moveLink'; id: number; destinationIndex: number };
 
-export async function clientAction({ context, request }: Route.ClientActionArgs) {
-  const { apolloClient } = context.get(appContext);
-  const body = (await request.json()) as ProjectContentActionBody;
+type ProjectLinkAttributes = { title: string; url: string; icon: string | null };
 
-  return withApolloErrors(async () => {
-    switch (body.intent) {
-      case 'deleteFile':
-        await apolloClient.mutate({ mutation: DeleteProjectFileDocument, variables: { id: body.id } });
-        break;
-      case 'moveFile':
-        await apolloClient.mutate({
-          mutation: MoveProjectFileDocument,
-          variables: { id: body.id, destinationIndex: body.destinationIndex },
-        });
-        break;
-      case 'createLink':
-        await apolloClient.mutate({
-          mutation: CreateProjectLinkDocument,
-          variables: { projectId: body.projectId, projectLinkAttributes: body.projectLinkAttributes },
-        });
-        break;
-      case 'updateLink':
-        await apolloClient.mutate({
-          mutation: UpdateProjectLinkDocument,
-          variables: { id: body.id, projectLinkAttributes: body.projectLinkAttributes },
-        });
-        break;
-      case 'deleteLink':
-        await apolloClient.mutate({ mutation: DeleteProjectLinkDocument, variables: { id: body.id } });
-        break;
-      case 'moveLink':
-        await apolloClient.mutate({
-          mutation: MoveProjectLinkDocument,
-          variables: { id: body.id, destinationIndex: body.destinationIndex },
-        });
-        break;
+export async function action({ context, request }: Route.ActionArgs) {
+  const ability = context.get(abilityContext);
+  const body = await request.json();
+
+  switch (body.intent) {
+    case 'deleteFile':
+      await deleteProjectFile(ability, body.id);
+      break;
+    case 'moveFile':
+      await moveProjectFile(ability, body.id, body.destinationIndex);
+      break;
+    case 'createLink':
+    case 'updateLink': {
+      const result =
+        body.intent === 'createLink'
+          ? await createProjectLink(ability, body.projectId, body.projectLinkAttributes)
+          : await updateProjectLink(ability, body.id, body.projectLinkAttributes);
+      if (!result.ok) {
+        return data({ errors: result.errors }, { status: 422 });
+      }
+      break;
     }
+    case 'deleteLink':
+      await deleteProjectLink(ability, body.id);
+      break;
+    case 'moveLink':
+      await moveProjectLink(ability, body.id, body.destinationIndex);
+      break;
+    default:
+      throw new Response(null, { status: 400, statusText: 'Bad Request' });
+  }
 
-    return { done: body.intent };
-  });
+  return { done: body.intent };
 }

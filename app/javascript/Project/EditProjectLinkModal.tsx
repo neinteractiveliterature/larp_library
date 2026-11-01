@@ -1,16 +1,14 @@
-import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { useEffect, useRef, useState, type JSX } from 'react';
 import Modal from 'react-bootstrap4-modal';
 
-import { getApolloActionError } from '../actionHelpers';
-import { ProjectLink } from '../graphqlTypes.generated';
+import ActionErrorDisplay from '../ActionErrorDisplay';
 import ProjectLinkFormFields, { ProjectLinkFormProjectLink } from './ProjectLinkFormFields';
 import { useProjectContentFetcher } from './useProjectContentFetcher';
 
 export type EditProjectLinkModalProps = {
   visible: boolean;
   close: () => void;
-  initialProjectLink?: ProjectLinkFormProjectLink & Pick<ProjectLink, 'id'>;
+  initialProjectLink?: ProjectLinkFormProjectLink & { id: number };
   /** Where to submit the changes (see ProjectContentRoute) */
   action: string;
 };
@@ -45,7 +43,7 @@ function EditProjectLinkModal({ initialProjectLink, visible, close, action }: Ed
     submit({
       intent: 'updateLink',
       id: initialProjectLink.id,
-      projectLinkAttributes: { icon: projectLink.icon, title: projectLink.title, url: projectLink.url },
+      projectLinkAttributes: { icon: projectLink.icon ?? null, title: projectLink.title, url: projectLink.url },
     });
   };
 
@@ -54,7 +52,7 @@ function EditProjectLinkModal({ initialProjectLink, visible, close, action }: Ed
       <div className="modal-header">Edit link</div>
       <div className="modal-body">
         <ProjectLinkFormFields projectLink={projectLink} onChange={setProjectLink} />
-        <ErrorDisplay graphQLError={getApolloActionError(fetcher.data)} />
+        <ActionErrorDisplay data={fetcher.data} />
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" onClick={close} disabled={loading}>

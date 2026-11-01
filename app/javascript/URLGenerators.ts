@@ -24,6 +24,15 @@ export function generateProjectContentActionPath(project: {
   return `${generateProjectPath(project)}/content`;
 }
 
+/** Where the browser asks to upload a file to a project, and reports the upload finished (see Project/ProjectUploadRoute.ts) */
+export function generateProjectUploadActionPath(project: {
+  id: string | number;
+  title?: string | null;
+  brand: { slug: string };
+}): string {
+  return `${generateProjectPath(project)}/uploads`;
+}
+
 export function generateProjectSearchPath(params?: { q?: string; tag?: string }): string {
   if (params) {
     const urlSearchParams = new URLSearchParams(params);

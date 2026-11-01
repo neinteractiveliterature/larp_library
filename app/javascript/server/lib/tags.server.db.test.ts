@@ -3,7 +3,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from
 import { brands, projects, projectsTags, tagCategories, tags } from '../db/schema';
 import { db, resetDb, rollbackDb, setupDb, stubDbTransactions, teardownDb } from '../test/db';
 import { buildAbility } from './authorization.server';
-import { createTag, deleteTag, findTagForEditing, listTags, updateTag } from './tags.server';
+import { autocompleteTags, createTag, deleteTag, findTagForEditing, listTags, updateTag } from './tags.server';
 
 const admin = buildAbility({ id: 1, admin: true });
 const notAdmin = buildAbility({ id: 2, admin: false });
@@ -168,5 +168,50 @@ describe('tags', () => {
       expect(await responseStatus(deleteTag(admin, 123456, db))).toEqual(404);
       expect(await db.$count(tags)).toEqual(1);
     });
+  });
+});
+
+describe('tag autocomplete', () => {
+  beforeAll(setupDb);
+  afterAll(teardownDb);
+  beforeEach(resetDb);
+  afterEach(rollbackDb);
+
+  it('finds tags by the start of their name, or of their category’s name, ignoring case', async () => {
+    const [genre] = await db.insert(tagCategories).values({ name: 'Genre' }).returning();
+    await db
+      .insert(tags)
+      .values([
+        { name: 'horde', tagCategoryId: genre.id },
+        { name: 'Heist' },
+        { name: 'comedy', tagCategoryId: genre.id },
+        { name: 'chorus' },
+      ]);
+
+    expect((await autocompleteTags(db, 'h')).map((tag) => tag.name)).toEqual(['Heist', 'horde']);
+    expect((await autocompleteTags(db, 'GEN')).map((tag) => tag.name)).toEqual(['comedy', 'horde']);
+    expect(await autocompleteTags(db, 'zzz')).toEqual([]);
+    expect((await autocompleteTags(db, '')).map((tag) => tag.name)).toEqual(['chorus', 'comedy', 'Heist', 'horde']);
+  });
+
+  it('includes each tag’s category, and treats % and _ as ordinary characters', async () => {
+    const [genre] = await db.insert(tagCategories).values({ name: 'Genre', color: '#ffff00' }).returning();
+    await db.insert(tags).values([{ name: '100%', tagCategoryId: genre.id }, { name: 'a_b' }, { name: 'axb' }]);
+
+    expect(await autocompleteTags(db, '100%')).toEqual([
+      {
+        id: expect.any(Number),
+        name: '100%',
+        tagCategory: expect.objectContaining({ name: 'Genre', textColor: '#000000' }),
+      },
+    ]);
+    expect((await autocompleteTags(db, '%')).map((tag) => tag.name)).toEqual([]);
+    expect((await autocompleteTags(db, 'a_')).map((tag) => tag.name)).toEqual(['a_b']);
+  });
+
+  it('gives at most 25 tags', async () => {
+    await db.insert(tags).values(Array.from({ length: 30 }, (_, i) => ({ name: `tag ${String(i).padStart(2, '0')}` })));
+
+    expect(await autocompleteTags(db, 'tag')).toHaveLength(25);
   });
 });

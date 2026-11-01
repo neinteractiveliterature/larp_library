@@ -255,3 +255,76 @@ export function recordingLoader<TData>(answer: (url: URL, params: Record<string,
   };
   return { loader, requests };
 }
+
+/**
+ * Replaces `fetch` with one that answers from `answer`, which is given the URL and options of each request and returns the JSON
+ * to send back (and optionally a status). Restore it with `vi.restoreAllMocks()`.
+ */
+export function mockFetch(answer: (url: URL, init: RequestInit | undefined) => { body: unknown; status?: number }) {
+  return vi.spyOn(globalThis, 'fetch').mockImplementation(async (input, init) => {
+    const url = new URL(
+      typeof input === 'string' ? input : input instanceof URL ? input.href : input.url,
+      'http://localhost',
+    );
+    const { body, status = 200 } = answer(url, init);
+    return Response.json(body, { status });
+  });
+}
+
+/**
+ * A stand-in for the browser's XMLHttpRequest, which the file upload uses to PUT a file to storage with progress. Each request
+ * made is kept in `FakeXMLHttpRequest.requests`; by default it succeeds as soon as it's sent, or call `respond()` on it
+ * yourself (after setting `FakeXMLHttpRequest.autoRespond = false`). Install it with `vi.stubGlobal`.
+ */
+export class FakeXMLHttpRequest {
+  static requests: FakeXMLHttpRequest[] = [];
+  static autoRespond = true;
+  static status = 200;
+
+  static reset() {
+    FakeXMLHttpRequest.requests = [];
+    FakeXMLHttpRequest.autoRespond = true;
+    FakeXMLHttpRequest.status = 200;
+  }
+
+  method?: string;
+  url?: string;
+  headers: Record<string, string> = {};
+  body?: unknown;
+  status = 0;
+  onload: (() => void) | null = null;
+  onerror: (() => void) | null = null;
+  upload: { onprogress: ((event: { lengthComputable: boolean; loaded: number; total: number }) => void) | null } = {
+    onprogress: null,
+  };
+
+  open(method: string, url: string) {
+    this.method = method;
+    this.url = url;
+  }
+
+  setRequestHeader(name: string, value: string) {
+    this.headers[name] = value;
+  }
+
+  send(body: unknown) {
+    this.body = body;
+    FakeXMLHttpRequest.requests.push(this);
+    if (FakeXMLHttpRequest.autoRespond) {
+      queueMicrotask(() => this.respond());
+    }
+  }
+
+  progress(loaded: number, total: number) {
+    this.upload.onprogress?.({ lengthComputable: true, loaded, total });
+  }
+
+  respond(status = FakeXMLHttpRequest.status) {
+    this.status = status;
+    this.onload?.();
+  }
+
+  failToConnect() {
+    this.onerror?.();
+  }
+}

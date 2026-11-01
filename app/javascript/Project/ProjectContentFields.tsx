@@ -1,14 +1,13 @@
 import type { JSX } from 'react';
 import EditProjectLinksCard from './EditProjectLinksCard';
 import EditProjectFilesCard from './EditProjectFilesCard';
-import { ProjectFieldsFragment } from './queries.generated';
-import { S3UploadProps } from './S3Upload';
+import type { ProjectPageData } from '../server/lib/projects.server';
 
-export type ProjectContentFieldsProps = Omit<S3UploadProps, 'projectId'> & {
-  project: ProjectFieldsFragment;
+export type ProjectContentFieldsProps = {
+  project: ProjectPageData['project'];
 };
 
-export default function ProjectContentFields({ project, ...s3UploadProps }: ProjectContentFieldsProps): JSX.Element {
+export default function ProjectContentFields({ project }: ProjectContentFieldsProps): JSX.Element {
   return (
     <>
       <div className="alert alert-info">
@@ -39,7 +38,7 @@ export default function ProjectContentFields({ project, ...s3UploadProps }: Proj
       </div>
 
       <div className="d-flex flex-wrap">
-        <EditProjectFilesCard project={project} {...s3UploadProps} />
+        <EditProjectFilesCard project={project} />
         <EditProjectLinksCard project={project} />
       </div>
     </>

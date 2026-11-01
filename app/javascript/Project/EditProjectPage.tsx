@@ -1,43 +1,32 @@
-import { ErrorDisplay, Tabs, useTabsWithRouter } from '@neinteractiveliterature/litform';
+import { Tabs, useTabsWithRouter } from '@neinteractiveliterature/litform';
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
-import { Form, Link, useFetcher, useLocation, useNavigate } from 'react-router';
-import { appContext } from '../appContext';
-import { getApolloActionError, withApolloErrors } from '../actionHelpers';
-import type { ProjectAttributes } from '../graphqlTypes.generated';
-import { loadQuery } from '../loadQuery';
+import { data, Form, Link, useFetcher, useLocation, useNavigate } from 'react-router';
+import ActionErrorDisplay from '../ActionErrorDisplay';
+import { LICENSES } from '../licenses';
 import { formatPageTitle } from '../pageTitle';
+import { abilityContext } from '../server/lib/authContext';
+import { readDbContext } from '../server/lib/dbContext';
+import { findProjectPage, updateProject } from '../server/lib/projects.server';
 import { generateProjectPath } from '../URLGenerators';
 import { buildProjectAttributes } from './buildProjectAttributes';
-import { UpdateProjectDocument } from './mutations.generated';
 import ProjectContentFields from './ProjectContentFields';
 import ProjectFormFields from './ProjectFormFields';
-import { ProjectPageQueryDocument } from './queries.generated';
 import type { Route } from './+types/EditProjectPage';
 
-export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
-  const { apolloClient } = context.get(appContext);
-  return loadQuery(apolloClient, ProjectPageQueryDocument, { projectId: params.projectId });
+export function loader({ context, params }: Route.LoaderArgs) {
+  return findProjectPage(context.get(readDbContext), context.get(abilityContext), params.projectId, { editing: true });
 }
 
-export async function clientAction({ context, request }: Route.ClientActionArgs) {
-  const { apolloClient } = context.get(appContext);
-  const { projectId, projectAttributes } = (await request.json()) as {
-    projectId: string;
-    projectAttributes: ProjectAttributes;
-  };
+export async function action({ context, request }: Route.ActionArgs) {
+  const { projectId, projectAttributes } = await request.json();
 
-  return withApolloErrors(async () => {
-    await apolloClient.mutate({
-      mutation: UpdateProjectDocument,
-      variables: { id: projectId, projectAttributes },
-    });
-    return { saved: true };
-  });
+  const result = await updateProject(context.get(abilityContext), projectId, projectAttributes);
+  return result.ok ? { saved: true } : data({ errors: result.errors }, { status: 422 });
 }
 
-export default function EditProjectPage({ loaderData: data }: Route.ComponentProps) {
-  const [project, setProject] = useState(data.project);
-  const saveFetcher = useFetcher<typeof clientAction>();
+export default function EditProjectPage({ loaderData }: Route.ComponentProps) {
+  const [project, setProject] = useState(loaderData.project);
+  const saveFetcher = useFetcher<typeof action>();
   const location = useLocation();
   const navigate = useNavigate();
   const history = useMemo(() => ({ replace: navigate }), [navigate]);
@@ -69,7 +58,7 @@ export default function EditProjectPage({ loaderData: data }: Route.ComponentPro
           return (
             <section className="p-2 bg-light border border-color-light border-top-0">
               <Form method="post" onSubmit={saveSubmitted}>
-                <ProjectFormFields licenseOptions={data.licenses} onChange={setProject} project={project} />
+                <ProjectFormFields licenseOptions={LICENSES} onChange={setProject} project={project} />
                 <button className="btn btn-primary" type="submit" disabled={saveFetcher.state !== 'idle'}>
                   {showSaved ? (
                     <>
@@ -79,7 +68,7 @@ export default function EditProjectPage({ loaderData: data }: Route.ComponentPro
                     'Save changes'
                   )}
                 </button>
-                <ErrorDisplay graphQLError={getApolloActionError(saveFetcher.data)} />
+                <ActionErrorDisplay data={saveFetcher.data} />
               </Form>
             </section>
           );
@@ -91,13 +80,13 @@ export default function EditProjectPage({ loaderData: data }: Route.ComponentPro
         renderContent: function ProjectContentTab() {
           return (
             <section className="p-2 bg-light border border-color-light border-top-0">
-              <ProjectContentFields project={data.project} />
+              <ProjectContentFields project={loaderData.project} />
             </section>
           );
         },
       },
     ],
-    `${generateProjectPath(data.project)}/edit`,
+    `${generateProjectPath(loaderData.project)}/edit`,
     location,
     history,
     'properties',
@@ -105,7 +94,7 @@ export default function EditProjectPage({ loaderData: data }: Route.ComponentPro
 
   return (
     <>
-      <h1>Editing project “{data.project.title}”</h1>
+      <h1>Editing project “{loaderData.project.title}”</h1>
       <div className="my-3">
         <Link to={generateProjectPath(project)}>
           <i className="bi-arrow-left" /> Back to project page

@@ -1,42 +1,31 @@
-import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { useState, type FormEvent } from 'react';
-import { Form, redirect, useNavigation, useSubmit } from 'react-router';
-import { appContext } from '../appContext';
-import { getApolloActionError, withApolloErrors } from '../actionHelpers';
-import type { ProjectAttributes } from '../graphqlTypes.generated';
-import { loadQuery } from '../loadQuery';
+import { data, Form, redirect, useNavigation, useSubmit } from 'react-router';
+import ActionErrorDisplay from '../ActionErrorDisplay';
+import { LICENSES } from '../licenses';
 import { pageTitle } from '../pageTitle';
+import { abilityContext } from '../server/lib/authContext';
+import { readDbContext } from '../server/lib/dbContext';
+import { createProject, findBrandForNewProject } from '../server/lib/projects.server';
 import { generateProjectPath } from '../URLGenerators';
 import { buildProjectAttributes } from './buildProjectAttributes';
-import { CreateProjectDocument } from './mutations.generated';
-import ProjectFormFields, { ProjectFormProps } from './ProjectFormFields';
-import { NewProjectFormQueryDocument } from './queries.generated';
+import ProjectFormFields, { type ProjectFormValues } from './ProjectFormFields';
 import type { Route } from './+types/NewProjectPage';
 
-export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
-  const { apolloClient } = context.get(appContext);
-  return loadQuery(apolloClient, NewProjectFormQueryDocument, { slug: params.brandSlug });
+export function loader({ context, params }: Route.LoaderArgs) {
+  return findBrandForNewProject(context.get(readDbContext), context.get(abilityContext), params.brandSlug);
 }
 
-export async function clientAction({ context, request }: Route.ClientActionArgs) {
-  const { apolloClient } = context.get(appContext);
-  const { brandId, projectAttributes } = (await request.json()) as {
-    brandId: string;
-    projectAttributes: ProjectAttributes;
-  };
+export async function action({ context, request }: Route.ActionArgs) {
+  const { brandId, projectAttributes } = await request.json();
 
-  return withApolloErrors(async () => {
-    const result = await apolloClient.mutate({
-      mutation: CreateProjectDocument,
-      variables: { brandId, projectAttributes },
-    });
-    const newProject = result.data?.createProject?.project;
-    return newProject ? redirect(`${generateProjectPath(newProject)}/initial_content`) : null;
-  });
+  const result = await createProject(context.get(abilityContext), brandId, projectAttributes);
+  return result.ok
+    ? redirect(`${generateProjectPath(result.project)}/initial_content`)
+    : data({ errors: result.errors }, { status: 422 });
 }
 
-export default function NewProjectPage({ loaderData: data, actionData }: Route.ComponentProps) {
-  const [project, setProject] = useState<ProjectFormProps['project']>({
+export default function NewProjectPage({ loaderData, actionData }: Route.ComponentProps) {
+  const [project, setProject] = useState<ProjectFormValues>({
     tags: [],
   });
   const submit = useSubmit();
@@ -45,18 +34,18 @@ export default function NewProjectPage({ loaderData: data, actionData }: Route.C
   const saveSubmitted = (event: FormEvent) => {
     event.preventDefault();
     submit(
-      { brandId: data.brand.id, projectAttributes: buildProjectAttributes(project) },
+      { brandId: loaderData.brand.id, projectAttributes: buildProjectAttributes(project) },
       { method: 'post', encType: 'application/json' },
     );
   };
 
   return (
     <Form method="post" onSubmit={saveSubmitted}>
-      <ProjectFormFields licenseOptions={data.licenses} onChange={setProject} project={project} />
+      <ProjectFormFields licenseOptions={LICENSES} onChange={setProject} project={project} />
       <button className="btn btn-primary" type="submit" disabled={navigation.state !== 'idle'}>
         Save project
       </button>
-      <ErrorDisplay graphQLError={getApolloActionError(actionData)} />
+      <ActionErrorDisplay data={actionData} />
     </Form>
   );
 }
