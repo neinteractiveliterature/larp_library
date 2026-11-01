@@ -1,37 +1,42 @@
-import { ErrorDisplay } from '@neinteractiveliterature/litform';
-import sortBy from 'lodash/sortBy';
 import { useState, type FormEvent } from 'react';
-import { Form, Link, redirect, useNavigation, useSubmit } from 'react-router';
-import { appContext } from '../appContext';
-import { loadQuery } from '../loadQuery';
-import { getApolloActionError, withApolloErrors } from '../actionHelpers';
-import type { BrandAttributes } from '../graphqlTypes.generated';
+import { data, Form, Link, redirect, useNavigation, useSubmit } from 'react-router';
+import ActionErrorDisplay from '../ActionErrorDisplay';
 import { pageTitle } from '../pageTitle';
+import { abilityContext, userContext } from '../server/lib/authContext';
+import { requireAbility } from '../server/lib/authorization.server';
+import { createBrand, listUserBrands } from '../server/lib/brands.server';
+import { readDbContext } from '../server/lib/dbContext';
 import { generateBrandPath } from '../URLGenerators';
-import BrandFormFields, { BrandFormFieldsProps } from './BrandFormFields';
-import { CreateBrandDocument } from './mutations.generated';
-import { NewBrandQueryDocument } from './queries.generated';
+import BrandFormFields, { type BrandFormValues } from './BrandFormFields';
 import type { Route } from './+types/NewBrandPage';
 
-export async function clientLoader({ context }: Route.ClientLoaderArgs) {
-  const { apolloClient } = context.get(appContext);
-  return loadQuery(apolloClient, NewBrandQueryDocument);
+export async function loader({ context }: Route.LoaderArgs) {
+  const ability = context.get(abilityContext);
+  requireAbility(ability, 'create', 'Brand');
+
+  // (signed-in, or the ability above would have refused)
+  const user = context.get(userContext);
+  return {
+    currentUser: user && { name: user.name, brands: await listUserBrands(context.get(readDbContext), user.id) },
+  };
 }
 
-export async function clientAction({ context, request }: Route.ClientActionArgs) {
-  const { apolloClient } = context.get(appContext);
-  const { brandAttributes } = (await request.json()) as { brandAttributes: BrandAttributes };
+export async function action({ context, request }: Route.ActionArgs) {
+  const ability = context.get(abilityContext);
+  const user = context.get(userContext);
+  requireAbility(ability, 'create', 'Brand');
+  if (!user) {
+    throw new Response('Sign in to publish your larps', { status: 403, statusText: 'Forbidden' });
+  }
+  const { brandAttributes } = await request.json();
 
-  return withApolloErrors(async () => {
-    const result = await apolloClient.mutate({ mutation: CreateBrandDocument, variables: { brandAttributes } });
-    const newBrand = result.data?.createBrand?.brand;
-    return newBrand ? redirect(generateBrandPath(newBrand)) : null;
-  });
+  const result = await createBrand(ability, user, brandAttributes);
+  return result.ok ? redirect(generateBrandPath(result.brand)) : data({ errors: result.errors }, { status: 422 });
 }
 
 // This page is only reached through SignedInRoute, so there's always a current user
 export default function NewBrandPage({ loaderData: data, actionData }: Route.ComponentProps) {
-  const [brand, setBrand] = useState<BrandFormFieldsProps['brand']>({ name: '', description: '' });
+  const [brand, setBrand] = useState<BrandFormValues>({ name: '', description: '' });
   const submit = useSubmit();
   const navigation = useNavigation();
   const { currentUser } = data;
@@ -57,7 +62,7 @@ export default function NewBrandPage({ loaderData: data, actionData }: Route.Com
             brand page and click “new project.” Here are your current brands:
           </p>
           <ul className="list-inline">
-            {sortBy(currentUser.brands, (brand) => brand.name).map((brand) => (
+            {currentUser.brands.map((brand) => (
               <li className="list-inline-item" key={brand.id}>
                 <Link to={generateBrandPath(brand)}>{brand.name}</Link>
               </li>
@@ -76,7 +81,7 @@ export default function NewBrandPage({ loaderData: data, actionData }: Route.Com
         Submit
       </button>
 
-      <ErrorDisplay graphQLError={getApolloActionError(actionData)} />
+      <ActionErrorDisplay data={actionData} />
     </Form>
   );
 }

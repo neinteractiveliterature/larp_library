@@ -1,46 +1,32 @@
-import { ErrorDisplay } from '@neinteractiveliterature/litform';
-import { Form, redirect, useLocation, useNavigation, useSubmit, type SubmitOptions } from 'react-router';
-import { appContext } from '../appContext';
-import { loadQuery } from '../loadQuery';
-import { getApolloActionError, withApolloErrors } from '../actionHelpers';
+import { data, Form, redirect, useLocation, useNavigation, useSubmit, type SubmitOptions } from 'react-router';
+import ActionErrorDisplay from '../ActionErrorDisplay';
 import { formatPageTitle } from '../pageTitle';
 import { signInPath } from '../signIn';
+import { userContext } from '../server/lib/authContext';
+import { acceptInvitation, findInvitation } from '../server/lib/brandMemberships.server';
+import { readDbContext } from '../server/lib/dbContext';
 import { generateBrandPath } from '../URLGenerators';
-import { AcceptBrandMembershipInvitationDocument } from './mutations.generated';
-import { InvitationPageQueryDocument } from './queries.generated';
 import type { Route } from './+types/InvitationPage';
 
-export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
-  const { apolloClient } = context.get(appContext);
-  return loadQuery(apolloClient, InvitationPageQueryDocument, {
-    brandSlug: params.brandSlug,
-    invitationToken: params.invitationToken,
-  });
+export async function loader({ context, params }: Route.LoaderArgs) {
+  const invitation = await findInvitation(context.get(readDbContext), params.brandSlug, params.invitationToken);
+  const user = context.get(userContext);
+  return { ...invitation, currentUser: user && { id: user.id } };
 }
 
-export async function clientAction({ context, request }: Route.ClientActionArgs) {
-  const { apolloClient } = context.get(appContext);
-  const { brandId, brandSlug, invitationToken } = (await request.json()) as {
-    brandId: string;
-    brandSlug: string;
-    invitationToken: string;
-  };
+export async function action({ context, request }: Route.ActionArgs) {
+  const { brandId, brandSlug, invitationToken } = await request.json();
 
-  return withApolloErrors(async () => {
-    await apolloClient.mutate({
-      mutation: AcceptBrandMembershipInvitationDocument,
-      variables: { brandId, invitationToken },
-    });
-    // what the user is allowed to do has just changed, so forget everything that was loaded under the old permissions
-    await apolloClient.resetStore();
-    return redirect(generateBrandPath({ slug: brandSlug }));
-  });
+  const result = await acceptInvitation(context.get(userContext), { brandId, invitationToken });
+  return result.ok
+    ? redirect(generateBrandPath({ slug: brandSlug }))
+    : data({ errors: result.errors }, { status: 422 });
 }
 
 const jsonPost: SubmitOptions = { method: 'post', encType: 'application/json' };
 
-export default function InvitationPage({ loaderData: data, actionData, params }: Route.ComponentProps) {
-  const brandName = data.brandMembership.brand.name;
+export default function InvitationPage({ loaderData, actionData, params }: Route.ComponentProps) {
+  const brandName = loaderData.brandMembership.brand.name;
   const location = useLocation();
   const submit = useSubmit();
   const navigation = useNavigation();
@@ -48,7 +34,11 @@ export default function InvitationPage({ loaderData: data, actionData, params }:
   const acceptSubmitted = (event: React.FormEvent) => {
     event.preventDefault();
     submit(
-      { brandId: data.brandMembership.brand.id, brandSlug: params.brandSlug, invitationToken: params.invitationToken },
+      {
+        brandId: loaderData.brandMembership.brand.id,
+        brandSlug: params.brandSlug,
+        invitationToken: params.invitationToken,
+      },
       jsonPost,
     );
   };
@@ -67,7 +57,7 @@ export default function InvitationPage({ loaderData: data, actionData, params }:
       <ul>
         <li>Publish larps as {brandName}</li>
         <li>Edit existing {brandName} larps</li>
-        {data.brandMembership.admin && (
+        {loaderData.brandMembership.admin && (
           <>
             <li>Add and remove members from {brandName}</li>
             <li>Edit the public description and branding for {brandName}</li>
@@ -75,7 +65,7 @@ export default function InvitationPage({ loaderData: data, actionData, params }:
         )}
       </ul>
 
-      {data.currentUser ? (
+      {loaderData.currentUser ? (
         <Form method="post" onSubmit={acceptSubmitted}>
           <button type="submit" className="btn btn-primary" disabled={navigation.state !== 'idle'}>
             Accept invitation
@@ -87,7 +77,7 @@ export default function InvitationPage({ loaderData: data, actionData, params }:
         </a>
       )}
 
-      <ErrorDisplay graphQLError={getApolloActionError(actionData)} />
+      <ActionErrorDisplay data={actionData} />
     </>
   );
 }

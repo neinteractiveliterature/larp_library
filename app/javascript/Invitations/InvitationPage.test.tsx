@@ -1,45 +1,36 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { data, redirect } from 'react-router';
 
-import * as InvitationPage from './InvitationPage';
-import { InvitationPageQueryDocument } from './queries.generated';
-import { AcceptBrandMembershipInvitationDocument } from './mutations.generated';
-import { MockedResponse, renderRouteModule } from '../../../test/javascript/testUtils';
+import InvitationPage from './InvitationPage';
+import { renderRouteModule } from '../../../test/javascript/testUtils';
 
-function invitationMock(options: { admin?: boolean; signedIn?: boolean } = {}): MockedResponse {
-  const { admin = false, signedIn = true } = options;
-  return {
-    request: { query: InvitationPageQueryDocument, variables: { brandSlug: 'acme', invitationToken: 'tok123' } },
-    maxUsageCount: Number.POSITIVE_INFINITY,
-    result: {
-      data: {
-        brandMembership: {
-          __typename: 'BrandMembership',
-          id: 'm1',
-          admin,
-          brand: { __typename: 'Brand', id: 'b1', name: 'Acme Larps', slug: 'acme' },
-        },
-        currentUser: signedIn ? { __typename: 'User', id: 'u1' } : null,
+function renderInvitationPage({
+  admin = false,
+  signedIn = true,
+  respond = () => redirect('/brands/acme') as unknown,
+}: { admin?: boolean; signedIn?: boolean; respond?: () => unknown } = {}) {
+  const submitted: unknown[] = [];
+  renderRouteModule(
+    {
+      default: InvitationPage,
+      loader: () => ({
+        brandMembership: { id: 7, admin, brand: { id: 5, name: 'Acme Larps', slug: 'acme' } },
+        currentUser: signedIn ? { id: 1 } : null,
+      }),
+      action: async ({ request }: { request: Request }) => {
+        submitted.push(await request.json());
+        return respond();
       },
     },
-  };
+    { route: '/brands/acme/invitations/tok123', path: '/brands/:brandSlug/invitations/:invitationToken' },
+  );
+  return { submitted };
 }
 
-const renderInvitationPage = (mocks: MockedResponse[]) =>
-  renderRouteModule(InvitationPage, {
-    mocks,
-    route: '/brands/acme/invitations/tok123',
-    path: '/brands/:brandSlug/invitations/:invitationToken',
-  });
-
 describe('InvitationPage', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-    document.querySelectorAll('body > form').forEach((form) => form.remove());
-  });
-
   it('explains what a regular membership allows', async () => {
-    renderInvitationPage([invitationMock()]);
+    renderInvitationPage();
 
     expect(await screen.findByRole('heading', { name: 'Welcome to Larp Library!' })).toBeInTheDocument();
     expect(screen.getByText('Publish larps as Acme Larps')).toBeInTheDocument();
@@ -48,7 +39,7 @@ describe('InvitationPage', () => {
   });
 
   it('explains the extra powers of an admin membership', async () => {
-    renderInvitationPage([invitationMock({ admin: true })]);
+    renderInvitationPage({ admin: true });
 
     expect(await screen.findByText('Add and remove members from Acme Larps')).toBeInTheDocument();
     expect(screen.getByText('Edit the public description and branding for Acme Larps')).toBeInTheDocument();
@@ -56,49 +47,27 @@ describe('InvitationPage', () => {
 
   it('accepts the invitation and goes to the brand page', async () => {
     const user = userEvent.setup();
-    let accepted = false;
-    renderInvitationPage([
-      invitationMock(),
-      {
-        request: {
-          query: AcceptBrandMembershipInvitationDocument,
-          variables: { brandId: 'b1', invitationToken: 'tok123' },
-        },
-        result: () => {
-          accepted = true;
-          return { data: { acceptBrandMembershipInvitation: { __typename: 'Payload', clientMutationId: null } } };
-        },
-      },
-    ]);
+    const { submitted } = renderInvitationPage();
 
     await user.click(await screen.findByRole('button', { name: 'Accept invitation' }));
 
     await vi.waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/brands/acme'));
-    expect(accepted).toBe(true);
+    expect(submitted).toEqual([{ brandId: 5, brandSlug: 'acme', invitationToken: 'tok123' }]);
   });
 
-  it('shows the error if accepting fails', async () => {
+  it('shows what the server says is wrong with accepting', async () => {
     const user = userEvent.setup();
-    renderInvitationPage([
-      invitationMock(),
-      {
-        request: {
-          query: AcceptBrandMembershipInvitationDocument,
-          variables: { brandId: 'b1', invitationToken: 'tok123' },
-        },
-        error: new Error('invitation already used'),
-      },
-    ]);
+    renderInvitationPage({
+      respond: () => data({ errors: ['User is already a member of this brand'] }, { status: 422 }),
+    });
 
-    // InvitationPage doesn't catch the failed mutation, so the browser would log an unhandled rejection too.  That's
-    // why the error message carries the marker that vitest.config.mts ignores.
     await user.click(await screen.findByRole('button', { name: 'Accept invitation' }));
 
-    expect(await screen.findByText(/invitation already used/)).toBeInTheDocument();
+    expect(await screen.findByText(/already a member of this brand/)).toBeInTheDocument();
   });
 
   it('asks anonymous visitors to sign in, then returns them here', async () => {
-    renderInvitationPage([invitationMock({ signedIn: false })]);
+    renderInvitationPage({ signedIn: false });
 
     expect(screen.queryByRole('button', { name: 'Accept invitation' })).not.toBeInTheDocument();
     expect(await screen.findByRole('link', { name: 'Sign in to accept this invitation' })).toHaveAttribute(

@@ -1,18 +1,12 @@
 import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { EditorView } from '@codemirror/view';
+import { data, redirect } from 'react-router';
 
-import * as EditBrandPage from './EditBrandPage';
-import * as NewBrandPage from './NewBrandPage';
-import {
-  CreateBrandDocument,
-  DeleteBrandMembershipDocument,
-  InviteBrandMemberDocument,
-  UpdateBrandDocument,
-} from './mutations.generated';
-import { EditBrandQueryDocument, NewBrandQueryDocument } from './queries.generated';
-import { buildBrand, resetFixtureIds } from '../../../test/javascript/fixtures';
-import { MockedResponse, renderRouteModule } from '../../../test/javascript/testUtils';
+import EditBrandPage from './EditBrandPage';
+import NewBrandPage from './NewBrandPage';
+import type { BrandEditingData } from '../server/lib/brands.server';
+import { renderRouteModule } from '../../../test/javascript/testUtils';
 
 function setDescription(text: string) {
   const view = EditorView.findFromDOM(document.querySelector('.cm-editor') as HTMLElement)!;
@@ -20,56 +14,34 @@ function setDescription(text: string) {
   act(() => view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: text } }));
 }
 
-function newBrandMock(currentUser: { name: string; brands: { id: string; name: string; slug: string }[] } | null) {
-  return {
-    request: { query: NewBrandQueryDocument },
-    // React Router reloads the page's data after every action, so the query is asked again
-    maxUsageCount: Number.POSITIVE_INFINITY,
-    result: {
-      data: {
-        currentUser: currentUser && {
-          __typename: 'User',
-          id: 'u1',
-          name: currentUser.name,
-          brands: currentUser.brands.map((brand) => ({ __typename: 'Brand', ...brand })),
-        },
-      },
-    },
-  } satisfies MockedResponse;
+/** The action stand-in tests give a page: it records the JSON the page submitted, and then does what the test asks */
+type SubmittedBody = Record<string, unknown>;
+
+function recordingAction(respond: (body: SubmittedBody) => unknown) {
+  const submitted: SubmittedBody[] = [];
+  const action = async ({ request }: { request: Request }) => {
+    const body = await request.json();
+    submitted.push(body);
+    return respond(body);
+  };
+  return { action, submitted };
 }
 
 describe('NewBrandPage', () => {
-  beforeEach(() => resetFixtureIds());
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-    document.querySelectorAll('body > form').forEach((form) => form.remove());
-  });
+  function renderNewBrandPage(
+    currentUser: { name: string; brands: { id: number; name: string; slug: string }[] },
+    action: ReturnType<typeof recordingAction>['action'] = recordingAction(() => redirect('/brands/pats-larps')).action,
+  ) {
+    return renderRouteModule(
+      { default: NewBrandPage, loader: () => ({ currentUser }), action },
+      { route: '/brands/new' },
+    );
+  }
 
   it('creates the brand and goes to its page', async () => {
     const user = userEvent.setup();
-    let sent: unknown;
-    renderRouteModule(NewBrandPage, {
-      route: '/brands/new',
-      mocks: [
-        newBrandMock({ name: 'Pat', brands: [] }),
-        {
-          request: { query: CreateBrandDocument },
-          variableMatcher: () => true,
-          result: (variables: unknown) => {
-            sent = variables;
-            return {
-              data: {
-                createBrand: {
-                  __typename: 'CreateBrandPayload',
-                  brand: buildBrand({ slug: 'pats-larps', name: 'Pat’s Larps' }),
-                },
-              },
-            };
-          },
-        },
-      ],
-    });
+    const { action, submitted } = recordingAction(() => redirect('/brands/pats-larps'));
+    renderNewBrandPage({ name: 'Pat', brands: [] }, action);
 
     expect(await screen.findByRole('heading', { name: 'Publish your larps' })).toBeInTheDocument();
     expect(screen.queryByText(/already signed up as a larp creator/)).not.toBeInTheDocument();
@@ -79,20 +51,15 @@ describe('NewBrandPage', () => {
     await user.click(screen.getByRole('button', { name: 'Submit' }));
 
     await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/brands/pats-larps'));
-    expect(sent).toEqual({ brandAttributes: { name: 'Pat’s Larps', description: 'We make *larps*.' } });
+    expect(submitted).toEqual([{ brandAttributes: { name: 'Pat’s Larps', description: 'We make *larps*.' } }]);
   });
 
-  it('reminds people who already have brands, listing them alphabetically', async () => {
-    renderRouteModule(NewBrandPage, {
-      route: '/brands/new',
-      mocks: [
-        newBrandMock({
-          name: 'Pat',
-          brands: [
-            { id: 'b2', name: 'Zed Games', slug: 'zed' },
-            { id: 'b1', name: 'Acme Larps', slug: 'acme' },
-          ],
-        }),
+  it('reminds people who already have brands, listing them in the order given', async () => {
+    renderNewBrandPage({
+      name: 'Pat',
+      brands: [
+        { id: 1, name: 'Acme Larps', slug: 'acme' },
+        { id: 2, name: 'Zed Games', slug: 'zed' },
       ],
     });
 
@@ -104,79 +71,86 @@ describe('NewBrandPage', () => {
     expect(links[0]).toHaveAttribute('href', '/brands/acme');
   });
 
-  it('shows the error if creating fails', async () => {
+  it('shows what the server says is wrong, and stays on the page', async () => {
     const user = userEvent.setup();
-    renderRouteModule(NewBrandPage, {
-      route: '/brands/new',
-      mocks: [
-        newBrandMock({ name: 'Pat', brands: [] }),
-        {
-          request: { query: CreateBrandDocument },
-          variableMatcher: () => true,
-          error: new Error('name has already been taken'),
-        },
-      ],
-    });
+    const { action } = recordingAction(() => data({ errors: ['Name has already been taken.'] }, { status: 422 }));
+    renderNewBrandPage({ name: 'Pat', brands: [] }, action);
 
     await user.type(await screen.findByLabelText('Name'), 'Taken');
     await user.click(screen.getByRole('button', { name: 'Submit' }));
 
-    expect(await screen.findByText(/name has already been taken/)).toBeInTheDocument();
+    expect(await screen.findByText(/Name has already been taken/)).toBeInTheDocument();
+    expect(screen.getByTestId('location')).toHaveTextContent('/brands/new');
   });
 });
 
 describe('EditBrandPage', () => {
-  beforeEach(() => resetFixtureIds());
-
-  const member = (id: string, overrides: Record<string, unknown> = {}) => ({
-    __typename: 'BrandMembership',
+  const member = (id: number, overrides: Partial<BrandEditingData['brandMemberships'][number]> = {}) => ({
     id,
     admin: false,
     invitationEmail: null,
-    user: { __typename: 'User', id: `user-${id}`, name: `Member ${id}`, email: `${id}@example.com` },
+    user: { id: 100 + id, name: `Member ${id}`, email: `m${id}@example.com` },
     ...overrides,
   });
 
-  function editBrandMock(
-    options: { canManage?: boolean; approved?: boolean; memberships?: unknown[]; maxUsageCount?: number } = {},
-  ): MockedResponse {
-    const {
-      canManage = true,
-      approved = true,
-      memberships = [
-        member('m1', { admin: true }),
-        member('m2'),
-        member('m3', { user: null, invitationEmail: 'pending@example.com' }),
-      ],
-      // React Router reloads the page's data after every action, so the query is asked again
-      maxUsageCount = Number.POSITIVE_INFINITY,
-    } = options;
-    return {
-      request: { query: EditBrandQueryDocument, variables: { slug: 'acme' } },
-      maxUsageCount,
-      result: {
-        data: {
+  const initialMemberships = () => [
+    member(1, { admin: true }),
+    member(2),
+    member(3, { user: null, invitationEmail: 'pending@example.com' }),
+  ];
+
+  /**
+   * Renders the page with a stand-in for the server: the brand's memberships, and an action that records what was submitted
+   * and changes them as the real one would (so React Router's reload afterward shows the change).
+   */
+  function renderEditBrandPage({
+    canManage = true,
+    approved = true,
+    respond,
+  }: { canManage?: boolean; approved?: boolean; respond?: (body: SubmittedBody) => unknown } = {}) {
+    let memberships = initialMemberships();
+    const { action, submitted } = recordingAction((body) => {
+      if (respond) {
+        return respond(body);
+      }
+      if (body.intent === 'removeMembership') {
+        memberships = memberships.filter((m) => m.id !== body.membershipId);
+        return data(null);
+      }
+      if (body.intent === 'invite') {
+        memberships = [
+          ...memberships,
+          member(9, { user: null, invitationEmail: String(body.email), admin: body.admin === true }),
+        ];
+        return { invited: true };
+      }
+      return redirect('/brands/acme');
+    });
+
+    renderRouteModule(
+      {
+        default: EditBrandPage,
+        loader: (): BrandEditingData & { currentUserId: number } => ({
           brand: {
-            __typename: 'Brand',
-            id: 'b1',
-            approved,
+            id: 5,
             name: 'Acme Larps',
             slug: 'acme',
             description: 'About Acme',
+            approved,
             currentUserCanManageMemberships: canManage,
-            brandMemberships: memberships,
           },
-          currentUser: { __typename: 'User', id: 'user-m1' },
-        },
+          brandMemberships: memberships,
+          currentUserId: 101,
+        }),
+        action,
       },
-    };
+      { route: '/brands/acme/edit', path: '/brands/:brandSlug/edit' },
+    );
+    return { submitted };
   }
 
-  const renderEditBrandPage = (mocks: MockedResponse[]) =>
-    renderRouteModule(EditBrandPage, { mocks, route: '/brands/acme/edit', path: '/brands/:brandSlug/edit' });
-
   it('lists the members, including pending invitations', async () => {
-    renderEditBrandPage([editBrandMock()]);
+    renderEditBrandPage();
 
     expect(await screen.findByText('m1@example.com')).toBeInTheDocument();
     expect(screen.getByText('m2@example.com')).toBeInTheDocument();
@@ -187,13 +161,13 @@ describe('EditBrandPage', () => {
   });
 
   it('warns about unapproved brands', async () => {
-    renderEditBrandPage([editBrandMock({ approved: false })]);
+    renderEditBrandPage({ approved: false });
 
     expect(await screen.findByText(/Acme Larps is pending approval/)).toBeInTheDocument();
   });
 
   it('lets you remove other members but not yourself', async () => {
-    renderEditBrandPage([editBrandMock()]);
+    renderEditBrandPage();
 
     await screen.findByText('m1@example.com');
     const rows = screen.getAllByRole('row');
@@ -204,7 +178,7 @@ describe('EditBrandPage', () => {
   });
 
   it('hides the remove buttons from people who cannot manage memberships', async () => {
-    renderEditBrandPage([editBrandMock({ canManage: false })]);
+    renderEditBrandPage({ canManage: false });
 
     await screen.findByText('m1@example.com');
     expect(screen.queryByRole('button', { name: 'Remove' })).not.toBeInTheDocument();
@@ -212,24 +186,7 @@ describe('EditBrandPage', () => {
 
   it('removes a member after confirmation', async () => {
     const user = userEvent.setup();
-    let removed = false;
-    renderEditBrandPage([
-      editBrandMock({ maxUsageCount: 1 }),
-      {
-        request: { query: DeleteBrandMembershipDocument, variables: { id: 'm2' } },
-        result: () => {
-          removed = true;
-          return { data: { deleteBrandMembership: { __typename: 'Payload', clientMutationId: null } } };
-        },
-      },
-      // the reload after the removal
-      editBrandMock({
-        memberships: [
-          member('m1', { admin: true }),
-          member('m3', { user: null, invitationEmail: 'pending@example.com' }),
-        ],
-      }),
-    ]);
+    const { submitted } = renderEditBrandPage();
 
     await screen.findByText('m2@example.com');
     const row = screen.getAllByRole('row').find((r) => r.textContent?.includes('m2@example.com')) as HTMLElement;
@@ -237,75 +194,39 @@ describe('EditBrandPage', () => {
     expect(await screen.findByText(/remove m2@example.com’s/)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'OK', hidden: true }));
 
-    await waitFor(() => expect(removed).toBe(true));
     await waitFor(() => expect(screen.queryByText('m2@example.com')).not.toBeInTheDocument());
+    expect(submitted).toEqual([{ intent: 'removeMembership', membershipId: 2 }]);
   });
 
-  it('invites a new member and clears the form', async () => {
+  it('invites a new member, shows the invitation, and clears the form', async () => {
     const user = userEvent.setup();
-    let sent: unknown;
-    renderEditBrandPage([
-      editBrandMock(),
-      {
-        request: { query: InviteBrandMemberDocument },
-        variableMatcher: () => true,
-        result: (variables: unknown) => {
-          sent = variables;
-          return {
-            data: {
-              inviteBrandMember: {
-                __typename: 'InviteBrandMemberPayload',
-                brandMembership: member('m9', { user: null, invitationEmail: 'new@example.com', admin: true }),
-              },
-            },
-          };
-        },
-      },
-    ]);
+    const { submitted } = renderEditBrandPage();
 
     await user.type(await screen.findByLabelText('Email to invite'), 'new@example.com');
     await user.click(screen.getByLabelText('Admin?'));
     await user.click(screen.getByRole('button', { name: 'Send invitation' }));
 
-    await waitFor(() => expect(sent).toEqual({ brandId: 'b1', admin: true, email: 'new@example.com' }));
+    expect(await screen.findByText(/Invitation sent to new@example.com/)).toBeInTheDocument();
+    expect(submitted).toEqual([{ intent: 'invite', brandId: 5, admin: true, email: 'new@example.com' }]);
     await waitFor(() => expect(screen.getByLabelText('Email to invite')).toHaveValue(''));
     expect(screen.getByLabelText('Admin?')).not.toBeChecked();
   });
 
-  it('shows the error if the invitation fails', async () => {
+  it('shows what the server says is wrong with an invitation, and keeps what was typed', async () => {
     const user = userEvent.setup();
-    renderEditBrandPage([
-      editBrandMock(),
-      {
-        request: { query: InviteBrandMemberDocument },
-        variableMatcher: () => true,
-        error: new Error('email is invalid'),
-      },
-    ]);
+    renderEditBrandPage({ respond: () => data({ errors: ['Email is invalid'] }, { status: 422 }) });
 
     // (a real form: the browser itself rejects anything that isn't an email address, so the server's error is the next step)
-    await user.type(await screen.findByLabelText('Email to invite'), 'taken@example.com');
+    await user.type(await screen.findByLabelText('Email to invite'), 'bad@example.com');
     await user.click(screen.getByRole('button', { name: 'Send invitation' }));
 
-    expect(await screen.findByText(/email is invalid/)).toBeInTheDocument();
+    expect(await screen.findByText(/Email is invalid/)).toBeInTheDocument();
+    expect(screen.getByLabelText('Email to invite')).toHaveValue('bad@example.com');
   });
 
   it('saves the brand settings and goes to the brand page', async () => {
     const user = userEvent.setup();
-    let sent: unknown;
-    renderEditBrandPage([
-      editBrandMock(),
-      {
-        request: { query: UpdateBrandDocument },
-        variableMatcher: () => true,
-        result: (variables: unknown) => {
-          sent = variables;
-          return {
-            data: { updateBrand: { __typename: 'UpdateBrandPayload', brand: buildBrand({ id: 'b1', slug: 'acme' }) } },
-          };
-        },
-      },
-    ]);
+    const { submitted } = renderEditBrandPage();
 
     await user.type(await screen.findByLabelText('Name'), ' Ltd');
     await waitFor(() => expect(document.querySelector('.cm-editor')).toBeInTheDocument());
@@ -313,6 +234,19 @@ describe('EditBrandPage', () => {
     await user.click(screen.getByRole('button', { name: 'Save changes' }));
 
     await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/brands/acme'));
-    expect(sent).toEqual({ id: 'b1', brandAttributes: { name: 'Acme Larps Ltd', description: 'A new description' } });
+    expect(submitted).toEqual([
+      { intent: 'save', brandId: 5, brandAttributes: { name: 'Acme Larps Ltd', description: 'A new description' } },
+    ]);
+  });
+
+  it('shows what the server says is wrong with the settings', async () => {
+    const user = userEvent.setup();
+    renderEditBrandPage({ respond: () => data({ errors: ['Name has already been taken.'] }, { status: 422 }) });
+
+    await user.type(await screen.findByLabelText('Name'), 'x');
+    await user.click(screen.getByRole('button', { name: 'Save changes' }));
+
+    expect(await screen.findByText(/Name has already been taken/)).toBeInTheDocument();
+    expect(screen.getByTestId('location')).toHaveTextContent('/brands/acme/edit');
   });
 });

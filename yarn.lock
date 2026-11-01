@@ -11579,6 +11579,7 @@ __metadata:
     react-router: "npm:8.5.1"
     react-select: "npm:5.10.2"
     sass: "npm:1.107.1"
+    slugify: "npm:^1.6.9"
     sst: "npm:^4.17.2"
     tinycolor2: "npm:1.6.0"
     tsx: "npm:^4.23.15"
@@ -11871,6 +11872,13 @@ __metadata:
     ansi-styles: "npm:^6.2.3"
     is-fullwidth-code-point: "npm:^5.1.0"
   checksum: 10/6a7e146852047e26dd5857b35c767e52906549c580cce0ad2287cc32f54f5a582494f674817fc9ac21b2e4ac1ddeaa85b3dee409782681b465330278890c73a8
+  languageName: node
+  linkType: hard
+
+"slugify@npm:^1.6.9":
+  version: 1.6.9
+  resolution: "slugify@npm:1.6.9"
+  checksum: 10/101599a77585ac3b3fe49662db8666260c8ee1c5090d28a13c6ecabf16b42057e69ea209654797f46b13faee4c53224f48784044bd734a9443b7b88e0357110e
   languageName: node
   linkType: hard
 

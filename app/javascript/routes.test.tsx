@@ -51,10 +51,26 @@ const serverLoaderStubs: Record<string, (args: any) => unknown> = {
       offset: 0,
     };
   },
+  './Brands/EditBrandPage.tsx': () => ({
+    brand: {
+      id: 1,
+      name: 'Acme Games',
+      slug: 'acme',
+      description: null,
+      approved: true,
+      currentUserCanManageMemberships: false,
+    },
+    brandMemberships: [],
+    currentUserId: null,
+  }),
+  './Invitations/InvitationPage.tsx': () => ({
+    brandMembership: { id: 1, admin: false, brand: { id: 1, name: 'Acme Games', slug: 'acme' } },
+    currentUser: null,
+  }),
   './Tags/TagListPage.tsx': () => ({ tags: [] }),
   './ProjectPromotions/ProjectPromotionsPage.tsx': () => ({ projectPromotions: [] }),
   './TagCategories/TagCategoryListPage.tsx': () => ({ tagCategories: [] }),
-  // (the promotions, new and edit pages require an administrator, which the signed-out visitor of these tests isn't)
+  // (the promotions, new and edit pages require an administrator or a brand's administrator, which the signed-out visitor of these tests isn't)
   './Tags/NewTagPage.tsx': () => null,
   './TagCategories/NewTagCategoryPage.tsx': () => null,
   './Tags/EditTagPage.tsx': () => ({ tag: { id: 5, name: 'horde', tagCategory: null }, projectCount: 0 }),
@@ -131,6 +147,8 @@ describe('routes', () => {
     ['/brands', 'Larp creators'],
     ['/brands/unapproved', 'Brands pending approval'],
     ['/brands/acme', 'Acme Games'],
+    ['/brands/acme/edit', 'Settings'],
+    ['/brands/acme/invitations/tok123', 'Welcome to Larp Library!'],
     ['/project_promotions', 'Project promotions'],
     ['/tags', 'Tags'],
     ['/tags/new', 'Create a new tag'],
@@ -149,8 +167,6 @@ describe('routes', () => {
   // These pages need richer data than is worth building here, so they're left unmocked: Apollo's "No more mocked
   // responses" error names the query the page ran, which shows the URL reached the right page.
   it.each([
-    ['/brands/acme/edit', 'EditBrandQuery'],
-    ['/brands/acme/invitations/tok123', 'InvitationPageQuery'],
     ['/brands/acme/projects/new', 'NewProjectFormQuery'],
     ['/brands/acme/projects/7-the-big-larp', 'ProjectPageQuery'],
     ['/brands/acme/projects/7-the-big-larp/edit', 'ProjectPageQuery'],
