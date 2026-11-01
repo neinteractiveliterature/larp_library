@@ -18,6 +18,9 @@ const envSchema = z.object({
   INTERCODE_APP_ID: z.string(),
   INTERCODE_APP_SECRET: z.string(),
   SENTRY_DSN: z.string().optional(),
+  // Set by the Lambda runtime in the deployed web function, and nowhere else
+  AWS_LAMBDA_FUNCTION_NAME: z.string().optional(),
+  SENTRY_DEBUG_LOGGING: z.string().optional(),
   NODE_ENV: z.enum(['development', 'production', 'test']).optional(),
 });
 

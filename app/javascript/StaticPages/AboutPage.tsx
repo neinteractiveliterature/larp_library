@@ -15,7 +15,7 @@ export default function AboutPage() {
         </li>
       </ul>
       <p>
-        Larp Library is made with Ruby on Rails, TypeScript, and React. The source code for the app is available{' '}
+        Larp Library is made with TypeScript, React Router, and PostgreSQL. The source code for the app is available{' '}
         <a href="https://github.com/neinteractiveliterature/larp_library">on Github</a>.
       </p>
     </>

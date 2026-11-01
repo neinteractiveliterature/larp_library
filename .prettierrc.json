@@ -1,13 +1,5 @@
 {
   "printWidth": 120,
   "singleQuote": true,
-  "trailingComma": "all",
-  "overrides": [
-    {
-      "files": "*.rb",
-      "options": {
-        "singleQuote": false
-      }
-    }
-  ]
+  "trailingComma": "all"
 }
