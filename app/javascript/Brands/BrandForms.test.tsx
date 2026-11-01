@@ -1,9 +1,9 @@
-import { act, screen, within } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { EditorView } from '@codemirror/view';
 
-import EditBrandPage from './EditBrandPage';
-import NewBrandPage from './NewBrandPage';
+import * as EditBrandPage from './EditBrandPage';
+import * as NewBrandPage from './NewBrandPage';
 import {
   CreateBrandDocument,
   DeleteBrandMembershipDocument,
@@ -11,9 +11,8 @@ import {
   UpdateBrandDocument,
 } from './mutations.generated';
 import { EditBrandQueryDocument, NewBrandQueryDocument } from './queries.generated';
-import { SetReturnUrlDocument } from '../mutations.generated';
 import { buildBrand, resetFixtureIds } from '../../../test/javascript/fixtures';
-import { MockedResponse, renderPage } from '../../../test/javascript/testUtils';
+import { MockedResponse, renderRouteModule } from '../../../test/javascript/testUtils';
 
 function setDescription(text: string) {
   const view = EditorView.findFromDOM(document.querySelector('.cm-editor') as HTMLElement)!;
@@ -24,6 +23,8 @@ function setDescription(text: string) {
 function newBrandMock(currentUser: { name: string; brands: { id: string; name: string; slug: string }[] } | null) {
   return {
     request: { query: NewBrandQueryDocument },
+    // React Router reloads the page's data after every action, so the query is asked again
+    maxUsageCount: Number.POSITIVE_INFINITY,
     result: {
       data: {
         currentUser: currentUser && {
@@ -42,13 +43,13 @@ describe('NewBrandPage', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
-    document.querySelectorAll('form').forEach((form) => form.remove());
+    document.querySelectorAll('body > form').forEach((form) => form.remove());
   });
 
   it('creates the brand and goes to its page', async () => {
     const user = userEvent.setup();
     let sent: unknown;
-    renderPage(<NewBrandPage />, {
+    renderRouteModule(NewBrandPage, {
       route: '/brands/new',
       mocks: [
         newBrandMock({ name: 'Pat', brands: [] }),
@@ -73,16 +74,16 @@ describe('NewBrandPage', () => {
     expect(await screen.findByRole('heading', { name: 'Publish your larps' })).toBeInTheDocument();
     expect(screen.queryByText(/already signed up as a larp creator/)).not.toBeInTheDocument();
     await user.type(screen.getByLabelText('Name'), 'Pat’s Larps');
-    await vi.waitFor(() => expect(document.querySelector('.cm-editor')).toBeInTheDocument());
+    await waitFor(() => expect(document.querySelector('.cm-editor')).toBeInTheDocument());
     setDescription('We make *larps*.');
     await user.click(screen.getByRole('button', { name: 'Submit' }));
 
-    await vi.waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/brands/pats-larps'));
+    await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/brands/pats-larps'));
     expect(sent).toEqual({ brandAttributes: { name: 'Pat’s Larps', description: 'We make *larps*.' } });
   });
 
   it('reminds people who already have brands, listing them alphabetically', async () => {
-    renderPage(<NewBrandPage />, {
+    renderRouteModule(NewBrandPage, {
       route: '/brands/new',
       mocks: [
         newBrandMock({
@@ -105,15 +106,14 @@ describe('NewBrandPage', () => {
 
   it('shows the error if creating fails', async () => {
     const user = userEvent.setup();
-    renderPage(<NewBrandPage />, {
+    renderRouteModule(NewBrandPage, {
       route: '/brands/new',
       mocks: [
         newBrandMock({ name: 'Pat', brands: [] }),
         {
           request: { query: CreateBrandDocument },
           variableMatcher: () => true,
-          // the page doesn't catch the failed mutation, so the browser logs an unhandled rejection as well
-          error: new Error('[expected unhandled] name has already been taken'),
+          error: new Error('name has already been taken'),
         },
       ],
     });
@@ -122,32 +122,6 @@ describe('NewBrandPage', () => {
     await user.click(screen.getByRole('button', { name: 'Submit' }));
 
     expect(await screen.findByText(/name has already been taken/)).toBeInTheDocument();
-  });
-
-  it('sends signed out visitors off to sign in, coming back here afterwards', async () => {
-    const submitted: string[] = [];
-    vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(function (this: HTMLFormElement) {
-      submitted.push(this.getAttribute('action') ?? '');
-    });
-    let returnUrl: string | undefined;
-    renderPage(<NewBrandPage />, {
-      route: '/brands/new',
-      mocks: [
-        newBrandMock(null),
-        {
-          request: { query: SetReturnUrlDocument },
-          variableMatcher: () => true,
-          result: (variables: { returnUrl: string }) => {
-            returnUrl = variables.returnUrl;
-            return { data: { setReturnUrl: { __typename: 'SetReturnUrlPayload', clientMutationId: null } } };
-          },
-        },
-      ],
-    });
-
-    expect(await screen.findByText('Please wait, redirecting...')).toBeInTheDocument();
-    await vi.waitFor(() => expect(submitted).toEqual(['/users/auth/intercode']));
-    expect(returnUrl).toEqual('/brands/new');
   });
 });
 
@@ -163,10 +137,23 @@ describe('EditBrandPage', () => {
     ...overrides,
   });
 
-  function editBrandMock(options: { canManage?: boolean; approved?: boolean } = {}): MockedResponse {
-    const { canManage = true, approved = true } = options;
+  function editBrandMock(
+    options: { canManage?: boolean; approved?: boolean; memberships?: unknown[]; maxUsageCount?: number } = {},
+  ): MockedResponse {
+    const {
+      canManage = true,
+      approved = true,
+      memberships = [
+        member('m1', { admin: true }),
+        member('m2'),
+        member('m3', { user: null, invitationEmail: 'pending@example.com' }),
+      ],
+      // React Router reloads the page's data after every action, so the query is asked again
+      maxUsageCount = Number.POSITIVE_INFINITY,
+    } = options;
     return {
       request: { query: EditBrandQueryDocument, variables: { slug: 'acme' } },
+      maxUsageCount,
       result: {
         data: {
           brand: {
@@ -177,11 +164,7 @@ describe('EditBrandPage', () => {
             slug: 'acme',
             description: 'About Acme',
             currentUserCanManageMemberships: canManage,
-            brandMemberships: [
-              member('m1', { admin: true }),
-              member('m2'),
-              member('m3', { user: null, invitationEmail: 'pending@example.com' }),
-            ],
+            brandMemberships: memberships,
           },
           currentUser: { __typename: 'User', id: 'user-m1' },
         },
@@ -190,7 +173,7 @@ describe('EditBrandPage', () => {
   }
 
   const renderEditBrandPage = (mocks: MockedResponse[]) =>
-    renderPage(<EditBrandPage />, { mocks, route: '/brands/acme/edit', path: '/brands/:brandSlug/edit' });
+    renderRouteModule(EditBrandPage, { mocks, route: '/brands/acme/edit', path: '/brands/:brandSlug/edit' });
 
   it('lists the members, including pending invitations', async () => {
     renderEditBrandPage([editBrandMock()]);
@@ -231,7 +214,7 @@ describe('EditBrandPage', () => {
     const user = userEvent.setup();
     let removed = false;
     renderEditBrandPage([
-      editBrandMock(),
+      editBrandMock({ maxUsageCount: 1 }),
       {
         request: { query: DeleteBrandMembershipDocument, variables: { id: 'm2' } },
         result: () => {
@@ -239,6 +222,13 @@ describe('EditBrandPage', () => {
           return { data: { deleteBrandMembership: { __typename: 'Payload', clientMutationId: null } } };
         },
       },
+      // the reload after the removal
+      editBrandMock({
+        memberships: [
+          member('m1', { admin: true }),
+          member('m3', { user: null, invitationEmail: 'pending@example.com' }),
+        ],
+      }),
     ]);
 
     await screen.findByText('m2@example.com');
@@ -247,8 +237,8 @@ describe('EditBrandPage', () => {
     expect(await screen.findByText(/remove m2@example.com’s/)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'OK', hidden: true }));
 
-    await vi.waitFor(() => expect(removed).toBe(true));
-    await vi.waitFor(() => expect(screen.queryByText('m2@example.com')).not.toBeInTheDocument());
+    await waitFor(() => expect(removed).toBe(true));
+    await waitFor(() => expect(screen.queryByText('m2@example.com')).not.toBeInTheDocument());
   });
 
   it('invites a new member and clears the form', async () => {
@@ -277,8 +267,8 @@ describe('EditBrandPage', () => {
     await user.click(screen.getByLabelText('Admin?'));
     await user.click(screen.getByRole('button', { name: 'Send invitation' }));
 
-    await vi.waitFor(() => expect(sent).toEqual({ brandId: 'b1', admin: true, email: 'new@example.com' }));
-    await vi.waitFor(() => expect(screen.getByLabelText('Email to invite')).toHaveValue(''));
+    await waitFor(() => expect(sent).toEqual({ brandId: 'b1', admin: true, email: 'new@example.com' }));
+    await waitFor(() => expect(screen.getByLabelText('Email to invite')).toHaveValue(''));
     expect(screen.getByLabelText('Admin?')).not.toBeChecked();
   });
 
@@ -289,12 +279,12 @@ describe('EditBrandPage', () => {
       {
         request: { query: InviteBrandMemberDocument },
         variableMatcher: () => true,
-        // the page doesn't catch the failed mutation, so the browser logs an unhandled rejection as well
-        error: new Error('[expected unhandled] email is invalid'),
+        error: new Error('email is invalid'),
       },
     ]);
 
-    await user.type(await screen.findByLabelText('Email to invite'), 'nope');
+    // (a real form: the browser itself rejects anything that isn't an email address, so the server's error is the next step)
+    await user.type(await screen.findByLabelText('Email to invite'), 'taken@example.com');
     await user.click(screen.getByRole('button', { name: 'Send invitation' }));
 
     expect(await screen.findByText(/email is invalid/)).toBeInTheDocument();
@@ -318,11 +308,11 @@ describe('EditBrandPage', () => {
     ]);
 
     await user.type(await screen.findByLabelText('Name'), ' Ltd');
-    await vi.waitFor(() => expect(document.querySelector('.cm-editor')).toBeInTheDocument());
+    await waitFor(() => expect(document.querySelector('.cm-editor')).toBeInTheDocument());
     setDescription('A new description');
     await user.click(screen.getByRole('button', { name: 'Save changes' }));
 
-    await vi.waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/brands/acme'));
+    await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/brands/acme'));
     expect(sent).toEqual({ id: 'b1', brandAttributes: { name: 'Acme Larps Ltd', description: 'A new description' } });
   });
 });

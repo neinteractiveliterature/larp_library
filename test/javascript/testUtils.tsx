@@ -16,11 +16,14 @@ import {
   useLocation,
   useParams,
   useRouteError,
+  useRouteLoaderData,
   type ActionFunction,
+  type MiddlewareFunction,
   type LoaderFunction,
   type RouteObject,
 } from 'react-router';
 import { appContext } from '../../app/javascript/appContext';
+import RouteErrorDisplay from '../../app/javascript/RouteErrorDisplay';
 
 import { typePolicies } from '../../app/javascript/larpLibraryApolloClient';
 import { CSRFTokensContext } from '../../app/javascript/CSRFTokensContext';
@@ -100,6 +103,7 @@ export type RouteModuleUnderTest = {
   default: ComponentType<any>;
   clientLoader?: LoaderFunction;
   clientAction?: ActionFunction;
+  clientMiddleware?: MiddlewareFunction[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ErrorBoundary?: ComponentType<any>;
 };
@@ -116,24 +120,30 @@ function withRouteProps(module: RouteModuleUnderTest): ComponentType {
   };
 }
 
-function withErrorBoundaryProps(module: RouteModuleUnderTest): ComponentType | undefined {
+function withErrorBoundaryProps(module: RouteModuleUnderTest, id: string | undefined): ComponentType | undefined {
   const { ErrorBoundary } = module;
   if (!ErrorBoundary) {
     return undefined;
   }
   return function RouteErrorBoundary() {
-    return <ErrorBoundary error={useRouteError()} />;
+    // like the framework, give the boundary the data its own route loaded (if that worked)
+    const loaderData = useRouteLoaderData(id ?? '');
+    return <ErrorBoundary error={useRouteError()} loaderData={loaderData} />;
   };
 }
 
 /** Turns a route module into a react-router route, the way the framework build does */
-export function routeFromModule(module: RouteModuleUnderTest, props: { path?: string; index?: boolean }): RouteObject {
+export function routeFromModule(
+  module: RouteModuleUnderTest,
+  props: { path?: string; index?: boolean; id?: string },
+): RouteObject {
   return {
     ...props,
     Component: withRouteProps(module),
-    ErrorBoundary: withErrorBoundaryProps(module),
+    ErrorBoundary: withErrorBoundaryProps(module, props.id),
     loader: module.clientLoader,
     action: module.clientAction,
+    middleware: module.clientMiddleware,
   } as RouteObject;
 }
 
@@ -142,7 +152,7 @@ export type RenderRouteModuleOptions = {
   mocks?: MockedResponse[];
   /** The URL to start at */
   route?: string;
-  /** The route pattern the module is mounted at, e.g. "/tags/:tagId/edit" */
+  /** The route pattern the module is mounted at, e.g. "/tags/:tagId/edit" (default: the path of `route`) */
   path?: string;
 };
 
@@ -153,7 +163,7 @@ export type RenderRouteModuleOptions = {
  */
 export function renderRouteModule(
   module: RouteModuleUnderTest,
-  { mocks = [], route = '/', path = '/' }: RenderRouteModuleOptions = {},
+  { mocks = [], route = '/', path = new URL(route, 'http://localhost').pathname }: RenderRouteModuleOptions = {},
 ): RenderResult {
   const apolloClient = createMockApolloClient(mocks);
   const config = {
@@ -199,4 +209,9 @@ export function renderRouteModule(
       </S3ConfigurationContext.Provider>
     </ApolloProvider>,
   );
+}
+
+/** The module, with an ErrorBoundary like the layout route's, so a failed loader or action shows its message */
+export function withRouteErrorDisplay(module: RouteModuleUnderTest): RouteModuleUnderTest {
+  return { ...module, ErrorBoundary: ({ error }: { error: unknown }) => <RouteErrorDisplay error={error} /> };
 }

@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 import { ApolloProvider } from '@apollo/client';
+import { GraphQLError } from 'graphql';
 import { Confirm } from '@neinteractiveliterature/litform';
 import type { RouteConfigEntry } from '@react-router/dev/routes';
 import { render, screen, waitFor } from '@testing-library/react';
@@ -12,7 +13,7 @@ import { appContext } from './appContext';
 import { AppLayoutQueryDocument } from './queries.generated';
 import { SetReturnUrlDocument } from './mutations.generated';
 import { LicensingPageQueryDocument } from './StaticPages/queries.generated';
-import { BrandsPageQueryDocument } from './Brands/queries.generated';
+import { BrandPageQueryDocument, BrandsPageQueryDocument } from './Brands/queries.generated';
 import { ProjectSearchQueryDocument } from './ProjectSearch/queries.generated';
 import { ProjectPromotionsPageQueryDocument } from './ProjectPromotions/queries.generated';
 import { TagCategoryListPageQueryDocument } from './TagCategories/queries.generated';
@@ -81,25 +82,21 @@ const pageMocks: MockedResponse[] = [
   },
 ];
 
-// routes.ts is the framework-mode route config (file paths, loaded lazily by the build); here the same config is turned
-// into ordinary react-router route objects so the URL → page mapping can be tested.
-const routeModules = import.meta.glob<RouteModuleUnderTest>('./**/*.tsx');
+// routes.ts is the framework-mode route config (file paths, which the build loads lazily); here the same config is turned
+// into ordinary react-router route objects, with the modules loaded up front, so the URL → page mapping can be tested.
+const routeModules = import.meta.glob<RouteModuleUnderTest>(['./**/*.tsx', '!./**/*.test.tsx'], { eager: true });
 
 function toRouteObjects(entries: RouteConfigEntry[]): RouteObject[] {
   return entries.map((entry): RouteObject => {
-    const loadModule = routeModules[entry.file];
-    if (!loadModule) {
+    const routeModule = routeModules[entry.file];
+    if (!routeModule) {
       throw new Error(`routes.ts refers to ${entry.file}, which doesn't exist`);
     }
-    // like the framework build, the module's loader and action are only known once its code has loaded
-    const lazy = async () => {
-      const { Component, ErrorBoundary, loader, action } = routeFromModule(await loadModule(), {});
-      return { Component, ErrorBoundary, loader, action };
-    };
-    if (entry.index) {
-      return { index: true, lazy };
-    }
-    return { path: entry.path, lazy, children: entry.children ? toRouteObjects(entry.children) : undefined };
+    const route = routeFromModule(
+      routeModule,
+      entry.index ? { index: true, id: entry.file } : { path: entry.path, id: entry.file },
+    );
+    return entry.children && !route.index ? { ...route, children: toRouteObjects(entry.children) } : route;
   });
 }
 
@@ -173,27 +170,45 @@ describe('routes', () => {
     ).toBeInTheDocument();
   });
 
-  it('sends signed out visitors who open /brands/new off to sign in', async () => {
-    // the layout query has already told the cache nobody is signed in, so the page redirects without querying
+  it('sends signed out visitors who open /brands/new off to sign in, before loading the page', async () => {
     const submitted: string[] = [];
     vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(function (this: HTMLFormElement) {
       submitted.push(this.getAttribute('action') ?? '');
     });
+    let returnUrl: string | undefined;
     renderRoute('/brands/new', [
       layoutMock,
       {
         request: { query: SetReturnUrlDocument },
         variableMatcher: () => true,
-        result: { data: { setReturnUrl: { __typename: 'SetReturnUrlPayload', clientMutationId: null } } },
+        result: (variables: { returnUrl: string }) => {
+          returnUrl = variables.returnUrl;
+          return { data: { setReturnUrl: { __typename: 'SetReturnUrlPayload', clientMutationId: null } } };
+        },
+      },
+      // (no NewBrandQuery mock: the page never loads)
+    ]);
+
+    // Testing Library's waitFor (not vi.waitFor) tells React that async updates are expected while it waits
+    await waitFor(() => expect(submitted).toEqual(['/users/auth/intercode']));
+    expect(returnUrl).toEqual('/brands/new');
+    expect(screen.queryByRole('heading', { name: 'Publish your larps' })).not.toBeInTheDocument();
+    vi.restoreAllMocks();
+    document.querySelectorAll('body > form').forEach((form) => form.remove());
+  });
+
+  it('shows the not-found page inside the layout when a brand does not exist', async () => {
+    renderRoute('/brands/no-such-brand', [
+      layoutMock,
+      {
+        request: { query: BrandPageQueryDocument },
+        variableMatcher: () => true,
+        result: { errors: [new GraphQLError('Brand not found', { extensions: { code: 'NOT_FOUND' } })] },
       },
     ]);
 
-    expect(await screen.findByText('Please wait, redirecting...')).toBeInTheDocument();
-    // Testing Library's waitFor (not vi.waitFor) tells React that async updates are expected while it waits; the sign-in
-    // mutation finishes during this wait
-    await waitFor(() => expect(submitted).toEqual(['/users/auth/intercode']));
-    vi.restoreAllMocks();
-    document.querySelectorAll('form').forEach((form) => form.remove());
+    expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Larp Library' })).toBeInTheDocument();
   });
 
   it('shows a not-found page inside the layout for a URL no page claims', async () => {

@@ -1,15 +1,41 @@
-import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
+import { ErrorDisplay, useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import sortBy from 'lodash/sortBy';
 import { useMemo } from 'react';
-import { Link } from 'react-router';
-import { generateBrandPath } from '../URLGenerators';
-import { useApproveBrandMutation } from './mutations.generated';
-import { UnapprovedBrandsListPageQueryDocument, useUnapprovedBrandsListPageQuery } from './queries.generated';
+import { Link, useFetcher } from 'react-router';
+import { appContext } from '../appContext';
+import { loadQuery } from '../loadQuery';
+import { getApolloActionError, withApolloErrors } from '../actionHelpers';
 import { pageTitle } from '../pageTitle';
+import { generateBrandPath } from '../URLGenerators';
+import { ApproveBrandDocument } from './mutations.generated';
+import {
+  UnapprovedBrandsListPageQueryDocument,
+  type UnapprovedBrandsListPageQueryData,
+  type UnapprovedBrandsListPageQueryVariables,
+} from './queries.generated';
+import type { Route } from './+types/UnapprovedBrandsListPage';
 
-export default LoadQueryWrapper(useUnapprovedBrandsListPageQuery, function UnapprovedBrandsListPage({ data }) {
-  const [approveBrand] = useApproveBrandMutation();
+export async function clientLoader({ context }: Route.ClientLoaderArgs) {
+  const { apolloClient } = context.get(appContext);
+  return loadQuery<UnapprovedBrandsListPageQueryData, UnapprovedBrandsListPageQueryVariables>(
+    apolloClient,
+    UnapprovedBrandsListPageQueryDocument,
+  );
+}
+
+export async function clientAction({ context, request }: Route.ClientActionArgs) {
+  const { apolloClient } = context.get(appContext);
+  const { brandId } = (await request.json()) as { brandId: string };
+
+  // React Router reloads the list afterward, so the approved brand drops off it
+  return withApolloErrors(async () => {
+    await apolloClient.mutate({ mutation: ApproveBrandDocument, variables: { id: brandId } });
+    return null;
+  });
+}
+
+export default function UnapprovedBrandsListPage({ loaderData: data }: Route.ComponentProps) {
+  const approveFetcher = useFetcher<typeof clientAction>();
   const sortedBrands = useMemo(
     () =>
       sortBy(
@@ -20,11 +46,8 @@ export default LoadQueryWrapper(useUnapprovedBrandsListPageQuery, function Unapp
   );
   const confirm = useGraphQLConfirm();
 
-  const approveBrandConfirmed = async (brand: (typeof data)['brands']['edges'][number]['node']) => {
-    await approveBrand({
-      variables: { id: brand.id },
-      refetchQueries: [{ query: UnapprovedBrandsListPageQueryDocument }],
-    });
+  const approveBrandConfirmed = async (brand: (typeof sortedBrands)[number]) => {
+    await approveFetcher.submit({ brandId: brand.id }, { method: 'post', encType: 'application/json' });
   };
 
   return (
@@ -62,6 +85,7 @@ export default LoadQueryWrapper(useUnapprovedBrandsListPageQuery, function Unapp
                 <button
                   className="btn btn-success"
                   type="button"
+                  disabled={approveFetcher.state !== 'idle'}
                   onClick={() =>
                     confirm({
                       prompt: `Approve “${brand.name}”?  Their content will become immediately
@@ -77,8 +101,9 @@ export default LoadQueryWrapper(useUnapprovedBrandsListPageQuery, function Unapp
           ))}
         </tbody>
       </table>
+      <ErrorDisplay graphQLError={getApolloActionError(approveFetcher.data)} />
     </>
   );
-});
+}
 
 export const meta = pageTitle('Pending creators');

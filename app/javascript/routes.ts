@@ -8,7 +8,7 @@ export default [
 
     route('brands', './Brands/BrandListPage.tsx'),
     route('brands/unapproved', './Brands/UnapprovedBrandsListPage.tsx'),
-    route('brands/new', './Brands/NewBrandPage.tsx'),
+    layout('./SignedInRoute.tsx', [route('brands/new', './Brands/NewBrandPage.tsx')]),
     route('brands/:brandSlug', './Brands/BrandPage.tsx'),
     route('brands/:brandSlug/edit', './Brands/EditBrandPage.tsx'),
     route('brands/:brandSlug/invitations/:invitationToken', './Invitations/InvitationPage.tsx'),
