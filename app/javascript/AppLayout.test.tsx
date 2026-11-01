@@ -2,31 +2,27 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import AppLayout from './AppLayout';
-import { AppLayoutQueryDocument } from './queries.generated';
+import type { AppLayoutQueryData } from './queries.generated';
 import { SetReturnUrlDocument } from './mutations.generated';
 import { useSignIn } from './SignInButton';
-import { MockedResponse, renderPage } from '../../test/javascript/testUtils';
+import { renderPage } from '../../test/javascript/testUtils';
 
 const noAbilities = {
-  __typename: 'Ability',
+  __typename: 'Ability' as const,
   canApproveBrands: false,
   canCreateProjectPromotions: false,
   canUpdateTags: false,
   canUpdateTagCategories: false,
 };
 
-function layoutMock(
+function layoutData(
   currentUser: { admin: boolean } | null,
   currentAbility: Partial<typeof noAbilities> = {},
-): MockedResponse {
+): AppLayoutQueryData {
   return {
-    request: { query: AppLayoutQueryDocument },
-    result: {
-      data: {
-        currentUser: currentUser && { __typename: 'User', id: '1', ...currentUser },
-        currentAbility: { ...noAbilities, ...currentAbility },
-      },
-    },
+    __typename: 'Query',
+    currentUser: currentUser && { __typename: 'User', id: '1', ...currentUser },
+    currentAbility: { ...noAbilities, ...currentAbility },
   };
 }
 
@@ -46,15 +42,14 @@ describe('AppLayout', () => {
     document.querySelectorAll('form').forEach((form) => form.remove());
   });
 
-  it('shows the navigation, the page, and a sign in button to anonymous visitors', async () => {
+  it('shows the navigation, the page, and a sign in button to anonymous visitors', () => {
     renderPage(
-      <AppLayout>
+      <AppLayout data={layoutData(null)}>
         <p>The page content</p>
       </AppLayout>,
-      { mocks: [layoutMock(null)] },
     );
 
-    expect(await screen.findByText('The page content')).toBeInTheDocument();
+    expect(screen.getByText('The page content')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Larps' })).toHaveAttribute('href', '/projects');
     expect(screen.getByRole('link', { name: 'Creators' })).toHaveAttribute('href', '/brands');
     expect(screen.getByRole('link', { name: 'Publish your larp' })).toHaveAttribute('href', '/brands/new');
@@ -66,9 +61,9 @@ describe('AppLayout', () => {
 
   it('posts a sign in form with the CSRF token', async () => {
     const user = userEvent.setup();
-    renderPage(<AppLayout>content</AppLayout>, { mocks: [layoutMock(null)] });
+    renderPage(<AppLayout data={layoutData(null)}>content</AppLayout>);
 
-    await user.click(await screen.findByRole('button', { name: 'Sign in' }));
+    await user.click(screen.getByRole('button', { name: 'Sign in' }));
 
     expect(submittedForms).toEqual([
       { action: '/users/auth/intercode', fields: { authenticity_token: 'sign-in-token' } },
@@ -77,9 +72,9 @@ describe('AppLayout', () => {
 
   it('posts a DELETE sign out form for signed in users, without an admin menu for non-admins', async () => {
     const user = userEvent.setup();
-    renderPage(<AppLayout>content</AppLayout>, { mocks: [layoutMock({ admin: false })] });
+    renderPage(<AppLayout data={layoutData({ admin: false })}>content</AppLayout>);
 
-    await user.click(await screen.findByRole('button', { name: 'Sign out' }));
+    await user.click(screen.getByRole('button', { name: 'Sign out' }));
 
     expect(submittedForms).toEqual([
       { action: '/users/sign_out', fields: { authenticity_token: 'sign-out-token', _method: 'DELETE' } },
@@ -88,10 +83,10 @@ describe('AppLayout', () => {
     expect(screen.queryByRole('button', { name: 'Sign in' })).not.toBeInTheDocument();
   });
 
-  it('shows every admin menu entry to an admin with all abilities', async () => {
-    renderPage(<AppLayout>content</AppLayout>, {
-      mocks: [
-        layoutMock(
+  it('shows every admin menu entry to an admin with all abilities', () => {
+    renderPage(
+      <AppLayout
+        data={layoutData(
           { admin: true },
           {
             canApproveBrands: true,
@@ -99,22 +94,22 @@ describe('AppLayout', () => {
             canUpdateTags: true,
             canUpdateTagCategories: true,
           },
-        ),
-      ],
-    });
+        )}
+      >
+        content
+      </AppLayout>,
+    );
 
-    expect(await screen.findByRole('link', { name: 'Pending Creators' })).toHaveAttribute('href', '/brands/unapproved');
+    expect(screen.getByRole('link', { name: 'Pending Creators' })).toHaveAttribute('href', '/brands/unapproved');
     expect(screen.getByRole('link', { name: 'Promotions' })).toHaveAttribute('href', '/project_promotions');
     expect(screen.getByRole('link', { name: 'Tags' })).toHaveAttribute('href', '/tags');
     expect(screen.getByRole('link', { name: 'Tag Categories' })).toHaveAttribute('href', '/tag_categories');
   });
 
-  it('only shows the admin menu entries the admin is allowed to use', async () => {
-    renderPage(<AppLayout>content</AppLayout>, {
-      mocks: [layoutMock({ admin: true }, { canUpdateTags: true })],
-    });
+  it('only shows the admin menu entries the admin is allowed to use', () => {
+    renderPage(<AppLayout data={layoutData({ admin: true }, { canUpdateTags: true })}>content</AppLayout>);
 
-    expect(await screen.findByRole('link', { name: 'Tags' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Tags' })).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Pending Creators' })).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Promotions' })).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Tag Categories' })).not.toBeInTheDocument();

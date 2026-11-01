@@ -3,12 +3,12 @@ import userEvent from '@testing-library/user-event';
 
 import ColorPicker from '../ColorPicker';
 import IconSelect from '../IconSelect';
-import EditTagCategoryPage from './EditTagCategoryPage';
-import NewTagCategoryPage from './NewTagCategoryPage';
+import * as EditTagCategoryPage from './EditTagCategoryPage';
+import * as NewTagCategoryPage from './NewTagCategoryPage';
 import { CreateTagCategoryDocument, DeleteTagCategoryDocument, UpdateTagCategoryDocument } from './mutations.generated';
 import { EditTagCategoryQueryDocument } from './queries.generated';
 import { buildTag, buildTagCategory, resetFixtureIds } from '../../../test/javascript/fixtures';
-import { MockedResponse, renderPage, selectReactSelectOption } from '../../../test/javascript/testUtils';
+import { MockedResponse, renderRouteModule, selectReactSelectOption } from '../../../test/javascript/testUtils';
 
 describe('NewTagCategoryPage', () => {
   beforeEach(() => resetFixtureIds());
@@ -16,8 +16,9 @@ describe('NewTagCategoryPage', () => {
   it('creates a tag category with a name and icon, then returns to the list', async () => {
     const user = userEvent.setup();
     let sent: unknown;
-    renderPage(<NewTagCategoryPage />, {
+    renderRouteModule(NewTagCategoryPage, {
       route: '/tag_categories/new',
+      path: '/tag_categories/new',
       mocks: [
         {
           request: { query: CreateTagCategoryDocument },
@@ -44,21 +45,21 @@ describe('NewTagCategoryPage', () => {
   });
 
   it('labels the icon select, so clicking the label or using a screen reader reaches the field', () => {
-    renderPage(<NewTagCategoryPage />, { route: '/tag_categories/new' });
+    renderRouteModule(NewTagCategoryPage, { route: '/tag_categories/new', path: '/tag_categories/new' });
 
     expect(screen.getByLabelText('Icon')).toBe(screen.getByRole('combobox'));
   });
 
   it('shows the error if creating fails', async () => {
     const user = userEvent.setup();
-    renderPage(<NewTagCategoryPage />, {
+    renderRouteModule(NewTagCategoryPage, {
       route: '/tag_categories/new',
+      path: '/tag_categories/new',
       mocks: [
         {
           request: { query: CreateTagCategoryDocument },
           variableMatcher: () => true,
-          // the page doesn't catch the failed mutation, so the browser logs an unhandled rejection as well
-          error: new Error('[expected unhandled] name is required'),
+          error: new Error('name is required'),
         },
       ],
     });
@@ -93,7 +94,7 @@ describe('EditTagCategoryPage', () => {
   }
 
   const renderEditPage = (mocks: MockedResponse[]) =>
-    renderPage(<EditTagCategoryPage />, {
+    renderRouteModule(EditTagCategoryPage, {
       mocks,
       route: '/tag_categories/3/edit',
       path: '/tag_categories/:tagCategoryId/edit',

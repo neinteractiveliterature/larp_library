@@ -1,15 +1,14 @@
 /// <reference types="vite/client" />
-import { InMemoryCache } from '@apollo/client';
-import { MockedProvider } from '@apollo/client/testing';
+import { ApolloProvider } from '@apollo/client';
 import { Confirm } from '@neinteractiveliterature/litform';
 import type { RouteConfigEntry } from '@react-router/dev/routes';
 import { render, screen, waitFor } from '@testing-library/react';
-import { createMemoryRouter, RouterProvider, type RouteObject } from 'react-router';
+import { createMemoryRouter, RouterContextProvider, RouterProvider, type RouteObject } from 'react-router';
 
 import routes from './routes';
 import { CSRFTokensContext } from './CSRFTokensContext';
 import { S3ConfigurationContext } from './S3ConfigurationContext';
-import { typePolicies } from './useLarpLibraryApolloClient';
+import { appContext } from './appContext';
 import { AppLayoutQueryDocument } from './queries.generated';
 import { SetReturnUrlDocument } from './mutations.generated';
 import { LicensingPageQueryDocument } from './StaticPages/queries.generated';
@@ -20,7 +19,12 @@ import { TagCategoryListPageQueryDocument } from './TagCategories/queries.genera
 import { TagListPageQueryDocument } from './Tags/queries.generated';
 import { TagCategoryAutocompleteQueryDocument } from './TagCategories/queries.generated';
 import { buildConnection } from '../../test/javascript/fixtures';
-import type { MockedResponse } from '../../test/javascript/testUtils';
+import {
+  createMockApolloClient,
+  routeFromModule,
+  type MockedResponse,
+  type RouteModuleUnderTest,
+} from '../../test/javascript/testUtils';
 
 const anyVariables = { variableMatcher: () => true, maxUsageCount: Number.POSITIVE_INFINITY };
 const empty = [] as { id: string }[];
@@ -79,7 +83,7 @@ const pageMocks: MockedResponse[] = [
 
 // routes.ts is the framework-mode route config (file paths, loaded lazily by the build); here the same config is turned
 // into ordinary react-router route objects so the URL → page mapping can be tested.
-const routeModules = import.meta.glob<{ default: React.ComponentType }>('./**/*.tsx');
+const routeModules = import.meta.glob<RouteModuleUnderTest>('./**/*.tsx');
 
 function toRouteObjects(entries: RouteConfigEntry[]): RouteObject[] {
   return entries.map((entry): RouteObject => {
@@ -87,7 +91,11 @@ function toRouteObjects(entries: RouteConfigEntry[]): RouteObject[] {
     if (!loadModule) {
       throw new Error(`routes.ts refers to ${entry.file}, which doesn't exist`);
     }
-    const lazy = async () => ({ Component: (await loadModule()).default });
+    // like the framework build, the module's loader and action are only known once its code has loaded
+    const lazy = async () => {
+      const { Component, ErrorBoundary, loader, action } = routeFromModule(await loadModule(), {});
+      return { Component, ErrorBoundary, loader, action };
+    };
     if (entry.index) {
       return { index: true, lazy };
     }
@@ -96,21 +104,31 @@ function toRouteObjects(entries: RouteConfigEntry[]): RouteObject[] {
 }
 
 function renderRoute(route: string, mocks: MockedResponse[]) {
+  const apolloClient = createMockApolloClient(mocks);
+  const s3Configuration = { awsRegion: 'us-east-1', awsAccessKeyId: 'key', bucketName: 'bucket' };
+  const config = {
+    graphqlCSRFToken: 'graphql',
+    signInCSRFToken: 'in',
+    signOutCSRFToken: 'out',
+    s3Configuration,
+    sentryDsn: null,
+    currentUserId: null,
+  };
   const router = createMemoryRouter(toRouteObjects(routes), {
     initialEntries: [route],
-    hydrationData: { loaderData: {} },
+    getContext: () => new RouterContextProvider(new Map([[appContext, { config, apolloClient }]])),
   });
 
   return render(
-    <MockedProvider mocks={mocks} cache={new InMemoryCache({ typePolicies })}>
-      <S3ConfigurationContext.Provider value={{ awsRegion: 'us-east-1', awsAccessKeyId: 'key', bucketName: 'bucket' }}>
+    <ApolloProvider client={apolloClient}>
+      <S3ConfigurationContext.Provider value={s3Configuration}>
         <CSRFTokensContext.Provider value={{ signInCSRFToken: 'in', signOutCSRFToken: 'out' }}>
           <Confirm>
             <RouterProvider router={router} />
           </Confirm>
         </CSRFTokensContext.Provider>
       </S3ConfigurationContext.Provider>
-    </MockedProvider>,
+    </ApolloProvider>,
   );
 }
 

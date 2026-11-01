@@ -1,36 +1,61 @@
 import { ErrorDisplay, useGraphQLConfirm } from '@neinteractiveliterature/litform';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
-import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
-import TagFormFields from './TagFormFields';
-import { useEditTagQuery } from './queries.generated';
-import { Link } from 'react-router';
-import { useDeleteTagMutation, useUpdateTagMutation } from './mutations.generated';
+import { useState, type FormEvent } from 'react';
+import { Form, Link, redirect, useFetcher } from 'react-router';
+import { appContext } from '../appContext';
+import { getApolloActionError, withApolloErrors } from '../actionHelpers';
+import type { TagAttributes } from '../graphqlTypes.generated';
+import { formatPageTitle } from '../pageTitle';
 import buildTagAttributes from './buildTagAttributes';
+import { DeleteTagDocument, UpdateTagDocument } from './mutations.generated';
+import { EditTagQueryDocument, type EditTagQueryData, type EditTagQueryVariables } from './queries.generated';
+import TagFormFields from './TagFormFields';
+import type { Route } from './+types/EditTagPage';
 
-function useEditTagQueryFromParams() {
-  const { tagId } = useParams();
-  if (tagId == null) {
-    throw new Error('tagId param is required');
-  }
-  return useEditTagQuery({ variables: { id: tagId } });
+export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
+  const { apolloClient } = context.get(appContext);
+  const { data } = await apolloClient.query<EditTagQueryData, EditTagQueryVariables>({
+    query: EditTagQueryDocument,
+    variables: { id: params.tagId },
+    fetchPolicy: 'network-only',
+  });
+  return data;
 }
 
-export default LoadQueryWrapper(useEditTagQueryFromParams, function EditTagPage({ data }) {
+type EditTagActionBody = { intent: 'save'; tagAttributes: TagAttributes } | { intent: 'delete' };
+
+export async function clientAction({ context, params, request }: Route.ClientActionArgs) {
+  const { apolloClient } = context.get(appContext);
+  const body = (await request.json()) as EditTagActionBody;
+
+  return withApolloErrors(async () => {
+    if (body.intent === 'delete') {
+      await apolloClient.mutate({ mutation: DeleteTagDocument, variables: { id: params.tagId } });
+    } else {
+      await apolloClient.mutate({
+        mutation: UpdateTagDocument,
+        variables: { id: params.tagId, tagAttributes: body.tagAttributes },
+      });
+    }
+    return redirect('/tags');
+  });
+}
+
+export default function EditTagPage({ loaderData: data }: Route.ComponentProps) {
   const [tag, setTag] = useState(data.tag);
-  const [updateTag, { loading: updatingTag, error: updateTagError }] = useUpdateTagMutation();
-  const [deleteTag, { loading: deletingTag, error: deleteTagError }] = useDeleteTagMutation();
-  const navigate = useNavigate();
+  const saveFetcher = useFetcher<typeof clientAction>();
+  const deleteFetcher = useFetcher<typeof clientAction>();
   const confirm = useGraphQLConfirm();
 
-  const deleteConfirmed = async () => {
-    await deleteTag({ variables: { id: data.tag.id } });
-    navigate('/tags');
+  const saveSubmitted = (event: FormEvent) => {
+    event.preventDefault();
+    saveFetcher.submit(
+      { intent: 'save', tagAttributes: buildTagAttributes(tag) },
+      { method: 'post', encType: 'application/json' },
+    );
   };
 
-  const saveChanges = async () => {
-    await updateTag({ variables: { id: data.tag.id, tagAttributes: buildTagAttributes(tag) } });
-    navigate('/tags');
+  const deleteConfirmed = async () => {
+    await deleteFetcher.submit({ intent: 'delete' }, { method: 'post', encType: 'application/json' });
   };
 
   return (
@@ -48,7 +73,7 @@ export default LoadQueryWrapper(useEditTagQueryFromParams, function EditTagPage(
           <button
             type="button"
             className="btn btn-danger"
-            disabled={deletingTag}
+            disabled={deleteFetcher.state !== 'idle'}
             onClick={() =>
               confirm({
                 action: deleteConfirmed,
@@ -58,17 +83,23 @@ export default LoadQueryWrapper(useEditTagQueryFromParams, function EditTagPage(
           >
             Delete tag
           </button>
-          <ErrorDisplay graphQLError={deleteTagError} />
+          <ErrorDisplay graphQLError={getApolloActionError(deleteFetcher.data)} />
         </div>
       </header>
 
-      <TagFormFields tag={tag} onChange={setTag} />
+      <Form method="post" onSubmit={saveSubmitted}>
+        <TagFormFields tag={tag} onChange={setTag} />
 
-      <button type="button" className="btn btn-primary" disabled={updatingTag} onClick={saveChanges}>
-        Save changes
-      </button>
+        <button type="submit" className="btn btn-primary" disabled={saveFetcher.state !== 'idle'}>
+          Save changes
+        </button>
 
-      <ErrorDisplay graphQLError={updateTagError} />
+        <ErrorDisplay graphQLError={getApolloActionError(saveFetcher.data)} />
+      </Form>
     </>
   );
-});
+}
+
+export function meta({ loaderData }: Route.MetaArgs) {
+  return [{ title: formatPageTitle(loaderData ? `Editing tag: ${loaderData.tag.name}` : 'Edit tag') }];
+}

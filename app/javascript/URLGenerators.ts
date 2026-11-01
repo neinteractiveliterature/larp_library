@@ -4,9 +4,7 @@ export function generateBrandPath(brand: Pick<Brand, 'slug'>): string {
   return `/brands/${brand.slug}`;
 }
 
-export function generateProjectPath(
-  project: Pick<Project, 'title' | 'id'> & { brand: Pick<Brand, 'slug'> },
-): string {
+export function generateProjectPath(project: Pick<Project, 'title' | 'id'> & { brand: Pick<Brand, 'slug'> }): string {
   return `${generateBrandPath(project.brand)}/projects/${project.id}-${project.title
     ?.replace(/[^0-9A-Za-z]/g, '-')
     .replace(/--+/, '-')

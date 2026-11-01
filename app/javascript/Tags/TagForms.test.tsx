@@ -2,14 +2,19 @@ import { useState } from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import EditTagPage from './EditTagPage';
-import NewTagPage from './NewTagPage';
+import * as EditTagPage from './EditTagPage';
+import * as NewTagPage from './NewTagPage';
 import TagSelector from './TagSelector';
 import { CreateTagDocument, DeleteTagDocument, UpdateTagDocument } from './mutations.generated';
 import { EditTagQueryDocument, TagAutocompleteQueryDocument, TagFragment } from './queries.generated';
 import { TagCategoryAutocompleteQueryDocument } from '../TagCategories/queries.generated';
 import { buildConnection, buildTag, buildTagCategory, resetFixtureIds } from '../../../test/javascript/fixtures';
-import { MockedResponse, renderPage, selectReactSelectOption } from '../../../test/javascript/testUtils';
+import {
+  MockedResponse,
+  renderPage,
+  renderRouteModule,
+  selectReactSelectOption,
+} from '../../../test/javascript/testUtils';
 
 function categoryAutocompleteMock(categories: ReturnType<typeof buildTagCategory>[]): MockedResponse {
   return {
@@ -39,8 +44,9 @@ describe('NewTagPage', () => {
     const user = userEvent.setup();
     const genre = buildTagCategory({ id: 'cat-1', name: 'Genre' });
     let sentAttributes: unknown;
-    renderPage(<NewTagPage />, {
+    renderRouteModule(NewTagPage, {
       route: '/tags/new',
+      path: '/tags/new',
       mocks: [
         categoryAutocompleteMock([genre, buildTagCategory({ id: 'cat-2', name: 'Element' })]),
         {
@@ -66,8 +72,9 @@ describe('NewTagPage', () => {
   it('can create a tag without a category', async () => {
     const user = userEvent.setup();
     let sentAttributes: unknown;
-    renderPage(<NewTagPage />, {
+    renderRouteModule(NewTagPage, {
       route: '/tags/new',
+      path: '/tags/new',
       mocks: [
         categoryAutocompleteMock([]),
         {
@@ -89,15 +96,15 @@ describe('NewTagPage', () => {
 
   it('shows the error if creating the tag fails', async () => {
     const user = userEvent.setup();
-    renderPage(<NewTagPage />, {
+    renderRouteModule(NewTagPage, {
       route: '/tags/new',
+      path: '/tags/new',
       mocks: [
         categoryAutocompleteMock([]),
         {
           request: { query: CreateTagDocument },
           variableMatcher: () => true,
-          // the page doesn't catch the failed mutation, so the browser logs an unhandled rejection as well
-          error: new Error('[expected unhandled] name has already been taken'),
+          error: new Error('name has already been taken'),
         },
       ],
     });
@@ -121,7 +128,7 @@ describe('EditTagPage', () => {
   }
 
   const renderEditTagPage = (mocks: MockedResponse[]) =>
-    renderPage(<EditTagPage />, { mocks, route: '/tags/5/edit', path: '/tags/:tagId/edit' });
+    renderRouteModule(EditTagPage, { mocks, route: '/tags/5/edit', path: '/tags/:tagId/edit' });
 
   it('shows the tag and how many projects use it', async () => {
     renderEditTagPage([editTagMock(buildTag({ id: '5', name: 'horde' }), 3), categoryAutocompleteMock([])]);

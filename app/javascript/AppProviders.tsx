@@ -1,23 +1,16 @@
 import { ApolloProvider } from '@apollo/client';
-import { useRef, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Confirm, ErrorBoundary } from '@neinteractiveliterature/litform';
-import useLarpLibraryApolloClient from './useLarpLibraryApolloClient';
 import { CSRFTokensContext } from './CSRFTokensContext';
 import { S3ConfigurationContext } from './S3ConfigurationContext';
-import type { AppConfig } from './appConfig';
+import type { AppContextValue } from './appContext';
 
-export type AppProvidersProps = {
-  config: AppConfig;
+export type AppProvidersProps = AppContextValue & {
   children: ReactNode;
 };
 
 /** Everything the pages expect to find above them: Apollo, the S3/CSRF contexts, and the Confirm modal host */
-export default function AppProviders({ config, children }: AppProvidersProps) {
-  const onUnauthenticatedRef = useRef(() => {
-    // TODO: handle unauthenticated errors
-  });
-  const apolloClient = useLarpLibraryApolloClient(config.graphqlCSRFToken, onUnauthenticatedRef);
-
+export default function AppProviders({ config, apolloClient, children }: AppProvidersProps) {
   return (
     <ErrorBoundary placement="replace">
       <Confirm>
