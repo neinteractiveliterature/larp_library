@@ -62,6 +62,8 @@ Each stage needs its SST secrets set once with `sst secret set --stage productio
 
 ### Migrating a database that came from the Rails app
 
+(The whole move from the Rails app on Fly is laid out in [docs/cutover.md](docs/cutover.md).)
+
 The first deploy against a database the Rails app created must not run `0000_baseline.sql`, which would fail on the tables that
 already exist. Record it as applied first, once, with:
 
