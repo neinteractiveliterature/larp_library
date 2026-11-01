@@ -25,6 +25,8 @@ export default [
     route('brands/:brandSlug/projects/:projectId/content', './Project/ProjectContentRoute.ts'),
 
     route('project_promotions', './ProjectPromotions/ProjectPromotionsPage.tsx'),
+    // no page, just the JSON the project picker on the promotions page asks for as the user types
+    route('project_promotions/projects', './ProjectPromotions/ProjectSearchRoute.ts'),
 
     route('tags', './Tags/TagListPage.tsx'),
     route('tags/new', './Tags/NewTagPage.tsx'),
