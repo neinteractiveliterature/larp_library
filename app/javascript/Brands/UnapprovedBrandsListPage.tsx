@@ -8,19 +8,12 @@ import { getApolloActionError, withApolloErrors } from '../actionHelpers';
 import { pageTitle } from '../pageTitle';
 import { generateBrandPath } from '../URLGenerators';
 import { ApproveBrandDocument } from './mutations.generated';
-import {
-  UnapprovedBrandsListPageQueryDocument,
-  type UnapprovedBrandsListPageQueryData,
-  type UnapprovedBrandsListPageQueryVariables,
-} from './queries.generated';
+import { UnapprovedBrandsListPageQueryDocument } from './queries.generated';
 import type { Route } from './+types/UnapprovedBrandsListPage';
 
 export async function clientLoader({ context }: Route.ClientLoaderArgs) {
   const { apolloClient } = context.get(appContext);
-  return loadQuery<UnapprovedBrandsListPageQueryData, UnapprovedBrandsListPageQueryVariables>(
-    apolloClient,
-    UnapprovedBrandsListPageQueryDocument,
-  );
+  return loadQuery(apolloClient, UnapprovedBrandsListPageQueryDocument);
 }
 
 export async function clientAction({ context, request }: Route.ClientActionArgs) {

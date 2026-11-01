@@ -1,9 +1,10 @@
+import { useMutation } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { useEffect, useState, type JSX } from 'react';
 import Modal from 'react-bootstrap4-modal';
 
 import { ProjectLink } from '../graphqlTypes.generated';
-import { useUpdateProjectLinkMutation } from './mutations.generated';
+import { UpdateProjectLinkDocument } from './mutations.generated';
 import ProjectLinkFormFields, { ProjectLinkFormProjectLink } from './ProjectLinkFormFields';
 
 export type EditProjectLinkModalProps = {
@@ -13,7 +14,7 @@ export type EditProjectLinkModalProps = {
 };
 
 function EditProjectLinkModal({ initialProjectLink, visible, close }: EditProjectLinkModalProps): JSX.Element {
-  const [updateProjectLink, { loading, error }] = useUpdateProjectLinkMutation();
+  const [updateProjectLink, { loading, error }] = useMutation(UpdateProjectLinkDocument);
   const [projectLink, setProjectLink] = useState<ProjectLinkFormProjectLink>(
     initialProjectLink ?? { title: '', url: '' },
   );

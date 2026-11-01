@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import {
   useConfirm,
   useModal,
@@ -14,7 +15,7 @@ import { Project, ProjectLink } from '../graphqlTypes.generated';
 import { getSortableStyle, useSortableDndSensors } from '../SortableUtils';
 import AddProjectLinkModal from './AddProjectLinkModal';
 import EditProjectLinkModal, { EditProjectLinkModalProps } from './EditProjectLinkModal';
-import { useDeleteProjectLinkMutation, useMoveProjectLinkMutation } from './mutations.generated';
+import { DeleteProjectLinkDocument, MoveProjectLinkDocument } from './mutations.generated';
 import { ProjectLinkDisplayProps, ProjectLinkDisplay } from './ProjectLinkDisplay';
 import { ProjectFieldsFragment } from './queries.generated';
 
@@ -28,7 +29,7 @@ type EditProjectLinkProps = {
 
 function EditProjectLink({ project, link, editProjectLinkModal }: EditProjectLinkProps) {
   const confirm = useConfirm();
-  const [deleteProjectLink] = useDeleteProjectLinkMutation();
+  const [deleteProjectLink] = useMutation(DeleteProjectLinkDocument);
 
   const { attributes, listeners, isDragging, setNodeRef, transform, transition } = useSortable({
     id: link.id,
@@ -103,7 +104,7 @@ export type EditProjectLinksCardProps = {
 function EditProjectLinksCard({ project }: EditProjectLinksCardProps): JSX.Element {
   const addProjectLinkModal = useModal();
   const editProjectLinkModal = useModal<Pick<EditProjectLinkModalProps, 'initialProjectLink'>>();
-  const [moveProjectLink] = useMoveProjectLinkMutation();
+  const [moveProjectLink] = useMutation(MoveProjectLinkDocument);
 
   const sortedLinks = useMemo(
     () => [...project.projectLinks].sort((a, b) => a.position - b.position),

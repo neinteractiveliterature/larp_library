@@ -8,13 +8,13 @@ import type { TagAttributes } from '../graphqlTypes.generated';
 import { formatPageTitle } from '../pageTitle';
 import buildTagAttributes from './buildTagAttributes';
 import { DeleteTagDocument, UpdateTagDocument } from './mutations.generated';
-import { EditTagQueryDocument, type EditTagQueryData, type EditTagQueryVariables } from './queries.generated';
+import { EditTagQueryDocument } from './queries.generated';
 import TagFormFields from './TagFormFields';
 import type { Route } from './+types/EditTagPage';
 
 export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
   const { apolloClient } = context.get(appContext);
-  return loadQuery<EditTagQueryData, EditTagQueryVariables>(apolloClient, EditTagQueryDocument, { id: params.tagId });
+  return loadQuery(apolloClient, EditTagQueryDocument, { id: params.tagId });
 }
 
 type EditTagActionBody = { intent: 'save'; tagAttributes: TagAttributes } | { intent: 'delete' };

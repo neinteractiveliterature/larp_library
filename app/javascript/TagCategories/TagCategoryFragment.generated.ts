@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type TagCategoryFragment = {
   __typename: 'TagCategory';
   id: string;
@@ -11,12 +11,23 @@ export type TagCategoryFragment = {
   icon?: string | null;
 };
 
-export const TagCategoryFragmentDoc = gql`
-  fragment TagCategoryFragment on TagCategory {
-    id
-    name
-    color
-    textColor
-    icon
-  }
-`;
+export const TagCategoryFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TagCategoryFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'TagCategory' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'color' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'textColor' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'icon' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<TagCategoryFragment, unknown>;

@@ -1,12 +1,13 @@
+import { useMutation } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { addNewObjectToReferenceArrayUpdater } from '@neinteractiveliterature/litform-apollo';
 import { useState, type JSX } from 'react';
 import Modal from 'react-bootstrap4-modal';
 
 import { Project, ProjectLink } from '../graphqlTypes.generated';
-import { useCreateProjectLinkMutation } from './mutations.generated';
+import { CreateProjectLinkDocument } from './mutations.generated';
 import ProjectLinkFormFields, { ProjectLinkFormProjectLink } from './ProjectLinkFormFields';
-import { ProjectLinkFieldsFragmentDoc } from './queries.generated';
+import { ProjectLinkFieldsFragment as ProjectLinkFieldsFragmentDoc } from './queries';
 
 export type AddProjectLinkModalProps = {
   visible: boolean;
@@ -17,7 +18,7 @@ export type AddProjectLinkModalProps = {
 };
 
 function AddProjectLinkModal({ project, visible, close }: AddProjectLinkModalProps): JSX.Element {
-  const [createProjectLink, { loading, error }] = useCreateProjectLinkMutation();
+  const [createProjectLink, { loading, error }] = useMutation(CreateProjectLinkDocument);
   const [projectLink, setProjectLink] = useState<ProjectLinkFormProjectLink>({
     title: '',
     url: '',

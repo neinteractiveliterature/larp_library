@@ -1,11 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { TagCategoryFragmentDoc } from './TagCategoryFragment.generated';
-import { TagFragmentDoc } from '../Tags/queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type TagCategoryAutocompleteQueryVariables = Types.Exact<{
   queryString?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
@@ -81,171 +77,245 @@ export type EditTagCategoryQueryData = {
   };
 };
 
-export const TagCategoryAutocompleteQueryDocument = gql`
-  query TagCategoryAutocompleteQuery($queryString: String) {
-    tagCategories(queryString: $queryString) {
-      edges {
-        node {
-          id
-          ...TagCategoryFragment
-        }
-      }
-    }
-  }
-  ${TagCategoryFragmentDoc}
-`;
-
-/**
- * __useTagCategoryAutocompleteQuery__
- *
- * To run a query within a React component, call `useTagCategoryAutocompleteQuery` and pass it any options that fit your needs.
- * When your component renders, `useTagCategoryAutocompleteQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useTagCategoryAutocompleteQuery({
- *   variables: {
- *      queryString: // value for 'queryString'
- *   },
- * });
- */
-export function useTagCategoryAutocompleteQuery(
-  baseOptions?: Apollo.QueryHookOptions<TagCategoryAutocompleteQueryData, TagCategoryAutocompleteQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<TagCategoryAutocompleteQueryData, TagCategoryAutocompleteQueryVariables>(
-    TagCategoryAutocompleteQueryDocument,
-    options,
-  );
-}
-export function useTagCategoryAutocompleteQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<TagCategoryAutocompleteQueryData, TagCategoryAutocompleteQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<TagCategoryAutocompleteQueryData, TagCategoryAutocompleteQueryVariables>(
-    TagCategoryAutocompleteQueryDocument,
-    options,
-  );
-}
-export type TagCategoryAutocompleteQueryHookResult = ReturnType<typeof useTagCategoryAutocompleteQuery>;
-export type TagCategoryAutocompleteQueryLazyQueryHookResult = ReturnType<
-  typeof useTagCategoryAutocompleteQueryLazyQuery
->;
-export type TagCategoryAutocompleteQueryQueryResult = Apollo.QueryResult<
-  TagCategoryAutocompleteQueryData,
-  TagCategoryAutocompleteQueryVariables
->;
-export const TagCategoryListPageQueryDocument = gql`
-  query TagCategoryListPageQuery($after: String) {
-    tagCategories(first: 25, after: $after) {
-      pageInfo {
-        endCursor
-      }
-      totalCount
-      edges {
-        node {
-          id
-          ...TagCategoryFragment
-        }
-      }
-    }
-  }
-  ${TagCategoryFragmentDoc}
-`;
-
-/**
- * __useTagCategoryListPageQuery__
- *
- * To run a query within a React component, call `useTagCategoryListPageQuery` and pass it any options that fit your needs.
- * When your component renders, `useTagCategoryListPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useTagCategoryListPageQuery({
- *   variables: {
- *      after: // value for 'after'
- *   },
- * });
- */
-export function useTagCategoryListPageQuery(
-  baseOptions?: Apollo.QueryHookOptions<TagCategoryListPageQueryData, TagCategoryListPageQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<TagCategoryListPageQueryData, TagCategoryListPageQueryVariables>(
-    TagCategoryListPageQueryDocument,
-    options,
-  );
-}
-export function useTagCategoryListPageQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<TagCategoryListPageQueryData, TagCategoryListPageQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<TagCategoryListPageQueryData, TagCategoryListPageQueryVariables>(
-    TagCategoryListPageQueryDocument,
-    options,
-  );
-}
-export type TagCategoryListPageQueryHookResult = ReturnType<typeof useTagCategoryListPageQuery>;
-export type TagCategoryListPageQueryLazyQueryHookResult = ReturnType<typeof useTagCategoryListPageQueryLazyQuery>;
-export type TagCategoryListPageQueryQueryResult = Apollo.QueryResult<
-  TagCategoryListPageQueryData,
-  TagCategoryListPageQueryVariables
->;
-export const EditTagCategoryQueryDocument = gql`
-  query EditTagCategoryQuery($id: ID!) {
-    tagCategory(id: $id) {
-      id
-      ...TagCategoryFragment
-      tags {
-        ...TagFragment
-      }
-    }
-  }
-  ${TagCategoryFragmentDoc}
-  ${TagFragmentDoc}
-`;
-
-/**
- * __useEditTagCategoryQuery__
- *
- * To run a query within a React component, call `useEditTagCategoryQuery` and pass it any options that fit your needs.
- * When your component renders, `useEditTagCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useEditTagCategoryQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useEditTagCategoryQuery(
-  baseOptions: Apollo.QueryHookOptions<EditTagCategoryQueryData, EditTagCategoryQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<EditTagCategoryQueryData, EditTagCategoryQueryVariables>(
-    EditTagCategoryQueryDocument,
-    options,
-  );
-}
-export function useEditTagCategoryQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<EditTagCategoryQueryData, EditTagCategoryQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<EditTagCategoryQueryData, EditTagCategoryQueryVariables>(
-    EditTagCategoryQueryDocument,
-    options,
-  );
-}
-export type EditTagCategoryQueryHookResult = ReturnType<typeof useEditTagCategoryQuery>;
-export type EditTagCategoryQueryLazyQueryHookResult = ReturnType<typeof useEditTagCategoryQueryLazyQuery>;
-export type EditTagCategoryQueryQueryResult = Apollo.QueryResult<
-  EditTagCategoryQueryData,
-  EditTagCategoryQueryVariables
->;
+export const TagCategoryAutocompleteQueryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'TagCategoryAutocompleteQuery' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'queryString' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'tagCategories' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'queryString' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'queryString' } },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'edges' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'node' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                            { kind: 'FragmentSpread', name: { kind: 'Name', value: 'TagCategoryFragment' } },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TagCategoryFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'TagCategory' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'color' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'textColor' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'icon' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<TagCategoryAutocompleteQueryData, TagCategoryAutocompleteQueryVariables>;
+export const TagCategoryListPageQueryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'TagCategoryListPageQuery' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'after' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'tagCategories' },
+            arguments: [
+              { kind: 'Argument', name: { kind: 'Name', value: 'first' }, value: { kind: 'IntValue', value: '25' } },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'after' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'after' } },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pageInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [{ kind: 'Field', name: { kind: 'Name', value: 'endCursor' } }],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'totalCount' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'edges' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'node' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                            { kind: 'FragmentSpread', name: { kind: 'Name', value: 'TagCategoryFragment' } },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TagCategoryFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'TagCategory' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'color' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'textColor' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'icon' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<TagCategoryListPageQueryData, TagCategoryListPageQueryVariables>;
+export const EditTagCategoryQueryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'EditTagCategoryQuery' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'tagCategory' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'FragmentSpread', name: { kind: 'Name', value: 'TagCategoryFragment' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'tags' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [{ kind: 'FragmentSpread', name: { kind: 'Name', value: 'TagFragment' } }],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TagCategoryFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'TagCategory' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'color' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'textColor' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'icon' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TagFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Tag' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'tagCategory' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'FragmentSpread', name: { kind: 'Name', value: 'TagCategoryFragment' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<EditTagCategoryQueryData, EditTagCategoryQueryVariables>;

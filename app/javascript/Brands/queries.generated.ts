@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { ProjectHeadersFragmentDoc } from '../ProjectSearch/queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type BrandsPageQueryVariables = Types.Exact<{
   after?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
@@ -160,286 +157,460 @@ export type UnapprovedBrandsListPageQueryData = {
   };
 };
 
-export const BrandPageBrandFieldsFragmentDoc = gql`
-  fragment BrandPageBrandFields on Brand {
-    id
-    approved
-    name
-    description
-    slug
-    currentUserCanEdit
-    currentUserCanCreateProjects
-  }
-`;
-export const BrandMembershipFieldsFragmentDoc = gql`
-  fragment BrandMembershipFields on BrandMembership {
-    id
-    admin
-    invitationEmail
-    user {
-      id
-      name
-      email
-    }
-  }
-`;
-export const BrandsPageQueryDocument = gql`
-  query BrandsPageQuery($after: String) {
-    brands(after: $after) {
-      pageInfo {
-        endCursor
-      }
-      totalCount
-      edges {
-        node {
-          id
-          name
-          description
-          slug
-          projects {
-            totalCount
-          }
-        }
-      }
-    }
-  }
-`;
-
-/**
- * __useBrandsPageQuery__
- *
- * To run a query within a React component, call `useBrandsPageQuery` and pass it any options that fit your needs.
- * When your component renders, `useBrandsPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBrandsPageQuery({
- *   variables: {
- *      after: // value for 'after'
- *   },
- * });
- */
-export function useBrandsPageQuery(
-  baseOptions?: Apollo.QueryHookOptions<BrandsPageQueryData, BrandsPageQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<BrandsPageQueryData, BrandsPageQueryVariables>(BrandsPageQueryDocument, options);
-}
-export function useBrandsPageQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<BrandsPageQueryData, BrandsPageQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<BrandsPageQueryData, BrandsPageQueryVariables>(BrandsPageQueryDocument, options);
-}
-export type BrandsPageQueryHookResult = ReturnType<typeof useBrandsPageQuery>;
-export type BrandsPageQueryLazyQueryHookResult = ReturnType<typeof useBrandsPageQueryLazyQuery>;
-export type BrandsPageQueryQueryResult = Apollo.QueryResult<BrandsPageQueryData, BrandsPageQueryVariables>;
-export const BrandPageQueryDocument = gql`
-  query BrandPageQuery($slug: String!, $projectsAfter: String) {
-    brand(slug: $slug) {
-      id
-      ...BrandPageBrandFields
-      projects(after: $projectsAfter) {
-        pageInfo {
-          endCursor
-        }
-        totalCount
-        edges {
-          node {
-            id
-            description
-            ...ProjectHeadersFragment
-          }
-        }
-      }
-    }
-  }
-  ${BrandPageBrandFieldsFragmentDoc}
-  ${ProjectHeadersFragmentDoc}
-`;
-
-/**
- * __useBrandPageQuery__
- *
- * To run a query within a React component, call `useBrandPageQuery` and pass it any options that fit your needs.
- * When your component renders, `useBrandPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBrandPageQuery({
- *   variables: {
- *      slug: // value for 'slug'
- *      projectsAfter: // value for 'projectsAfter'
- *   },
- * });
- */
-export function useBrandPageQuery(baseOptions: Apollo.QueryHookOptions<BrandPageQueryData, BrandPageQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<BrandPageQueryData, BrandPageQueryVariables>(BrandPageQueryDocument, options);
-}
-export function useBrandPageQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<BrandPageQueryData, BrandPageQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<BrandPageQueryData, BrandPageQueryVariables>(BrandPageQueryDocument, options);
-}
-export type BrandPageQueryHookResult = ReturnType<typeof useBrandPageQuery>;
-export type BrandPageQueryLazyQueryHookResult = ReturnType<typeof useBrandPageQueryLazyQuery>;
-export type BrandPageQueryQueryResult = Apollo.QueryResult<BrandPageQueryData, BrandPageQueryVariables>;
-export const NewBrandQueryDocument = gql`
-  query NewBrandQuery {
-    currentUser {
-      id
-      name
-      brands {
-        id
-        name
-        slug
-      }
-    }
-  }
-`;
-
-/**
- * __useNewBrandQuery__
- *
- * To run a query within a React component, call `useNewBrandQuery` and pass it any options that fit your needs.
- * When your component renders, `useNewBrandQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useNewBrandQuery({
- *   variables: {
- *   },
- * });
- */
-export function useNewBrandQuery(baseOptions?: Apollo.QueryHookOptions<NewBrandQueryData, NewBrandQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<NewBrandQueryData, NewBrandQueryVariables>(NewBrandQueryDocument, options);
-}
-export function useNewBrandQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<NewBrandQueryData, NewBrandQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<NewBrandQueryData, NewBrandQueryVariables>(NewBrandQueryDocument, options);
-}
-export type NewBrandQueryHookResult = ReturnType<typeof useNewBrandQuery>;
-export type NewBrandQueryLazyQueryHookResult = ReturnType<typeof useNewBrandQueryLazyQuery>;
-export type NewBrandQueryQueryResult = Apollo.QueryResult<NewBrandQueryData, NewBrandQueryVariables>;
-export const EditBrandQueryDocument = gql`
-  query EditBrandQuery($slug: String!) {
-    brand(slug: $slug) {
-      id
-      approved
-      name
-      slug
-      description
-      currentUserCanManageMemberships
-      brandMemberships {
-        id
-        ...BrandMembershipFields
-      }
-    }
-    currentUser {
-      id
-    }
-  }
-  ${BrandMembershipFieldsFragmentDoc}
-`;
-
-/**
- * __useEditBrandQuery__
- *
- * To run a query within a React component, call `useEditBrandQuery` and pass it any options that fit your needs.
- * When your component renders, `useEditBrandQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useEditBrandQuery({
- *   variables: {
- *      slug: // value for 'slug'
- *   },
- * });
- */
-export function useEditBrandQuery(baseOptions: Apollo.QueryHookOptions<EditBrandQueryData, EditBrandQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<EditBrandQueryData, EditBrandQueryVariables>(EditBrandQueryDocument, options);
-}
-export function useEditBrandQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<EditBrandQueryData, EditBrandQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<EditBrandQueryData, EditBrandQueryVariables>(EditBrandQueryDocument, options);
-}
-export type EditBrandQueryHookResult = ReturnType<typeof useEditBrandQuery>;
-export type EditBrandQueryLazyQueryHookResult = ReturnType<typeof useEditBrandQueryLazyQuery>;
-export type EditBrandQueryQueryResult = Apollo.QueryResult<EditBrandQueryData, EditBrandQueryVariables>;
-export const UnapprovedBrandsListPageQueryDocument = gql`
-  query UnapprovedBrandsListPageQuery {
-    brands(unapproved: true) {
-      edges {
-        node {
-          id
-          name
-          slug
-          createdAt
-          creator {
-            id
-            email
-            name
-          }
-        }
-      }
-    }
-  }
-`;
-
-/**
- * __useUnapprovedBrandsListPageQuery__
- *
- * To run a query within a React component, call `useUnapprovedBrandsListPageQuery` and pass it any options that fit your needs.
- * When your component renders, `useUnapprovedBrandsListPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUnapprovedBrandsListPageQuery({
- *   variables: {
- *   },
- * });
- */
-export function useUnapprovedBrandsListPageQuery(
-  baseOptions?: Apollo.QueryHookOptions<UnapprovedBrandsListPageQueryData, UnapprovedBrandsListPageQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<UnapprovedBrandsListPageQueryData, UnapprovedBrandsListPageQueryVariables>(
-    UnapprovedBrandsListPageQueryDocument,
-    options,
-  );
-}
-export function useUnapprovedBrandsListPageQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<UnapprovedBrandsListPageQueryData, UnapprovedBrandsListPageQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<UnapprovedBrandsListPageQueryData, UnapprovedBrandsListPageQueryVariables>(
-    UnapprovedBrandsListPageQueryDocument,
-    options,
-  );
-}
-export type UnapprovedBrandsListPageQueryHookResult = ReturnType<typeof useUnapprovedBrandsListPageQuery>;
-export type UnapprovedBrandsListPageQueryLazyQueryHookResult = ReturnType<
-  typeof useUnapprovedBrandsListPageQueryLazyQuery
->;
-export type UnapprovedBrandsListPageQueryQueryResult = Apollo.QueryResult<
-  UnapprovedBrandsListPageQueryData,
-  UnapprovedBrandsListPageQueryVariables
->;
+export const BrandsPageQueryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'BrandsPageQuery' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'after' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'brands' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'after' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'after' } },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pageInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [{ kind: 'Field', name: { kind: 'Name', value: 'endCursor' } }],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'totalCount' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'edges' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'node' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                            { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                            { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                            { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'projects' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [{ kind: 'Field', name: { kind: 'Name', value: 'totalCount' } }],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<BrandsPageQueryData, BrandsPageQueryVariables>;
+export const BrandPageQueryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'BrandPageQuery' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'slug' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'projectsAfter' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'brand' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'slug' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'slug' } },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'FragmentSpread', name: { kind: 'Name', value: 'BrandPageBrandFields' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'projects' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'after' },
+                      value: { kind: 'Variable', name: { kind: 'Name', value: 'projectsAfter' } },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'pageInfo' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [{ kind: 'Field', name: { kind: 'Name', value: 'endCursor' } }],
+                        },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'totalCount' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'edges' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'node' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                  { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                                  { kind: 'FragmentSpread', name: { kind: 'Name', value: 'ProjectHeadersFragment' } },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TagCategoryFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'TagCategory' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'color' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'textColor' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'icon' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TagFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Tag' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'tagCategory' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'FragmentSpread', name: { kind: 'Name', value: 'TagCategoryFragment' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'BrandPageBrandFields' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Brand' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'approved' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'currentUserCanEdit' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'currentUserCanCreateProjects' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'ProjectHeadersFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Project' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'authors' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'minPlayers' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'maxPlayers' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'minFacilitators' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'maxFacilitators' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'publicationYear' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'lengthQuantity' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'lengthUnits' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'brand' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'tags' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'FragmentSpread', name: { kind: 'Name', value: 'TagFragment' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<BrandPageQueryData, BrandPageQueryVariables>;
+export const NewBrandQueryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'NewBrandQuery' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'currentUser' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'brands' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<NewBrandQueryData, NewBrandQueryVariables>;
+export const EditBrandQueryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'EditBrandQuery' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'slug' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'brand' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'slug' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'slug' } },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'approved' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'currentUserCanManageMemberships' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'brandMemberships' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'FragmentSpread', name: { kind: 'Name', value: 'BrandMembershipFields' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'currentUser' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [{ kind: 'Field', name: { kind: 'Name', value: 'id' } }],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'BrandMembershipFields' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'BrandMembership' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'admin' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'invitationEmail' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'user' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<EditBrandQueryData, EditBrandQueryVariables>;
+export const UnapprovedBrandsListPageQueryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'UnapprovedBrandsListPageQuery' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'brands' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'unapproved' },
+                value: { kind: 'BooleanValue', value: true },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'edges' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'node' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                            { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                            { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
+                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'creator' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                  { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                                  { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UnapprovedBrandsListPageQueryData, UnapprovedBrandsListPageQueryVariables>;

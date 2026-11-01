@@ -7,16 +7,12 @@ import { formatPageTitle } from '../pageTitle';
 import { useSignIn } from '../SignInButton';
 import { generateBrandPath } from '../URLGenerators';
 import { AcceptBrandMembershipInvitationDocument } from './mutations.generated';
-import {
-  InvitationPageQueryDocument,
-  type InvitationPageQueryData,
-  type InvitationPageQueryVariables,
-} from './queries.generated';
+import { InvitationPageQueryDocument } from './queries.generated';
 import type { Route } from './+types/InvitationPage';
 
 export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
   const { apolloClient } = context.get(appContext);
-  return loadQuery<InvitationPageQueryData, InvitationPageQueryVariables>(apolloClient, InvitationPageQueryDocument, {
+  return loadQuery(apolloClient, InvitationPageQueryDocument, {
     brandSlug: params.brandSlug,
     invitationToken: params.invitationToken,
   });

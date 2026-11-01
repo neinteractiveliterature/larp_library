@@ -14,13 +14,13 @@ import { formatPageTitle } from '../pageTitle';
 import { generateBrandPath } from '../URLGenerators';
 import BrandFormFields from './BrandFormFields';
 import { DeleteBrandMembershipDocument, InviteBrandMemberDocument, UpdateBrandDocument } from './mutations.generated';
-import { EditBrandQueryDocument, type EditBrandQueryData, type EditBrandQueryVariables } from './queries.generated';
+import { EditBrandQueryDocument } from './queries.generated';
 import UnapprovedBrandAlert from './UnapprovedBrandAlert';
 import type { Route } from './+types/EditBrandPage';
 
 export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
   const { apolloClient } = context.get(appContext);
-  return loadQuery<EditBrandQueryData, EditBrandQueryVariables>(apolloClient, EditBrandQueryDocument, {
+  return loadQuery(apolloClient, EditBrandQueryDocument, {
     slug: params.brandSlug,
   });
 }

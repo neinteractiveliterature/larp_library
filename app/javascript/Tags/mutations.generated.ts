@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { TagFragmentDoc } from './queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CreateTagMutationVariables = Types.Exact<{
   tagAttributes: Types.TagAttributes;
 }>;
@@ -63,115 +60,245 @@ export type DeleteTagMutationData = {
   deleteTag?: { __typename: 'DeleteTagPayload'; clientMutationId?: string | null } | null;
 };
 
-export const CreateTagDocument = gql`
-  mutation CreateTag($tagAttributes: TagAttributes!) {
-    createTag(input: { tagAttributes: $tagAttributes }) {
-      tag {
-        ...TagFragment
-      }
-    }
-  }
-  ${TagFragmentDoc}
-`;
-export type CreateTagMutationFn = Apollo.MutationFunction<CreateTagMutationData, CreateTagMutationVariables>;
-
-/**
- * __useCreateTagMutation__
- *
- * To run a mutation, you first call `useCreateTagMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateTagMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createTagMutation, { data, loading, error }] = useCreateTagMutation({
- *   variables: {
- *      tagAttributes: // value for 'tagAttributes'
- *   },
- * });
- */
-export function useCreateTagMutation(
-  baseOptions?: Apollo.MutationHookOptions<CreateTagMutationData, CreateTagMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<CreateTagMutationData, CreateTagMutationVariables>(CreateTagDocument, options);
-}
-export type CreateTagMutationHookResult = ReturnType<typeof useCreateTagMutation>;
-export type CreateTagMutationResult = Apollo.MutationResult<CreateTagMutationData>;
-export type CreateTagMutationOptions = Apollo.BaseMutationOptions<CreateTagMutationData, CreateTagMutationVariables>;
-export const UpdateTagDocument = gql`
-  mutation UpdateTag($id: ID!, $tagAttributes: TagAttributes!) {
-    updateTag(input: { id: $id, tagAttributes: $tagAttributes }) {
-      tag {
-        ...TagFragment
-      }
-    }
-  }
-  ${TagFragmentDoc}
-`;
-export type UpdateTagMutationFn = Apollo.MutationFunction<UpdateTagMutationData, UpdateTagMutationVariables>;
-
-/**
- * __useUpdateTagMutation__
- *
- * To run a mutation, you first call `useUpdateTagMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateTagMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateTagMutation, { data, loading, error }] = useUpdateTagMutation({
- *   variables: {
- *      id: // value for 'id'
- *      tagAttributes: // value for 'tagAttributes'
- *   },
- * });
- */
-export function useUpdateTagMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateTagMutationData, UpdateTagMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UpdateTagMutationData, UpdateTagMutationVariables>(UpdateTagDocument, options);
-}
-export type UpdateTagMutationHookResult = ReturnType<typeof useUpdateTagMutation>;
-export type UpdateTagMutationResult = Apollo.MutationResult<UpdateTagMutationData>;
-export type UpdateTagMutationOptions = Apollo.BaseMutationOptions<UpdateTagMutationData, UpdateTagMutationVariables>;
-export const DeleteTagDocument = gql`
-  mutation DeleteTag($id: ID!) {
-    deleteTag(input: { id: $id }) {
-      clientMutationId
-    }
-  }
-`;
-export type DeleteTagMutationFn = Apollo.MutationFunction<DeleteTagMutationData, DeleteTagMutationVariables>;
-
-/**
- * __useDeleteTagMutation__
- *
- * To run a mutation, you first call `useDeleteTagMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteTagMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteTagMutation, { data, loading, error }] = useDeleteTagMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteTagMutation(
-  baseOptions?: Apollo.MutationHookOptions<DeleteTagMutationData, DeleteTagMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<DeleteTagMutationData, DeleteTagMutationVariables>(DeleteTagDocument, options);
-}
-export type DeleteTagMutationHookResult = ReturnType<typeof useDeleteTagMutation>;
-export type DeleteTagMutationResult = Apollo.MutationResult<DeleteTagMutationData>;
-export type DeleteTagMutationOptions = Apollo.BaseMutationOptions<DeleteTagMutationData, DeleteTagMutationVariables>;
+export const CreateTagDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CreateTag' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'tagAttributes' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'TagAttributes' } } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createTag' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'ObjectValue',
+                  fields: [
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'tagAttributes' },
+                      value: { kind: 'Variable', name: { kind: 'Name', value: 'tagAttributes' } },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'tag' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [{ kind: 'FragmentSpread', name: { kind: 'Name', value: 'TagFragment' } }],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TagCategoryFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'TagCategory' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'color' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'textColor' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'icon' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TagFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Tag' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'tagCategory' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'FragmentSpread', name: { kind: 'Name', value: 'TagCategoryFragment' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<CreateTagMutationData, CreateTagMutationVariables>;
+export const UpdateTagDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'UpdateTag' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'tagAttributes' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'TagAttributes' } } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'updateTag' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'ObjectValue',
+                  fields: [
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'id' },
+                      value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+                    },
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'tagAttributes' },
+                      value: { kind: 'Variable', name: { kind: 'Name', value: 'tagAttributes' } },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'tag' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [{ kind: 'FragmentSpread', name: { kind: 'Name', value: 'TagFragment' } }],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TagCategoryFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'TagCategory' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'color' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'textColor' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'icon' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TagFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Tag' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'tagCategory' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'FragmentSpread', name: { kind: 'Name', value: 'TagCategoryFragment' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UpdateTagMutationData, UpdateTagMutationVariables>;
+export const DeleteTagDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'DeleteTag' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'deleteTag' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'ObjectValue',
+                  fields: [
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'id' },
+                      value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [{ kind: 'Field', name: { kind: 'Name', value: 'clientMutationId' } }],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<DeleteTagMutationData, DeleteTagMutationVariables>;

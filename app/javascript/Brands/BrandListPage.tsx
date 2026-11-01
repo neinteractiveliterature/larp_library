@@ -1,25 +1,21 @@
+import { useQuery } from '@apollo/client';
 import React from 'react';
 import { appContext } from '../appContext';
 import { loadQuery } from '../loadQuery';
 import { pageTitle } from '../pageTitle';
 import { Waypoint } from '../Waypoint';
 import BrandCard from './BrandCard';
-import {
-  BrandsPageQueryDocument,
-  useBrandsPageQuery,
-  type BrandsPageQueryData,
-  type BrandsPageQueryVariables,
-} from './queries.generated';
+import { BrandsPageQueryDocument } from './queries.generated';
 import type { Route } from './+types/BrandListPage';
 
 export async function clientLoader({ context }: Route.ClientLoaderArgs) {
   const { apolloClient } = context.get(appContext);
-  return loadQuery<BrandsPageQueryData, BrandsPageQueryVariables>(apolloClient, BrandsPageQueryDocument);
+  return loadQuery(apolloClient, BrandsPageQueryDocument);
 }
 
 export default function BrandListPage({ loaderData }: Route.ComponentProps) {
   // the loader fetched the first page into the Apollo cache; reading it back from there is what lets fetchMore work
-  const { data = loaderData, fetchMore } = useBrandsPageQuery();
+  const { data = loaderData, fetchMore } = useQuery(BrandsPageQueryDocument);
 
   return (
     <>

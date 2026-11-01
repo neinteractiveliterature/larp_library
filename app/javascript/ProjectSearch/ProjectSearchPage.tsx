@@ -1,7 +1,8 @@
+import { useQuery } from '@apollo/client';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import React, { useState, type JSX } from 'react';
 import { Waypoint } from '../Waypoint';
-import { useProjectSearchQuery } from './queries.generated';
+import { ProjectSearchQueryDocument } from './queries.generated';
 import ProjectCard from './ProjectCard';
 import SimpleProjectSearchControls from './SimpleProjectSearchControls';
 import useProjectSearchParams from './useProjectSearchParams';
@@ -42,7 +43,7 @@ export default function ProjectSearchPage(): JSX.Element {
     setSearchMode(ProjectSearchMode.SIMPLE);
   };
 
-  const { data, loading, error, fetchMore } = useProjectSearchQuery({
+  const { data, loading, error, fetchMore } = useQuery(ProjectSearchQueryDocument, {
     variables: projectSearchParams,
     fetchPolicy: 'network-only',
   });

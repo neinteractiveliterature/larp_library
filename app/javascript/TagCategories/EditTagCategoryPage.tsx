@@ -9,21 +9,13 @@ import { formatPageTitle } from '../pageTitle';
 import Tag from '../Tags/Tag';
 import buildTagCategoryAttributes from './buildTagCategoryAttributes';
 import { DeleteTagCategoryDocument, UpdateTagCategoryDocument } from './mutations.generated';
-import {
-  EditTagCategoryQueryDocument,
-  type EditTagCategoryQueryData,
-  type EditTagCategoryQueryVariables,
-} from './queries.generated';
+import { EditTagCategoryQueryDocument } from './queries.generated';
 import TagCategoryFormFields from './TagCategoryFormFields';
 import type { Route } from './+types/EditTagCategoryPage';
 
 export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
   const { apolloClient } = context.get(appContext);
-  return loadQuery<EditTagCategoryQueryData, EditTagCategoryQueryVariables>(
-    apolloClient,
-    EditTagCategoryQueryDocument,
-    { id: params.tagCategoryId },
-  );
+  return loadQuery(apolloClient, EditTagCategoryQueryDocument, { id: params.tagCategoryId });
 }
 
 type EditTagCategoryActionBody =

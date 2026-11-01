@@ -1,15 +1,16 @@
+import { useQuery } from '@apollo/client';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
 import { Link, useParams } from 'react-router';
 import { generateProjectPath } from '../URLGenerators';
 import ProjectContentFields from './ProjectContentFields';
-import { useProjectPageQuery } from './queries.generated';
+import { ProjectPageQueryDocument } from './queries.generated';
 
 function useLoadProject() {
   const { projectId } = useParams();
   if (projectId == null) {
     throw new Error('projectId param is required');
   }
-  return useProjectPageQuery({ variables: { projectId } });
+  return useQuery(ProjectPageQueryDocument, { variables: { projectId } });
 }
 
 export default LoadQueryWrapper(useLoadProject, function ProjectInitialContentPage({ data }) {

@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { ProjectHeadersFragmentDoc } from '../ProjectSearch/queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type ProjectFileFieldsFragment = {
   __typename: 'ProjectFile';
   id: string;
@@ -199,190 +196,345 @@ export type SignRequestQueryVariables = Types.Exact<{
 
 export type SignRequestQueryData = { __typename: 'Query'; presignS3Url: string };
 
-export const LicenseFieldsFragmentDoc = gql`
-  fragment LicenseFieldsFragment on License {
-    id
-    name
-    url
-    logoUrl
-    dedicationHtml
-    discouraged
-    discouragedReason
-  }
-`;
-export const ProjectFileFieldsFragmentDoc = gql`
-  fragment ProjectFileFieldsFragment on ProjectFile {
-    id
-    url
-    filename
-    filesize
-    filetype
-    position
-  }
-`;
-export const ProjectLinkFieldsFragmentDoc = gql`
-  fragment ProjectLinkFieldsFragment on ProjectLink {
-    id
-    url
-    title
-    icon
-    position
-  }
-`;
-export const ProjectFieldsFragmentDoc = gql`
-  fragment ProjectFieldsFragment on Project {
-    id
-    description
-    currentUserCanEdit
-    currentUserCanDelete
-    currentUserCanUploadFiles
-    currentUserCanDeleteFiles
-    ...ProjectHeadersFragment
-    license {
-      id
-      ...LicenseFieldsFragment
-    }
-    projectFiles {
-      id
-      ...ProjectFileFieldsFragment
-    }
-    projectLinks {
-      id
-      ...ProjectLinkFieldsFragment
-    }
-  }
-  ${ProjectHeadersFragmentDoc}
-  ${LicenseFieldsFragmentDoc}
-  ${ProjectFileFieldsFragmentDoc}
-  ${ProjectLinkFieldsFragmentDoc}
-`;
-export const NewProjectFormQueryDocument = gql`
-  query NewProjectFormQuery($slug: String!) {
-    brand(slug: $slug) {
-      id
-    }
-    licenses {
-      ...LicenseFieldsFragment
-    }
-  }
-  ${LicenseFieldsFragmentDoc}
-`;
-
-/**
- * __useNewProjectFormQuery__
- *
- * To run a query within a React component, call `useNewProjectFormQuery` and pass it any options that fit your needs.
- * When your component renders, `useNewProjectFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useNewProjectFormQuery({
- *   variables: {
- *      slug: // value for 'slug'
- *   },
- * });
- */
-export function useNewProjectFormQuery(
-  baseOptions: Apollo.QueryHookOptions<NewProjectFormQueryData, NewProjectFormQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<NewProjectFormQueryData, NewProjectFormQueryVariables>(NewProjectFormQueryDocument, options);
-}
-export function useNewProjectFormQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<NewProjectFormQueryData, NewProjectFormQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<NewProjectFormQueryData, NewProjectFormQueryVariables>(
-    NewProjectFormQueryDocument,
-    options,
-  );
-}
-export type NewProjectFormQueryHookResult = ReturnType<typeof useNewProjectFormQuery>;
-export type NewProjectFormQueryLazyQueryHookResult = ReturnType<typeof useNewProjectFormQueryLazyQuery>;
-export type NewProjectFormQueryQueryResult = Apollo.QueryResult<NewProjectFormQueryData, NewProjectFormQueryVariables>;
-export const ProjectPageQueryDocument = gql`
-  query ProjectPageQuery($projectId: ID!) {
-    project(id: $projectId) {
-      ...ProjectFieldsFragment
-    }
-    licenses {
-      id
-      ...LicenseFieldsFragment
-    }
-  }
-  ${ProjectFieldsFragmentDoc}
-  ${LicenseFieldsFragmentDoc}
-`;
-
-/**
- * __useProjectPageQuery__
- *
- * To run a query within a React component, call `useProjectPageQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProjectPageQuery({
- *   variables: {
- *      projectId: // value for 'projectId'
- *   },
- * });
- */
-export function useProjectPageQuery(
-  baseOptions: Apollo.QueryHookOptions<ProjectPageQueryData, ProjectPageQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ProjectPageQueryData, ProjectPageQueryVariables>(ProjectPageQueryDocument, options);
-}
-export function useProjectPageQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ProjectPageQueryData, ProjectPageQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ProjectPageQueryData, ProjectPageQueryVariables>(ProjectPageQueryDocument, options);
-}
-export type ProjectPageQueryHookResult = ReturnType<typeof useProjectPageQuery>;
-export type ProjectPageQueryLazyQueryHookResult = ReturnType<typeof useProjectPageQueryLazyQuery>;
-export type ProjectPageQueryQueryResult = Apollo.QueryResult<ProjectPageQueryData, ProjectPageQueryVariables>;
-export const SignRequestQueryDocument = gql`
-  query SignRequestQuery($httpMethod: String!, $url: String!, $headers: JSON!) {
-    presignS3Url(httpMethod: $httpMethod, url: $url, headers: $headers)
-  }
-`;
-
-/**
- * __useSignRequestQuery__
- *
- * To run a query within a React component, call `useSignRequestQuery` and pass it any options that fit your needs.
- * When your component renders, `useSignRequestQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSignRequestQuery({
- *   variables: {
- *      httpMethod: // value for 'httpMethod'
- *      url: // value for 'url'
- *      headers: // value for 'headers'
- *   },
- * });
- */
-export function useSignRequestQuery(
-  baseOptions: Apollo.QueryHookOptions<SignRequestQueryData, SignRequestQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<SignRequestQueryData, SignRequestQueryVariables>(SignRequestQueryDocument, options);
-}
-export function useSignRequestQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<SignRequestQueryData, SignRequestQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<SignRequestQueryData, SignRequestQueryVariables>(SignRequestQueryDocument, options);
-}
-export type SignRequestQueryHookResult = ReturnType<typeof useSignRequestQuery>;
-export type SignRequestQueryLazyQueryHookResult = ReturnType<typeof useSignRequestQueryLazyQuery>;
-export type SignRequestQueryQueryResult = Apollo.QueryResult<SignRequestQueryData, SignRequestQueryVariables>;
+export const NewProjectFormQueryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'NewProjectFormQuery' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'slug' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'brand' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'slug' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'slug' } },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [{ kind: 'Field', name: { kind: 'Name', value: 'id' } }],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'licenses' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [{ kind: 'FragmentSpread', name: { kind: 'Name', value: 'LicenseFieldsFragment' } }],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'LicenseFieldsFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'License' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'logoUrl' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'dedicationHtml' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'discouraged' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'discouragedReason' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<NewProjectFormQueryData, NewProjectFormQueryVariables>;
+export const ProjectPageQueryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'ProjectPageQuery' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'projectId' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'project' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'projectId' } },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [{ kind: 'FragmentSpread', name: { kind: 'Name', value: 'ProjectFieldsFragment' } }],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'licenses' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'FragmentSpread', name: { kind: 'Name', value: 'LicenseFieldsFragment' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TagCategoryFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'TagCategory' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'color' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'textColor' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'icon' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TagFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Tag' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'tagCategory' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'FragmentSpread', name: { kind: 'Name', value: 'TagCategoryFragment' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'ProjectHeadersFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Project' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'authors' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'minPlayers' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'maxPlayers' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'minFacilitators' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'maxFacilitators' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'publicationYear' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'lengthQuantity' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'lengthUnits' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'brand' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'tags' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'FragmentSpread', name: { kind: 'Name', value: 'TagFragment' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'LicenseFieldsFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'License' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'logoUrl' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'dedicationHtml' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'discouraged' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'discouragedReason' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'ProjectFileFieldsFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'ProjectFile' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'filename' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'filesize' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'filetype' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'position' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'ProjectLinkFieldsFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'ProjectLink' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'icon' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'position' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'ProjectFieldsFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Project' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'currentUserCanEdit' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'currentUserCanDelete' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'currentUserCanUploadFiles' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'currentUserCanDeleteFiles' } },
+          { kind: 'FragmentSpread', name: { kind: 'Name', value: 'ProjectHeadersFragment' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'license' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'FragmentSpread', name: { kind: 'Name', value: 'LicenseFieldsFragment' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'projectFiles' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'FragmentSpread', name: { kind: 'Name', value: 'ProjectFileFieldsFragment' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'projectLinks' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'FragmentSpread', name: { kind: 'Name', value: 'ProjectLinkFieldsFragment' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ProjectPageQueryData, ProjectPageQueryVariables>;
+export const SignRequestQueryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'SignRequestQuery' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'httpMethod' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'url' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'headers' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'JSON' } } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'presignS3Url' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'httpMethod' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'httpMethod' } },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'url' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'url' } },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'headers' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'headers' } },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SignRequestQueryData, SignRequestQueryVariables>;

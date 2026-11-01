@@ -1,14 +1,10 @@
+import { useQuery } from '@apollo/client';
 import type { JSX } from 'react';
 import { Link } from 'react-router';
 import { appContext } from '../appContext';
 import { loadQuery } from '../loadQuery';
 import { Waypoint } from '../Waypoint';
-import {
-  TagListPageQueryDocument,
-  useTagListPageQuery,
-  type TagListPageQueryData,
-  type TagListPageQueryVariables,
-} from './queries.generated';
+import { TagListPageQueryDocument } from './queries.generated';
 import Tag from './Tag';
 import { pageTitle } from '../pageTitle';
 import type { Route } from './+types/TagListPage';
@@ -17,12 +13,12 @@ import type { Route } from './+types/TagListPage';
 // cache with a query hook, which is what lets it page in more with fetchMore.
 export async function clientLoader({ context }: Route.ClientLoaderArgs) {
   const { apolloClient } = context.get(appContext);
-  await loadQuery<TagListPageQueryData, TagListPageQueryVariables>(apolloClient, TagListPageQueryDocument);
+  await loadQuery(apolloClient, TagListPageQueryDocument);
   return null;
 }
 
 export default function TagListPage(): JSX.Element {
-  const { data, fetchMore } = useTagListPageQuery();
+  const { data, fetchMore } = useQuery(TagListPageQueryDocument);
 
   const tags = !data ? [] : data.tags.edges.map((edge) => edge.node);
 
