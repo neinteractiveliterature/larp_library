@@ -13,6 +13,9 @@ const intercodeKeys = createRemoteJWKSet(new URL('/oauth/discovery/keys', env.IN
 
 export const auth = betterAuth({
   secret: env.BETTER_AUTH_SECRET,
+  // Set explicitly, not worked out from each request's Host header: the deployed function is behind CloudFront, and the callback
+  // URL sent to Intercode must be exactly the one registered there
+  baseURL: env.APP_URL_BASE,
   database: drizzleAdapter(db, { provider: 'pg', schema, usePlural: true }),
   advanced: {
     // The tables use integer serial ids (Rails' ids, which existing rows and foreign keys depend on), so better-auth
