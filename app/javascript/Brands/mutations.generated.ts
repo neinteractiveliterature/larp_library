@@ -45,27 +45,6 @@ export type UpdateBrandMutationData = {
   } | null;
 };
 
-export type ApproveBrandMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
-}>;
-
-export type ApproveBrandMutationData = {
-  __typename: 'Mutation';
-  approveBrand?: {
-    __typename: 'ApproveBrandPayload';
-    brand: {
-      __typename: 'Brand';
-      id: string;
-      approved?: boolean | null;
-      name: string;
-      description?: string | null;
-      slug: string;
-      currentUserCanEdit: boolean;
-      currentUserCanCreateProjects: boolean;
-    };
-  } | null;
-};
-
 export type InviteBrandMemberMutationVariables = Types.Exact<{
   brandId: Types.Scalars['ID']['input'];
   email: Types.Scalars['String']['input'];
@@ -255,81 +234,6 @@ export const UpdateBrandDocument = {
     },
   ],
 } as unknown as DocumentNode<UpdateBrandMutationData, UpdateBrandMutationVariables>;
-export const ApproveBrandDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'ApproveBrand' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } } },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'approveBrand' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'input' },
-                value: {
-                  kind: 'ObjectValue',
-                  fields: [
-                    {
-                      kind: 'ObjectField',
-                      name: { kind: 'Name', value: 'id' },
-                      value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                    },
-                  ],
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'brand' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      { kind: 'FragmentSpread', name: { kind: 'Name', value: 'BrandPageBrandFields' } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-    {
-      kind: 'FragmentDefinition',
-      name: { kind: 'Name', value: 'BrandPageBrandFields' },
-      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Brand' } },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'approved' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'currentUserCanEdit' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'currentUserCanCreateProjects' } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<ApproveBrandMutationData, ApproveBrandMutationVariables>;
 export const InviteBrandMemberDocument = {
   kind: 'Document',
   definitions: [

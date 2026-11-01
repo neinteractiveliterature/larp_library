@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useState, type JSX } from 'react';
 import { useFetcher, useLocation } from 'react-router';
+import { pageUrl, useLoadMorePages } from '../useLoadMorePages';
 import { Waypoint } from '../Waypoint';
 import { pageTitle } from '../pageTitle';
 import { readDbContext } from '../server/lib/dbContext';
@@ -7,7 +8,6 @@ import {
   findTagByName,
   searchProjects,
   type ProjectSearchPage as ProjectSearchPageData,
-  type ProjectSearchResult,
 } from '../server/lib/projectSearch.server';
 import ProjectCard from './ProjectCard';
 import SimpleProjectSearchControls from './SimpleProjectSearchControls';
@@ -98,29 +98,18 @@ export const meta = pageTitle('Larps');
 function ProjectSearchResults({ firstPage }: { firstPage: ProjectSearchPageData }): JSX.Element {
   const location = useLocation();
   const fetcher = useFetcher<typeof loader>();
-  const [laterPages, setLaterPages] = useState<Record<number, ProjectSearchResult[]>>({});
+  const { items: projects, addPage } = useLoadMorePages(firstPage.projects);
 
   useEffect(() => {
     if (fetcher.data) {
-      const { offset, projects } = fetcher.data;
-      setLaterPages((pages) => ({ ...pages, [offset]: projects }));
+      addPage(fetcher.data.offset, fetcher.data.projects);
     }
-  }, [fetcher.data]);
-
-  const projects = [
-    ...firstPage.projects,
-    ...Object.entries(laterPages)
-      .sort(([a], [b]) => Number(a) - Number(b))
-      .flatMap(([, page]) => page),
-  ];
+  }, [fetcher.data, addPage]);
 
   const loadNextPage = () => {
-    if (projects.length >= firstPage.totalCount || fetcher.state !== 'idle') {
-      return;
+    if (projects.length < firstPage.totalCount && fetcher.state === 'idle') {
+      void fetcher.load(pageUrl(location, firstPage.offset + projects.length));
     }
-    const params = new URLSearchParams(location.search);
-    params.set('offset', String(firstPage.offset + projects.length));
-    void fetcher.load(`/projects?${params.toString()}`);
   };
 
   return (

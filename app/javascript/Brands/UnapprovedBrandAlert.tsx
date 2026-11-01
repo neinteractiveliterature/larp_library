@@ -1,13 +1,10 @@
 import type { JSX } from 'react';
-import { Brand } from '../graphqlTypes.generated';
 
 export type UnapprovedBrandAlertProps = {
-  brand: Pick<Brand, 'name' | 'approved'>;
+  brand: { name: string; approved?: boolean | null };
 };
 
 export default function UnapprovedBrandAlert({ brand }: UnapprovedBrandAlertProps): JSX.Element {
-  // null and undefined approved values just mean the user doesn't have the ability to
-  // manage this brand, so don't show this alert
   if (brand.approved !== false) {
     return <></>;
   }

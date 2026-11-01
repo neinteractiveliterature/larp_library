@@ -1,45 +1,30 @@
-import { ErrorDisplay, useGraphQLConfirm } from '@neinteractiveliterature/litform';
-import sortBy from 'lodash/sortBy';
-import { useMemo } from 'react';
-import { Link, useFetcher } from 'react-router';
-import { appContext } from '../appContext';
-import { loadQuery } from '../loadQuery';
-import { getApolloActionError, withApolloErrors } from '../actionHelpers';
+import { useConfirm } from '@neinteractiveliterature/litform';
+import { data, Link, useFetcher } from 'react-router';
+import ActionErrorDisplay from '../ActionErrorDisplay';
 import { pageTitle } from '../pageTitle';
+import { abilityContext } from '../server/lib/authContext';
+import { approveBrand, listUnapprovedBrands } from '../server/lib/brands.server';
+import { readDbContext } from '../server/lib/dbContext';
 import { generateBrandPath } from '../URLGenerators';
-import { ApproveBrandDocument } from './mutations.generated';
-import { UnapprovedBrandsListPageQueryDocument } from './queries.generated';
 import type { Route } from './+types/UnapprovedBrandsListPage';
 
-export async function clientLoader({ context }: Route.ClientLoaderArgs) {
-  const { apolloClient } = context.get(appContext);
-  return loadQuery(apolloClient, UnapprovedBrandsListPageQueryDocument);
+export async function loader({ context }: Route.LoaderArgs) {
+  return { brands: await listUnapprovedBrands(context.get(readDbContext), context.get(abilityContext)) };
 }
 
-export async function clientAction({ context, request }: Route.ClientActionArgs) {
-  const { apolloClient } = context.get(appContext);
-  const { brandId } = (await request.json()) as { brandId: string };
+export async function action({ context, request }: Route.ActionArgs) {
+  const { brandId } = await request.json();
 
   // React Router reloads the list afterward, so the approved brand drops off it
-  return withApolloErrors(async () => {
-    await apolloClient.mutate({ mutation: ApproveBrandDocument, variables: { id: brandId } });
-    return null;
-  });
+  await approveBrand(context.get(abilityContext), brandId);
+  return data(null);
 }
 
-export default function UnapprovedBrandsListPage({ loaderData: data }: Route.ComponentProps) {
-  const approveFetcher = useFetcher<typeof clientAction>();
-  const sortedBrands = useMemo(
-    () =>
-      sortBy(
-        data.brands.edges.map((edge) => edge.node),
-        (brand) => brand.name,
-      ),
-    [data.brands],
-  );
-  const confirm = useGraphQLConfirm();
+export default function UnapprovedBrandsListPage({ loaderData: { brands } }: Route.ComponentProps) {
+  const approveFetcher = useFetcher<typeof action>();
+  const confirm = useConfirm();
 
-  const approveBrandConfirmed = async (brand: (typeof sortedBrands)[number]) => {
+  const approveBrandConfirmed = async (brand: (typeof brands)[number]) => {
     await approveFetcher.submit({ brandId: brand.id }, { method: 'post', encType: 'application/json' });
   };
 
@@ -56,7 +41,7 @@ export default function UnapprovedBrandsListPage({ loaderData: data }: Route.Com
           </tr>
         </thead>
         <tbody>
-          {sortedBrands.map((brand) => (
+          {brands.map((brand) => (
             <tr key={brand.id}>
               <td>
                 <Link to={generateBrandPath(brand)}>{brand.name}</Link>
@@ -72,7 +57,7 @@ export default function UnapprovedBrandsListPage({ loaderData: data }: Route.Com
                 {new Intl.DateTimeFormat(undefined, {
                   dateStyle: 'long',
                   timeStyle: 'long',
-                }).format(new Date(brand.createdAt))}
+                }).format(brand.createdAt)}
               </td>
               <td>
                 <button
@@ -94,7 +79,7 @@ export default function UnapprovedBrandsListPage({ loaderData: data }: Route.Com
           ))}
         </tbody>
       </table>
-      <ErrorDisplay graphQLError={getApolloActionError(approveFetcher.data)} />
+      <ActionErrorDisplay data={approveFetcher.data} />
     </>
   );
 }

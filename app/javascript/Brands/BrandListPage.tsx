@@ -1,44 +1,54 @@
-import { useQuery } from '@apollo/client';
-import React from 'react';
-import { appContext } from '../appContext';
-import { loadQuery } from '../loadQuery';
+import { Fragment, useEffect, type JSX } from 'react';
+import { useFetcher, useLocation } from 'react-router';
 import { pageTitle } from '../pageTitle';
+import { userContext } from '../server/lib/authContext';
+import { listBrands, type BrandListPageData } from '../server/lib/brands.server';
+import { readDbContext } from '../server/lib/dbContext';
+import { pageUrl, useLoadMorePages } from '../useLoadMorePages';
 import { Waypoint } from '../Waypoint';
 import BrandCard from './BrandCard';
-import { BrandsPageQueryDocument } from './queries.generated';
 import type { Route } from './+types/BrandListPage';
 
-export async function clientLoader({ context }: Route.ClientLoaderArgs) {
-  const { apolloClient } = context.get(appContext);
-  return loadQuery(apolloClient, BrandsPageQueryDocument);
+// The same loader serves the pages after the first: the list asks for them with an `offset`.
+export async function loader({ context, request }: Route.LoaderArgs) {
+  const offset = Math.max(0, parseInt(new URL(request.url).searchParams.get('offset') ?? '', 10) || 0);
+  return listBrands(context.get(readDbContext), context.get(userContext), { offset });
 }
 
 export default function BrandListPage({ loaderData }: Route.ComponentProps) {
-  // the loader fetched the first page into the Apollo cache; reading it back from there is what lets fetchMore work
-  const { data = loaderData, fetchMore } = useQuery(BrandsPageQueryDocument);
-
   return (
     <>
       <h1>Larp creators</h1>
+      <BrandList firstPage={loaderData} />
+    </>
+  );
+}
 
-      {data.brands.edges.map(({ node: brand }, index) => (
-        <React.Fragment key={brand.id}>
+/** The brands, the first page from the loader and then, as the end is scrolled toward, the following pages */
+function BrandList({ firstPage }: { firstPage: BrandListPageData }): JSX.Element {
+  const location = useLocation();
+  const fetcher = useFetcher<typeof loader>();
+  const { items: brands, addPage } = useLoadMorePages(firstPage.brands);
+
+  useEffect(() => {
+    if (fetcher.data) {
+      addPage(fetcher.data.offset, fetcher.data.brands);
+    }
+  }, [fetcher.data, addPage]);
+
+  const loadNextPage = () => {
+    if (brands.length < firstPage.totalCount && fetcher.state === 'idle') {
+      void fetcher.load(pageUrl(location, firstPage.offset + brands.length));
+    }
+  };
+
+  return (
+    <>
+      {brands.map((brand, index) => (
+        <Fragment key={brand.id}>
           <BrandCard brand={brand} />
-
-          {index === data.brands.edges.length - 5 && (
-            <Waypoint
-              onEnter={() => {
-                if (data.brands.edges.length < data.brands.totalCount) {
-                  fetchMore({
-                    variables: {
-                      after: data.brands.pageInfo.endCursor,
-                    },
-                  });
-                }
-              }}
-            />
-          )}
-        </React.Fragment>
+          {index === brands.length - 5 && <Waypoint onEnter={loadNextPage} />}
+        </Fragment>
       ))}
     </>
   );
