@@ -29,11 +29,18 @@ const timestamps = {
   updatedAt: timestamp({ mode: 'date' }).notNull(),
 };
 
+// The users table doubles as better-auth's user table (see auth.server.ts). Rails' Devise columns it no longer reads
+// (sign-in tracking, provider/uid) stay until cutover so the old app keeps working against the same database.
 export const users = pgTable('users', {
   id: serial().primaryKey(),
   email: varchar(),
   firstname: varchar(),
   lastname: varchar(),
+  // Required by better-auth. Rails computed the name from firstname and lastname; here it's a real column, filled in by
+  // the migration for existing users and from the Intercode profile for new ones.
+  name: text().notNull().default(''),
+  emailVerified: boolean().notNull().default(false),
+  image: text(),
   admin: boolean().default(false),
   signInCount: integer().default(0).notNull(),
   currentSignInAt: timestamp({ mode: 'date' }),
@@ -44,6 +51,64 @@ export const users = pgTable('users', {
   updatedAt: timestamp({ mode: 'date' }),
   provider: varchar(),
   uid: varchar(),
+});
+
+export const sessions = pgTable('sessions', {
+  id: serial().primaryKey(),
+  userId: integer()
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  token: text().notNull().unique(),
+  expiresAt: timestamp({ mode: 'date' }).notNull(),
+  ipAddress: text(),
+  userAgent: text(),
+  createdAt: timestamp({ mode: 'date' }).defaultNow().notNull(),
+  updatedAt: timestamp({ mode: 'date' })
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+
+// Links a user to their identity at an OAuth provider. Intercode is the only provider: providerId is 'intercode' and
+// accountId is the user's Intercode user id (what Rails kept in users.uid).
+export const accounts = pgTable(
+  'accounts',
+  {
+    id: serial().primaryKey(),
+    userId: integer()
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    providerId: text().notNull(),
+    accountId: text().notNull(),
+    accessToken: text(),
+    refreshToken: text(),
+    idToken: text(),
+    accessTokenExpiresAt: timestamp({ mode: 'date' }),
+    refreshTokenExpiresAt: timestamp({ mode: 'date' }),
+    scope: text(),
+    password: text(),
+    createdAt: timestamp({ mode: 'date' }).defaultNow().notNull(),
+    updatedAt: timestamp({ mode: 'date' })
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex('index_accounts_on_provider_id_and_account_id').on(table.providerId, table.accountId),
+    index('index_accounts_on_user_id').on(table.userId),
+  ],
+);
+
+export const verifications = pgTable('verifications', {
+  id: serial().primaryKey(),
+  identifier: text().notNull(),
+  value: text().notNull(),
+  expiresAt: timestamp({ mode: 'date' }).notNull(),
+  createdAt: timestamp({ mode: 'date' }).defaultNow().notNull(),
+  updatedAt: timestamp({ mode: 'date' })
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 export const brands = pgTable(
@@ -206,6 +271,16 @@ export const projectPromotions = pgTable(
 
 export const usersRelations = relations(users, ({ many }) => ({
   brandMemberships: many(brandMemberships),
+  sessions: many(sessions),
+  accounts: many(accounts),
+}));
+
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+  user: one(users, { fields: [sessions.userId], references: [users.id] }),
+}));
+
+export const accountsRelations = relations(accounts, ({ one }) => ({
+  user: one(users, { fields: [accounts.userId], references: [users.id] }),
 }));
 
 export const brandsRelations = relations(brands, ({ one, many }) => ({
