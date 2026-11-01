@@ -1,11 +1,21 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
-import type { AppLayoutQueryData } from './queries.generated';
 import { SignInButton } from './SignInButton';
 import { SignOutButton } from './SignOutButton';
 
+/** What the site header needs to know about the visitor: whether they're an admin, and which admin pages they can use */
+export type AppLayoutData = {
+  currentUser: { admin: boolean } | null;
+  currentAbility: {
+    canApproveBrands: boolean;
+    canCreateProjectPromotions: boolean;
+    canUpdateTags: boolean;
+    canUpdateTagCategories: boolean;
+  };
+};
+
 export type AppLayoutProps = {
-  data: AppLayoutQueryData;
+  data: AppLayoutData;
   children: ReactNode;
 };
 

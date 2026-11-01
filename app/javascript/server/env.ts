@@ -17,6 +17,7 @@ const envSchema = z.object({
   INTERCODE_URL: z.string(),
   INTERCODE_APP_ID: z.string(),
   INTERCODE_APP_SECRET: z.string(),
+  SENTRY_DSN: z.string().optional(),
   NODE_ENV: z.enum(['development', 'production', 'test']).optional(),
 });
 

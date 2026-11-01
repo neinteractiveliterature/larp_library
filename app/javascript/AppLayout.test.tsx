@@ -1,14 +1,9 @@
 import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 
-import AppLayout from './AppLayout';
-import type { AppLayoutQueryData } from './queries.generated';
-import { SetReturnUrlDocument } from './mutations.generated';
-import { useSignIn } from './SignInButton';
+import AppLayout, { type AppLayoutData } from './AppLayout';
 import { renderPage } from '../../test/javascript/testUtils';
 
 const noAbilities = {
-  __typename: 'Ability' as const,
   canApproveBrands: false,
   canCreateProjectPromotions: false,
   canUpdateTags: false,
@@ -18,30 +13,11 @@ const noAbilities = {
 function layoutData(
   currentUser: { admin: boolean } | null,
   currentAbility: Partial<typeof noAbilities> = {},
-): AppLayoutQueryData {
-  return {
-    __typename: 'Query',
-    currentUser: currentUser && { __typename: 'User', id: '1', ...currentUser },
-    currentAbility: { ...noAbilities, ...currentAbility },
-  };
+): AppLayoutData {
+  return { currentUser, currentAbility: { ...noAbilities, ...currentAbility } };
 }
 
 describe('AppLayout', () => {
-  let submittedForms: { action: string | null; fields: Record<string, FormDataEntryValue> }[];
-
-  beforeEach(() => {
-    submittedForms = [];
-    // jsdom doesn't implement form submission; record what would have been posted instead
-    vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(function (this: HTMLFormElement) {
-      submittedForms.push({ action: this.getAttribute('action'), fields: Object.fromEntries(new FormData(this)) });
-    });
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-    document.querySelectorAll('body > form').forEach((form) => form.remove());
-  });
-
   it('shows the navigation, the page, and a sign in button to anonymous visitors', () => {
     renderPage(
       <AppLayout data={layoutData(null)}>
@@ -59,28 +35,23 @@ describe('AppLayout', () => {
     expect(screen.queryByText('Admin')).not.toBeInTheDocument();
   });
 
-  it('posts a sign in form with the CSRF token', async () => {
-    const user = userEvent.setup();
-    renderPage(<AppLayout data={layoutData(null)}>content</AppLayout>);
+  it('links the sign in button to sign-in, returning to the current page', () => {
+    renderPage(<AppLayout data={layoutData(null)}>content</AppLayout>, { route: '/projects?query=heist' });
 
-    await user.click(screen.getByRole('button', { name: 'Sign in' }));
-
-    expect(submittedForms).toEqual([
-      { action: '/users/auth/intercode', fields: { authenticity_token: 'sign-in-token' } },
-    ]);
+    expect(screen.getByRole('link', { name: 'Sign in' })).toHaveAttribute(
+      'href',
+      '/sign-in?returnTo=%2Fprojects%3Fquery%3Dheist',
+    );
   });
 
-  it('posts a DELETE sign out form for signed in users, without an admin menu for non-admins', async () => {
-    const user = userEvent.setup();
+  it('posts a sign out form for signed in users, without an admin menu for non-admins', () => {
     renderPage(<AppLayout data={layoutData({ admin: false })}>content</AppLayout>);
 
-    await user.click(screen.getByRole('button', { name: 'Sign out' }));
-
-    expect(submittedForms).toEqual([
-      { action: '/users/sign_out', fields: { authenticity_token: 'sign-out-token', _method: 'DELETE' } },
-    ]);
+    const form = screen.getByRole('button', { name: 'Sign out' }).closest('form');
+    expect(form).toHaveAttribute('action', '/sign-out');
+    expect(form).toHaveAttribute('method', 'post');
     expect(screen.queryByText('Admin')).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Sign in' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Sign in' })).not.toBeInTheDocument();
   });
 
   it('shows every admin menu entry to an admin with all abilities', () => {
@@ -113,43 +84,5 @@ describe('AppLayout', () => {
     expect(screen.queryByRole('link', { name: 'Pending Creators' })).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Promotions' })).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Tag Categories' })).not.toBeInTheDocument();
-  });
-});
-
-describe('useSignIn', () => {
-  function SignInWithReturn() {
-    const signIn = useSignIn();
-    return (
-      <button type="button" onClick={() => signIn('/brands/acme/invitations/tok')}>
-        Sign in and return
-      </button>
-    );
-  }
-
-  it('remembers where to come back to before sending the user off to sign in', async () => {
-    const user = userEvent.setup();
-    const submitted: string[] = [];
-    vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(function (this: HTMLFormElement) {
-      submitted.push(this.getAttribute('action') ?? '');
-    });
-    let returnUrlSet = false;
-    renderPage(<SignInWithReturn />, {
-      mocks: [
-        {
-          request: { query: SetReturnUrlDocument, variables: { returnUrl: '/brands/acme/invitations/tok' } },
-          result: () => {
-            returnUrlSet = true;
-            return { data: { setReturnUrl: { __typename: 'SetReturnUrlPayload', clientMutationId: null } } };
-          },
-        },
-      ],
-    });
-
-    await user.click(screen.getByRole('button', { name: 'Sign in and return' }));
-
-    await vi.waitFor(() => expect(submitted).toEqual(['/users/auth/intercode']));
-    expect(returnUrlSet).toBe(true);
-    vi.restoreAllMocks();
-    document.querySelectorAll('body > form').forEach((form) => form.remove());
   });
 });

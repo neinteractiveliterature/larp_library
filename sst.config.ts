@@ -44,6 +44,8 @@ export default $config({
       DATABASE_URL: databaseUrl.value,
       BETTER_AUTH_SECRET: betterAuthSecret.value,
       INTERCODE_URL: 'https://www.neilhosting.net',
+      // Not a secret: it ships to the browser
+      SENTRY_DSN: 'https://29f53aa57e6984c5f905eb0dad4630a4@o4506357087076352.ingest.us.sentry.io/4512023434166272',
       INTERCODE_APP_ID: intercodeAppId.value,
       INTERCODE_APP_SECRET: intercodeAppSecret.value,
       AWS_S3_BUCKET: uploadsBucket.name,

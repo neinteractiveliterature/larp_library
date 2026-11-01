@@ -1,38 +1,13 @@
-import { useContext, useCallback, type JSX } from 'react';
-import { CSRFTokensContext } from './CSRFTokensContext';
-
-export function useSignOut() {
-  const { signOutCSRFToken } = useContext(CSRFTokensContext);
-
-  const signOut = useCallback(() => {
-    const form = document.createElement('form');
-    form.setAttribute('action', '/users/sign_out');
-    form.setAttribute('method', 'POST');
-
-    const authTokenInput = document.createElement('input');
-    authTokenInput.setAttribute('type', 'hidden');
-    authTokenInput.setAttribute('name', 'authenticity_token');
-    authTokenInput.setAttribute('value', signOutCSRFToken);
-    form.appendChild(authTokenInput);
-
-    const methodInput = document.createElement('input');
-    methodInput.setAttribute('type', 'hidden');
-    methodInput.setAttribute('name', '_method');
-    methodInput.setAttribute('value', 'DELETE');
-    form.appendChild(methodInput);
-
-    document.body.appendChild(form);
-    form.submit();
-  }, [signOutCSRFToken]);
-
-  return signOut;
-}
+import type { JSX } from 'react';
 
 export function SignOutButton(): JSX.Element {
-  const signOut = useSignOut();
   return (
-    <button type="submit" className="btn btn-link" onClick={signOut}>
-      Sign out
-    </button>
+    // A plain form rather than react-router's <Form>: signing out clears the session cookie and redirects, so this is a
+    // full-page POST and everything on the page should start over, not a client-side submission.
+    <form method="post" action="/sign-out">
+      <button type="submit" className="btn btn-link">
+        Sign out
+      </button>
+    </form>
   );
 }

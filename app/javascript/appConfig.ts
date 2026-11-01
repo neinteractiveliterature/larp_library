@@ -1,16 +1,12 @@
 import type { S3ConfigurationContextValue } from './S3ConfigurationContext';
 
 /**
- * Values that only the server knows and that can differ per request.  The app shell is a static HTML file, so these
- * come from Rails' /app_config endpoint once the page has loaded.
+ * What the pages that still talk to Rails (through GraphQL) need from it, fetched from Rails' /app_config endpoint once the
+ * page has loaded. This goes away as the pages move to server loaders and actions.
  */
 export type AppConfig = {
   graphqlCSRFToken: string;
-  signInCSRFToken: string;
-  signOutCSRFToken: string;
   s3Configuration: S3ConfigurationContextValue;
-  sentryDsn: string | null;
-  currentUserId: number | null;
 };
 
 export async function fetchAppConfig(): Promise<AppConfig> {

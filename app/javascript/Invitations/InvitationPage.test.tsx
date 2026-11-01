@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import * as InvitationPage from './InvitationPage';
 import { InvitationPageQueryDocument } from './queries.generated';
 import { AcceptBrandMembershipInvitationDocument } from './mutations.generated';
-import { SetReturnUrlDocument } from '../mutations.generated';
 import { MockedResponse, renderRouteModule } from '../../../test/javascript/testUtils';
 
 function invitationMock(options: { admin?: boolean; signedIn?: boolean } = {}): MockedResponse {
@@ -99,28 +98,12 @@ describe('InvitationPage', () => {
   });
 
   it('asks anonymous visitors to sign in, then returns them here', async () => {
-    const user = userEvent.setup();
-    const submitted: string[] = [];
-    vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(function (this: HTMLFormElement) {
-      submitted.push(this.getAttribute('action') ?? '');
-    });
-    let returnUrl: string | undefined;
-    renderInvitationPage([
-      invitationMock({ signedIn: false }),
-      {
-        request: { query: SetReturnUrlDocument },
-        variableMatcher: () => true,
-        result: (variables: { returnUrl: string }) => {
-          returnUrl = variables.returnUrl;
-          return { data: { setReturnUrl: { __typename: 'SetReturnUrlPayload', clientMutationId: null } } };
-        },
-      },
-    ]);
+    renderInvitationPage([invitationMock({ signedIn: false })]);
 
     expect(screen.queryByRole('button', { name: 'Accept invitation' })).not.toBeInTheDocument();
-    await user.click(await screen.findByRole('button', { name: 'Sign in to accept this invitation' }));
-
-    await vi.waitFor(() => expect(submitted).toEqual(['/users/auth/intercode']));
-    expect(returnUrl).toEqual('/brands/acme/invitations/tok123');
+    expect(await screen.findByRole('link', { name: 'Sign in to accept this invitation' })).toHaveAttribute(
+      'href',
+      '/sign-in?returnTo=%2Fbrands%2Facme%2Finvitations%2Ftok123',
+    );
   });
 });

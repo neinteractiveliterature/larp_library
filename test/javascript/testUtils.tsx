@@ -26,7 +26,6 @@ import { appContext } from '../../app/javascript/appContext';
 import RouteErrorDisplay from '../../app/javascript/RouteErrorDisplay';
 
 import { typePolicies } from '../../app/javascript/larpLibraryApolloClient';
-import { CSRFTokensContext } from '../../app/javascript/CSRFTokensContext';
 import { S3ConfigurationContext } from '../../app/javascript/S3ConfigurationContext';
 
 export type { MockedResponse };
@@ -48,7 +47,7 @@ export type RenderPageOptions = {
 
 /**
  * Renders a page the way AppWrapper/AppRoot do (Apollo with the app's real cache type policies, router, Confirm,
- * Suspense, and the S3/CSRF contexts), but with the network replaced by the given Apollo mocks.
+ * Suspense, and the S3 context), but with the network replaced by the given Apollo mocks.
  */
 export function renderPage(
   page: React.ReactElement,
@@ -59,18 +58,16 @@ export function renderPage(
       <S3ConfigurationContext.Provider
         value={{ awsRegion: 'us-east-1', awsAccessKeyId: 'test-key-id', bucketName: 'test-bucket' }}
       >
-        <CSRFTokensContext.Provider value={{ signInCSRFToken: 'sign-in-token', signOutCSRFToken: 'sign-out-token' }}>
-          <Confirm>
-            <MemoryRouter initialEntries={[route]}>
-              <Suspense fallback={<div data-testid="suspense-fallback" />}>
-                <Routes>
-                  <Route path={path} element={page} />
-                </Routes>
-              </Suspense>
-              <LocationDisplay />
-            </MemoryRouter>
-          </Confirm>
-        </CSRFTokensContext.Provider>
+        <Confirm>
+          <MemoryRouter initialEntries={[route]}>
+            <Suspense fallback={<div data-testid="suspense-fallback" />}>
+              <Routes>
+                <Route path={path} element={page} />
+              </Routes>
+            </Suspense>
+            <LocationDisplay />
+          </MemoryRouter>
+        </Confirm>
       </S3ConfigurationContext.Provider>
     </MockedProvider>,
   );
@@ -105,6 +102,10 @@ export type RouteModuleUnderTest = {
   clientLoader?: LoaderFunction;
   clientAction?: ActionFunction;
   clientMiddleware?: MiddlewareFunction[];
+  // Server loaders and middleware only read the router context (the signed-in user and what they may do), so tests run
+  // them like client ones, with those values supplied by the harness
+  loader?: LoaderFunction;
+  middleware?: MiddlewareFunction[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ErrorBoundary?: ComponentType<any>;
 };
@@ -146,9 +147,9 @@ export function routeFromModule(
     ...props,
     Component: withRouteProps(module),
     ErrorBoundary: withErrorBoundaryProps(module, props.id),
-    loader: module.clientLoader,
+    loader: module.clientLoader ?? module.loader,
     action: module.clientAction,
-    middleware: module.clientMiddleware,
+    middleware: module.clientMiddleware ?? module.middleware,
   } as RouteObject;
 }
 
@@ -180,11 +181,7 @@ export function renderRouteModule(
   const apolloClient = createMockApolloClient(mocks);
   const config = {
     graphqlCSRFToken: 'graphql-token',
-    signInCSRFToken: 'sign-in-token',
-    signOutCSRFToken: 'sign-out-token',
     s3Configuration: { awsRegion: 'us-east-1', awsAccessKeyId: 'test-key-id', bucketName: 'test-bucket' },
-    sentryDsn: null,
-    currentUserId: null,
   };
 
   function Root() {
@@ -217,11 +214,9 @@ export function renderRouteModule(
   return render(
     <ApolloProvider client={apolloClient}>
       <S3ConfigurationContext.Provider value={config.s3Configuration}>
-        <CSRFTokensContext.Provider value={{ signInCSRFToken: 'sign-in-token', signOutCSRFToken: 'sign-out-token' }}>
-          <Confirm>
-            <RouterProvider router={router} />
-          </Confirm>
-        </CSRFTokensContext.Provider>
+        <Confirm>
+          <RouterProvider router={router} />
+        </Confirm>
       </S3ConfigurationContext.Provider>
     </ApolloProvider>,
   );

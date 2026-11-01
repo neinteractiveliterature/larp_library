@@ -7,11 +7,10 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { createMemoryRouter, RouterContextProvider, RouterProvider, type RouteObject } from 'react-router';
 
 import routes from './routes';
-import { CSRFTokensContext } from './CSRFTokensContext';
 import { S3ConfigurationContext } from './S3ConfigurationContext';
 import { appContext } from './appContext';
-import { AppLayoutQueryDocument } from './queries.generated';
-import { SetReturnUrlDocument } from './mutations.generated';
+import { abilityContext, userContext } from './server/lib/authContext';
+import { buildAbility } from './server/lib/authorization.server';
 import { LicensingPageQueryDocument } from './StaticPages/queries.generated';
 import { BrandPageQueryDocument, BrandsPageQueryDocument } from './Brands/queries.generated';
 import { ProjectSearchQueryDocument } from './ProjectSearch/queries.generated';
@@ -30,25 +29,7 @@ import {
 const anyVariables = { variableMatcher: () => true, maxUsageCount: Number.POSITIVE_INFINITY };
 const empty = [] as { id: string }[];
 
-const layoutMock: MockedResponse = {
-  request: { query: AppLayoutQueryDocument },
-  maxUsageCount: Number.POSITIVE_INFINITY,
-  result: {
-    data: {
-      currentUser: null,
-      currentAbility: {
-        __typename: 'Ability',
-        canApproveBrands: false,
-        canCreateProjectPromotions: false,
-        canUpdateTags: false,
-        canUpdateTagCategories: false,
-      },
-    },
-  },
-};
-
 const pageMocks: MockedResponse[] = [
-  layoutMock,
   { request: { query: LicensingPageQueryDocument }, ...anyVariables, result: { data: { licenses: [] } } },
   {
     request: { query: BrandsPageQueryDocument },
@@ -92,7 +73,9 @@ const routeModules = import.meta.glob<RouteModuleUnderTest>(
 
 function toRouteObjects(entries: RouteConfigEntry[]): RouteObject[] {
   return entries.map((entry): RouteObject => {
-    const routeModule = routeModules[entry.file];
+    // The server-only resource routes (better-auth's endpoints, sign-in and sign-out) aren't pages, and nothing here
+    // runs them; they're empty routes, so a redirect to one can be seen
+    const routeModule = entry.file.startsWith('./server/routes/') ? {} : routeModules[entry.file];
     if (!routeModule) {
       throw new Error(`routes.ts refers to ${entry.file}, which doesn't exist`);
     }
@@ -109,28 +92,30 @@ function renderRoute(route: string, mocks: MockedResponse[]) {
   const s3Configuration = { awsRegion: 'us-east-1', awsAccessKeyId: 'key', bucketName: 'bucket' };
   const config = {
     graphqlCSRFToken: 'graphql',
-    signInCSRFToken: 'in',
-    signOutCSRFToken: 'out',
     s3Configuration,
-    sentryDsn: null,
-    currentUserId: null,
   };
   const router = createMemoryRouter(toRouteObjects(routes), {
     initialEntries: [route],
-    getContext: () => new RouterContextProvider(new Map([[appContext, { config, apolloClient }]])),
+    getContext: () => {
+      const context = new RouterContextProvider();
+      context.set(appContext, { config, apolloClient });
+      // a signed-out visitor
+      context.set(userContext, null);
+      context.set(abilityContext, buildAbility(null));
+      return context;
+    },
   });
 
-  return render(
+  const result = render(
     <ApolloProvider client={apolloClient}>
       <S3ConfigurationContext.Provider value={s3Configuration}>
-        <CSRFTokensContext.Provider value={{ signInCSRFToken: 'in', signOutCSRFToken: 'out' }}>
-          <Confirm>
-            <RouterProvider router={router} />
-          </Confirm>
-        </CSRFTokensContext.Provider>
+        <Confirm>
+          <RouterProvider router={router} />
+        </Confirm>
       </S3ConfigurationContext.Provider>
     </ApolloProvider>,
   );
+  return { ...result, router };
 }
 
 describe('routes', () => {
@@ -167,7 +152,7 @@ describe('routes', () => {
     ['/tags/5/edit', 'EditTagQuery'],
     ['/tag_categories/3/edit', 'EditTagCategoryQuery'],
   ])('routes %s to the page that runs %s', async (route, queryName) => {
-    renderRoute(route, [layoutMock]);
+    renderRoute(route, []);
 
     expect(
       await screen.findByText(new RegExp(`No more mocked responses for the query: query ${queryName}\\b`)),
@@ -175,35 +160,16 @@ describe('routes', () => {
   });
 
   it('sends signed out visitors who open /brands/new off to sign in, before loading the page', async () => {
-    const submitted: string[] = [];
-    vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(function (this: HTMLFormElement) {
-      submitted.push(this.getAttribute('action') ?? '');
-    });
-    let returnUrl: string | undefined;
-    renderRoute('/brands/new', [
-      layoutMock,
-      {
-        request: { query: SetReturnUrlDocument },
-        variableMatcher: () => true,
-        result: (variables: { returnUrl: string }) => {
-          returnUrl = variables.returnUrl;
-          return { data: { setReturnUrl: { __typename: 'SetReturnUrlPayload', clientMutationId: null } } };
-        },
-      },
-      // (no NewBrandQuery mock: the page never loads)
-    ]);
+    // (no NewBrandQuery mock: the page never loads)
+    const { router } = renderRoute('/brands/new', []);
 
-    // Testing Library's waitFor (not vi.waitFor) tells React that async updates are expected while it waits
-    await waitFor(() => expect(submitted).toEqual(['/users/auth/intercode']));
-    expect(returnUrl).toEqual('/brands/new');
+    await waitFor(() => expect(router.state.location.pathname).toEqual('/sign-in'));
+    expect(router.state.location.search).toEqual('?returnTo=%2Fbrands%2Fnew');
     expect(screen.queryByRole('heading', { name: 'Publish your larps' })).not.toBeInTheDocument();
-    vi.restoreAllMocks();
-    document.querySelectorAll('body > form').forEach((form) => form.remove());
   });
 
   it('shows the not-found page inside the layout when a brand does not exist', async () => {
     renderRoute('/brands/no-such-brand', [
-      layoutMock,
       {
         request: { query: BrandPageQueryDocument },
         variableMatcher: () => true,

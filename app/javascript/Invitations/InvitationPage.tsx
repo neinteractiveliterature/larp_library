@@ -4,7 +4,7 @@ import { appContext } from '../appContext';
 import { loadQuery } from '../loadQuery';
 import { getApolloActionError, withApolloErrors } from '../actionHelpers';
 import { formatPageTitle } from '../pageTitle';
-import { useSignIn } from '../SignInButton';
+import { signInPath } from '../signIn';
 import { generateBrandPath } from '../URLGenerators';
 import { AcceptBrandMembershipInvitationDocument } from './mutations.generated';
 import { InvitationPageQueryDocument } from './queries.generated';
@@ -44,7 +44,6 @@ export default function InvitationPage({ loaderData: data, actionData, params }:
   const location = useLocation();
   const submit = useSubmit();
   const navigation = useNavigation();
-  const signIn = useSignIn();
 
   const acceptSubmitted = (event: React.FormEvent) => {
     event.preventDefault();
@@ -83,9 +82,9 @@ export default function InvitationPage({ loaderData: data, actionData, params }:
           </button>
         </Form>
       ) : (
-        <button type="button" onClick={() => signIn(location.pathname)} className="btn btn-primary">
+        <a href={signInPath(location.pathname)} className="btn btn-primary">
           Sign in to accept this invitation
-        </button>
+        </a>
       )}
 
       <ErrorDisplay graphQLError={getApolloActionError(actionData)} />
