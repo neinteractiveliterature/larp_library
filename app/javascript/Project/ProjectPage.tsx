@@ -1,31 +1,44 @@
-import { useMutation, useQuery } from '@apollo/client';
-import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
+import { ErrorDisplay, useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import sortBy from 'lodash/sortBy';
-import ReactMarkdown from 'react-markdown';
-import { useParams } from 'react-router';
-import { Link, useNavigate } from 'react-router';
 import { useMemo } from 'react';
+import ReactMarkdown from 'react-markdown';
+import { Link, redirect, useFetcher } from 'react-router';
+import { appContext } from '../appContext';
+import { getApolloActionError, withApolloErrors } from '../actionHelpers';
+import { loadQuery } from '../loadQuery';
+import { formatPageTitle } from '../pageTitle';
 import ProjectHeaders from '../ProjectSearch/ProjectHeaders';
 import { generateProjectPath } from '../URLGenerators';
 import { DeleteProjectDocument } from './mutations.generated';
 import ProjectFileDisplay from './ProjectFileDisplay';
 import { ProjectLinkDisplay } from './ProjectLinkDisplay';
 import { ProjectPageQueryDocument } from './queries.generated';
+import type { Route } from './+types/ProjectPage';
 
-function useProjectPageQueryFromParam() {
-  const { projectId } = useParams();
-  if (projectId == null) {
-    throw new Error('projectId param is required');
-  }
-  return useQuery(ProjectPageQueryDocument, { variables: { projectId: projectId.replace(/-.*$/, '') } });
+// the URL has a readable suffix after the id, e.g. 112-1-900-psy-chic
+const projectIdFromParam = (projectId: string) => projectId.replace(/-.*$/, '');
+
+export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
+  const { apolloClient } = context.get(appContext);
+  return loadQuery(apolloClient, ProjectPageQueryDocument, { projectId: projectIdFromParam(params.projectId) });
 }
 
-export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPage({ data }) {
+export async function clientAction({ context, params }: Route.ClientActionArgs) {
+  const { apolloClient } = context.get(appContext);
+
+  return withApolloErrors(async () => {
+    await apolloClient.mutate({
+      mutation: DeleteProjectDocument,
+      variables: { id: projectIdFromParam(params.projectId) },
+    });
+    return redirect('/projects');
+  });
+}
+
+export default function ProjectPage({ loaderData: data }: Route.ComponentProps) {
   const { project } = data;
   const confirm = useGraphQLConfirm();
-  const [deleteProject] = useMutation(DeleteProjectDocument);
-  const navigate = useNavigate();
+  const deleteFetcher = useFetcher<typeof clientAction>();
 
   const sortedFiles = useMemo(() => sortBy(project.projectFiles, (file) => file.position), [project.projectFiles]);
   const sortedLinks = useMemo(() => sortBy(project.projectLinks, (link) => link.position), [project.projectLinks]);
@@ -33,8 +46,7 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
   const hasLinksAndFiles = project.projectLinks.length > 0 && project.projectFiles.length > 0;
 
   const deleteProjectConfirmed = async () => {
-    await deleteProject({ variables: { id: project.id } });
-    navigate('/projects', { replace: true });
+    await deleteFetcher.submit(null, { method: 'post' });
   };
 
   return (
@@ -58,6 +70,7 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
                 <button
                   type="button"
                   className="btn btn-link text-danger"
+                  disabled={deleteFetcher.state !== 'idle'}
                   onClick={() =>
                     confirm({
                       action: deleteProjectConfirmed,
@@ -67,6 +80,7 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
                 >
                   Delete project
                 </button>
+                <ErrorDisplay graphQLError={getApolloActionError(deleteFetcher.data)} />
               </li>
             )}
           </ul>
@@ -138,4 +152,8 @@ export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPa
       </div>
     </>
   );
-});
+}
+
+export function meta({ loaderData }: Route.MetaArgs) {
+  return [{ title: formatPageTitle(loaderData?.project.title) }];
+}

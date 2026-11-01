@@ -1,10 +1,10 @@
-import { act, screen, within } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { EditorView } from '@codemirror/view';
 
-import EditProjectPage from './EditProjectPage';
-import NewProjectPage from './NewProjectPage';
-import ProjectInitialContentPage from './ProjectInitialContentPage';
+import * as EditProjectPage from './EditProjectPage';
+import * as NewProjectPage from './NewProjectPage';
+import * as ProjectInitialContentPage from './ProjectInitialContentPage';
 import { CreateProjectDocument, UpdateProjectDocument } from './mutations.generated';
 import { NewProjectFormQueryDocument, ProjectPageQueryDocument } from './queries.generated';
 import { TagAutocompleteQueryDocument } from '../Tags/queries.generated';
@@ -17,7 +17,7 @@ import {
   buildTag,
   resetFixtureIds,
 } from '../../../test/javascript/fixtures';
-import { MockedResponse, renderPage, selectReactSelectOption } from '../../../test/javascript/testUtils';
+import { MockedResponse, renderRouteModule, selectReactSelectOption } from '../../../test/javascript/testUtils';
 
 function setDescription(text: string) {
   const view = EditorView.findFromDOM(document.querySelector('.cm-editor') as HTMLElement)!;
@@ -41,11 +41,13 @@ describe('NewProjectPage', () => {
 
   const newProjectMock: MockedResponse = {
     request: { query: NewProjectFormQueryDocument, variables: { slug: 'acme' } },
+    // React Router reloads the page's data after an action, so the query can be asked again
+    maxUsageCount: Number.POSITIVE_INFINITY,
     result: { data: { brand: { __typename: 'Brand', id: 'b1' }, licenses } },
   };
 
   const renderNewProjectPage = (mocks: MockedResponse[]) =>
-    renderPage(<NewProjectPage />, {
+    renderRouteModule(NewProjectPage, {
       mocks: [newProjectMock, noTagResults, ...mocks],
       route: '/brands/acme/projects/new',
       path: '/brands/:brandSlug/projects/new',
@@ -92,11 +94,11 @@ describe('NewProjectPage', () => {
     await user.selectOptions(screen.getByLabelText('Length units'), 'days');
     await user.selectOptions(screen.getByLabelText('License'), 'CC BY');
     await selectReactSelectOption(user, screen.getByLabelText('Tags'), 'brand-new', { typeText: 'brand-new' });
-    await vi.waitFor(() => expect(document.querySelector('.cm-editor')).toBeInTheDocument());
+    await waitFor(() => expect(document.querySelector('.cm-editor')).toBeInTheDocument());
     setDescription('A *great* larp.');
     await user.click(screen.getByRole('button', { name: 'Save project' }));
 
-    await vi.waitFor(() =>
+    await waitFor(() =>
       expect(screen.getByTestId('location')).toHaveTextContent('/brands/acme/projects/55-my-new-larp/initial_content'),
     );
     expect(sent).toEqual({
@@ -125,7 +127,7 @@ describe('NewProjectPage', () => {
         request: { query: CreateProjectDocument },
         variableMatcher: () => true,
         // the page doesn't catch the failed mutation, so the browser logs an unhandled rejection as well
-        error: new Error('[expected unhandled] title is required'),
+        error: new Error('title is required'),
       },
     ]);
 
@@ -152,11 +154,13 @@ describe('EditProjectPage', () => {
 
   const projectMock = (): MockedResponse => ({
     request: { query: ProjectPageQueryDocument, variables: { projectId: '7-the-big-larp' } },
+    // React Router reloads the page's data after an action, so the query can be asked again
+    maxUsageCount: Number.POSITIVE_INFINITY,
     result: { data: { project: project(), licenses } },
   });
 
   const renderEditProjectPage = (mocks: MockedResponse[], route = '/brands/acme/projects/7-the-big-larp/edit') =>
-    renderPage(<EditProjectPage />, {
+    renderRouteModule(EditProjectPage, {
       mocks: [projectMock(), noTagResults, ...mocks],
       route,
       path: '/brands/:brandSlug/projects/:projectId/edit',
@@ -225,7 +229,7 @@ describe('EditProjectPage', () => {
     await user.selectOptions(await screen.findByLabelText('License'), '_unspecified');
     await user.click(screen.getByRole('button', { name: 'Save changes' }));
 
-    await vi.waitFor(() =>
+    await waitFor(() =>
       expect(sent).toEqual({ id: '7', projectAttributes: expect.objectContaining({ licenseId: null }) }),
     );
   });
@@ -237,7 +241,7 @@ describe('EditProjectPage', () => {
         request: { query: UpdateProjectDocument },
         variableMatcher: () => true,
         // the page doesn't catch the failed mutation, so the browser logs an unhandled rejection as well
-        error: new Error('[expected unhandled] title is too long'),
+        error: new Error('title is too long'),
       },
     ]);
 
@@ -254,7 +258,7 @@ describe('EditProjectPage', () => {
     expect(contentTab).not.toHaveClass('active');
     await user.click(contentTab);
 
-    await vi.waitFor(() => expect(screen.getByRole('link', { name: 'Project content' })).toHaveClass('active'));
+    await waitFor(() => expect(screen.getByRole('link', { name: 'Project content' })).toHaveClass('active'));
     expect(screen.getByRole('link', { name: 'Project properties' })).not.toHaveClass('active');
     expect(screen.getByText('Files')).toBeInTheDocument();
     expect(screen.getByText('Links')).toBeInTheDocument();
@@ -275,12 +279,14 @@ describe('ProjectInitialContentPage', () => {
   beforeEach(() => resetFixtureIds());
 
   it('lets you add content and then finish', async () => {
-    renderPage(<ProjectInitialContentPage />, {
+    renderRouteModule(ProjectInitialContentPage, {
       route: '/brands/acme/projects/7-the-big-larp/initial_content',
       path: '/brands/:brandSlug/projects/:projectId/initial_content',
       mocks: [
         {
           request: { query: ProjectPageQueryDocument, variables: { projectId: '7-the-big-larp' } },
+          // React Router reloads the page's data after an action, so the query can be asked again
+          maxUsageCount: Number.POSITIVE_INFINITY,
           result: { data: { project: buildProjectFields(), licenses } },
         },
       ],

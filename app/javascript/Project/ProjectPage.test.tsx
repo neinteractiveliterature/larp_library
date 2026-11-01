@@ -1,8 +1,8 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import ProjectFileDisplay from './ProjectFileDisplay';
-import ProjectPage from './ProjectPage';
+import * as ProjectPage from './ProjectPage';
 import { ProjectPageQueryDocument } from './queries.generated';
 import { DeleteProjectDocument } from './mutations.generated';
 import {
@@ -13,7 +13,7 @@ import {
   buildTag,
   resetFixtureIds,
 } from '../../../test/javascript/fixtures';
-import { MockedResponse, renderPage } from '../../../test/javascript/testUtils';
+import { MockedResponse, renderRouteModule } from '../../../test/javascript/testUtils';
 
 function buildProject(overrides: Record<string, unknown> = {}) {
   return {
@@ -38,12 +38,14 @@ function buildProject(overrides: Record<string, unknown> = {}) {
 function projectMock(project: ReturnType<typeof buildProject>): MockedResponse {
   return {
     request: { query: ProjectPageQueryDocument, variables: { projectId: '7' } },
+    // React Router reloads the page's data after an action, so the query can be asked again
+    maxUsageCount: Number.POSITIVE_INFINITY,
     result: { data: { project, licenses: [buildLicense()] } },
   };
 }
 
 const renderProjectPage = (mocks: MockedResponse[]) =>
-  renderPage(<ProjectPage />, {
+  renderRouteModule(ProjectPage, {
     mocks,
     route: '/brands/b/projects/7-the-big-larp',
     path: '/brands/:brandSlug/projects/:projectId',
@@ -163,7 +165,7 @@ describe('ProjectPage', () => {
     expect(await screen.findByText(/completely delete The Big Larp/)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'OK', hidden: true }));
 
-    await vi.waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/projects'));
+    await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/projects'));
     expect(deleted).toBe(true);
   });
 

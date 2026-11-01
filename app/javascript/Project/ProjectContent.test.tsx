@@ -1,7 +1,7 @@
 import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import ProjectInitialContentPage from './ProjectInitialContentPage';
+import * as ProjectInitialContentPage from './ProjectInitialContentPage';
 import {
   CompleteProjectFileUploadDocument,
   CreateProjectLinkDocument,
@@ -19,7 +19,7 @@ import {
   buildProjectLink,
   resetFixtureIds,
 } from '../../../test/javascript/fixtures';
-import { MockedResponse, renderPage } from '../../../test/javascript/testUtils';
+import { MockedResponse, renderRouteModule } from '../../../test/javascript/testUtils';
 
 // Replace only the AWS uploader, so no request ever leaves the test.  Each test controls what `done()` does.
 const uploads: { params: Record<string, unknown>; handlers: Record<string, (progress: unknown) => void> }[] = [];
@@ -42,7 +42,7 @@ vi.mock('@aws-sdk/lib-storage', () => ({
 type Project = ReturnType<typeof buildProjectFields>;
 
 const renderContentPage = (project: Project, extraMocks: MockedResponse[] = []) =>
-  renderPage(<ProjectInitialContentPage />, {
+  renderRouteModule(ProjectInitialContentPage, {
     route: '/brands/acme/projects/7-the-big-larp/initial_content',
     path: '/brands/:brandSlug/projects/:projectId/initial_content',
     mocks: [
@@ -148,7 +148,7 @@ describe('project links', () => {
     await user.type(editTitle, 'New Title');
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
-    await vi.waitFor(() => expect(sent).toBeDefined());
+    await waitFor(() => expect(sent).toBeDefined());
     expect(sent).toEqual({
       id: 'link-1',
       projectLinkAttributes: { title: 'New Title', url: 'https://example.com/1', icon: 'bi-link' },
@@ -173,8 +173,8 @@ describe('project links', () => {
     expect(await screen.findByText('Are you sure you want to delete the “Doomed Link” link?')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'OK', hidden: true }));
 
-    await vi.waitFor(() => expect(deleted).toBe(true));
-    await vi.waitFor(() => expect(screen.queryByRole('link', { name: 'Doomed Link' })).not.toBeInTheDocument());
+    await waitFor(() => expect(deleted).toBe(true));
+    await waitFor(() => expect(screen.queryByRole('link', { name: 'Doomed Link' })).not.toBeInTheDocument());
     expect(screen.getByRole('link', { name: 'Safe Link' })).toBeInTheDocument();
   });
 });
@@ -214,8 +214,8 @@ describe('project files', () => {
     expect(await screen.findByText('Are you sure you want to delete doomed.pdf?')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'OK', hidden: true }));
 
-    await vi.waitFor(() => expect(deleted).toBe(true));
-    await vi.waitFor(() => expect(screen.queryByRole('link', { name: /doomed\.pdf/ })).not.toBeInTheDocument());
+    await waitFor(() => expect(deleted).toBe(true));
+    await waitFor(() => expect(screen.queryByRole('link', { name: /doomed\.pdf/ })).not.toBeInTheDocument());
     expect(screen.getByRole('link', { name: /safe\.pdf/ })).toBeInTheDocument();
   });
 
@@ -314,7 +314,7 @@ describe('project files', () => {
       new File(['2'], 'two.txt', { type: 'text/plain' }),
     ]);
 
-    await vi.waitFor(() => expect(completions).toBe(2));
+    await waitFor(() => expect(completions).toBe(2));
     expect(uploads.map((u) => (u.params.Key as string).split('/').pop())).toEqual(['one.txt', 'two.txt']);
   });
 
