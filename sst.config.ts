@@ -24,6 +24,10 @@ export default $config({
   },
   async run() {
     const databaseUrl = new sst.Secret('DATABASE_URL');
+    const betterAuthSecret = new sst.Secret('BETTER_AUTH_SECRET');
+    // This app's registered OAuth application on Intercode
+    const intercodeAppId = new sst.Secret('INTERCODE_APP_ID');
+    const intercodeAppSecret = new sst.Secret('INTERCODE_APP_SECRET');
 
     // Production's bucket already exists (and is managed by neil-terraform, including its CORS rules), so it's imported
     // rather than created.  Other stages get a bucket of their own.
@@ -38,6 +42,10 @@ export default $config({
     // another one.
     const appEnvironment = {
       DATABASE_URL: databaseUrl.value,
+      BETTER_AUTH_SECRET: betterAuthSecret.value,
+      INTERCODE_URL: 'https://www.neilhosting.net',
+      INTERCODE_APP_ID: intercodeAppId.value,
+      INTERCODE_APP_SECRET: intercodeAppSecret.value,
       AWS_S3_BUCKET: uploadsBucket.name,
       APP_URL_BASE: $app.stage === 'production' ? 'https://www.larplibrary.org' : 'http://localhost:3042',
       NODE_EXTRA_CA_CERTS: '/var/task/rds-global-bundle.pem',
