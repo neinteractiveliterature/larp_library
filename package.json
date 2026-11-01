@@ -73,7 +73,7 @@
     "@vitest/ui": "^4",
     "graphql-tag": "2.12.7",
     "husky": "9.1.7",
-    "jsdom": "^29",
+    "jsdom": "^30.0.0",
     "lint-staged": "17.6.0",
     "oxlint": "^1.90.0",
     "prettier": "3.9.10",
