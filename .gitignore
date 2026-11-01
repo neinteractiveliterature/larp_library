@@ -55,3 +55,4 @@ yarn-debug.log*
 /coverage
 /test/reports
 /test/html_reports
+/.vitest

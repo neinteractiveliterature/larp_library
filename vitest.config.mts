@@ -50,7 +50,7 @@ export default defineConfig({
     reporters: [
       'default',
       ['junit', { outputFile: absolutePath('./test/reports/TEST-vitest.xml') }],
-      ['html', { outputFile: absolutePath('./test/html_reports/vitest-report.html') }],
+      ['html', { outputDir: absolutePath('./test/html_reports/vitest') }],
     ],
     server: {
       deps: {
