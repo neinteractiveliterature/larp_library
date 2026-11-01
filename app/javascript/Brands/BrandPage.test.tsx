@@ -1,14 +1,14 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { data } from 'react-router';
 
-import * as BrandPage from './BrandPage';
+import BrandPage from './BrandPage';
 import UnapprovedBrandAlert from './UnapprovedBrandAlert';
-import * as UnapprovedBrandsListPage from './UnapprovedBrandsListPage';
-import { BrandPageQueryDocument, UnapprovedBrandsListPageQueryDocument } from './queries.generated';
-import { ApproveBrandDocument } from './mutations.generated';
-import { buildBrand, buildConnection, buildProjectHeaders, resetFixtureIds } from '../../../test/javascript/fixtures';
+import UnapprovedBrandsListPage from './UnapprovedBrandsListPage';
+import type { BrandPageData, UnapprovedBrandData } from '../server/lib/brands.server';
+import type { ProjectCardData } from '../server/lib/projectHeaders.server';
 import {
-  MockedResponse,
+  recordingLoader,
   renderPage,
   renderRouteModule,
   withRouteErrorDisplay,
@@ -16,36 +16,64 @@ import {
 
 vi.mock('../Waypoint', () => import('../../../test/javascript/mockWaypoint'));
 
-function brandPageMock(
-  brand: ReturnType<typeof buildBrand>,
-  projects: (ReturnType<typeof buildProjectHeaders> & { description: string | null })[],
-  { totalCount = projects.length, after }: { totalCount?: number; after?: string } = {},
-): MockedResponse {
+let nextId = 1;
+
+function buildProject(title: string): ProjectCardData {
   return {
-    request: { query: BrandPageQueryDocument },
-    variableMatcher: (variables) => (after ? variables.projectsAfter === after : variables.projectsAfter == null),
-    result: { data: { brand: { ...brand, projects: buildConnection(projects, { totalCount }) } } },
+    id: nextId++,
+    title,
+    authors: null,
+    minPlayers: null,
+    maxPlayers: null,
+    minFacilitators: null,
+    maxFacilitators: null,
+    publicationYear: null,
+    lengthQuantity: null,
+    lengthUnits: null,
+    brand: { id: 1, name: 'Team No Pants', slug: 'team-no-pants' },
+    tags: [],
+    description: 'A larp description',
   };
 }
 
-const withDescription = (overrides: Record<string, unknown> = {}) => ({
-  ...buildProjectHeaders(overrides),
-  description: 'A larp description',
-});
+function brandPage(
+  projects: ProjectCardData[],
+  brand: Partial<BrandPageData['brand']> = {},
+  { totalCount = projects.length, offset = 0 } = {},
+): BrandPageData {
+  return {
+    brand: {
+      id: 1,
+      name: 'Team No Pants',
+      slug: 'team-no-pants',
+      description: null,
+      approved: true,
+      currentUserCanEdit: false,
+      currentUserCanCreateProjects: false,
+      ...brand,
+    },
+    projects,
+    totalCount,
+    offset,
+  };
+}
 
 describe('BrandPage', () => {
-  beforeEach(() => resetFixtureIds());
+  beforeEach(() => {
+    nextId = 1;
+  });
 
-  const renderBrandPage = (mocks: MockedResponse[]) =>
-    renderRouteModule(withRouteErrorDisplay(BrandPage), {
-      mocks,
+  const renderBrandPage = (loader: ReturnType<typeof recordingLoader<BrandPageData>>['loader']) =>
+    renderRouteModule(withRouteErrorDisplay({ default: BrandPage, loader }), {
       route: '/brands/team-no-pants',
       path: '/brands/:brandSlug',
     });
 
   it('shows the brand, its description and its projects', async () => {
-    const brand = buildBrand({ name: 'Team No Pants', slug: 'team-no-pants', description: 'We make **bold** games.' });
-    renderBrandPage([brandPageMock(brand, [withDescription({ title: 'Pantsless Larp' })])]);
+    const { loader } = recordingLoader(() =>
+      brandPage([buildProject('Pantsless Larp')], { description: 'We make **bold** games.' }),
+    );
+    renderBrandPage(loader);
 
     expect(await screen.findByRole('heading', { name: 'Team No Pants' })).toBeInTheDocument();
     expect(screen.getByText('bold').tagName).toEqual('STRONG');
@@ -57,62 +85,64 @@ describe('BrandPage', () => {
   });
 
   it('offers editing and project creation to people who can do those things', async () => {
-    const brand = buildBrand({
-      slug: 'team-no-pants',
-      currentUserCanEdit: true,
-      currentUserCanCreateProjects: true,
-      description: null,
-    });
-    renderBrandPage([brandPageMock(brand, [])]);
+    const { loader } = recordingLoader(() =>
+      brandPage([], { currentUserCanEdit: true, currentUserCanCreateProjects: true }),
+    );
+    renderBrandPage(loader);
 
-    expect(await screen.findAllByRole('link', { name: 'New project' })).toHaveLength(2);
-    expect(screen.getByRole('link', { name: 'Admin' })).toHaveAttribute('href', '/brands/team-no-pants/edit');
+    await screen.findByRole('heading', { name: 'Team No Pants' });
     expect(screen.getAllByRole('link', { name: 'New project' })[0]).toHaveAttribute(
       'href',
       '/brands/team-no-pants/projects/new',
     );
+    expect(screen.getByRole('link', { name: 'Admin' })).toHaveAttribute('href', '/brands/team-no-pants/edit');
   });
 
   it('warns when the brand is awaiting approval', async () => {
-    renderBrandPage([brandPageMock(buildBrand({ name: 'Newbies', approved: false }), [])]);
+    const { loader } = recordingLoader(() => brandPage([], { approved: false }));
+    renderBrandPage(loader);
 
-    expect(await screen.findByText(/Newbies is pending approval/)).toBeInTheDocument();
+    expect(await screen.findByText(/Team No Pants is pending approval/)).toBeInTheDocument();
   });
 
-  it('shows an error if the brand cannot be loaded', async () => {
-    renderBrandPage([
-      { request: { query: BrandPageQueryDocument }, variableMatcher: () => true, error: new Error('no such brand') },
-    ]);
+  it('shows the not-found page when the brand cannot be seen', async () => {
+    renderBrandPage(() => {
+      throw new Response(null, { status: 404, statusText: 'Not Found' });
+    });
 
-    expect(await screen.findByText(/no such brand/)).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument();
   });
 
-  it('loads more projects when scrolled to the end', async () => {
+  it('loads more projects, by offset, when scrolled to the end', async () => {
     const user = userEvent.setup();
-    const brand = buildBrand({ slug: 'team-no-pants' });
-    const firstPage = Array.from({ length: 5 }, (_, i) => withDescription({ title: `Early Larp ${i + 1}` }));
-    renderBrandPage([
-      brandPageMock(brand, firstPage, { totalCount: 6 }),
-      brandPageMock(brand, [withDescription({ title: 'Late Larp' })], {
-        totalCount: 6,
-        after: `cursor-${firstPage[4].id}`,
-      }),
-    ]);
+    const early = Array.from({ length: 5 }, (_, i) => buildProject(`Early Larp ${i + 1}`));
+    const { loader, requests } = recordingLoader((url) =>
+      url.searchParams.get('offset') === '5'
+        ? brandPage([buildProject('Late Larp')], {}, { totalCount: 6, offset: 5 })
+        : brandPage(early, {}, { totalCount: 6 }),
+    );
+    renderBrandPage(loader);
 
     await screen.findByText('Early Larp 1');
     await user.click(screen.getByTestId('waypoint'));
+
     expect(await screen.findByText('Late Larp')).toBeInTheDocument();
+    expect(screen.getByText('Early Larp 5')).toBeInTheDocument();
+    expect(requests.some((url) => url.searchParams.get('offset') === '5')).toBe(true);
   });
 
   it('does not load more when all projects are shown', async () => {
     const user = userEvent.setup();
-    const brand = buildBrand({ slug: 'team-no-pants' });
-    const projects = Array.from({ length: 5 }, (_, i) => withDescription({ title: `Complete Larp ${i + 1}` }));
-    renderBrandPage([brandPageMock(brand, projects)]);
+    const { loader, requests } = recordingLoader(() =>
+      brandPage(Array.from({ length: 5 }, (_, i) => buildProject(`Complete Larp ${i + 1}`))),
+    );
+    renderBrandPage(loader);
 
     await screen.findByText('Complete Larp 1');
     await user.click(screen.getByTestId('waypoint'));
+
     expect(screen.getAllByText(/^Complete Larp/)).toHaveLength(5);
+    expect(requests).toHaveLength(1);
   });
 });
 
@@ -133,76 +163,53 @@ describe('UnapprovedBrandAlert', () => {
 });
 
 describe('UnapprovedBrandsListPage', () => {
-  beforeEach(() => resetFixtureIds());
-
-  function unapprovedBrand(name: string, overrides: Record<string, unknown> = {}) {
+  function unapprovedBrand(
+    id: number,
+    name: string,
+    overrides: Partial<UnapprovedBrandData> = {},
+  ): UnapprovedBrandData {
     return {
-      ...buildBrand({ name }),
-      createdAt: '2026-03-04T05:06:07Z',
-      creator: {
-        __typename: 'User',
-        id: `creator-${name}`,
-        email: `${name.toLowerCase()}@example.com`,
-        name: `${name} Owner`,
-      },
+      id,
+      name,
+      slug: name.toLowerCase(),
+      createdAt: new Date('2026-03-04T05:06:07Z'),
+      creator: { name: `${name} Owner`, email: `${name.toLowerCase()}@example.com` },
       ...overrides,
     };
   }
 
-  it('lists the pending brands alphabetically with their creators', async () => {
-    renderRouteModule(UnapprovedBrandsListPage, {
-      mocks: [
-        {
-          request: { query: UnapprovedBrandsListPageQueryDocument },
-          result: {
-            data: { brands: buildConnection([unapprovedBrand('Zeta'), unapprovedBrand('Alpha', { creator: null })]) },
-          },
-        },
-      ],
+  it('lists the pending brands with their creators', async () => {
+    renderRouteModule({
+      default: UnapprovedBrandsListPage,
+      loader: () => ({ brands: [unapprovedBrand(1, 'Alpha', { creator: null }), unapprovedBrand(2, 'Zeta')] }),
     });
 
     expect(await screen.findByRole('heading', { name: 'Brands pending approval' })).toBeInTheDocument();
-    const links = screen.getAllByRole('link').map((link) => link.textContent);
-    expect(links.indexOf('Alpha')).toBeLessThan(links.indexOf('Zeta'));
+    expect(screen.getByRole('link', { name: 'Zeta' })).toHaveAttribute('href', '/brands/zeta');
     expect(screen.getByRole('link', { name: 'zeta@example.com' })).toHaveAttribute('href', 'mailto:zeta@example.com');
     expect(screen.getByText(/Zeta Owner/)).toBeInTheDocument();
   });
 
   it('approves a brand after confirmation and refreshes the list', async () => {
     const user = userEvent.setup();
-    const zeta = unapprovedBrand('Zeta');
-    const listMock = (brands: ReturnType<typeof unapprovedBrand>[]): MockedResponse => ({
-      request: { query: UnapprovedBrandsListPageQueryDocument },
-      result: { data: { brands: buildConnection(brands) } },
-    });
-    let approved = false;
-    renderRouteModule(UnapprovedBrandsListPage, {
-      mocks: [
-        listMock([zeta]),
-        {
-          request: { query: ApproveBrandDocument, variables: { id: zeta.id } },
-          result: () => {
-            approved = true;
-            return {
-              data: {
-                approveBrand: {
-                  __typename: 'ApproveBrandPayload',
-                  brand: { ...zeta, approved: true, currentUserCanEdit: false, currentUserCanCreateProjects: false },
-                },
-              },
-            };
-          },
-        },
-        listMock([]),
-      ],
+    let pending = [unapprovedBrand(7, 'Zeta')];
+    const submitted: unknown[] = [];
+    renderRouteModule({
+      default: UnapprovedBrandsListPage,
+      loader: () => ({ brands: pending }),
+      action: async ({ request }: { request: Request }) => {
+        const body = await request.json();
+        submitted.push(body);
+        pending = [];
+        return data(null);
+      },
     });
 
     await user.click(await screen.findByRole('button', { name: 'Approve' }));
     expect(await screen.findByText(/Approve “Zeta”\?/)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'OK', hidden: true }));
 
-    await screen.findByRole('heading', { name: 'Brands pending approval' });
-    await waitFor(() => expect(approved).toBe(true));
     await waitFor(() => expect(screen.queryByRole('link', { name: 'Zeta' })).not.toBeInTheDocument());
+    expect(submitted).toEqual([{ brandId: 7 }]);
   });
 });

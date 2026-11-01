@@ -1,29 +1,25 @@
-import { useQuery } from '@apollo/client';
-import React from 'react';
+import { Fragment, useEffect, type JSX } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Link } from 'react-router';
+import { Link, useFetcher, useLocation } from 'react-router';
 import { Waypoint } from '../Waypoint';
 import ProjectCard from '../ProjectSearch/ProjectCard';
 import { generateBrandPath } from '../URLGenerators';
-import { appContext } from '../appContext';
-import { loadQuery } from '../loadQuery';
 import { formatPageTitle } from '../pageTitle';
-import { BrandPageQueryDocument } from './queries.generated';
+import { abilityContext } from '../server/lib/authContext';
+import { findBrandPage, type BrandPageData } from '../server/lib/brands.server';
+import { readDbContext } from '../server/lib/dbContext';
+import { pageUrl, useLoadMorePages } from '../useLoadMorePages';
 import UnapprovedBrandAlert from './UnapprovedBrandAlert';
 import type { Route } from './+types/BrandPage';
 
-export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
-  const { apolloClient } = context.get(appContext);
-  return loadQuery(apolloClient, BrandPageQueryDocument, {
-    slug: params.brandSlug,
-  });
+// The same loader serves the pages of projects after the first: the list asks for them with an `offset`.
+export async function loader({ context, params, request }: Route.LoaderArgs) {
+  const offset = Math.max(0, parseInt(new URL(request.url).searchParams.get('offset') ?? '', 10) || 0);
+  return findBrandPage(context.get(readDbContext), context.get(abilityContext), params.brandSlug, { offset });
 }
 
-export default function BrandPage({ loaderData, params }: Route.ComponentProps) {
-  // the loader fetched the first page of projects into the Apollo cache; reading it back from there is what lets
-  // fetchMore work
-  const { data = loaderData, fetchMore } = useQuery(BrandPageQueryDocument, { variables: { slug: params.brandSlug } });
-  const { brand } = data;
+export default function BrandPage({ loaderData }: Route.ComponentProps) {
+  const { brand } = loaderData;
 
   return (
     <>
@@ -46,30 +42,42 @@ export default function BrandPage({ loaderData, params }: Route.ComponentProps) 
         </div>
       </div>
       <ReactMarkdown>{brand.description ?? ''}</ReactMarkdown>
-      {brand.projects.edges.map(({ node: project }, index) => (
-        <React.Fragment key={project.id}>
-          <ProjectCard project={project} />
-          {index === brand.projects.edges.length - 5 && (
-            <Waypoint
-              onEnter={() => {
-                if (brand.projects.edges.length < brand.projects.totalCount) {
-                  fetchMore({
-                    variables: {
-                      slug: params.brandSlug,
-                      projectsAfter: brand.projects.pageInfo.endCursor,
-                    },
-                  });
-                }
-              }}
-            />
-          )}
-        </React.Fragment>
-      ))}
+      <BrandProjects firstPage={loaderData} />
       {brand.currentUserCanCreateProjects && (
         <Link to={`${generateBrandPath(brand)}/projects/new`} className="btn btn-success">
           New project
         </Link>
       )}
+    </>
+  );
+}
+
+/** The brand's projects, the first page from the loader and then, as the end is scrolled toward, the following pages */
+function BrandProjects({ firstPage }: { firstPage: BrandPageData }): JSX.Element {
+  const location = useLocation();
+  const fetcher = useFetcher<typeof loader>();
+  const { items: projects, addPage } = useLoadMorePages(firstPage.projects);
+
+  useEffect(() => {
+    if (fetcher.data) {
+      addPage(fetcher.data.offset, fetcher.data.projects);
+    }
+  }, [fetcher.data, addPage]);
+
+  const loadNextPage = () => {
+    if (projects.length < firstPage.totalCount && fetcher.state === 'idle') {
+      void fetcher.load(pageUrl(location, firstPage.offset + projects.length));
+    }
+  };
+
+  return (
+    <>
+      {projects.map((project, index) => (
+        <Fragment key={project.id}>
+          <ProjectCard project={project} />
+          {index === projects.length - 5 && <Waypoint onEnter={loadNextPage} />}
+        </Fragment>
+      ))}
     </>
   );
 }

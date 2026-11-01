@@ -1,20 +1,14 @@
-import { and, asc, desc, eq, exists, gte, inArray, lte, sql, type SQL } from 'drizzle-orm';
-import type { ProjectHeadersData, TagData } from '../../projectData';
+import { and, asc, desc, eq, exists, gte, lte, sql, type SQL } from 'drizzle-orm';
+import type { TagData } from '../../projectData';
 import type { ProjectSearchParams } from '../../ProjectSearch/projectSearchParams';
 import type { ReadDb } from '../db';
 import { brands, projects, projectsTags, tags } from '../db/schema';
-import { brandIsApproved, loadProjectHeaders } from './projectHeaders.server';
+import { brandIsApproved, loadProjectCards, type ProjectCardData } from './projectHeaders.server';
 import { tagCategoryData } from './tagDisplay';
 
 export const PROJECT_SEARCH_PAGE_SIZE = 25;
 
-/** How much of a description the project cards show (and so how much of it is worth sending) */
-const DESCRIPTION_EXCERPT_LENGTH = 500;
-
-export type ProjectSearchResult = ProjectHeadersData & {
-  /** The start of the description: no more than DESCRIPTION_EXCERPT_LENGTH characters */
-  description: string | null;
-};
+export type ProjectSearchResult = ProjectCardData;
 
 export type ProjectSearchPage = {
   projects: ProjectSearchResult[];
@@ -108,26 +102,12 @@ export async function searchProjects(
       .then(([row]) => row.count),
   ]);
 
-  const ids = pageRows.map((row) => row.id);
-  const [headers, descriptions] = await Promise.all([
-    loadProjectHeaders(db, ids),
-    ids.length === 0
-      ? []
-      : db
-          .select({
-            id: projects.id,
-            excerpt: sql<string | null>`left(${projects.description}, ${DESCRIPTION_EXCERPT_LENGTH})`,
-          })
-          .from(projects)
-          .where(inArray(projects.id, ids)),
-  ]);
-  const excerpts = new Map(descriptions.map((row) => [row.id, row.excerpt]));
+  const projectCards = await loadProjectCards(
+    db,
+    pageRows.map((row) => row.id),
+  );
 
-  return {
-    projects: headers.map((header) => ({ ...header, description: excerpts.get(header.id) ?? null })),
-    totalCount,
-    offset,
-  };
+  return { projects: projectCards, totalCount, offset };
 }
 
 /** The tag with exactly this name, which the search page shows as the active filter; null if there isn't one */

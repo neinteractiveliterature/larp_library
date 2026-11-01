@@ -1,97 +1,100 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import * as BrandListPage from './BrandListPage';
-import { BrandsPageQueryDocument } from './queries.generated';
-import { buildBrand, buildConnection, resetFixtureIds } from '../../../test/javascript/fixtures';
-import { MockedResponse, renderRouteModule, withRouteErrorDisplay } from '../../../test/javascript/testUtils';
+import BrandListPage from './BrandListPage';
+import type { BrandCardData, BrandListPageData } from '../server/lib/brands.server';
+import { recordingLoader, renderRouteModule, withRouteErrorDisplay } from '../../../test/javascript/testUtils';
 
 vi.mock('../Waypoint', () => import('../../../test/javascript/mockWaypoint'));
 
-function brandWithProjects(overrides: Record<string, unknown> = {}, projectCount = 3) {
-  return { ...buildBrand(overrides), projects: { __typename: 'Connection', totalCount: projectCount } };
+let nextId = 1;
+function buildBrandCard(overrides: Partial<BrandCardData> = {}): BrandCardData {
+  const id = nextId++;
+  return { id, name: `Brand ${id}`, slug: `brand-${id}`, description: null, projectCount: 3, ...overrides };
 }
 
-function brandsMock(
-  brands: ReturnType<typeof brandWithProjects>[],
-  { totalCount = brands.length, after }: { totalCount?: number; after?: string } = {},
-): MockedResponse {
-  return {
-    request: { query: BrandsPageQueryDocument },
-    variableMatcher: (variables) => (after ? variables.after === after : variables.after == null),
-    result: { data: { brands: buildConnection(brands, { totalCount }) } },
-  };
+function page(brands: BrandCardData[], { totalCount = brands.length, offset = 0 } = {}): BrandListPageData {
+  return { brands, totalCount, offset };
 }
 
 describe('BrandListPage', () => {
-  beforeEach(() => resetFixtureIds());
+  beforeEach(() => {
+    nextId = 1;
+  });
 
   it('lists the brands with their larp counts', async () => {
-    renderRouteModule(BrandListPage, {
-      mocks: [
-        brandsMock([
-          brandWithProjects({ name: 'Team No Pants', slug: 'team-no-pants' }, 1),
-          brandWithProjects({ name: 'Alleged Entertainment', slug: 'alleged' }, 5),
-        ]),
-      ],
-    });
+    const { loader } = recordingLoader(() =>
+      page([
+        buildBrandCard({
+          name: 'Team No Pants',
+          slug: 'team-no-pants',
+          projectCount: 4,
+          description: 'We **do** larps',
+        }),
+        buildBrandCard({ name: 'Solo Act', projectCount: 1 }),
+      ]),
+    );
+    renderRouteModule({ default: BrandListPage, loader });
 
     expect(await screen.findByRole('heading', { name: 'Larp creators' })).toBeInTheDocument();
-    expect(await screen.findByRole('link', { name: 'Team No Pants' })).toHaveAttribute('href', '/brands/team-no-pants');
+    expect(screen.getByRole('link', { name: 'Team No Pants' })).toHaveAttribute('href', '/brands/team-no-pants');
+    expect(screen.getByText('(4 larps)')).toBeInTheDocument();
     expect(screen.getByText('(1 larp)')).toBeInTheDocument();
-    expect(screen.getByText('(5 larps)')).toBeInTheDocument();
+    expect(screen.getByText('do').tagName).toEqual('STRONG');
   });
 
   it('truncates long descriptions with a read more link', async () => {
-    renderRouteModule(BrandListPage, {
-      mocks: [
-        brandsMock([
-          brandWithProjects({ name: 'Wordy', slug: 'wordy', description: 'word '.repeat(200) }),
-          brandWithProjects({ name: 'Terse', slug: 'terse', description: 'short and sweet' }),
-          brandWithProjects({ name: 'Blank', slug: 'blank', description: null }),
-        ]),
-      ],
-    });
+    const { loader } = recordingLoader(() =>
+      page([buildBrandCard({ name: 'Wordy', slug: 'wordy', description: 'x'.repeat(500) })]),
+    );
+    renderRouteModule({ default: BrandListPage, loader });
 
-    expect(await screen.findByText('short and sweet')).toBeInTheDocument();
-    const readMore = screen.getByRole('link', { name: '... (read more)' });
-    expect(readMore).toHaveAttribute('href', '/brands/wordy');
-    expect(screen.getAllByText(/^word word/)[0].textContent!.length).toBeLessThan(560);
+    expect(await screen.findByRole('link', { name: '... (read more)' })).toHaveAttribute('href', '/brands/wordy');
   });
 
   it('shows an error if the brands cannot be loaded', async () => {
-    renderRouteModule(withRouteErrorDisplay(BrandListPage), {
-      mocks: [{ request: { query: BrandsPageQueryDocument }, variableMatcher: () => true, error: new Error('nope') }],
-    });
+    renderRouteModule(
+      withRouteErrorDisplay({
+        default: BrandListPage,
+        loader: () => {
+          throw new Error('boom');
+        },
+      }),
+    );
 
-    expect(await screen.findByText(/nope/)).toBeInTheDocument();
+    expect(await screen.findByText(/boom/)).toBeInTheDocument();
   });
 
-  it('loads more brands when scrolled to the end', async () => {
+  it('loads more brands, by offset, when scrolled to the end', async () => {
     const user = userEvent.setup();
-    const firstPage = Array.from({ length: 5 }, (_, i) => brandWithProjects({ name: `First Page Brand ${i + 1}` }));
-    renderRouteModule(BrandListPage, {
-      mocks: [
-        brandsMock(firstPage, { totalCount: 6 }),
-        brandsMock([brandWithProjects({ name: 'Second Page Brand' })], {
-          totalCount: 6,
-          after: `cursor-${firstPage[4].id}`,
-        }),
-      ],
-    });
+    const first = Array.from({ length: 5 }, (_, i) => buildBrandCard({ name: `Early ${i + 1}` }));
+    const { loader, requests } = recordingLoader((url) =>
+      url.searchParams.get('offset') === '5'
+        ? page([buildBrandCard({ name: 'Late Brand' })], { totalCount: 6, offset: 5 })
+        : page(first, { totalCount: 6 }),
+    );
+    renderRouteModule({ default: BrandListPage, loader });
 
-    await screen.findByText('First Page Brand 1');
+    await screen.findByText('Early 1');
+    expect(screen.queryByText('Late Brand')).not.toBeInTheDocument();
     await user.click(screen.getByTestId('waypoint'));
-    expect(await screen.findByText('Second Page Brand')).toBeInTheDocument();
+
+    expect(await screen.findByText('Late Brand')).toBeInTheDocument();
+    expect(screen.getByText('Early 5')).toBeInTheDocument();
+    expect(requests.some((url) => url.searchParams.get('offset') === '5')).toBe(true);
   });
 
   it('does not load more when everything is already loaded', async () => {
     const user = userEvent.setup();
-    const brands = Array.from({ length: 5 }, (_, i) => brandWithProjects({ name: `Brand Number ${i + 1}` }));
-    renderRouteModule(BrandListPage, { mocks: [brandsMock(brands, { totalCount: 5 })] });
+    const { loader, requests } = recordingLoader(() =>
+      page(Array.from({ length: 5 }, (_, i) => buildBrandCard({ name: `Complete ${i + 1}` }))),
+    );
+    renderRouteModule({ default: BrandListPage, loader });
 
-    await screen.findByText('Brand Number 1');
+    await screen.findByText('Complete 1');
     await user.click(screen.getByTestId('waypoint'));
-    expect(screen.getAllByText(/^Brand Number/)).toHaveLength(5);
+
+    expect(screen.getAllByText(/^Complete/)).toHaveLength(5);
+    expect(requests).toHaveLength(1);
   });
 });

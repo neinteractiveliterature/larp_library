@@ -241,3 +241,17 @@ export function mockFetchJson(answer: (url: URL) => unknown) {
     return Response.json(answer(url));
   });
 }
+
+/**
+ * A stand-in for a route's loader: it's handed the URL and params it was asked for, records the requests, and answers with
+ * whatever the test decides.
+ */
+export function recordingLoader<TData>(answer: (url: URL, params: Record<string, string | undefined>) => TData) {
+  const requests: URL[] = [];
+  const loader = ({ request, params }: { request: Request; params: Record<string, string | undefined> }): TData => {
+    const url = new URL(request.url);
+    requests.push(url);
+    return answer(url, params);
+  };
+  return { loader, requests };
+}

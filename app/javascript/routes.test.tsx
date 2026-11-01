@@ -1,6 +1,5 @@
 /// <reference types="vite/client" />
 import { ApolloProvider } from '@apollo/client';
-import { GraphQLError } from 'graphql';
 import { Confirm } from '@neinteractiveliterature/litform';
 import type { RouteConfigEntry } from '@react-router/dev/routes';
 import { render, screen, waitFor } from '@testing-library/react';
@@ -11,8 +10,6 @@ import { S3ConfigurationContext } from './S3ConfigurationContext';
 import { appContext } from './appContext';
 import { abilityContext, userContext } from './server/lib/authContext';
 import { buildAbility } from './server/lib/authorization.server';
-import { BrandPageQueryDocument, BrandsPageQueryDocument } from './Brands/queries.generated';
-import { buildConnection } from '../../test/javascript/fixtures';
 import {
   createMockApolloClient,
   mockFetchJson,
@@ -20,17 +17,6 @@ import {
   type MockedResponse,
   type RouteModuleUnderTest,
 } from '../../test/javascript/testUtils';
-
-const anyVariables = { variableMatcher: () => true, maxUsageCount: Number.POSITIVE_INFINITY };
-const empty = [] as { id: string }[];
-
-const pageMocks: MockedResponse[] = [
-  {
-    request: { query: BrandsPageQueryDocument },
-    ...anyVariables,
-    result: { data: { brands: buildConnection(empty) } },
-  },
-];
 
 // routes.ts is the framework-mode route config (file paths, which the build loads lazily); here the same config is turned
 // into ordinary react-router route objects, with the modules loaded up front, so the URL → page mapping can be tested.
@@ -40,9 +26,31 @@ const routeModules = import.meta.glob<RouteModuleUnderTest>(
   { eager: true },
 );
 
-const serverLoaderStubs: Record<string, () => unknown> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const serverLoaderStubs: Record<string, (args: any) => unknown> = {
   './HomePage/HomePage.tsx': () => ({ promotedProjects: [], tagGroups: [] }),
   './ProjectSearch/ProjectSearchPage.tsx': () => ({ projects: [], totalCount: 0, offset: 0, tag: null }),
+  './Brands/BrandListPage.tsx': () => ({ brands: [], totalCount: 0, offset: 0 }),
+  './Brands/UnapprovedBrandsListPage.tsx': () => ({ brands: [] }),
+  './Brands/BrandPage.tsx': ({ params }: { params: { brandSlug: string } }) => {
+    if (params.brandSlug === 'no-such-brand') {
+      throw new Response(null, { status: 404, statusText: 'Not Found' });
+    }
+    return {
+      brand: {
+        id: 1,
+        name: 'Acme Games',
+        slug: params.brandSlug,
+        description: null,
+        approved: true,
+        currentUserCanEdit: false,
+        currentUserCanCreateProjects: false,
+      },
+      projects: [],
+      totalCount: 0,
+      offset: 0,
+    };
+  },
   './Tags/TagListPage.tsx': () => ({ tags: [] }),
   './ProjectPromotions/ProjectPromotionsPage.tsx': () => ({ projectPromotions: [] }),
   './TagCategories/TagCategoryListPage.tsx': () => ({ tagCategories: [] }),
@@ -121,6 +129,8 @@ describe('routes', () => {
     ['/pages/licensing', 'Licensing'],
     ['/projects', 'Larps'],
     ['/brands', 'Larp creators'],
+    ['/brands/unapproved', 'Brands pending approval'],
+    ['/brands/acme', 'Acme Games'],
     ['/project_promotions', 'Project promotions'],
     ['/tags', 'Tags'],
     ['/tags/new', 'Create a new tag'],
@@ -129,7 +139,7 @@ describe('routes', () => {
     ['/tags/5/edit', 'Editing tag: horde'],
     ['/tag_categories/3/edit', 'Editing tag category: Genre'],
   ])('routes %s to the page headed “%s”', async (route, heading) => {
-    renderRoute(route, pageMocks);
+    renderRoute(route, []);
 
     expect(await screen.findByRole('heading', { name: heading })).toBeInTheDocument();
     // every page sits inside the app layout
@@ -139,8 +149,6 @@ describe('routes', () => {
   // These pages need richer data than is worth building here, so they're left unmocked: Apollo's "No more mocked
   // responses" error names the query the page ran, which shows the URL reached the right page.
   it.each([
-    ['/brands/unapproved', 'UnapprovedBrandsListPageQuery'],
-    ['/brands/acme', 'BrandPageQuery'],
     ['/brands/acme/edit', 'EditBrandQuery'],
     ['/brands/acme/invitations/tok123', 'InvitationPageQuery'],
     ['/brands/acme/projects/new', 'NewProjectFormQuery'],
@@ -165,20 +173,14 @@ describe('routes', () => {
   });
 
   it('shows the not-found page inside the layout when a brand does not exist', async () => {
-    renderRoute('/brands/no-such-brand', [
-      {
-        request: { query: BrandPageQueryDocument },
-        variableMatcher: () => true,
-        result: { errors: [new GraphQLError('Brand not found', { extensions: { code: 'NOT_FOUND' } })] },
-      },
-    ]);
+    renderRoute('/brands/no-such-brand', []);
 
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Larp Library' })).toBeInTheDocument();
   });
 
   it('shows a not-found page inside the layout for a URL no page claims', async () => {
-    renderRoute('/no/such/page', pageMocks);
+    renderRoute('/no/such/page', []);
 
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Larp Library' })).toBeInTheDocument();

@@ -1,4 +1,4 @@
-import { eq, inArray } from 'drizzle-orm';
+import { eq, inArray, sql } from 'drizzle-orm';
 import type { ProjectHeadersData } from '../../projectData';
 import type { ReadDb } from '../db';
 import { brands, projects } from '../db/schema';
@@ -55,4 +55,33 @@ export async function loadProjectHeaders(db: ReadDb, projectIds: number[]): Prom
       },
     ];
   });
+}
+
+/** How much of a description the cards show (and so how much of it is worth sending) */
+export const DESCRIPTION_EXCERPT_LENGTH = 500;
+
+export type ProjectCardData = ProjectHeadersData & {
+  /** The start of the description: no more than DESCRIPTION_EXCERPT_LENGTH characters */
+  description: string | null;
+};
+
+/** What the project cards show, for the given projects, in the order the ids are given */
+export async function loadProjectCards(db: ReadDb, projectIds: number[]): Promise<ProjectCardData[]> {
+  if (projectIds.length === 0) {
+    return [];
+  }
+
+  const [headers, descriptions] = await Promise.all([
+    loadProjectHeaders(db, projectIds),
+    db
+      .select({
+        id: projects.id,
+        excerpt: sql<string | null>`left(${projects.description}, ${DESCRIPTION_EXCERPT_LENGTH})`,
+      })
+      .from(projects)
+      .where(inArray(projects.id, projectIds)),
+  ]);
+  const excerpts = new Map(descriptions.map((row) => [row.id, row.excerpt]));
+
+  return headers.map((header) => ({ ...header, description: excerpts.get(header.id) ?? null }));
 }

@@ -3,11 +3,13 @@ import { Link } from 'react-router';
 import ReactMarkdown from 'react-markdown';
 import { MarkdownLink } from '../MarkdownLink';
 import { generateBrandPath } from '../URLGenerators';
-import { Brand, ProjectConnection } from '../graphqlTypes.generated';
 
 export type BrandCardProps = {
-  brand: Pick<Brand, 'name' | 'description' | 'slug'> & {
-    projects: Pick<ProjectConnection, 'totalCount'>;
+  brand: {
+    name: string;
+    description: string | null;
+    slug: string;
+    projectCount: number;
   };
 };
 
@@ -21,7 +23,7 @@ export default function BrandCard({ brand }: BrandCardProps): JSX.Element {
               {brand.name}
             </Link>{' '}
             <small>
-              ({brand.projects.totalCount} {brand.projects.totalCount === 1 ? 'larp' : 'larps'})
+              ({brand.projectCount} {brand.projectCount === 1 ? 'larp' : 'larps'})
             </small>
           </h2>
         </div>
