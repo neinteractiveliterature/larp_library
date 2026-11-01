@@ -12,7 +12,6 @@ import { appContext } from './appContext';
 import { abilityContext, userContext } from './server/lib/authContext';
 import { buildAbility } from './server/lib/authorization.server';
 import { BrandPageQueryDocument, BrandsPageQueryDocument } from './Brands/queries.generated';
-import { ProjectPromotionsPageQueryDocument } from './ProjectPromotions/queries.generated';
 import { buildConnection } from '../../test/javascript/fixtures';
 import {
   createMockApolloClient,
@@ -31,11 +30,6 @@ const pageMocks: MockedResponse[] = [
     ...anyVariables,
     result: { data: { brands: buildConnection(empty) } },
   },
-  {
-    request: { query: ProjectPromotionsPageQueryDocument },
-    ...anyVariables,
-    result: { data: { projectPromotions: [] } },
-  },
 ];
 
 // routes.ts is the framework-mode route config (file paths, which the build loads lazily); here the same config is turned
@@ -50,8 +44,9 @@ const serverLoaderStubs: Record<string, () => unknown> = {
   './HomePage/HomePage.tsx': () => ({ promotedProjects: [], tagGroups: [] }),
   './ProjectSearch/ProjectSearchPage.tsx': () => ({ projects: [], totalCount: 0, offset: 0, tag: null }),
   './Tags/TagListPage.tsx': () => ({ tags: [] }),
+  './ProjectPromotions/ProjectPromotionsPage.tsx': () => ({ projectPromotions: [] }),
   './TagCategories/TagCategoryListPage.tsx': () => ({ tagCategories: [] }),
-  // (the new and edit pages require an administrator, which the signed-out visitor of these tests isn't)
+  // (the promotions, new and edit pages require an administrator, which the signed-out visitor of these tests isn't)
   './Tags/NewTagPage.tsx': () => null,
   './TagCategories/NewTagCategoryPage.tsx': () => null,
   './Tags/EditTagPage.tsx': () => ({ tag: { id: 5, name: 'horde', tagCategory: null }, projectCount: 0 }),

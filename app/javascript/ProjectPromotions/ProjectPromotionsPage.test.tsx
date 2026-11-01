@@ -1,51 +1,66 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { data } from 'react-router';
 
-import * as ProjectPromotionsPage from './ProjectPromotionsPage';
-import { PromoteProjectMutationDocument, UnpromoteProjectMutationDocument } from './mutations.generated';
-import { ProjectPromotionsPageQueryDocument } from './queries.generated';
-import { ProjectSearchQueryDocument } from '../ProjectSearch/queries.generated';
-import { buildConnection, buildProjectHeaders, resetFixtureIds } from '../../../test/javascript/fixtures';
-import { MockedResponse, renderRouteModule, selectReactSelectOption } from '../../../test/javascript/testUtils';
+import ProjectPromotionsPage from './ProjectPromotionsPage';
+import type { ProjectPromotionData } from '../server/lib/projectPromotions.server';
+import { mockFetchJson, renderRouteModule, selectReactSelectOption } from '../../../test/javascript/testUtils';
 
-function promotion(id: string, projectId: string, title: string, createdAt = '2026-03-04T12:00:00Z') {
+function promotion(
+  id: number,
+  projectId: number,
+  title: string,
+  createdAt = '2026-03-04T12:00:00Z',
+): ProjectPromotionData {
   return {
-    __typename: 'ProjectPromotion',
     id,
-    createdAt,
-    project: {
-      __typename: 'Project',
-      id: projectId,
-      title,
-      brand: { __typename: 'Brand', id: `brand-${projectId}`, slug: `brand-${projectId}` },
-    },
+    createdAt: new Date(createdAt),
+    project: { id: projectId, title, brand: { slug: `brand-${projectId}` } },
   };
 }
 
-const promotionsMock = (promotions: ReturnType<typeof promotion>[]): MockedResponse => ({
-  request: { query: ProjectPromotionsPageQueryDocument },
-  result: { data: { projectPromotions: promotions } },
-});
+/**
+ * Renders the page with a stand-in for the server: the promotions it lists, and an action that records what was submitted
+ * and changes that list the way the real one would (so React Router's reload afterward shows the change).
+ */
+function renderPromotionsPage(
+  initial: ProjectPromotionData[],
+  {
+    projectsToPromote = [] as { id: number; title: string }[],
+    respond = undefined as (() => unknown) | undefined,
+  } = {},
+) {
+  let promotions = initial;
+  const submitted: { intent: string; projectId: number }[] = [];
+  mockFetchJson(() => projectsToPromote);
 
-const projectSearchMock = (titles: string[]): MockedResponse => ({
-  request: { query: ProjectSearchQueryDocument },
-  variableMatcher: () => true,
-  maxUsageCount: Number.POSITIVE_INFINITY,
-  result: {
-    data: {
-      projects: buildConnection(titles.map((title) => ({ ...buildProjectHeaders({ title }), description: null }))),
-      tagByName: null,
+  renderRouteModule({
+    default: ProjectPromotionsPage,
+    loader: () => ({ projectPromotions: promotions }),
+    action: async ({ request }: { request: Request }) => {
+      const body = await request.json();
+      submitted.push(body);
+      if (respond) {
+        return respond();
+      }
+      promotions =
+        body.intent === 'unpromote'
+          ? promotions.filter((p) => p.project.id !== body.projectId)
+          : [
+              ...promotions,
+              promotion(99, body.projectId, projectsToPromote.find((p) => p.id === body.projectId)!.title),
+            ];
+      return { done: body.intent };
     },
-  },
-});
+  });
+  return { submitted };
+}
 
 describe('ProjectPromotionsPage', () => {
-  beforeEach(() => resetFixtureIds());
+  afterEach(() => vi.restoreAllMocks());
 
   it('lists the promoted projects and when the promotion started', async () => {
-    renderRouteModule(ProjectPromotionsPage, {
-      mocks: [promotionsMock([promotion('pr1', 'p1', 'Featured Larp', '2026-03-04T12:00:00Z')])],
-    });
+    renderPromotionsPage([promotion(1, 11, 'Featured Larp', '2026-03-04T12:00:00Z')]);
 
     expect(await screen.findByRole('heading', { name: 'Project promotions' })).toBeInTheDocument();
     const row = screen.getByText('Featured Larp').closest('tr') as HTMLElement;
@@ -57,63 +72,24 @@ describe('ProjectPromotionsPage', () => {
 
   it('stops promoting a project after confirmation', async () => {
     const user = userEvent.setup();
-    let unpromoted = false;
-    renderRouteModule(ProjectPromotionsPage, {
-      mocks: [
-        promotionsMock([promotion('pr1', 'p1', 'Old Feature'), promotion('pr2', 'p2', 'Keeper')]),
-        {
-          request: { query: UnpromoteProjectMutationDocument, variables: { projectId: 'p1' } },
-          result: () => {
-            unpromoted = true;
-            return {
-              data: {
-                unpromoteProject: {
-                  __typename: 'UnpromoteProjectPayload',
-                  projectPromotion: promotion('pr1', 'p1', 'Old Feature'),
-                },
-              },
-            };
-          },
-        },
-        // the reload after the promotion is removed
-        promotionsMock([promotion('pr2', 'p2', 'Keeper')]),
-      ],
-    });
+    const { submitted } = renderPromotionsPage([promotion(1, 11, 'Old Feature'), promotion(2, 12, 'Keeper')]);
 
     const row = (await screen.findByText('Old Feature')).closest('tr') as HTMLElement;
     await user.click(within(row).getByRole('button', { name: 'Delete' }));
     expect(await screen.findByText('Are you sure you want to stop promoting Old Feature?')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'OK', hidden: true }));
 
-    await waitFor(() => expect(unpromoted).toBe(true));
     await waitFor(() => expect(screen.queryByText('Old Feature')).not.toBeInTheDocument());
+    expect(submitted).toEqual([{ intent: 'unpromote', projectId: 11 }]);
     expect(screen.getByText('Keeper')).toBeInTheDocument();
   });
 
   it('promotes a project chosen from the search', async () => {
     const user = userEvent.setup();
-    let promotedId: unknown;
-    renderRouteModule(ProjectPromotionsPage, {
-      mocks: [
-        promotionsMock([]),
-        projectSearchMock(['Brand New Promotion', 'Something Else']),
-        {
-          request: { query: PromoteProjectMutationDocument },
-          variableMatcher: (variables) => {
-            promotedId = variables.projectId;
-            return true;
-          },
-          result: {
-            data: {
-              promoteProject: {
-                __typename: 'PromoteProjectPayload',
-                projectPromotion: promotion('pr9', 'p9', 'Brand New Promotion'),
-              },
-            },
-          },
-        },
-        // the reload after the project is promoted
-        promotionsMock([promotion('pr9', 'p9', 'Brand New Promotion')]),
+    const { submitted } = renderPromotionsPage([], {
+      projectsToPromote: [
+        { id: 21, title: 'Brand New Promotion' },
+        { id: 22, title: 'Something Else' },
       ],
     });
 
@@ -124,31 +100,24 @@ describe('ProjectPromotionsPage', () => {
     await user.click(screen.getByRole('button', { name: 'Promote' }));
 
     expect(await screen.findByRole('cell', { name: 'Brand New Promotion' })).toBeInTheDocument();
-    expect(promotedId).toBeDefined();
+    expect(submitted).toEqual([{ intent: 'promote', projectId: 21 }]);
     // the picker is cleared once the promotion has gone through
     await waitFor(() => expect(screen.getByRole('button', { name: 'Promote' })).toBeDisabled());
   });
 
-  it('shows the error if promoting fails', async () => {
+  it('shows what the server says is wrong with promoting', async () => {
     const user = userEvent.setup();
-    renderRouteModule(ProjectPromotionsPage, {
-      mocks: [
-        promotionsMock([]),
-        projectSearchMock(['Doomed Project']),
-        {
-          request: { query: PromoteProjectMutationDocument },
-          variableMatcher: () => true,
-          error: new Error('already promoted'),
-        },
-        // the reload after the failed promotion
-        promotionsMock([]),
-      ],
+    renderPromotionsPage([], {
+      projectsToPromote: [{ id: 31, title: 'Doomed Project' }],
+      respond: () => data({ errors: ['Project is already being promoted.'] }, { status: 422 }),
     });
 
     await screen.findByRole('heading', { name: 'Project promotions' });
     await selectReactSelectOption(user, screen.getByRole('combobox'), 'Doomed Project', { typeText: 'Doom' });
     await user.click(screen.getByRole('button', { name: 'Promote' }));
 
-    expect(await screen.findByText(/already promoted/)).toBeInTheDocument();
+    expect(await screen.findByText(/already being promoted/)).toBeInTheDocument();
+    // the picker keeps its choice, so it can be retried
+    expect(screen.getByRole('button', { name: 'Promote' })).toBeEnabled();
   });
 });

@@ -1,48 +1,53 @@
-import { useApolloClient } from '@apollo/client';
-import { ErrorDisplay, useGraphQLConfirm } from '@neinteractiveliterature/litform';
+import { useConfirm } from '@neinteractiveliterature/litform';
 import { useEffect, useState } from 'react';
-import { useFetcher } from 'react-router';
+import { data, useFetcher } from 'react-router';
 import AsyncSelect from 'react-select/async';
-import { appContext } from '../appContext';
-import { getApolloActionError, withApolloErrors } from '../actionHelpers';
-import { loadQuery } from '../loadQuery';
+import ActionErrorDisplay from '../ActionErrorDisplay';
 import { pageTitle } from '../pageTitle';
-import { ProjectSearchQueryDocument, type ProjectSearchQueryData } from '../ProjectSearch/queries.generated';
-import { PromoteProjectMutationDocument, UnpromoteProjectMutationDocument } from './mutations.generated';
-import { ProjectPromotionsPageQueryDocument } from './queries.generated';
+import { abilityContext } from '../server/lib/authContext';
+import { requireAbility } from '../server/lib/authorization.server';
+import { readDbContext } from '../server/lib/dbContext';
+import { listProjectPromotions, promoteProject, unpromoteProject } from '../server/lib/projectPromotions.server';
 import type { Route } from './+types/ProjectPromotionsPage';
 
-type ProjectSearchProject = ProjectSearchQueryData['projects']['edges'][number]['node'];
+type ProjectOption = { id: number; title: string | null };
 
-export async function clientLoader({ context }: Route.ClientLoaderArgs) {
-  const { apolloClient } = context.get(appContext);
-  return loadQuery(apolloClient, ProjectPromotionsPageQueryDocument);
+export async function loader({ context }: Route.LoaderArgs) {
+  requireAbility(context.get(abilityContext), 'create', 'ProjectPromotion');
+  return { projectPromotions: await listProjectPromotions(context.get(readDbContext)) };
 }
 
-type ProjectPromotionsActionBody = { intent: 'promote' | 'unpromote'; projectId: string };
-
-export async function clientAction({ context, request }: Route.ClientActionArgs) {
-  const { apolloClient } = context.get(appContext);
-  const { intent, projectId } = (await request.json()) as ProjectPromotionsActionBody;
+export async function action({ context, request }: Route.ActionArgs) {
+  const ability = context.get(abilityContext);
+  const { intent, projectId } = await request.json();
 
   // React Router reloads the list afterward, so the promotion appears or disappears
-  return withApolloErrors(async () => {
-    await apolloClient.mutate({
-      mutation: intent === 'promote' ? PromoteProjectMutationDocument : UnpromoteProjectMutationDocument,
-      variables: { projectId },
-    });
+  if (intent === 'unpromote') {
+    await unpromoteProject(ability, projectId);
     return { done: intent };
+  }
+
+  const result = await promoteProject(ability, projectId);
+  return result.ok ? { done: intent } : data({ errors: result.errors }, { status: 422 });
+}
+
+async function queryProjects(queryString: string): Promise<ProjectOption[]> {
+  const response = await fetch(`/project_promotions/projects?q=${encodeURIComponent(queryString)}`, {
+    headers: { Accept: 'application/json' },
   });
+  if (!response.ok) {
+    throw new Error(`Could not search projects (${response.status})`);
+  }
+  return response.json();
 }
 
 const jsonPost = { method: 'post', encType: 'application/json' } as const;
 
-export default function ProjectPromotionsPage({ loaderData: data }: Route.ComponentProps) {
-  const confirm = useGraphQLConfirm();
-  const apolloClient = useApolloClient();
-  const [projectToPromote, setProjectToPromote] = useState<ProjectSearchProject | null>(null);
-  const promoteFetcher = useFetcher<typeof clientAction>();
-  const unpromoteFetcher = useFetcher<typeof clientAction>();
+export default function ProjectPromotionsPage({ loaderData }: Route.ComponentProps) {
+  const confirm = useConfirm();
+  const [projectToPromote, setProjectToPromote] = useState<ProjectOption | null>(null);
+  const promoteFetcher = useFetcher<typeof action>();
+  const unpromoteFetcher = useFetcher<typeof action>();
 
   // once a project has been promoted, clear the project picker for the next one
   useEffect(() => {
@@ -50,16 +55,6 @@ export default function ProjectPromotionsPage({ loaderData: data }: Route.Compon
       setProjectToPromote(null);
     }
   }, [promoteFetcher.state, promoteFetcher.data]);
-
-  const queryProjects = async (queryString: string) => {
-    const result = await apolloClient.query({
-      query: ProjectSearchQueryDocument,
-      variables: { queryString },
-      fetchPolicy: 'network-only',
-    });
-
-    return result.data.projects.edges.map((edge) => edge.node);
-  };
 
   const promoteSelectedProject = () => {
     if (projectToPromote == null) {
@@ -69,7 +64,7 @@ export default function ProjectPromotionsPage({ loaderData: data }: Route.Compon
     promoteFetcher.submit({ intent: 'promote', projectId: projectToPromote.id }, jsonPost);
   };
 
-  const unpromoteProjectConfirmed = async (projectPromotion: (typeof data)['projectPromotions'][number]) => {
+  const unpromoteProjectConfirmed = async (projectPromotion: (typeof loaderData.projectPromotions)[number]) => {
     await unpromoteFetcher.submit({ intent: 'unpromote', projectId: projectPromotion.project.id }, jsonPost);
   };
 
@@ -85,14 +80,10 @@ export default function ProjectPromotionsPage({ loaderData: data }: Route.Compon
           </tr>
         </thead>
         <tbody>
-          {data.projectPromotions.map((projectPromotion) => (
+          {loaderData.projectPromotions.map((projectPromotion) => (
             <tr key={projectPromotion.id}>
               <td>{projectPromotion.project.title}</td>
-              <td>
-                {new Intl.DateTimeFormat(undefined, { dateStyle: 'short' }).format(
-                  new Date(projectPromotion.createdAt),
-                )}
-              </td>
+              <td>{new Intl.DateTimeFormat(undefined, { dateStyle: 'short' }).format(projectPromotion.createdAt)}</td>
               <td>
                 <button
                   type="button"
@@ -112,10 +103,10 @@ export default function ProjectPromotionsPage({ loaderData: data }: Route.Compon
           ))}
           <tr>
             <td colSpan={2}>
-              <AsyncSelect<ProjectSearchProject>
+              <AsyncSelect<ProjectOption>
                 isClearable
                 placeholder="Select a project to promote..."
-                loadOptions={(inputValue: string) => queryProjects(inputValue)}
+                loadOptions={queryProjects}
                 value={projectToPromote}
                 onChange={(newValue) => setProjectToPromote(newValue)}
                 getOptionValue={(option) => option.title ?? ''}
@@ -143,8 +134,8 @@ export default function ProjectPromotionsPage({ loaderData: data }: Route.Compon
         <tfoot>
           <tr>
             <td colSpan={3}>
-              <ErrorDisplay graphQLError={getApolloActionError(promoteFetcher.data)} />
-              <ErrorDisplay graphQLError={getApolloActionError(unpromoteFetcher.data)} />
+              <ActionErrorDisplay data={promoteFetcher.data} />
+              <ActionErrorDisplay data={unpromoteFetcher.data} />
             </td>
           </tr>
         </tfoot>
