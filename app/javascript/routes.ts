@@ -1,6 +1,11 @@
 import { index, layout, route, type RouteConfig } from '@react-router/dev/routes';
 
 export default [
+  // better-auth's endpoints (the OAuth callback and so on), and the sign-in and sign-out redirects
+  route('api/auth/*', './server/routes/authApi.ts'),
+  route('sign-in', './server/routes/signIn.ts'),
+  route('sign-out', './server/routes/signOut.ts'),
+
   layout('./AppLayoutRoute.tsx', [
     index('./HomePage/HomePage.tsx'),
 

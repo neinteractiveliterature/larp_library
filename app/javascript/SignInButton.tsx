@@ -1,25 +1,14 @@
-import { useApolloClient } from '@apollo/client';
-import { useContext, useCallback, type JSX } from 'react';
-import { CSRFTokensContext } from './CSRFTokensContext';
-import { startSignIn } from './signIn';
+import { useLocation } from 'react-router';
+import type { JSX } from 'react';
+import { signInPath } from './signIn';
 
-export function useSignIn() {
-  const { signInCSRFToken } = useContext(CSRFTokensContext);
-  const apolloClient = useApolloClient();
-
-  const signIn = useCallback(
-    (returnTo?: string) => startSignIn({ apolloClient, signInCSRFToken, returnTo }),
-    [apolloClient, signInCSRFToken],
-  );
-
-  return signIn;
-}
-
+/** Signs the visitor in, and brings them back to the page they're on */
 export function SignInButton(): JSX.Element {
-  const signIn = useSignIn();
+  const location = useLocation();
+  // a plain link, not a client-side navigation: sign-in redirects off to Intercode
   return (
-    <button className="btn btn-link" type="submit" onClick={() => signIn()}>
+    <a className="btn btn-link" href={signInPath(`${location.pathname}${location.search}`)}>
       Sign in
-    </button>
+    </a>
   );
 }

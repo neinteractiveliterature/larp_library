@@ -1,4 +1,5 @@
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { useEffect } from 'react';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from 'react-router';
 import { appContext, type AppContextValue } from './appContext';
 import { fetchAppConfig } from './appConfig';
@@ -7,6 +8,9 @@ import { initSentry } from './initSentry';
 import { createLarpLibraryApolloClient } from './larpLibraryApolloClient';
 import { formatPageTitle } from './pageTitle';
 import RouteErrorDisplay from './RouteErrorDisplay';
+import { env } from './server/env';
+import { userContext } from './server/lib/authContext';
+import { authMiddleware } from './server/lib/authMiddleware';
 import type { Route } from './+types/root';
 
 import './styles/application.scss';
@@ -22,15 +26,22 @@ export function meta() {
 let appContextValue: Promise<AppContextValue> | undefined;
 
 function loadAppContextValue(): Promise<AppContextValue> {
-  appContextValue ??= fetchAppConfig().then((config) => {
-    initSentry(config.sentryDsn, config.currentUserId);
-    return { config, apolloClient: createLarpLibraryApolloClient(config.graphqlCSRFToken) };
-  });
+  appContextValue ??= fetchAppConfig().then((config) => ({
+    config,
+    apolloClient: createLarpLibraryApolloClient(config.graphqlCSRFToken),
+  }));
   // if loading the configuration failed, let the next navigation try again
   appContextValue.catch(() => {
     appContextValue = undefined;
   });
   return appContextValue;
+}
+
+// Looks up who's signed in (and what they may do) before any loader runs
+export const middleware: Route.MiddlewareFunction[] = [authMiddleware];
+
+export function loader({ context }: Route.LoaderArgs) {
+  return { sentryDsn: env.SENTRY_DSN ?? null, currentUserId: context.get(userContext)?.id ?? null };
 }
 
 export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
@@ -39,13 +50,11 @@ export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
   },
 ];
 
-export function clientLoader({ context }: Route.ClientLoaderArgs) {
-  return context.get(appContext);
+export async function clientLoader({ context, serverLoader }: Route.ClientLoaderArgs) {
+  return { ...(await serverLoader()), ...context.get(appContext) };
 }
 clientLoader.hydrate = true as const;
 
-// This runs at build time to produce the static HTML shell (the app is a single-page app: `ssr: false`), so everything
-// here has to be the same for every visitor.
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -73,7 +82,9 @@ export function HydrateFallback() {
 }
 
 export default function Root() {
-  const { config, apolloClient } = useLoaderData<typeof clientLoader>();
+  const { config, apolloClient, sentryDsn, currentUserId } = useLoaderData<typeof clientLoader>();
+
+  useEffect(() => initSentry(sentryDsn, currentUserId), [sentryDsn, currentUserId]);
 
   return (
     <AppProviders config={config} apolloClient={apolloClient}>

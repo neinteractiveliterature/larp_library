@@ -1,15 +1,23 @@
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { Outlet, useNavigation } from 'react-router';
-import AppLayout from './AppLayout';
-import { appContext } from './appContext';
-import { loadQuery } from './loadQuery';
-import { AppLayoutQueryDocument } from './queries.generated';
+import AppLayout, { type AppLayoutData } from './AppLayout';
 import RouteErrorDisplay from './RouteErrorDisplay';
+import { abilityContext, userContext } from './server/lib/authContext';
 import type { Route } from './+types/AppLayoutRoute';
 
-export async function clientLoader({ context }: Route.ClientLoaderArgs) {
-  const { apolloClient } = context.get(appContext);
-  return loadQuery(apolloClient, AppLayoutQueryDocument);
+export function loader({ context }: Route.LoaderArgs): AppLayoutData {
+  const user = context.get(userContext);
+  const ability = context.get(abilityContext);
+
+  return {
+    currentUser: user ? { admin: user.admin === true } : null,
+    currentAbility: {
+      canApproveBrands: ability.can('approve', 'Brand'),
+      canCreateProjectPromotions: ability.can('create', 'ProjectPromotion'),
+      canUpdateTags: ability.can('update', 'Tag'),
+      canUpdateTagCategories: ability.can('update', 'TagCategory'),
+    },
+  };
 }
 
 /** The layout route: the site header and footer around whichever page the URL matched */
