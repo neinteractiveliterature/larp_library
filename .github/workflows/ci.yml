@@ -11,8 +11,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  graphql-codegen-tsc:
-    name: graphql-codegen-tsc
+  typecheck:
+    name: typecheck
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -22,11 +22,9 @@ jobs:
           cache: yarn
       - name: yarn install
         run: yarn install
-      - name: graphql-codegen
-        run: yarn run graphql:codegen
       - name: react-router typegen
         run: yarn run typegen
-      - name: tsc on resulting generated files
+      - name: tsc
         run: yarn run tsc --noEmit
   lint:
     name: lint
@@ -189,7 +187,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
     needs:
-      - graphql-codegen-tsc
+      - typecheck
       - lint
       - vitest
       - minitest

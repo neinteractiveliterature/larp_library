@@ -1,6 +1,4 @@
 import { Suspense, type ComponentType } from 'react';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
-import { MockedProvider, MockedResponse, MockLink } from '@apollo/client/testing';
 import { render, RenderResult } from '@testing-library/react';
 import { Confirm } from '@neinteractiveliterature/litform';
 import {
@@ -8,7 +6,6 @@ import {
   MemoryRouter,
   Outlet,
   Route,
-  RouterContextProvider,
   RouterProvider,
   Routes,
   useActionData,
@@ -22,13 +19,7 @@ import {
   type LoaderFunction,
   type RouteObject,
 } from 'react-router';
-import { appContext } from '../../app/javascript/appContext';
 import RouteErrorDisplay from '../../app/javascript/RouteErrorDisplay';
-
-import { typePolicies } from '../../app/javascript/larpLibraryApolloClient';
-import { S3ConfigurationContext } from '../../app/javascript/S3ConfigurationContext';
-
-export type { MockedResponse };
 
 /** Renders the current URL (path, search and hash) so tests can assert on navigation */
 export function LocationDisplay() {
@@ -37,39 +28,28 @@ export function LocationDisplay() {
 }
 
 export type RenderPageOptions = {
-  /** Apollo mocks, in the order the page will request them (each mock is consumed once unless `maxUsageCount` is set) */
-  mocks?: MockedResponse[];
   /** The URL to start at, including any query string */
   route?: string;
   /** The react-router path pattern the page is mounted at, e.g. "/brands/:brandSlug" */
   path?: string;
 };
 
-/**
- * Renders a page the way AppWrapper/AppRoot do (Apollo with the app's real cache type policies, router, Confirm,
- * Suspense, and the S3 context), but with the network replaced by the given Apollo mocks.
- */
+/** Renders a page the way the app does (inside a router, the Confirm modal host and Suspense), for components that need nothing else */
 export function renderPage(
   page: React.ReactElement,
-  { mocks = [], route = '/', path = '*' }: RenderPageOptions = {},
+  { route = '/', path = '*' }: RenderPageOptions = {},
 ): RenderResult {
   return render(
-    <MockedProvider mocks={mocks} cache={new InMemoryCache({ typePolicies })}>
-      <S3ConfigurationContext.Provider
-        value={{ awsRegion: 'us-east-1', awsAccessKeyId: 'test-key-id', bucketName: 'test-bucket' }}
-      >
-        <Confirm>
-          <MemoryRouter initialEntries={[route]}>
-            <Suspense fallback={<div data-testid="suspense-fallback" />}>
-              <Routes>
-                <Route path={path} element={page} />
-              </Routes>
-            </Suspense>
-            <LocationDisplay />
-          </MemoryRouter>
-        </Confirm>
-      </S3ConfigurationContext.Provider>
-    </MockedProvider>,
+    <Confirm>
+      <MemoryRouter initialEntries={[route]}>
+        <Suspense fallback={<div data-testid="suspense-fallback" />}>
+          <Routes>
+            <Route path={path} element={page} />
+          </Routes>
+        </Suspense>
+        <LocationDisplay />
+      </MemoryRouter>
+    </Confirm>,
   );
 }
 
@@ -111,11 +91,6 @@ export type RouteModuleUnderTest = {
   ErrorBoundary?: ComponentType<any>;
 };
 
-/** An Apollo client whose network is replaced by the given mocks, with the app's real cache type policies */
-export function createMockApolloClient(mocks: MockedResponse[]) {
-  return new ApolloClient({ link: new MockLink(mocks), cache: new InMemoryCache({ typePolicies }) });
-}
-
 /** Passes a route module's component the same props the framework would (`loaderData`, `actionData`, `params`) */
 function withRouteProps(module: RouteModuleUnderTest): ComponentType | undefined {
   const Page = module.default;
@@ -155,8 +130,6 @@ export function routeFromModule(
 }
 
 export type RenderRouteModuleOptions = {
-  /** Apollo mocks, in the order the loaders and actions will request them */
-  mocks?: MockedResponse[];
   /** The URL to start at */
   route?: string;
   /** The route pattern the module is mounted at, e.g. "/tags/:tagId/edit" (default: the path of `route`) */
@@ -166,25 +139,14 @@ export type RenderRouteModuleOptions = {
 };
 
 /**
- * Renders a page the way the framework build does: its `clientLoader` and `clientAction` run against the Apollo mocks,
- * and its component gets `loaderData`, `actionData` and `params`.  Anywhere else in the app is an empty page, so a
+ * Renders a page the way the framework build does: its loader and action run (they're given by the test, as stand-ins for
+ * the server's), and its component gets `loaderData`, `actionData` and `params`.  Anywhere else in the app is an empty page, so a
  * redirect can be seen in the LocationDisplay.
  */
 export function renderRouteModule(
   module: RouteModuleUnderTest,
-  {
-    mocks = [],
-    route = '/',
-    path = new URL(route, 'http://localhost').pathname,
-    extraRoutes = [],
-  }: RenderRouteModuleOptions = {},
+  { route = '/', path = new URL(route, 'http://localhost').pathname, extraRoutes = [] }: RenderRouteModuleOptions = {},
 ): RenderResult {
-  const apolloClient = createMockApolloClient(mocks);
-  const config = {
-    graphqlCSRFToken: 'graphql-token',
-    s3Configuration: { awsRegion: 'us-east-1', awsAccessKeyId: 'test-key-id', bucketName: 'test-bucket' },
-  };
-
   function Root() {
     return (
       <>
@@ -206,20 +168,13 @@ export function renderRouteModule(
         ],
       },
     ],
-    {
-      initialEntries: [route],
-      getContext: () => new RouterContextProvider(new Map([[appContext, { config, apolloClient }]])),
-    },
+    { initialEntries: [route] },
   );
 
   return render(
-    <ApolloProvider client={apolloClient}>
-      <S3ConfigurationContext.Provider value={config.s3Configuration}>
-        <Confirm>
-          <RouterProvider router={router} />
-        </Confirm>
-      </S3ConfigurationContext.Provider>
-    </ApolloProvider>,
+    <Confirm>
+      <RouterProvider router={router} />
+    </Confirm>,
   );
 }
 

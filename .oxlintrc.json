@@ -13,8 +13,7 @@
   },
   "ignorePatterns": [
     "public/assets",
-    "public/packs",
-    "**/*.generated.ts"
+    "public/packs"
   ],
   "rules": {
     "constructor-super": "error",

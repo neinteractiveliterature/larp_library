@@ -1,29 +1,28 @@
 /// <reference types="vite/client" />
-import { ApolloProvider } from '@apollo/client';
 import { Confirm } from '@neinteractiveliterature/litform';
 import type { RouteConfigEntry } from '@react-router/dev/routes';
 import { render, screen, waitFor } from '@testing-library/react';
 import { createMemoryRouter, RouterContextProvider, RouterProvider, type RouteObject } from 'react-router';
 
 import routes from './routes';
-import { S3ConfigurationContext } from './S3ConfigurationContext';
-import { appContext } from './appContext';
 import { abilityContext, userContext } from './server/lib/authContext';
 import { buildAbility } from './server/lib/authorization.server';
 import { buildProject } from '../../test/javascript/projectFixtures';
-import {
-  createMockApolloClient,
-  mockFetchJson,
-  routeFromModule,
-  type MockedResponse,
-  type RouteModuleUnderTest,
-} from '../../test/javascript/testUtils';
+import { mockFetchJson, routeFromModule, type RouteModuleUnderTest } from '../../test/javascript/testUtils';
 
 // routes.ts is the framework-mode route config (file paths, which the build loads lazily); here the same config is turned
 // into ordinary react-router route objects, with the modules loaded up front, so the URL → page mapping can be tested.
-// (entry.client.tsx isn't a route, and hydrates the page as soon as it's imported.)
+// (entry.client.tsx and root.tsx aren't routes in this config: the first hydrates the page as soon as it's imported, and the
+// second sets up the server's authentication.)
 const routeModules = import.meta.glob<RouteModuleUnderTest>(
-  ['./**/*.{ts,tsx}', '!./**/*.test.{ts,tsx}', '!./**/*.generated.ts', '!./entry.client.tsx', '!./server/**'],
+  [
+    './**/*.{ts,tsx}',
+    '!./**/*.test.{ts,tsx}',
+    '!./**/*.generated.ts',
+    '!./entry.client.tsx',
+    '!./root.tsx',
+    '!./server/**',
+  ],
   { eager: true },
 );
 
@@ -104,18 +103,11 @@ function toRouteObjects(entries: RouteConfigEntry[]): RouteObject[] {
   });
 }
 
-function renderRoute(route: string, mocks: MockedResponse[]) {
-  const apolloClient = createMockApolloClient(mocks);
-  const s3Configuration = { awsRegion: 'us-east-1', awsAccessKeyId: 'key', bucketName: 'bucket' };
-  const config = {
-    graphqlCSRFToken: 'graphql',
-    s3Configuration,
-  };
+function renderRoute(route: string) {
   const router = createMemoryRouter(toRouteObjects(routes), {
     initialEntries: [route],
     getContext: () => {
       const context = new RouterContextProvider();
-      context.set(appContext, { config, apolloClient });
       // a signed-out visitor
       context.set(userContext, null);
       context.set(abilityContext, buildAbility(null));
@@ -124,13 +116,9 @@ function renderRoute(route: string, mocks: MockedResponse[]) {
   });
 
   const result = render(
-    <ApolloProvider client={apolloClient}>
-      <S3ConfigurationContext.Provider value={s3Configuration}>
-        <Confirm>
-          <RouterProvider router={router} />
-        </Confirm>
-      </S3ConfigurationContext.Provider>
-    </ApolloProvider>,
+    <Confirm>
+      <RouterProvider router={router} />
+    </Confirm>,
   );
   return { ...result, router };
 }
@@ -165,7 +153,7 @@ describe('routes', () => {
     ['/brands/acme/projects/7-the-big-larp/edit', 'Editing project “The Big Larp”'],
     ['/brands/acme/projects/7-the-big-larp/initial_content', 'Content'],
   ])('routes %s to the page headed %s', async (route, heading) => {
-    renderRoute(route, []);
+    renderRoute(route);
 
     expect(await screen.findByRole('heading', { name: heading })).toBeInTheDocument();
     // every page sits inside the app layout
@@ -173,7 +161,7 @@ describe('routes', () => {
   });
 
   it('routes the new project page to its form', async () => {
-    renderRoute('/brands/acme/projects/new', []);
+    renderRoute('/brands/acme/projects/new');
 
     expect(await screen.findByLabelText('Title')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Save project' })).toBeInTheDocument();
@@ -181,7 +169,7 @@ describe('routes', () => {
 
   it('sends signed out visitors who open /brands/new off to sign in, before loading the page', async () => {
     // (no NewBrandQuery mock: the page never loads)
-    const { router } = renderRoute('/brands/new', []);
+    const { router } = renderRoute('/brands/new');
 
     await waitFor(() => expect(router.state.location.pathname).toEqual('/sign-in'));
     expect(router.state.location.search).toEqual('?returnTo=%2Fbrands%2Fnew');
@@ -189,14 +177,14 @@ describe('routes', () => {
   });
 
   it('shows the not-found page inside the layout when a brand does not exist', async () => {
-    renderRoute('/brands/no-such-brand', []);
+    renderRoute('/brands/no-such-brand');
 
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Larp Library' })).toBeInTheDocument();
   });
 
   it('shows a not-found page inside the layout for a URL no page claims', async () => {
-    renderRoute('/no/such/page', []);
+    renderRoute('/no/such/page');
 
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Larp Library' })).toBeInTheDocument();
