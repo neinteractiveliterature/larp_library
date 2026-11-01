@@ -1,49 +1,39 @@
-import { useMutation } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
-import { addNewObjectToReferenceArrayUpdater } from '@neinteractiveliterature/litform-apollo';
-import { useState, type JSX } from 'react';
+import { useEffect, useRef, useState, type JSX } from 'react';
 import Modal from 'react-bootstrap4-modal';
 
-import { Project, ProjectLink } from '../graphqlTypes.generated';
-import { CreateProjectLinkDocument } from './mutations.generated';
+import { getApolloActionError } from '../actionHelpers';
+import { Project } from '../graphqlTypes.generated';
 import ProjectLinkFormFields, { ProjectLinkFormProjectLink } from './ProjectLinkFormFields';
-import { ProjectLinkFieldsFragment as ProjectLinkFieldsFragmentDoc } from './queries';
+import { useProjectContentFetcher } from './useProjectContentFetcher';
 
 export type AddProjectLinkModalProps = {
   visible: boolean;
   close: () => void;
-  project: Pick<Project, 'id'> & {
-    projectLinks: Pick<ProjectLink, 'id'>[];
-  };
+  project: Pick<Project, 'id'>;
+  /** Where to submit the new link (see ProjectContentRoute) */
+  action: string;
 };
 
-function AddProjectLinkModal({ project, visible, close }: AddProjectLinkModalProps): JSX.Element {
-  const [createProjectLink, { loading, error }] = useMutation(CreateProjectLinkDocument);
-  const [projectLink, setProjectLink] = useState<ProjectLinkFormProjectLink>({
-    title: '',
-    url: '',
-    icon: '',
-  });
+const emptyProjectLink = { title: '', url: '', icon: '' };
 
-  const addClicked = async () => {
-    await createProjectLink({
-      variables: {
-        projectLinkAttributes: projectLink,
-        projectId: project.id,
-      },
-      update: addNewObjectToReferenceArrayUpdater(
-        project,
-        'projectLinks',
-        (data) => data.createProjectLink?.projectLink,
-        ProjectLinkFieldsFragmentDoc,
-      ),
-    });
-    close();
-    setProjectLink({
-      title: '',
-      url: '',
-      icon: '',
-    });
+function AddProjectLinkModal({ project, visible, close, action }: AddProjectLinkModalProps): JSX.Element {
+  const [fetcher, submit] = useProjectContentFetcher(action);
+  const [projectLink, setProjectLink] = useState<ProjectLinkFormProjectLink>(emptyProjectLink);
+  const loading = fetcher.state !== 'idle';
+
+  // once the link has been added, close the modal and clear the form for the next one
+  const closeRef = useRef(close);
+  closeRef.current = close;
+  useEffect(() => {
+    if (fetcher.state === 'idle' && fetcher.data && 'done' in fetcher.data) {
+      closeRef.current();
+      setProjectLink(emptyProjectLink);
+    }
+  }, [fetcher.state, fetcher.data]);
+
+  const addClicked = () => {
+    submit({ intent: 'createLink', projectId: project.id, projectLinkAttributes: projectLink });
   };
 
   return (
@@ -51,7 +41,7 @@ function AddProjectLinkModal({ project, visible, close }: AddProjectLinkModalPro
       <div className="modal-header">Add link</div>
       <div className="modal-body">
         <ProjectLinkFormFields projectLink={projectLink} onChange={setProjectLink} />
-        <ErrorDisplay graphQLError={error} />
+        <ErrorDisplay graphQLError={getApolloActionError(fetcher.data)} />
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" onClick={close} disabled={loading}>

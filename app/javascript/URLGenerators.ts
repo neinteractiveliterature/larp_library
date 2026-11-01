@@ -13,6 +13,13 @@ export function generateProjectPath(project: Pick<Project, 'title' | 'id'> & { b
     .toLowerCase()}`;
 }
 
+/** Where the file and link cards on a project's content tab send their changes (see Project/ProjectContentRoute.ts) */
+export function generateProjectContentActionPath(
+  project: Pick<Project, 'title' | 'id'> & { brand: Pick<Brand, 'slug'> },
+): string {
+  return `${generateProjectPath(project)}/content`;
+}
+
 export function generateProjectSearchPath(params?: { q?: string; tag?: string }): string {
   if (params) {
     const urlSearchParams = new URLSearchParams(params);

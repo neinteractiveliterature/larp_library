@@ -1,28 +1,31 @@
-import { useMutation } from '@apollo/client';
 import React, { useCallback, useMemo, type JSX } from 'react';
 import {
-  buildOptimisticArrayForMove,
+  ErrorDisplay,
   useArrayBasicSortableHandlers,
   useGraphQLConfirm,
   useMatchWidthStyle,
 } from '@neinteractiveliterature/litform';
-import { deleteObjectFromReferenceArrayUpdater } from '@neinteractiveliterature/litform-apollo';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { DeleteProjectFileDocument, MoveProjectFileDocument } from './mutations.generated';
 import { ProjectPageQueryData } from './queries.generated';
+import { getApolloActionError } from '../actionHelpers';
 import { Project } from '../graphqlTypes.generated';
 import ProjectFileDisplay from './ProjectFileDisplay';
 import S3Upload, { S3UploadProps } from './S3Upload';
 import { getSortableStyle, useSortableDndSensors } from '../SortableUtils';
+import { generateProjectContentActionPath } from '../URLGenerators';
+import { useOptimisticMove } from './useOptimisticMove';
+import { useProjectContentFetcher } from './useProjectContentFetcher';
 
 export type EditProjectFileProps = {
   file: ProjectPageQueryData['project']['projectFiles'][number];
   project: Pick<Project, 'id' | 'currentUserCanDeleteFiles'>;
+  /** Where to submit changes to the file (see ProjectContentRoute) */
+  action: string;
 };
 
-export function EditProjectFile({ file, project }: EditProjectFileProps): JSX.Element {
-  const [deleteProjectFile] = useMutation(DeleteProjectFileDocument);
+export function EditProjectFile({ file, project, action }: EditProjectFileProps): JSX.Element {
+  const [deleteFetcher, submitDelete] = useProjectContentFetcher(action);
   const confirm = useGraphQLConfirm();
 
   const { attributes, listeners, isDragging, setNodeRef, transform, transition } = useSortable({
@@ -36,11 +39,9 @@ export function EditProjectFile({ file, project }: EditProjectFileProps): JSX.El
 
     confirm({
       prompt: `Are you sure you want to delete ${file.filename}?`,
-      action: () =>
-        deleteProjectFile({
-          variables: { id: file.id },
-          update: deleteObjectFromReferenceArrayUpdater(project, 'projectFiles', file),
-        }),
+      action: async () => {
+        await submitDelete({ intent: 'deleteFile', id: file.id });
+      },
     });
   };
 
@@ -53,17 +54,23 @@ export function EditProjectFile({ file, project }: EditProjectFileProps): JSX.El
       <ProjectFileDisplay file={file} />
       {project.currentUserCanDeleteFiles && (
         <div>
-          <button type="button" className="btn btn-outline-danger btn-sm" onClick={deleteClicked}>
+          <button
+            type="button"
+            className="btn btn-outline-danger btn-sm"
+            onClick={deleteClicked}
+            disabled={deleteFetcher.state !== 'idle'}
+          >
             <i className="bi-trash" />
             <span className="visually-hidden">Delete file {file.filename}</span>
           </button>
+          <ErrorDisplay graphQLError={getApolloActionError(deleteFetcher.data)} />
         </div>
       )}
     </li>
   );
 }
 
-function EditProjectFileDragPreview({ file, project }: EditProjectFileProps) {
+function EditProjectFileDragPreview({ file, project }: Omit<EditProjectFileProps, 'action'>) {
   return (
     <div className="d-flex">
       <div className="me-2">
@@ -88,33 +95,19 @@ export type EditProjectFilesCardProps = Omit<S3UploadProps, 'projectId'> & {
 };
 
 function EditProjectFilesCard({ project, ...s3UploadProps }: EditProjectFilesCardProps): JSX.Element {
-  const [moveProjectFile] = useMutation(MoveProjectFileDocument);
-  const sortedFiles = useMemo(
+  const action = generateProjectContentActionPath(project);
+  const [moveFetcher, submitMove] = useProjectContentFetcher(action);
+  const filesByPosition = useMemo(
     () => [...project.projectFiles].sort((a, b) => a.position - b.position),
     [project.projectFiles],
   );
+  // while a move is being saved, show the files where they're going to end up
+  const sortedFiles = useOptimisticMove(filesByPosition, moveFetcher, 'moveFile');
   const moveFile = useCallback(
     (dragIndex: number, hoverIndex: number) => {
-      const optimisticFiles = buildOptimisticArrayForMove(sortedFiles, dragIndex, hoverIndex);
-
-      moveProjectFile({
-        variables: {
-          id: sortedFiles[dragIndex].id,
-          destinationIndex: hoverIndex,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          moveProjectFile: {
-            __typename: 'MoveProjectFilePayload',
-            project: {
-              ...project,
-              projectFiles: optimisticFiles,
-            },
-          },
-        },
-      });
+      submitMove({ intent: 'moveFile', id: sortedFiles[dragIndex].id, destinationIndex: hoverIndex });
     },
-    [project, moveProjectFile, sortedFiles],
+    [submitMove, sortedFiles],
   );
 
   const sensors = useSortableDndSensors();
@@ -129,7 +122,7 @@ function EditProjectFilesCard({ project, ...s3UploadProps }: EditProjectFilesCar
           <ul className="list-unstyled">
             <SortableContext items={sortedFiles.map((file) => file.id)} strategy={verticalListSortingStrategy}>
               {sortedFiles.map((file) => (
-                <EditProjectFile file={file} project={project} key={file.id} />
+                <EditProjectFile file={file} project={project} action={action} key={file.id} />
               ))}
             </SortableContext>
           </ul>
@@ -139,6 +132,7 @@ function EditProjectFilesCard({ project, ...s3UploadProps }: EditProjectFilesCar
           ) : (
             <div>Attaching files is disabled for this project because it does not specify a license.</div>
           )}
+          <ErrorDisplay graphQLError={getApolloActionError(moveFetcher.data)} />
         </div>
       </div>
 

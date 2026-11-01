@@ -1,14 +1,13 @@
 import React, { useContext, useMemo, useState, type JSX } from 'react';
 import { CompleteProjectFileUploadDocument } from './mutations.generated';
 import { S3ConfigurationContext } from '../S3ConfigurationContext';
-import { ProjectFileFieldsFragment } from './queries';
 import { Project } from '../graphqlTypes.generated';
 import { LoadingIndicator } from '@neinteractiveliterature/litform';
-import { addNewObjectToReferenceArrayUpdater } from '@neinteractiveliterature/litform-apollo';
+import { useRevalidator } from 'react-router';
 import { ObjectCannedACL, S3Client } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import { createRequestSigner } from './uploadSigning';
-import { useApolloClient, useMutation } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 import { getApplyMd5BodyChecksumPlugin, resolveMd5BodyChecksumConfig } from '@smithy/middleware-apply-body-checksum';
 
 export type S3UploadFile = { id: number; url: string; filename: string; filesize: number; filetype: string };
@@ -21,8 +20,8 @@ function S3Upload({ project }: S3UploadProps): JSX.Element {
   const [message, setMessage] = useState<string>();
   const [progressPercent, setProgressPercent] = useState(0);
   const [error, setError] = useState<string>();
-  const [completeProjectFileUpload] = useMutation(CompleteProjectFileUploadDocument);
   const apolloClient = useApolloClient();
+  const { revalidate } = useRevalidator();
   const requestSigner = useMemo(() => createRequestSigner(apolloClient), [apolloClient]);
 
   const s3Client = useMemo(() => {
@@ -71,7 +70,8 @@ function S3Upload({ project }: S3UploadProps): JSX.Element {
     try {
       await upload.done();
 
-      await completeProjectFileUpload({
+      await apolloClient.mutate({
+        mutation: CompleteProjectFileUploadDocument,
         variables: {
           projectId: project.id,
           url: `https://${bucketName}.s3.amazonaws.com/${objectName}`,
@@ -80,13 +80,10 @@ function S3Upload({ project }: S3UploadProps): JSX.Element {
           filesize: file.size,
           filepath: objectName,
         },
-        update: addNewObjectToReferenceArrayUpdater(
-          project,
-          'projectFiles',
-          (data) => data.completeProjectFileUpload?.projectFile,
-          ProjectFileFieldsFragment,
-        ),
       });
+      // the file isn't a form submission (its bytes went straight to S3), so tell the page to reload its project to
+      // show it
+      await revalidate();
 
       uploadNextFile(fileQueue.slice(1));
     } catch (error) {

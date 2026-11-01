@@ -1,6 +1,7 @@
 import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import * as ProjectContentRoute from './ProjectContentRoute';
 import * as ProjectInitialContentPage from './ProjectInitialContentPage';
 import {
   CompleteProjectFileUploadDocument,
@@ -41,17 +42,23 @@ vi.mock('@aws-sdk/lib-storage', () => ({
 
 type Project = ReturnType<typeof buildProjectFields>;
 
-const renderContentPage = (project: Project, extraMocks: MockedResponse[] = []) =>
+const projectMock = (project: Project, maxUsageCount: number): MockedResponse => ({
+  request: { query: ProjectPageQueryDocument, variables: { projectId: '7-the-big-larp' } },
+  maxUsageCount,
+  result: { data: { project, licenses: [buildLicense()] } },
+});
+
+/**
+ * Renders the content page.  Every change the page makes reloads its project, so `reloadedProject` is what the server
+ * returns from then on (by default, the same project).
+ */
+const renderContentPage = (project: Project, extraMocks: MockedResponse[] = [], reloadedProject: Project = project) =>
   renderRouteModule(ProjectInitialContentPage, {
     route: '/brands/acme/projects/7-the-big-larp/initial_content',
     path: '/brands/:brandSlug/projects/:projectId/initial_content',
-    mocks: [
-      {
-        request: { query: ProjectPageQueryDocument, variables: { projectId: '7-the-big-larp' } },
-        result: { data: { project, licenses: [buildLicense()] } },
-      },
-      ...extraMocks,
-    ],
+    // the file and link cards submit their changes here
+    extraRoutes: [{ path: '/brands/:brandSlug/projects/:projectId/content', module: ProjectContentRoute }],
+    mocks: [projectMock(project, 1), ...extraMocks, projectMock(reloadedProject, Number.POSITIVE_INFINITY)],
   });
 
 describe('project links', () => {
@@ -71,23 +78,27 @@ describe('project links', () => {
   it('adds a link, then closes and clears the form', async () => {
     const user = userEvent.setup();
     let sent: unknown;
-    renderContentPage(buildProjectFields(), [
-      {
-        request: { query: CreateProjectLinkDocument },
-        variableMatcher: () => true,
-        result: (variables: unknown) => {
-          sent = variables;
-          return {
-            data: {
-              createProjectLink: {
-                __typename: 'CreateProjectLinkPayload',
-                projectLink: link('Brand New Link', 1),
+    renderContentPage(
+      buildProjectFields(),
+      [
+        {
+          request: { query: CreateProjectLinkDocument },
+          variableMatcher: () => true,
+          result: (variables: unknown) => {
+            sent = variables;
+            return {
+              data: {
+                createProjectLink: {
+                  __typename: 'CreateProjectLinkPayload',
+                  projectLink: link('Brand New Link', 1),
+                },
               },
-            },
-          };
+            };
+          },
         },
-      },
-    ]);
+      ],
+      buildProjectFields({ projectLinks: [link('Brand New Link', 1)] }),
+    );
 
     await user.click(await screen.findByRole('button', { name: 'Add link' }));
     const [addTitle] = screen.getAllByLabelText('Title');
@@ -101,7 +112,8 @@ describe('project links', () => {
       projectId: '7',
       projectLinkAttributes: { title: 'Brand New Link', url: 'https://example.com/1', icon: '' },
     });
-    expect(addTitle).toHaveValue('');
+    // the modal clears itself once the save has fully settled, just after the page reloads
+    await waitFor(() => expect(addTitle).toHaveValue(''));
   });
 
   it('shows the error if adding fails, and can be cancelled', async () => {
@@ -110,8 +122,7 @@ describe('project links', () => {
       {
         request: { query: CreateProjectLinkDocument },
         variableMatcher: () => true,
-        // the modal doesn't catch the failed mutation, so the browser logs an unhandled rejection as well
-        error: new Error('[expected unhandled] url is invalid'),
+        error: new Error('url is invalid'),
       },
     ]);
 
@@ -126,20 +137,24 @@ describe('project links', () => {
   it('edits a link', async () => {
     const user = userEvent.setup();
     let sent: unknown;
-    renderContentPage(buildProjectFields({ projectLinks: [link('Old Title', 1)] }), [
-      {
-        request: { query: UpdateProjectLinkDocument },
-        variableMatcher: () => true,
-        result: (variables: unknown) => {
-          sent = variables;
-          return {
-            data: {
-              updateProjectLink: { __typename: 'UpdateProjectLinkPayload', projectLink: link('New Title', 1) },
-            },
-          };
+    renderContentPage(
+      buildProjectFields({ projectLinks: [link('Old Title', 1)] }),
+      [
+        {
+          request: { query: UpdateProjectLinkDocument },
+          variableMatcher: () => true,
+          result: (variables: unknown) => {
+            sent = variables;
+            return {
+              data: {
+                updateProjectLink: { __typename: 'UpdateProjectLinkPayload', projectLink: link('New Title', 1) },
+              },
+            };
+          },
         },
-      },
-    ]);
+      ],
+      buildProjectFields({ projectLinks: [link('New Title', 1)] }),
+    );
 
     await user.click(await screen.findByRole('button', { name: /Edit/ }));
     const editTitle = screen.getAllByLabelText('Title')[1];
@@ -159,15 +174,19 @@ describe('project links', () => {
   it('deletes a link after confirmation', async () => {
     const user = userEvent.setup();
     let deleted = false;
-    renderContentPage(buildProjectFields({ projectLinks: [link('Doomed Link', 1), link('Safe Link', 2)] }), [
-      {
-        request: { query: DeleteProjectLinkDocument, variables: { id: 'link-1' } },
-        result: () => {
-          deleted = true;
-          return { data: { deleteProjectLink: { __typename: 'DeleteProjectLinkPayload', clientMutationId: null } } };
+    renderContentPage(
+      buildProjectFields({ projectLinks: [link('Doomed Link', 1), link('Safe Link', 2)] }),
+      [
+        {
+          request: { query: DeleteProjectLinkDocument, variables: { id: 'link-1' } },
+          result: () => {
+            deleted = true;
+            return { data: { deleteProjectLink: { __typename: 'DeleteProjectLinkPayload', clientMutationId: null } } };
+          },
         },
-      },
-    ]);
+      ],
+      buildProjectFields({ projectLinks: [link('Safe Link', 2)] }),
+    );
 
     await user.click((await screen.findAllByRole('button', { name: 'Delete link' }))[0]);
     expect(await screen.findByText('Are you sure you want to delete the “Doomed Link” link?')).toBeInTheDocument();
@@ -200,15 +219,19 @@ describe('project files', () => {
   it('deletes a file after confirmation', async () => {
     const user = userEvent.setup();
     let deleted = false;
-    renderContentPage(buildProjectFields({ projectFiles: [file('doomed.pdf', 1), file('safe.pdf', 2)] }), [
-      {
-        request: { query: DeleteProjectFileDocument, variables: { id: 'file-1' } },
-        result: () => {
-          deleted = true;
-          return { data: { deleteProjectFile: { __typename: 'DeleteProjectFilePayload', clientMutationId: null } } };
+    renderContentPage(
+      buildProjectFields({ projectFiles: [file('doomed.pdf', 1), file('safe.pdf', 2)] }),
+      [
+        {
+          request: { query: DeleteProjectFileDocument, variables: { id: 'file-1' } },
+          result: () => {
+            deleted = true;
+            return { data: { deleteProjectFile: { __typename: 'DeleteProjectFilePayload', clientMutationId: null } } };
+          },
         },
-      },
-    ]);
+      ],
+      buildProjectFields({ projectFiles: [file('safe.pdf', 2)] }),
+    );
 
     await user.click(await screen.findByRole('button', { name: 'Delete file doomed.pdf' }));
     expect(await screen.findByText('Are you sure you want to delete doomed.pdf?')).toBeInTheDocument();
@@ -242,23 +265,29 @@ describe('project files', () => {
   it('uploads a file to S3 and then records it on the project', async () => {
     const user = userEvent.setup();
     let completed: Record<string, unknown> | undefined;
-    renderContentPage(buildProjectFields(), [
-      {
-        request: { query: CompleteProjectFileUploadDocument },
-        variableMatcher: () => true,
-        result: (variables: Record<string, unknown>) => {
-          completed = variables;
-          return {
-            data: {
-              completeProjectFileUpload: {
-                __typename: 'CompleteProjectFileUploadPayload',
-                projectFile: buildProjectFile({ id: 'uploaded', filename: 'My File.pdf', position: 1 }),
+    renderContentPage(
+      buildProjectFields(),
+      [
+        {
+          request: { query: CompleteProjectFileUploadDocument },
+          variableMatcher: () => true,
+          result: (variables: Record<string, unknown>) => {
+            completed = variables;
+            return {
+              data: {
+                completeProjectFileUpload: {
+                  __typename: 'CompleteProjectFileUploadPayload',
+                  projectFile: buildProjectFile({ id: 'uploaded', filename: 'My File.pdf', position: 1 }),
+                },
               },
-            },
-          };
+            };
+          },
         },
-      },
-    ]);
+      ],
+      buildProjectFields({
+        projectFiles: [buildProjectFile({ id: 'uploaded', filename: 'My File.pdf', position: 1 })],
+      }),
+    );
 
     const upload = new File(['hello'], 'My File.pdf', { type: 'application/pdf' });
     await user.upload(await screen.findByLabelText('Upload files'), upload);
@@ -419,6 +448,7 @@ describe('reordering by dragging', () => {
           },
         },
       ],
+      buildProjectFields({ projectLinks: reordered }),
     );
 
     await screen.findByRole('link', { name: 'First' });
@@ -492,6 +522,9 @@ describe('reordering by dragging', () => {
           },
         },
       ],
+      buildProjectFields({
+        projectFiles: [file('file-2', 'b.pdf', 1), file('file-1', 'a.pdf', 2), file('file-3', 'c.pdf', 3)],
+      }),
     );
 
     await screen.findByRole('link', { name: /a\.pdf/ });

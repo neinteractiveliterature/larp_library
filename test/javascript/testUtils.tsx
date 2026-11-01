@@ -99,8 +99,9 @@ export async function selectReactSelectOption(
 
 /** The parts of a route module (a page file) that the framework would wire up */
 export type RouteModuleUnderTest = {
+  // (a route with only actions, for fetchers to submit to, has no component)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  default: ComponentType<any>;
+  default?: ComponentType<any>;
   clientLoader?: LoaderFunction;
   clientAction?: ActionFunction;
   clientMiddleware?: MiddlewareFunction[];
@@ -114,9 +115,13 @@ export function createMockApolloClient(mocks: MockedResponse[]) {
 }
 
 /** Passes a route module's component the same props the framework would (`loaderData`, `actionData`, `params`) */
-function withRouteProps(module: RouteModuleUnderTest): ComponentType {
+function withRouteProps(module: RouteModuleUnderTest): ComponentType | undefined {
+  const Page = module.default;
+  if (!Page) {
+    return undefined;
+  }
   return function RouteComponent() {
-    return <module.default loaderData={useLoaderData()} actionData={useActionData()} params={useParams()} />;
+    return <Page loaderData={useLoaderData()} actionData={useActionData()} params={useParams()} />;
   };
 }
 
@@ -154,6 +159,8 @@ export type RenderRouteModuleOptions = {
   route?: string;
   /** The route pattern the module is mounted at, e.g. "/tags/:tagId/edit" (default: the path of `route`) */
   path?: string;
+  /** Other routes the page's fetchers submit to, e.g. a route that has only a `clientAction` */
+  extraRoutes?: { path: string; module: RouteModuleUnderTest }[];
 };
 
 /**
@@ -163,7 +170,12 @@ export type RenderRouteModuleOptions = {
  */
 export function renderRouteModule(
   module: RouteModuleUnderTest,
-  { mocks = [], route = '/', path = new URL(route, 'http://localhost').pathname }: RenderRouteModuleOptions = {},
+  {
+    mocks = [],
+    route = '/',
+    path = new URL(route, 'http://localhost').pathname,
+    extraRoutes = [],
+  }: RenderRouteModuleOptions = {},
 ): RenderResult {
   const apolloClient = createMockApolloClient(mocks);
   const config = {
@@ -189,7 +201,11 @@ export function renderRouteModule(
       {
         path: '/',
         Component: Root,
-        children: [routeFromModule(module, { path }), { path: '*', Component: () => null }],
+        children: [
+          routeFromModule(module, { path }),
+          ...extraRoutes.map((extra) => routeFromModule(extra.module, { path: extra.path })),
+          { path: '*', Component: () => null },
+        ],
       },
     ],
     {

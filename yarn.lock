@@ -2543,18 +2543,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform-apollo@npm:0.36.1":
-  version: 0.36.1
-  resolution: "@neinteractiveliterature/litform-apollo@npm:0.36.1"
-  dependencies:
-    "@neinteractiveliterature/litform-core": "npm:^0.36.1"
-  peerDependencies:
-    "@apollo/client": ">= 3.3.18"
-    react: ">= 18"
-  checksum: 10/20227ec3b5051b04dcbdb71f783d94bc277274286b3608fd82924243aa2ce32ce6a12fb927de8621698c7b2be5a449096716add0699e2a7fd35a246f59534d6e
-  languageName: node
-  linkType: hard
-
 "@neinteractiveliterature/litform-codemirror@npm:^0.36.1":
   version: 0.36.1
   resolution: "@neinteractiveliterature/litform-codemirror@npm:0.36.1"
@@ -9375,7 +9363,6 @@ __metadata:
     "@graphql-codegen/typescript-operations": "npm:5.1.0"
     "@graphql-typed-document-node/core": "npm:^3.2.0"
     "@neinteractiveliterature/litform": "npm:0.36.1"
-    "@neinteractiveliterature/litform-apollo": "npm:0.36.1"
     "@oxlint/migrate": "npm:^1.90.0"
     "@popperjs/core": "npm:2.11.8"
     "@prettier/plugin-ruby": "npm:4.0.4"
