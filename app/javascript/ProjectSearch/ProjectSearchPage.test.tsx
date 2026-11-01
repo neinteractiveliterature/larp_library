@@ -1,10 +1,10 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import ProjectSearchPage from './ProjectSearchPage';
+import * as ProjectSearchPage from './ProjectSearchPage';
 import { ProjectSearchQueryDocument } from './queries.generated';
 import { buildConnection, buildProjectHeaders, buildTag, resetFixtureIds } from '../../../test/javascript/fixtures';
-import { MockedResponse, renderPage } from '../../../test/javascript/testUtils';
+import { MockedResponse, renderRouteModule, withRouteErrorDisplay } from '../../../test/javascript/testUtils';
 
 vi.mock('../Waypoint', () => import('../../../test/javascript/mockWaypoint'));
 
@@ -31,12 +31,12 @@ describe('ProjectSearchPage', () => {
   beforeEach(() => resetFixtureIds());
 
   it('lists the matching projects', async () => {
-    renderPage(<ProjectSearchPage />, {
+    renderRouteModule(ProjectSearchPage, {
       route: '/projects',
       mocks: [searchMock([buildProject({ title: 'First Larp' }), buildProject({ title: 'Second Larp' })])],
     });
 
-    expect(screen.getByRole('heading', { name: 'Larps' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Larps' })).toBeInTheDocument();
     expect(await screen.findByText('First Larp')).toBeInTheDocument();
     expect(screen.getByText('Second Larp')).toBeInTheDocument();
     // descriptions are rendered as markdown
@@ -44,7 +44,7 @@ describe('ProjectSearchPage', () => {
   });
 
   it('shows an error when the search fails', async () => {
-    renderPage(<ProjectSearchPage />, {
+    renderRouteModule(withRouteErrorDisplay(ProjectSearchPage), {
       route: '/projects',
       mocks: [
         { request: { query: ProjectSearchQueryDocument }, variableMatcher: () => true, error: new Error('boom') },
@@ -68,7 +68,7 @@ describe('ProjectSearchPage', () => {
       }),
       maxUsageCount: Number.POSITIVE_INFINITY,
     });
-    renderPage(<ProjectSearchPage />, {
+    renderRouteModule(ProjectSearchPage, {
       route: '/projects',
       mocks: [
         answerFor('Everything', (queryString) => queryString == null),
@@ -87,7 +87,7 @@ describe('ProjectSearchPage', () => {
   it('shows the filtered tag and removes it when dismissed', async () => {
     const user = userEvent.setup();
     const horde = buildTag({ name: 'horde' });
-    renderPage(<ProjectSearchPage />, {
+    renderRouteModule(ProjectSearchPage, {
       route: '/projects?tag=horde',
       mocks: [
         searchMock([buildProject({ title: 'Hordey' })], { tagByName: horde }),
@@ -103,7 +103,7 @@ describe('ProjectSearchPage', () => {
 
   it('switches to advanced search, which opens automatically when advanced params are in the URL', async () => {
     const user = userEvent.setup();
-    renderPage(<ProjectSearchPage />, {
+    renderRouteModule(ProjectSearchPage, {
       route: '/projects?title=Wolf&player_count_lower=4',
       mocks: [searchMock([buildProject({ title: 'Wolf Larp' })]), searchMock([buildProject({ title: 'Wolf Larp' })])],
     });
@@ -120,9 +120,10 @@ describe('ProjectSearchPage', () => {
 
   it('lets you fill in each advanced search field', { timeout: 30000 }, async () => {
     const user = userEvent.setup();
-    renderPage(<ProjectSearchPage />, {
+    renderRouteModule(ProjectSearchPage, {
       route: '/projects',
-      mocks: [searchMock([buildProject({ title: 'Anything' })])],
+      // every field that lands in the URL is a new search, answered by the same mock
+      mocks: [{ ...searchMock([buildProject({ title: 'Anything' })]), maxUsageCount: Number.POSITIVE_INFINITY }],
     });
 
     await screen.findByText('Anything');
@@ -146,7 +147,7 @@ describe('ProjectSearchPage', () => {
     const user = userEvent.setup();
     const firstPage = Array.from({ length: 5 }, (_, i) => buildProject({ title: `Page One Larp ${i + 1}` }));
     const secondPage = [buildProject({ title: 'Page Two Larp' })];
-    renderPage(<ProjectSearchPage />, {
+    renderRouteModule(ProjectSearchPage, {
       route: '/projects',
       mocks: [
         searchMock(firstPage, { totalCount: 6 }),
@@ -168,7 +169,7 @@ describe('ProjectSearchPage', () => {
   it('does not request more when everything is already loaded', async () => {
     const user = userEvent.setup();
     const projects = Array.from({ length: 5 }, (_, i) => buildProject({ title: `Only Larp ${i + 1}` }));
-    renderPage(<ProjectSearchPage />, { route: '/projects', mocks: [searchMock(projects, { totalCount: 5 })] });
+    renderRouteModule(ProjectSearchPage, { route: '/projects', mocks: [searchMock(projects, { totalCount: 5 })] });
 
     await screen.findByText('Only Larp 1');
     await user.click(screen.getByTestId('waypoint'));

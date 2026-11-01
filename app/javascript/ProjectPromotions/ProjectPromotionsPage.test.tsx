@@ -1,12 +1,12 @@
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import ProjectPromotionsPage from './ProjectPromotionsPage';
+import * as ProjectPromotionsPage from './ProjectPromotionsPage';
 import { PromoteProjectMutationDocument, UnpromoteProjectMutationDocument } from './mutations.generated';
 import { ProjectPromotionsPageQueryDocument } from './queries.generated';
 import { ProjectSearchQueryDocument } from '../ProjectSearch/queries.generated';
 import { buildConnection, buildProjectHeaders, resetFixtureIds } from '../../../test/javascript/fixtures';
-import { MockedResponse, renderPage, selectReactSelectOption } from '../../../test/javascript/testUtils';
+import { MockedResponse, renderRouteModule, selectReactSelectOption } from '../../../test/javascript/testUtils';
 
 function promotion(id: string, projectId: string, title: string, createdAt = '2026-03-04T12:00:00Z') {
   return {
@@ -43,7 +43,7 @@ describe('ProjectPromotionsPage', () => {
   beforeEach(() => resetFixtureIds());
 
   it('lists the promoted projects and when the promotion started', async () => {
-    renderPage(<ProjectPromotionsPage />, {
+    renderRouteModule(ProjectPromotionsPage, {
       mocks: [promotionsMock([promotion('pr1', 'p1', 'Featured Larp', '2026-03-04T12:00:00Z')])],
     });
 
@@ -58,7 +58,7 @@ describe('ProjectPromotionsPage', () => {
   it('stops promoting a project after confirmation', async () => {
     const user = userEvent.setup();
     let unpromoted = false;
-    renderPage(<ProjectPromotionsPage />, {
+    renderRouteModule(ProjectPromotionsPage, {
       mocks: [
         promotionsMock([promotion('pr1', 'p1', 'Old Feature'), promotion('pr2', 'p2', 'Keeper')]),
         {
@@ -75,6 +75,8 @@ describe('ProjectPromotionsPage', () => {
             };
           },
         },
+        // the reload after the promotion is removed
+        promotionsMock([promotion('pr2', 'p2', 'Keeper')]),
       ],
     });
 
@@ -83,15 +85,15 @@ describe('ProjectPromotionsPage', () => {
     expect(await screen.findByText('Are you sure you want to stop promoting Old Feature?')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'OK', hidden: true }));
 
-    await vi.waitFor(() => expect(unpromoted).toBe(true));
-    await vi.waitFor(() => expect(screen.queryByText('Old Feature')).not.toBeInTheDocument());
+    await waitFor(() => expect(unpromoted).toBe(true));
+    await waitFor(() => expect(screen.queryByText('Old Feature')).not.toBeInTheDocument());
     expect(screen.getByText('Keeper')).toBeInTheDocument();
   });
 
   it('promotes a project chosen from the search', async () => {
     const user = userEvent.setup();
     let promotedId: unknown;
-    renderPage(<ProjectPromotionsPage />, {
+    renderRouteModule(ProjectPromotionsPage, {
       mocks: [
         promotionsMock([]),
         projectSearchMock(['Brand New Promotion', 'Something Else']),
@@ -110,6 +112,8 @@ describe('ProjectPromotionsPage', () => {
             },
           },
         },
+        // the reload after the project is promoted
+        promotionsMock([promotion('pr9', 'p9', 'Brand New Promotion')]),
       ],
     });
 
@@ -121,21 +125,23 @@ describe('ProjectPromotionsPage', () => {
 
     expect(await screen.findByRole('cell', { name: 'Brand New Promotion' })).toBeInTheDocument();
     expect(promotedId).toBeDefined();
-    expect(screen.getByRole('button', { name: 'Promote' })).toBeDisabled();
+    // the picker is cleared once the promotion has gone through
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Promote' })).toBeDisabled());
   });
 
   it('shows the error if promoting fails', async () => {
     const user = userEvent.setup();
-    renderPage(<ProjectPromotionsPage />, {
+    renderRouteModule(ProjectPromotionsPage, {
       mocks: [
         promotionsMock([]),
         projectSearchMock(['Doomed Project']),
         {
           request: { query: PromoteProjectMutationDocument },
           variableMatcher: () => true,
-          // the page doesn't catch the failed mutation, so the browser logs an unhandled rejection as well
-          error: new Error('[expected unhandled] already promoted'),
+          error: new Error('already promoted'),
         },
+        // the reload after the failed promotion
+        promotionsMock([]),
       ],
     });
 

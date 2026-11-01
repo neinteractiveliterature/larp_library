@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router';
 import stringPresence from '../stringPresence';
 import { ProjectSearchQueryVariables } from './queries.generated';
 
-type ProjectSearchParams = Omit<ProjectSearchQueryVariables, 'after'>;
+export type ProjectSearchParams = Omit<ProjectSearchQueryVariables, 'after'>;
 
 function useSearchParams<T>(
   path: string,
@@ -33,7 +33,7 @@ function useSearchParams<T>(
   return [paramsObject, setParamsObject] as const;
 }
 
-function decodeProjectSearchParams(urlSearchParams: URLSearchParams): ProjectSearchParams {
+export function decodeProjectSearchParams(urlSearchParams: URLSearchParams): ProjectSearchParams {
   return {
     queryString: stringPresence(urlSearchParams.get('q')),
     tag: stringPresence(urlSearchParams.get('tag')),

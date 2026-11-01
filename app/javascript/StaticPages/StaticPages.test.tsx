@@ -1,10 +1,10 @@
 import { screen } from '@testing-library/react';
 
 import AboutPage from './AboutPage';
-import LicensingPage from './LicensingPage';
+import * as LicensingPage from './LicensingPage';
 import { LicensingPageQueryDocument } from './queries.generated';
 import { buildLicense, resetFixtureIds } from '../../../test/javascript/fixtures';
-import { renderPage } from '../../../test/javascript/testUtils';
+import { renderPage, renderRouteModule } from '../../../test/javascript/testUtils';
 
 describe('AboutPage', () => {
   it('credits the team and links to the source', () => {
@@ -26,7 +26,7 @@ describe('LicensingPage', () => {
   beforeEach(() => resetFixtureIds());
 
   it('lists the licenses, flagging the discouraged ones', async () => {
-    renderPage(<LicensingPage />, {
+    renderRouteModule(LicensingPage, {
       mocks: [
         {
           request: { query: LicensingPageQueryDocument },
