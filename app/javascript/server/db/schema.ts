@@ -24,9 +24,13 @@ const tsvector = customType<{ data: string }>({
   },
 });
 
+// ActiveRecord filled these in from Rails, so the columns had no defaults; they do now.
 const timestamps = {
-  createdAt: timestamp({ mode: 'date' }).notNull(),
-  updatedAt: timestamp({ mode: 'date' }).notNull(),
+  createdAt: timestamp({ mode: 'date' }).defaultNow().notNull(),
+  updatedAt: timestamp({ mode: 'date' })
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 };
 
 // The users table doubles as better-auth's user table (see auth.server.ts). Rails' Devise columns it no longer reads
@@ -251,8 +255,11 @@ export const projectLinks = pgTable(
     title: text().notNull(),
     position: integer().notNull(),
     icon: text(),
-    createdAt: timestamp({ precision: 6, mode: 'date' }).notNull(),
-    updatedAt: timestamp({ precision: 6, mode: 'date' }).notNull(),
+    createdAt: timestamp({ precision: 6, mode: 'date' }).defaultNow().notNull(),
+    updatedAt: timestamp({ precision: 6, mode: 'date' })
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
   },
   (table) => [index('index_project_links_on_project_id').on(table.projectId)],
 );
