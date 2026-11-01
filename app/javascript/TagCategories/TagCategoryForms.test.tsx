@@ -1,161 +1,125 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { data, redirect } from 'react-router';
 
 import ColorPicker from '../ColorPicker';
 import IconSelect from '../IconSelect';
-import * as EditTagCategoryPage from './EditTagCategoryPage';
-import * as NewTagCategoryPage from './NewTagCategoryPage';
-import { CreateTagCategoryDocument, DeleteTagCategoryDocument, UpdateTagCategoryDocument } from './mutations.generated';
-import { EditTagCategoryQueryDocument } from './queries.generated';
-import { buildTag, buildTagCategory, resetFixtureIds } from '../../../test/javascript/fixtures';
-import { MockedResponse, renderRouteModule, selectReactSelectOption } from '../../../test/javascript/testUtils';
+import EditTagCategoryPage from './EditTagCategoryPage';
+import NewTagCategoryPage from './NewTagCategoryPage';
+import { renderRouteModule, selectReactSelectOption } from '../../../test/javascript/testUtils';
+
+/** The action stand-in tests give a page: it records the JSON the page submitted, and then does what the test asks */
+function recordingAction(respond: () => unknown = () => redirect('/tag_categories')) {
+  const submitted: unknown[] = [];
+  const action = async ({ request }: { request: Request }) => {
+    submitted.push(await request.json());
+    return respond();
+  };
+  return { action, submitted };
+}
 
 describe('NewTagCategoryPage', () => {
-  beforeEach(() => resetFixtureIds());
+  function renderNewPage(action: ReturnType<typeof recordingAction>['action'] = recordingAction().action) {
+    return renderRouteModule(
+      { default: NewTagCategoryPage, loader: () => null, action },
+      { route: '/tag_categories/new' },
+    );
+  }
 
   it('creates a tag category with a name and icon, then returns to the list', async () => {
     const user = userEvent.setup();
-    let sent: unknown;
-    renderRouteModule(NewTagCategoryPage, {
-      route: '/tag_categories/new',
-      path: '/tag_categories/new',
-      mocks: [
-        {
-          request: { query: CreateTagCategoryDocument },
-          variableMatcher: () => true,
-          result: (variables: unknown) => {
-            sent = variables;
-            return {
-              data: {
-                createTagCategory: { __typename: 'CreateTagCategoryPayload', tagCategory: buildTagCategory() },
-              },
-            };
-          },
-        },
-      ],
-    });
+    const { action, submitted } = recordingAction();
+    renderNewPage(action);
 
-    expect(screen.getByRole('heading', { name: 'Create a new tag category' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Create a new tag category' })).toBeInTheDocument();
     await user.type(screen.getByLabelText('Name'), 'Structure');
     await selectReactSelectOption(user, screen.getByLabelText('Icon'), 'bank', { typeText: 'bank' });
     await user.click(screen.getByRole('button', { name: 'Create tag category' }));
 
     await vi.waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/tag_categories'));
-    expect(sent).toEqual({ tagCategoryAttributes: { name: 'Structure', color: undefined, icon: 'bank' } });
+    expect(submitted).toEqual([{ tagCategoryAttributes: { name: 'Structure', color: null, icon: 'bank' } }]);
   });
 
-  it('labels the icon select, so clicking the label or using a screen reader reaches the field', () => {
-    renderRouteModule(NewTagCategoryPage, { route: '/tag_categories/new', path: '/tag_categories/new' });
+  it('labels the icon select, so clicking the label or using a screen reader reaches the field', async () => {
+    renderNewPage();
 
-    expect(screen.getByLabelText('Icon')).toBe(screen.getByRole('combobox'));
+    expect(await screen.findByLabelText('Icon')).toBe(screen.getByRole('combobox'));
   });
 
-  it('shows the error if creating fails', async () => {
+  it('shows what the server says is wrong, and stays on the page', async () => {
     const user = userEvent.setup();
-    renderRouteModule(NewTagCategoryPage, {
-      route: '/tag_categories/new',
-      path: '/tag_categories/new',
-      mocks: [
-        {
-          request: { query: CreateTagCategoryDocument },
-          variableMatcher: () => true,
-          error: new Error('name is required'),
-        },
-      ],
-    });
+    const { action } = recordingAction(() => data({ errors: ['Name has already been taken'] }, { status: 422 }));
+    renderNewPage(action);
 
+    await user.type(await screen.findByLabelText('Name'), 'Dupe');
     await user.click(screen.getByRole('button', { name: 'Create tag category' }));
 
-    expect(await screen.findByText(/name is required/)).toBeInTheDocument();
+    expect(await screen.findByText(/Name has already been taken/)).toBeInTheDocument();
+    expect(screen.getByTestId('location')).toHaveTextContent('/tag_categories/new');
   });
 });
 
 describe('EditTagCategoryPage', () => {
-  beforeEach(() => resetFixtureIds());
+  const genre = { id: 3, name: 'Genre', color: '#112233', textColor: '#ffffff', icon: 'film' };
+  const loaderData = {
+    tagCategory: genre,
+    tags: [
+      { id: 11, name: 'comedy', tagCategory: genre },
+      { id: 12, name: 'drama', tagCategory: genre },
+    ],
+  };
 
-  const category = () => buildTagCategory({ id: '3', name: 'Genre', color: '#112233', icon: 'film' });
-
-  function editMock(): MockedResponse {
-    const genre = category();
-    return {
-      request: { query: EditTagCategoryQueryDocument, variables: { id: '3' } },
-      result: {
-        data: {
-          tagCategory: {
-            ...genre,
-            tags: [
-              buildTag({ id: 't1', name: 'comedy', tagCategory: genre }),
-              buildTag({ id: 't2', name: 'drama', tagCategory: genre }),
-            ],
-          },
-        },
-      },
-    };
-  }
-
-  const renderEditPage = (mocks: MockedResponse[]) =>
-    renderRouteModule(EditTagCategoryPage, {
-      mocks,
-      route: '/tag_categories/3/edit',
-      path: '/tag_categories/:tagCategoryId/edit',
-    });
+  const renderEditPage = (action: ReturnType<typeof recordingAction>['action'] = recordingAction().action) =>
+    renderRouteModule(
+      { default: EditTagCategoryPage, loader: () => loaderData, action },
+      { route: '/tag_categories/3/edit', path: '/tag_categories/:tagCategoryId/edit' },
+    );
 
   it('shows the category and links to the tags in it', async () => {
-    renderEditPage([editMock()]);
+    renderEditPage();
 
     expect(await screen.findByRole('heading', { name: 'Editing tag category: Genre' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'comedy' })).toHaveAttribute('href', '/tags/t1/edit');
-    expect(screen.getByRole('link', { name: 'drama' })).toHaveAttribute('href', '/tags/t2/edit');
+    expect(screen.getByRole('link', { name: 'comedy' })).toHaveAttribute('href', '/tags/11/edit');
+    expect(screen.getByRole('link', { name: 'drama' })).toHaveAttribute('href', '/tags/12/edit');
     expect(screen.getByLabelText('Name')).toHaveValue('Genre');
   });
 
   it('saves changes and returns to the list', async () => {
     const user = userEvent.setup();
-    let sent: unknown;
-    renderEditPage([
-      editMock(),
-      {
-        request: { query: UpdateTagCategoryDocument },
-        variableMatcher: () => true,
-        result: (variables: unknown) => {
-          sent = variables;
-          return {
-            data: { updateTagCategory: { __typename: 'UpdateTagCategoryPayload', tagCategory: category() } },
-          };
-        },
-      },
-    ]);
+    const { action, submitted } = recordingAction();
+    renderEditPage(action);
 
     await user.type(await screen.findByLabelText('Name'), 's');
     await user.click(screen.getByRole('button', { name: 'Save changes' }));
 
     await vi.waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/tag_categories'));
-    expect(sent).toEqual({
-      id: '3',
-      tagCategoryAttributes: { name: 'Genres', color: '#112233', icon: 'film' },
-    });
+    expect(submitted).toEqual([
+      { intent: 'save', tagCategoryAttributes: { name: 'Genres', color: '#112233', icon: 'film' } },
+    ]);
+  });
+
+  it('shows what the server says is wrong with the changes', async () => {
+    const user = userEvent.setup();
+    const { action } = recordingAction(() => data({ errors: ['Color is invalid'] }, { status: 422 }));
+    renderEditPage(action);
+
+    await user.click(await screen.findByRole('button', { name: 'Save changes' }));
+
+    expect(await screen.findByText(/Color is invalid/)).toBeInTheDocument();
+    expect(screen.getByTestId('location')).toHaveTextContent('/tag_categories/3/edit');
   });
 
   it('deletes the category after confirmation', async () => {
     const user = userEvent.setup();
-    let deleted = false;
-    renderEditPage([
-      editMock(),
-      {
-        request: { query: DeleteTagCategoryDocument, variables: { id: '3' } },
-        result: () => {
-          deleted = true;
-          return { data: { deleteTagCategory: { __typename: 'DeleteTagCategoryPayload', clientMutationId: null } } };
-        },
-      },
-    ]);
+    const { action, submitted } = recordingAction();
+    renderEditPage(action);
 
     await user.click(await screen.findByRole('button', { name: 'Delete tag category' }));
     expect(await screen.findByText('Are you sure you want to delete the tag category Genre?')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'OK', hidden: true }));
 
     await vi.waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/tag_categories'));
-    expect(deleted).toBe(true);
+    expect(submitted).toEqual([{ intent: 'delete' }]);
   });
 });
 

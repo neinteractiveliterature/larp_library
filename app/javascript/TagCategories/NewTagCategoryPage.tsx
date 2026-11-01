@@ -1,29 +1,28 @@
-import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { useState, type FormEvent } from 'react';
-import { Form, redirect, useNavigation, useSubmit } from 'react-router';
-import { appContext } from '../appContext';
-import { getApolloActionError, withApolloErrors } from '../actionHelpers';
-import type { TagCategoryAttributes } from '../graphqlTypes.generated';
+import { data, Form, redirect, useNavigation, useSubmit } from 'react-router';
+import ActionErrorDisplay from '../ActionErrorDisplay';
 import { pageTitle } from '../pageTitle';
+import { abilityContext } from '../server/lib/authContext';
+import { requireAbility } from '../server/lib/authorization.server';
+import { createTagCategory } from '../server/lib/tagCategories.server';
 import buildTagCategoryAttributes from './buildTagCategoryAttributes';
-import { CreateTagCategoryDocument } from './mutations.generated';
-import TagCategoryFormFields, { TagCategoryFormFieldsProps } from './TagCategoryFormFields';
+import TagCategoryFormFields, { type TagCategoryFormValues } from './TagCategoryFormFields';
 import type { Route } from './+types/NewTagCategoryPage';
 
-export async function clientAction({ context, request }: Route.ClientActionArgs) {
-  const { apolloClient } = context.get(appContext);
-  const { tagCategoryAttributes } = (await request.json()) as { tagCategoryAttributes: TagCategoryAttributes };
+export function loader({ context }: Route.LoaderArgs) {
+  requireAbility(context.get(abilityContext), 'create', 'TagCategory');
+  return null;
+}
 
-  return withApolloErrors(async () => {
-    await apolloClient.mutate({ mutation: CreateTagCategoryDocument, variables: { tagCategoryAttributes } });
-    return redirect('/tag_categories');
-  });
+export async function action({ context, request }: Route.ActionArgs) {
+  const { tagCategoryAttributes } = await request.json();
+
+  const result = await createTagCategory(context.get(abilityContext), tagCategoryAttributes);
+  return result.ok ? redirect('/tag_categories') : data({ errors: result.errors }, { status: 422 });
 }
 
 export default function NewTagCategoryPage({ actionData }: Route.ComponentProps) {
-  const [tagCategory, setTagCategory] = useState<TagCategoryFormFieldsProps['tagCategory']>({
-    name: '',
-  });
+  const [tagCategory, setTagCategory] = useState<TagCategoryFormValues>({ name: '' });
   const submit = useSubmit();
   const navigation = useNavigation();
 
@@ -47,7 +46,7 @@ export default function NewTagCategoryPage({ actionData }: Route.ComponentProps)
         Create tag category
       </button>
 
-      <ErrorDisplay graphQLError={getApolloActionError(actionData)} />
+      <ActionErrorDisplay data={actionData} />
     </Form>
   );
 }

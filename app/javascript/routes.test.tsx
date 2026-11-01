@@ -13,12 +13,10 @@ import { abilityContext, userContext } from './server/lib/authContext';
 import { buildAbility } from './server/lib/authorization.server';
 import { BrandPageQueryDocument, BrandsPageQueryDocument } from './Brands/queries.generated';
 import { ProjectPromotionsPageQueryDocument } from './ProjectPromotions/queries.generated';
-import { TagCategoryListPageQueryDocument } from './TagCategories/queries.generated';
-import { TagListPageQueryDocument } from './Tags/queries.generated';
-import { TagCategoryAutocompleteQueryDocument } from './TagCategories/queries.generated';
 import { buildConnection } from '../../test/javascript/fixtures';
 import {
   createMockApolloClient,
+  mockFetchJson,
   routeFromModule,
   type MockedResponse,
   type RouteModuleUnderTest,
@@ -38,21 +36,6 @@ const pageMocks: MockedResponse[] = [
     ...anyVariables,
     result: { data: { projectPromotions: [] } },
   },
-  {
-    request: { query: TagListPageQueryDocument },
-    ...anyVariables,
-    result: { data: { tags: buildConnection(empty) } },
-  },
-  {
-    request: { query: TagCategoryListPageQueryDocument },
-    ...anyVariables,
-    result: { data: { tagCategories: buildConnection(empty) } },
-  },
-  {
-    request: { query: TagCategoryAutocompleteQueryDocument },
-    ...anyVariables,
-    result: { data: { tagCategories: buildConnection(empty) } },
-  },
 ];
 
 // routes.ts is the framework-mode route config (file paths, which the build loads lazily); here the same config is turned
@@ -66,6 +49,16 @@ const routeModules = import.meta.glob<RouteModuleUnderTest>(
 const serverLoaderStubs: Record<string, () => unknown> = {
   './HomePage/HomePage.tsx': () => ({ promotedProjects: [], tagGroups: [] }),
   './ProjectSearch/ProjectSearchPage.tsx': () => ({ projects: [], totalCount: 0, offset: 0, tag: null }),
+  './Tags/TagListPage.tsx': () => ({ tags: [] }),
+  './TagCategories/TagCategoryListPage.tsx': () => ({ tagCategories: [] }),
+  // (the new and edit pages require an administrator, which the signed-out visitor of these tests isn't)
+  './Tags/NewTagPage.tsx': () => null,
+  './TagCategories/NewTagCategoryPage.tsx': () => null,
+  './Tags/EditTagPage.tsx': () => ({ tag: { id: 5, name: 'horde', tagCategory: null }, projectCount: 0 }),
+  './TagCategories/EditTagCategoryPage.tsx': () => ({
+    tagCategory: { id: 3, name: 'Genre', color: '#777777', textColor: '#ffffff', icon: 'tag' },
+    tags: [],
+  }),
 };
 
 function toRouteObjects(entries: RouteConfigEntry[]): RouteObject[] {
@@ -119,6 +112,14 @@ function renderRoute(route: string, mocks: MockedResponse[]) {
 }
 
 describe('routes', () => {
+  // the tag form's category picker asks for its options as soon as it appears
+  beforeEach(() => {
+    mockFetchJson(() => []);
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it.each([
     ['/', 'Welcome to Larp Library'],
     ['/pages/about', 'About Us'],
@@ -130,6 +131,8 @@ describe('routes', () => {
     ['/tags/new', 'Create a new tag'],
     ['/tag_categories', 'Tag categories'],
     ['/tag_categories/new', 'Create a new tag category'],
+    ['/tags/5/edit', 'Editing tag: horde'],
+    ['/tag_categories/3/edit', 'Editing tag category: Genre'],
   ])('routes %s to the page headed “%s”', async (route, heading) => {
     renderRoute(route, pageMocks);
 
@@ -149,8 +152,6 @@ describe('routes', () => {
     ['/brands/acme/projects/7-the-big-larp', 'ProjectPageQuery'],
     ['/brands/acme/projects/7-the-big-larp/edit', 'ProjectPageQuery'],
     ['/brands/acme/projects/7-the-big-larp/initial_content', 'ProjectPageQuery'],
-    ['/tags/5/edit', 'EditTagQuery'],
-    ['/tag_categories/3/edit', 'EditTagCategoryQuery'],
   ])('routes %s to the page that runs %s', async (route, queryName) => {
     renderRoute(route, []);
 

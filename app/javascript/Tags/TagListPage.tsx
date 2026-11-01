@@ -1,27 +1,16 @@
-import { useQuery } from '@apollo/client';
 import type { JSX } from 'react';
 import { Link } from 'react-router';
-import { appContext } from '../appContext';
-import { loadQuery } from '../loadQuery';
-import { Waypoint } from '../Waypoint';
-import { TagListPageQueryDocument } from './queries.generated';
-import Tag from './Tag';
 import { pageTitle } from '../pageTitle';
+import { readDbContext } from '../server/lib/dbContext';
+import { listTags } from '../server/lib/tags.server';
+import Tag from './Tag';
 import type { Route } from './+types/TagListPage';
 
-// The first page of the list is loaded here, before the route renders.  The component then reads it back from the Apollo
-// cache with a query hook, which is what lets it page in more with fetchMore.
-export async function clientLoader({ context }: Route.ClientLoaderArgs) {
-  const { apolloClient } = context.get(appContext);
-  await loadQuery(apolloClient, TagListPageQueryDocument);
-  return null;
+export async function loader({ context }: Route.LoaderArgs) {
+  return { tags: await listTags(context.get(readDbContext)) };
 }
 
-export default function TagListPage(): JSX.Element {
-  const { data, fetchMore } = useQuery(TagListPageQueryDocument);
-
-  const tags = !data ? [] : data.tags.edges.map((edge) => edge.node);
-
+export default function TagListPage({ loaderData: { tags } }: Route.ComponentProps): JSX.Element {
   return (
     <>
       <h1>Tags</h1>
@@ -31,22 +20,9 @@ export default function TagListPage(): JSX.Element {
       </Link>
 
       <ul className="list-unstyled my-4">
-        {tags.map((tag, index) => (
+        {tags.map((tag) => (
           <div className="mb-1" key={tag.id}>
             <Tag tag={tag} linkTo={`/tags/${tag.id}/edit`} />
-            {index === tags.length - 5 && (
-              <Waypoint
-                onEnter={() => {
-                  if (data && data.tags.edges.length < data.tags.totalCount) {
-                    fetchMore({
-                      variables: {
-                        after: data.tags.pageInfo.endCursor,
-                      },
-                    });
-                  }
-                }}
-              />
-            )}
           </div>
         ))}
       </ul>

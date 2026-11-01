@@ -1,14 +1,17 @@
 import { BootstrapFormInput, FormGroupWithLabel, usePropertySetters } from '@neinteractiveliterature/litform';
 import React, { type JSX } from 'react';
 import ColorPicker from '../ColorPicker';
-import { TagCategory } from '../graphqlTypes.generated';
 import IconSelect from '../IconSelect';
 
-type TagCategoryFormTagCategory = Pick<TagCategory, 'name' | 'color' | 'icon'>;
+export type TagCategoryFormValues = {
+  name: string;
+  color?: string | null;
+  icon?: string | null;
+};
 
 export type TagCategoryFormFieldsProps = {
-  tagCategory: TagCategoryFormTagCategory;
-  onChange: React.Dispatch<React.SetStateAction<TagCategoryFormTagCategory>>;
+  tagCategory: TagCategoryFormValues;
+  onChange: React.Dispatch<React.SetStateAction<TagCategoryFormValues>>;
 };
 
 export default function TagCategoryFormFields({ tagCategory, onChange }: TagCategoryFormFieldsProps): JSX.Element {

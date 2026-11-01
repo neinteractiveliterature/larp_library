@@ -31,6 +31,8 @@ export default [
     route('tags/:tagId/edit', './Tags/EditTagPage.tsx'),
 
     route('tag_categories', './TagCategories/TagCategoryListPage.tsx'),
+    // no page, just the JSON the tag category picker asks for as the user types
+    route('tag_categories/autocomplete', './TagCategories/TagCategoryAutocompleteRoute.ts'),
     route('tag_categories/new', './TagCategories/NewTagCategoryPage.tsx'),
     route('tag_categories/:tagCategoryId/edit', './TagCategories/EditTagCategoryPage.tsx'),
 
