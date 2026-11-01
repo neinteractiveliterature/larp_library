@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState, type JSX } from 'react';
-import { useCompleteProjectFileUploadMutation } from './mutations.generated';
+import { CompleteProjectFileUploadDocument } from './mutations.generated';
 import { S3ConfigurationContext } from '../S3ConfigurationContext';
 import { ProjectFileFieldsFragment } from './queries';
 import { Project } from '../graphqlTypes.generated';
@@ -8,7 +8,7 @@ import { addNewObjectToReferenceArrayUpdater } from '@neinteractiveliterature/li
 import { ObjectCannedACL, S3Client } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import { createRequestSigner } from './uploadSigning';
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient, useMutation } from '@apollo/client';
 import { getApplyMd5BodyChecksumPlugin, resolveMd5BodyChecksumConfig } from '@smithy/middleware-apply-body-checksum';
 
 export type S3UploadFile = { id: number; url: string; filename: string; filesize: number; filetype: string };
@@ -21,7 +21,7 @@ function S3Upload({ project }: S3UploadProps): JSX.Element {
   const [message, setMessage] = useState<string>();
   const [progressPercent, setProgressPercent] = useState(0);
   const [error, setError] = useState<string>();
-  const [completeProjectFileUpload] = useCompleteProjectFileUploadMutation();
+  const [completeProjectFileUpload] = useMutation(CompleteProjectFileUploadDocument);
   const apolloClient = useApolloClient();
   const requestSigner = useMemo(() => createRequestSigner(apolloClient), [apolloClient]);
 

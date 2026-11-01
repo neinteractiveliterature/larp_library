@@ -1,26 +1,27 @@
+import { useMutation, useQuery } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { generateProjectPath } from '../URLGenerators';
 import { buildProjectAttributes } from './buildProjectAttributes';
-import { useCreateProjectMutation } from './mutations.generated';
+import { CreateProjectDocument } from './mutations.generated';
 import ProjectFormFields, { ProjectFormProps } from './ProjectFormFields';
-import { useNewProjectFormQuery } from './queries.generated';
+import { NewProjectFormQueryDocument } from './queries.generated';
 
 function useLoadProject() {
   const { brandSlug } = useParams();
   if (brandSlug == null) {
     throw new Error('brandSlug param is required');
   }
-  return useNewProjectFormQuery({ variables: { slug: brandSlug } });
+  return useQuery(NewProjectFormQueryDocument, { variables: { slug: brandSlug } });
 }
 
 export default LoadQueryWrapper(useLoadProject, function NewProjectPage({ data }) {
   const [project, setProject] = useState<ProjectFormProps['project']>({
     tags: [],
   });
-  const [createProject, { error }] = useCreateProjectMutation();
+  const [createProject, { error }] = useMutation(CreateProjectDocument);
   const navigate = useNavigate();
 
   const saveProject = async () => {

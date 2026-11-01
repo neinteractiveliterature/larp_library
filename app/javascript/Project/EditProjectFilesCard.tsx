@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import React, { useCallback, useMemo, type JSX } from 'react';
 import {
   buildOptimisticArrayForMove,
@@ -8,7 +9,7 @@ import {
 import { deleteObjectFromReferenceArrayUpdater } from '@neinteractiveliterature/litform-apollo';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { useDeleteProjectFileMutation, useMoveProjectFileMutation } from './mutations.generated';
+import { DeleteProjectFileDocument, MoveProjectFileDocument } from './mutations.generated';
 import { ProjectPageQueryData } from './queries.generated';
 import { Project } from '../graphqlTypes.generated';
 import ProjectFileDisplay from './ProjectFileDisplay';
@@ -21,7 +22,7 @@ export type EditProjectFileProps = {
 };
 
 export function EditProjectFile({ file, project }: EditProjectFileProps): JSX.Element {
-  const [deleteProjectFile] = useDeleteProjectFileMutation();
+  const [deleteProjectFile] = useMutation(DeleteProjectFileDocument);
   const confirm = useGraphQLConfirm();
 
   const { attributes, listeners, isDragging, setNodeRef, transform, transition } = useSortable({
@@ -87,7 +88,7 @@ export type EditProjectFilesCardProps = Omit<S3UploadProps, 'projectId'> & {
 };
 
 function EditProjectFilesCard({ project, ...s3UploadProps }: EditProjectFilesCardProps): JSX.Element {
-  const [moveProjectFile] = useMoveProjectFileMutation();
+  const [moveProjectFile] = useMutation(MoveProjectFileDocument);
   const sortedFiles = useMemo(
     () => [...project.projectFiles].sort((a, b) => a.position - b.position),
     [project.projectFiles],

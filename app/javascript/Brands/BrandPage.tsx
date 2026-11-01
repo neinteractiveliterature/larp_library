@@ -1,3 +1,4 @@
+import { useQuery } from '@apollo/client';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router';
@@ -7,18 +8,13 @@ import { generateBrandPath } from '../URLGenerators';
 import { appContext } from '../appContext';
 import { loadQuery } from '../loadQuery';
 import { formatPageTitle } from '../pageTitle';
-import {
-  BrandPageQueryDocument,
-  useBrandPageQuery,
-  type BrandPageQueryData,
-  type BrandPageQueryVariables,
-} from './queries.generated';
+import { BrandPageQueryDocument } from './queries.generated';
 import UnapprovedBrandAlert from './UnapprovedBrandAlert';
 import type { Route } from './+types/BrandPage';
 
 export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
   const { apolloClient } = context.get(appContext);
-  return loadQuery<BrandPageQueryData, BrandPageQueryVariables>(apolloClient, BrandPageQueryDocument, {
+  return loadQuery(apolloClient, BrandPageQueryDocument, {
     slug: params.brandSlug,
   });
 }
@@ -26,7 +22,7 @@ export async function clientLoader({ context, params }: Route.ClientLoaderArgs) 
 export default function BrandPage({ loaderData, params }: Route.ComponentProps) {
   // the loader fetched the first page of projects into the Apollo cache; reading it back from there is what lets
   // fetchMore work
-  const { data = loaderData, fetchMore } = useBrandPageQuery({ variables: { slug: params.brandSlug } });
+  const { data = loaderData, fetchMore } = useQuery(BrandPageQueryDocument, { variables: { slug: params.brandSlug } });
   const { brand } = data;
 
   return (

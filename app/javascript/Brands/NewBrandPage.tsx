@@ -10,12 +10,12 @@ import { pageTitle } from '../pageTitle';
 import { generateBrandPath } from '../URLGenerators';
 import BrandFormFields, { BrandFormFieldsProps } from './BrandFormFields';
 import { CreateBrandDocument } from './mutations.generated';
-import { NewBrandQueryDocument, type NewBrandQueryData, type NewBrandQueryVariables } from './queries.generated';
+import { NewBrandQueryDocument } from './queries.generated';
 import type { Route } from './+types/NewBrandPage';
 
 export async function clientLoader({ context }: Route.ClientLoaderArgs) {
   const { apolloClient } = context.get(appContext);
-  return loadQuery<NewBrandQueryData, NewBrandQueryVariables>(apolloClient, NewBrandQueryDocument);
+  return loadQuery(apolloClient, NewBrandQueryDocument);
 }
 
 export async function clientAction({ context, request }: Route.ClientActionArgs) {

@@ -1,9 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type InvitationPageQueryVariables = Types.Exact<{
   brandSlug: Types.Scalars['String']['input'];
   invitationToken: Types.Scalars['String']['input'];
@@ -20,55 +18,73 @@ export type InvitationPageQueryData = {
   currentUser?: { __typename: 'User'; id: string } | null;
 };
 
-export const InvitationPageQueryDocument = gql`
-  query InvitationPageQuery($brandSlug: String!, $invitationToken: String!) {
-    brandMembership(brandSlug: $brandSlug, invitationToken: $invitationToken) {
-      id
-      admin
-      brand {
-        id
-        name
-        slug
-      }
-    }
-    currentUser {
-      id
-    }
-  }
-`;
-
-/**
- * __useInvitationPageQuery__
- *
- * To run a query within a React component, call `useInvitationPageQuery` and pass it any options that fit your needs.
- * When your component renders, `useInvitationPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useInvitationPageQuery({
- *   variables: {
- *      brandSlug: // value for 'brandSlug'
- *      invitationToken: // value for 'invitationToken'
- *   },
- * });
- */
-export function useInvitationPageQuery(
-  baseOptions: Apollo.QueryHookOptions<InvitationPageQueryData, InvitationPageQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<InvitationPageQueryData, InvitationPageQueryVariables>(InvitationPageQueryDocument, options);
-}
-export function useInvitationPageQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<InvitationPageQueryData, InvitationPageQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<InvitationPageQueryData, InvitationPageQueryVariables>(
-    InvitationPageQueryDocument,
-    options,
-  );
-}
-export type InvitationPageQueryHookResult = ReturnType<typeof useInvitationPageQuery>;
-export type InvitationPageQueryLazyQueryHookResult = ReturnType<typeof useInvitationPageQueryLazyQuery>;
-export type InvitationPageQueryQueryResult = Apollo.QueryResult<InvitationPageQueryData, InvitationPageQueryVariables>;
+export const InvitationPageQueryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'InvitationPageQuery' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'brandSlug' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'invitationToken' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'brandMembership' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'brandSlug' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'brandSlug' } },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'invitationToken' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'invitationToken' } },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'admin' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'brand' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'currentUser' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [{ kind: 'Field', name: { kind: 'Name', value: 'id' } }],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<InvitationPageQueryData, InvitationPageQueryVariables>;

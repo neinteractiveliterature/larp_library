@@ -1,10 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import { TagFragmentDoc } from '../Tags/queries.generated';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type ProjectHeadersFragment = {
   __typename: 'Project';
   id: string;
@@ -98,110 +95,250 @@ export type ProjectSearchQueryData = {
   } | null;
 };
 
-export const ProjectHeadersFragmentDoc = gql`
-  fragment ProjectHeadersFragment on Project {
-    id
-    title
-    authors
-    minPlayers
-    maxPlayers
-    minFacilitators
-    maxFacilitators
-    publicationYear
-    lengthQuantity
-    lengthUnits
-    brand {
-      id
-      name
-      slug
-    }
-    tags {
-      id
-      ...TagFragment
-    }
-  }
-  ${TagFragmentDoc}
-`;
-export const ProjectSearchQueryDocument = gql`
-  query ProjectSearchQuery(
-    $queryString: String
-    $tag: String
-    $title: String
-    $authors: String
-    $playerCountUpperBound: Int
-    $playerCountLowerBound: Int
-    $facilitatorCountUpperBound: Int
-    $facilitatorCountLowerBound: Int
-    $after: String
-  ) {
-    projects(
-      queryString: $queryString
-      tag: $tag
-      title: $title
-      authors: $authors
-      playerCountUpperBound: $playerCountUpperBound
-      playerCountLowerBound: $playerCountLowerBound
-      facilitatorCountUpperBound: $facilitatorCountUpperBound
-      facilitatorCountLowerBound: $facilitatorCountLowerBound
-      after: $after
-    ) {
-      pageInfo {
-        endCursor
-      }
-      totalCount
-      edges {
-        node {
-          id
-          description
-          ...ProjectHeadersFragment
-        }
-      }
-    }
-    tagByName(name: $tag) {
-      id
-      ...TagFragment
-    }
-  }
-  ${ProjectHeadersFragmentDoc}
-  ${TagFragmentDoc}
-`;
-
-/**
- * __useProjectSearchQuery__
- *
- * To run a query within a React component, call `useProjectSearchQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProjectSearchQuery({
- *   variables: {
- *      queryString: // value for 'queryString'
- *      tag: // value for 'tag'
- *      title: // value for 'title'
- *      authors: // value for 'authors'
- *      playerCountUpperBound: // value for 'playerCountUpperBound'
- *      playerCountLowerBound: // value for 'playerCountLowerBound'
- *      facilitatorCountUpperBound: // value for 'facilitatorCountUpperBound'
- *      facilitatorCountLowerBound: // value for 'facilitatorCountLowerBound'
- *      after: // value for 'after'
- *   },
- * });
- */
-export function useProjectSearchQuery(
-  baseOptions?: Apollo.QueryHookOptions<ProjectSearchQueryData, ProjectSearchQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ProjectSearchQueryData, ProjectSearchQueryVariables>(ProjectSearchQueryDocument, options);
-}
-export function useProjectSearchQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ProjectSearchQueryData, ProjectSearchQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ProjectSearchQueryData, ProjectSearchQueryVariables>(ProjectSearchQueryDocument, options);
-}
-export type ProjectSearchQueryHookResult = ReturnType<typeof useProjectSearchQuery>;
-export type ProjectSearchQueryLazyQueryHookResult = ReturnType<typeof useProjectSearchQueryLazyQuery>;
-export type ProjectSearchQueryQueryResult = Apollo.QueryResult<ProjectSearchQueryData, ProjectSearchQueryVariables>;
+export const ProjectSearchQueryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'ProjectSearchQuery' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'queryString' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'tag' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'title' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'authors' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'playerCountUpperBound' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'playerCountLowerBound' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'facilitatorCountUpperBound' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'facilitatorCountLowerBound' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'after' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'projects' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'queryString' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'queryString' } },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'tag' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'tag' } },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'title' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'title' } },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'authors' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'authors' } },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'playerCountUpperBound' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'playerCountUpperBound' } },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'playerCountLowerBound' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'playerCountLowerBound' } },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'facilitatorCountUpperBound' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'facilitatorCountUpperBound' } },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'facilitatorCountLowerBound' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'facilitatorCountLowerBound' } },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'after' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'after' } },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pageInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [{ kind: 'Field', name: { kind: 'Name', value: 'endCursor' } }],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'totalCount' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'edges' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'node' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                            { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                            { kind: 'FragmentSpread', name: { kind: 'Name', value: 'ProjectHeadersFragment' } },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'tagByName' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'name' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'tag' } },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'FragmentSpread', name: { kind: 'Name', value: 'TagFragment' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TagCategoryFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'TagCategory' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'color' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'textColor' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'icon' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TagFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Tag' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'tagCategory' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'FragmentSpread', name: { kind: 'Name', value: 'TagCategoryFragment' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'ProjectHeadersFragment' },
+      typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Project' } },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'authors' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'minPlayers' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'maxPlayers' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'minFacilitators' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'maxFacilitators' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'publicationYear' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'lengthQuantity' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'lengthUnits' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'brand' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'tags' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'FragmentSpread', name: { kind: 'Name', value: 'TagFragment' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ProjectSearchQueryData, ProjectSearchQueryVariables>;

@@ -1,25 +1,26 @@
+import { useMutation, useQuery } from '@apollo/client';
 import { ErrorDisplay, Tabs, useTabsWithRouter } from '@neinteractiveliterature/litform';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
 import { useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router';
 import { generateProjectPath } from '../URLGenerators';
 import { buildProjectAttributes } from './buildProjectAttributes';
-import { useUpdateProjectMutation } from './mutations.generated';
+import { UpdateProjectDocument } from './mutations.generated';
 import ProjectContentFields from './ProjectContentFields';
 import ProjectFormFields from './ProjectFormFields';
-import { useProjectPageQuery } from './queries.generated';
+import { ProjectPageQueryDocument } from './queries.generated';
 
 function useLoadProject() {
   const { projectId } = useParams();
   if (projectId == null) {
     throw new Error('projectId param is required');
   }
-  return useProjectPageQuery({ variables: { projectId } });
+  return useQuery(ProjectPageQueryDocument, { variables: { projectId } });
 }
 
 export default LoadQueryWrapper(useLoadProject, function EditProjectPage({ data }) {
   const [project, setProject] = useState(data.project);
-  const [updateProject, { loading, error }] = useUpdateProjectMutation();
+  const [updateProject, { loading, error }] = useMutation(UpdateProjectDocument);
   const location = useLocation();
   const navigate = useNavigate();
   const history = useMemo(() => ({ replace: navigate }), [navigate]);

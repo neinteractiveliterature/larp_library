@@ -1,9 +1,5 @@
 import { gql } from '@apollo/client';
-import {
-  ProjectFieldsFragment,
-  ProjectFileFieldsFragment,
-  ProjectLinkFieldsFragment,
-} from './queries';
+import { ProjectFieldsFragment, ProjectFileFieldsFragment, ProjectLinkFieldsFragment } from './queries';
 
 export const CreateProject = gql`
   mutation CreateProject($brandId: ID!, $projectAttributes: ProjectAttributes!) {
@@ -88,9 +84,7 @@ export const DeleteProjectFile = gql`
 
 export const CreateProjectLink = gql`
   mutation CreateProjectLink($projectId: ID!, $projectLinkAttributes: ProjectLinkAttributes!) {
-    createProjectLink(
-      input: { projectId: $projectId, projectLinkAttributes: $projectLinkAttributes }
-    ) {
+    createProjectLink(input: { projectId: $projectId, projectLinkAttributes: $projectLinkAttributes }) {
       projectLink {
         ...ProjectLinkFieldsFragment
       }

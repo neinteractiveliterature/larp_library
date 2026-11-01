@@ -1,9 +1,7 @@
 /* eslint-disable */
 import * as Types from '../graphqlTypes.generated';
 
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-const defaultOptions = {} as const;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type AcceptBrandMembershipInvitationMutationVariables = Types.Exact<{
   brandId: Types.Scalars['ID']['input'];
   invitationToken: Types.Scalars['String']['input'];
@@ -17,54 +15,62 @@ export type AcceptBrandMembershipInvitationMutationData = {
   } | null;
 };
 
-export const AcceptBrandMembershipInvitationDocument = gql`
-  mutation AcceptBrandMembershipInvitation($brandId: ID!, $invitationToken: String!) {
-    acceptBrandMembershipInvitation(input: { brandId: $brandId, invitationToken: $invitationToken }) {
-      clientMutationId
-    }
-  }
-`;
-export type AcceptBrandMembershipInvitationMutationFn = Apollo.MutationFunction<
-  AcceptBrandMembershipInvitationMutationData,
-  AcceptBrandMembershipInvitationMutationVariables
->;
-
-/**
- * __useAcceptBrandMembershipInvitationMutation__
- *
- * To run a mutation, you first call `useAcceptBrandMembershipInvitationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAcceptBrandMembershipInvitationMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [acceptBrandMembershipInvitationMutation, { data, loading, error }] = useAcceptBrandMembershipInvitationMutation({
- *   variables: {
- *      brandId: // value for 'brandId'
- *      invitationToken: // value for 'invitationToken'
- *   },
- * });
- */
-export function useAcceptBrandMembershipInvitationMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    AcceptBrandMembershipInvitationMutationData,
-    AcceptBrandMembershipInvitationMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    AcceptBrandMembershipInvitationMutationData,
-    AcceptBrandMembershipInvitationMutationVariables
-  >(AcceptBrandMembershipInvitationDocument, options);
-}
-export type AcceptBrandMembershipInvitationMutationHookResult = ReturnType<
-  typeof useAcceptBrandMembershipInvitationMutation
->;
-export type AcceptBrandMembershipInvitationMutationResult =
-  Apollo.MutationResult<AcceptBrandMembershipInvitationMutationData>;
-export type AcceptBrandMembershipInvitationMutationOptions = Apollo.BaseMutationOptions<
+export const AcceptBrandMembershipInvitationDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'AcceptBrandMembershipInvitation' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'brandId' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'invitationToken' } },
+          type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'acceptBrandMembershipInvitation' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'ObjectValue',
+                  fields: [
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'brandId' },
+                      value: { kind: 'Variable', name: { kind: 'Name', value: 'brandId' } },
+                    },
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'invitationToken' },
+                      value: { kind: 'Variable', name: { kind: 'Name', value: 'invitationToken' } },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [{ kind: 'Field', name: { kind: 'Name', value: 'clientMutationId' } }],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   AcceptBrandMembershipInvitationMutationData,
   AcceptBrandMembershipInvitationMutationVariables
 >;

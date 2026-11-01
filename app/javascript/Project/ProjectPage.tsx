@@ -1,3 +1,4 @@
+import { useMutation, useQuery } from '@apollo/client';
 import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
 import sortBy from 'lodash/sortBy';
@@ -7,23 +8,23 @@ import { Link, useNavigate } from 'react-router';
 import { useMemo } from 'react';
 import ProjectHeaders from '../ProjectSearch/ProjectHeaders';
 import { generateProjectPath } from '../URLGenerators';
-import { useDeleteProjectMutation } from './mutations.generated';
+import { DeleteProjectDocument } from './mutations.generated';
 import ProjectFileDisplay from './ProjectFileDisplay';
 import { ProjectLinkDisplay } from './ProjectLinkDisplay';
-import { useProjectPageQuery } from './queries.generated';
+import { ProjectPageQueryDocument } from './queries.generated';
 
 function useProjectPageQueryFromParam() {
   const { projectId } = useParams();
   if (projectId == null) {
     throw new Error('projectId param is required');
   }
-  return useProjectPageQuery({ variables: { projectId: projectId.replace(/-.*$/, '') } });
+  return useQuery(ProjectPageQueryDocument, { variables: { projectId: projectId.replace(/-.*$/, '') } });
 }
 
 export default LoadQueryWrapper(useProjectPageQueryFromParam, function ProjectPage({ data }) {
   const { project } = data;
   const confirm = useGraphQLConfirm();
-  const [deleteProject] = useDeleteProjectMutation();
+  const [deleteProject] = useMutation(DeleteProjectDocument);
   const navigate = useNavigate();
 
   const sortedFiles = useMemo(() => sortBy(project.projectFiles, (file) => file.position), [project.projectFiles]);

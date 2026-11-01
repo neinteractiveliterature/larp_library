@@ -3,13 +3,13 @@ import { Outlet, useNavigation } from 'react-router';
 import AppLayout from './AppLayout';
 import { appContext } from './appContext';
 import { loadQuery } from './loadQuery';
-import { AppLayoutQueryDocument, type AppLayoutQueryData, type AppLayoutQueryVariables } from './queries.generated';
+import { AppLayoutQueryDocument } from './queries.generated';
 import RouteErrorDisplay from './RouteErrorDisplay';
 import type { Route } from './+types/AppLayoutRoute';
 
 export async function clientLoader({ context }: Route.ClientLoaderArgs) {
   const { apolloClient } = context.get(appContext);
-  return loadQuery<AppLayoutQueryData, AppLayoutQueryVariables>(apolloClient, AppLayoutQueryDocument);
+  return loadQuery(apolloClient, AppLayoutQueryDocument);
 }
 
 /** The layout route: the site header and footer around whichever page the URL matched */
