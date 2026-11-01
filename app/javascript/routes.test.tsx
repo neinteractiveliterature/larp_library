@@ -84,7 +84,10 @@ const pageMocks: MockedResponse[] = [
 
 // routes.ts is the framework-mode route config (file paths, which the build loads lazily); here the same config is turned
 // into ordinary react-router route objects, with the modules loaded up front, so the URL → page mapping can be tested.
-const routeModules = import.meta.glob<RouteModuleUnderTest>(['./**/*.tsx', '!./**/*.test.tsx'], { eager: true });
+// (entry.client.tsx isn't a route, and hydrates the page as soon as it's imported.)
+const routeModules = import.meta.glob<RouteModuleUnderTest>(['./**/*.tsx', '!./**/*.test.tsx', '!./entry.client.tsx'], {
+  eager: true,
+});
 
 function toRouteObjects(entries: RouteConfigEntry[]): RouteObject[] {
   return entries.map((entry): RouteObject => {
