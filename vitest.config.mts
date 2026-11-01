@@ -43,6 +43,16 @@ export default defineConfig({
       return undefined;
     },
     environment: 'jsdom',
+    // Placeholder values for the server code's env validation (app/javascript/server/env.ts). The database pool connects
+    // lazily, so nothing here is ever contacted; tests that need a real database set one up themselves.
+    env: {
+      DATABASE_URL: 'postgres://localhost/larp_library_test',
+      APP_URL_BASE: 'http://localhost:3042',
+      BETTER_AUTH_SECRET: 'test-secret-test-secret-test-secret-12',
+      INTERCODE_URL: 'https://intercode.test',
+      INTERCODE_APP_ID: 'test-app-id',
+      INTERCODE_APP_SECRET: 'test-app-secret',
+    },
     globals: true,
     setupFiles: [absolutePath('./test/javascript/setupTests.ts')],
     include: ['app/javascript/**/*.test.{ts,tsx}', 'test/javascript/**/*.test.{ts,tsx}'],
