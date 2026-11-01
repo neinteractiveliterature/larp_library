@@ -1,40 +1,68 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { ErrorDisplay, Tabs, useTabsWithRouter } from '@neinteractiveliterature/litform';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
-import { useMemo, useState } from 'react';
-import { Link, useLocation, useNavigate, useParams } from 'react-router';
+import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { Form, Link, useFetcher, useLocation, useNavigate } from 'react-router';
+import { appContext } from '../appContext';
+import { getApolloActionError, withApolloErrors } from '../actionHelpers';
+import type { ProjectAttributes } from '../graphqlTypes.generated';
+import { loadQuery } from '../loadQuery';
+import { formatPageTitle } from '../pageTitle';
 import { generateProjectPath } from '../URLGenerators';
 import { buildProjectAttributes } from './buildProjectAttributes';
 import { UpdateProjectDocument } from './mutations.generated';
 import ProjectContentFields from './ProjectContentFields';
 import ProjectFormFields from './ProjectFormFields';
 import { ProjectPageQueryDocument } from './queries.generated';
+import type { Route } from './+types/EditProjectPage';
 
-function useLoadProject() {
-  const { projectId } = useParams();
-  if (projectId == null) {
-    throw new Error('projectId param is required');
-  }
-  return useQuery(ProjectPageQueryDocument, { variables: { projectId } });
+export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
+  const { apolloClient } = context.get(appContext);
+  return loadQuery(apolloClient, ProjectPageQueryDocument, { projectId: params.projectId });
 }
 
-export default LoadQueryWrapper(useLoadProject, function EditProjectPage({ data }) {
+export async function clientAction({ context, request }: Route.ClientActionArgs) {
+  const { apolloClient } = context.get(appContext);
+  const { projectId, projectAttributes } = (await request.json()) as {
+    projectId: string;
+    projectAttributes: ProjectAttributes;
+  };
+
+  return withApolloErrors(async () => {
+    await apolloClient.mutate({
+      mutation: UpdateProjectDocument,
+      variables: { id: projectId, projectAttributes },
+    });
+    return { saved: true };
+  });
+}
+
+export default function EditProjectPage({ loaderData, params }: Route.ComponentProps) {
+  // The loader put the project in the Apollo cache.  Reading it from there (rather than using `loaderData` directly)
+  // keeps the content tab's file and link lists up to date as files are uploaded, links are added and items are
+  // dragged into a new order, since those all update the cache.
+  const { data = loaderData } = useQuery(ProjectPageQueryDocument, { variables: { projectId: params.projectId } });
   const [project, setProject] = useState(data.project);
-  const [updateProject, { loading, error }] = useMutation(UpdateProjectDocument);
+  const saveFetcher = useFetcher<typeof clientAction>();
   const location = useLocation();
   const navigate = useNavigate();
   const history = useMemo(() => ({ replace: navigate }), [navigate]);
-  const [saved, setSaved] = useState(false);
+  const [showSaved, setShowSaved] = useState(false);
 
-  const saveProject = async () => {
-    await updateProject({
-      variables: {
-        id: project.id,
-        projectAttributes: buildProjectAttributes(project),
-      },
-    });
-    setSaved(true);
-    window.setTimeout(() => setSaved(false), 5000);
+  // show "Saved!" on the button for a few seconds once a save has gone through
+  useEffect(() => {
+    if (saveFetcher.state === 'idle' && saveFetcher.data && 'saved' in saveFetcher.data) {
+      setShowSaved(true);
+      const timeout = window.setTimeout(() => setShowSaved(false), 5000);
+      return () => window.clearTimeout(timeout);
+    }
+  }, [saveFetcher.state, saveFetcher.data]);
+
+  const saveSubmitted = (event: FormEvent) => {
+    event.preventDefault();
+    saveFetcher.submit(
+      { projectId: project.id, projectAttributes: buildProjectAttributes(project) },
+      { method: 'post', encType: 'application/json' },
+    );
   };
 
   const { selectedTab, setSelectedTab, tabs } = useTabsWithRouter(
@@ -45,17 +73,19 @@ export default LoadQueryWrapper(useLoadProject, function EditProjectPage({ data 
         renderContent: function ProjectPropertiesTab() {
           return (
             <section className="p-2 bg-light border border-color-light border-top-0">
-              <ProjectFormFields licenseOptions={data.licenses} onChange={setProject} project={project} />
-              <button className="btn btn-primary" type="button" onClick={saveProject} disabled={loading}>
-                {saved ? (
-                  <>
-                    Saved! <i className="bi-check" />
-                  </>
-                ) : (
-                  'Save changes'
-                )}
-              </button>
-              <ErrorDisplay graphQLError={error} />
+              <Form method="post" onSubmit={saveSubmitted}>
+                <ProjectFormFields licenseOptions={data.licenses} onChange={setProject} project={project} />
+                <button className="btn btn-primary" type="submit" disabled={saveFetcher.state !== 'idle'}>
+                  {showSaved ? (
+                    <>
+                      Saved! <i className="bi-check" />
+                    </>
+                  ) : (
+                    'Save changes'
+                  )}
+                </button>
+                <ErrorDisplay graphQLError={getApolloActionError(saveFetcher.data)} />
+              </Form>
             </section>
           );
         },
@@ -95,4 +125,8 @@ export default LoadQueryWrapper(useLoadProject, function EditProjectPage({ data 
       />
     </>
   );
-});
+}
+
+export function meta({ loaderData }: Route.MetaArgs) {
+  return [{ title: formatPageTitle(loaderData ? `Editing ${loaderData.project.title}` : 'Edit project') }];
+}
