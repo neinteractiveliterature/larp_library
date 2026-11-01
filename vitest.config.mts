@@ -46,6 +46,9 @@ export default defineConfig({
     // Placeholder values for the server code's env validation (app/javascript/server/env.ts). The database pool connects
     // lazily, so nothing here is ever contacted; tests that need a real database set one up themselves.
     env: {
+      // The Postgres server the database tests run against (each test worker makes its own database on it; see
+      // app/javascript/server/test/db.ts). Set TEST_DATABASE_URL to use a different one.
+      TEST_DATABASE_URL: process.env['TEST_DATABASE_URL'] ?? 'postgres://postgres@localhost/larp_library_test',
       DATABASE_URL: 'postgres://localhost/larp_library_test',
       APP_URL_BASE: 'http://localhost:3042',
       BETTER_AUTH_SECRET: 'test-secret-test-secret-test-secret-12',

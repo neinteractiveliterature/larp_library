@@ -22,3 +22,9 @@ export type Db = NodePgDatabase<typeof schema>;
 export type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
 /** Accepted by helpers that may run standalone or inside a caller's transaction. */
 export type DbOrTx = Db | Tx;
+
+/**
+ * The read-only slice of a database handle. `Db` and `Tx` both satisfy it structurally, so read helpers can accept `ReadDb`
+ * and still run inside a caller's transaction.
+ */
+export type ReadDb = Pick<Db, 'select' | 'selectDistinct' | 'query' | '$count'>;
