@@ -1,14 +1,24 @@
 import type { JSX } from 'react';
 import { Link } from 'react-router';
+import { appContext } from '../appContext';
 import { Waypoint } from '../Waypoint';
-import { useTagListPageQuery } from './queries.generated';
+import { TagListPageQueryDocument, useTagListPageQuery } from './queries.generated';
 import Tag from './Tag';
 import { pageTitle } from '../pageTitle';
+import type { Route } from './+types/TagListPage';
+
+// The first page of the list is loaded here, before the route renders.  The component then reads it back from the Apollo
+// cache with a query hook, which is what lets it page in more with fetchMore.
+export async function clientLoader({ context }: Route.ClientLoaderArgs) {
+  const { apolloClient } = context.get(appContext);
+  await apolloClient.query({ query: TagListPageQueryDocument, fetchPolicy: 'network-only' });
+  return null;
+}
 
 export default function TagListPage(): JSX.Element {
-  const { data, loading, error, fetchMore } = useTagListPageQuery({ fetchPolicy: 'network-only' });
+  const { data, fetchMore } = useTagListPageQuery();
 
-  const tags = loading || error || !data ? [] : data.tags.edges.map((edge) => edge.node);
+  const tags = !data ? [] : data.tags.edges.map((edge) => edge.node);
 
   return (
     <>

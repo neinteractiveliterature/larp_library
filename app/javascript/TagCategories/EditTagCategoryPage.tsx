@@ -1,43 +1,67 @@
 import { ErrorDisplay, useGraphQLConfirm } from '@neinteractiveliterature/litform';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
-import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
-import TagCategoryFormFields from './TagCategoryFormFields';
-import { useEditTagCategoryQuery } from './queries.generated';
-import { useDeleteTagCategoryMutation, useUpdateTagCategoryMutation } from './mutations.generated';
-import buildTagCategoryAttributes from './buildTagCategoryAttributes';
+import { useState, type FormEvent } from 'react';
+import { Form, redirect, useFetcher } from 'react-router';
+import { appContext } from '../appContext';
+import { getApolloActionError, withApolloErrors } from '../actionHelpers';
+import type { TagCategoryAttributes } from '../graphqlTypes.generated';
+import { formatPageTitle } from '../pageTitle';
 import Tag from '../Tags/Tag';
+import buildTagCategoryAttributes from './buildTagCategoryAttributes';
+import { DeleteTagCategoryDocument, UpdateTagCategoryDocument } from './mutations.generated';
+import {
+  EditTagCategoryQueryDocument,
+  type EditTagCategoryQueryData,
+  type EditTagCategoryQueryVariables,
+} from './queries.generated';
+import TagCategoryFormFields from './TagCategoryFormFields';
+import type { Route } from './+types/EditTagCategoryPage';
 
-function useEditTagQueryFromParams() {
-  const { tagCategoryId } = useParams();
-  if (tagCategoryId == null) {
-    throw new Error('tagCategoryId param is required');
-  }
-  return useEditTagCategoryQuery({ variables: { id: tagCategoryId } });
+export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
+  const { apolloClient } = context.get(appContext);
+  const { data } = await apolloClient.query<EditTagCategoryQueryData, EditTagCategoryQueryVariables>({
+    query: EditTagCategoryQueryDocument,
+    variables: { id: params.tagCategoryId },
+    fetchPolicy: 'network-only',
+  });
+  return data;
 }
 
-export default LoadQueryWrapper(useEditTagQueryFromParams, function EditTagCategoryPage({ data }) {
+type EditTagCategoryActionBody =
+  { intent: 'save'; tagCategoryAttributes: TagCategoryAttributes } | { intent: 'delete' };
+
+export async function clientAction({ context, params, request }: Route.ClientActionArgs) {
+  const { apolloClient } = context.get(appContext);
+  const body = (await request.json()) as EditTagCategoryActionBody;
+
+  return withApolloErrors(async () => {
+    if (body.intent === 'delete') {
+      await apolloClient.mutate({ mutation: DeleteTagCategoryDocument, variables: { id: params.tagCategoryId } });
+    } else {
+      await apolloClient.mutate({
+        mutation: UpdateTagCategoryDocument,
+        variables: { id: params.tagCategoryId, tagCategoryAttributes: body.tagCategoryAttributes },
+      });
+    }
+    return redirect('/tag_categories');
+  });
+}
+
+export default function EditTagCategoryPage({ loaderData: data }: Route.ComponentProps) {
   const [tagCategory, setTagCategory] = useState(data.tagCategory);
-  const [updateTagCategory, { loading: updatingTagCategory, error: updateTagCategoryError }] =
-    useUpdateTagCategoryMutation();
-  const [deleteTagCategory, { loading: deletingTagCategory, error: deleteTagCategoryError }] =
-    useDeleteTagCategoryMutation();
-  const navigate = useNavigate();
+  const saveFetcher = useFetcher<typeof clientAction>();
+  const deleteFetcher = useFetcher<typeof clientAction>();
   const confirm = useGraphQLConfirm();
 
-  const deleteConfirmed = async () => {
-    await deleteTagCategory({ variables: { id: data.tagCategory.id } });
-    navigate('/tag_categories');
+  const saveSubmitted = (event: FormEvent) => {
+    event.preventDefault();
+    saveFetcher.submit(
+      { intent: 'save', tagCategoryAttributes: buildTagCategoryAttributes(tagCategory) },
+      { method: 'post', encType: 'application/json' },
+    );
   };
 
-  const saveChanges = async () => {
-    await updateTagCategory({
-      variables: {
-        id: data.tagCategory.id,
-        tagCategoryAttributes: buildTagCategoryAttributes(tagCategory),
-      },
-    });
-    navigate('/tag_categories');
+  const deleteConfirmed = async () => {
+    await deleteFetcher.submit({ intent: 'delete' }, { method: 'post', encType: 'application/json' });
   };
 
   return (
@@ -57,7 +81,7 @@ export default LoadQueryWrapper(useEditTagQueryFromParams, function EditTagCateg
           <button
             type="button"
             className="btn btn-danger"
-            disabled={deletingTagCategory}
+            disabled={deleteFetcher.state !== 'idle'}
             onClick={() =>
               confirm({
                 action: deleteConfirmed,
@@ -67,17 +91,27 @@ export default LoadQueryWrapper(useEditTagQueryFromParams, function EditTagCateg
           >
             Delete tag category
           </button>
-          <ErrorDisplay graphQLError={deleteTagCategoryError} />
+          <ErrorDisplay graphQLError={getApolloActionError(deleteFetcher.data)} />
         </div>
       </header>
 
-      <TagCategoryFormFields tagCategory={tagCategory} onChange={setTagCategory} />
+      <Form method="post" onSubmit={saveSubmitted}>
+        <TagCategoryFormFields tagCategory={tagCategory} onChange={setTagCategory} />
 
-      <button type="button" className="btn btn-primary" disabled={updatingTagCategory} onClick={saveChanges}>
-        Save changes
-      </button>
+        <button type="submit" className="btn btn-primary" disabled={saveFetcher.state !== 'idle'}>
+          Save changes
+        </button>
 
-      <ErrorDisplay graphQLError={updateTagCategoryError} />
+        <ErrorDisplay graphQLError={getApolloActionError(saveFetcher.data)} />
+      </Form>
     </>
   );
-});
+}
+
+export function meta({ loaderData }: Route.MetaArgs) {
+  return [
+    {
+      title: formatPageTitle(loaderData ? `Editing tag category: ${loaderData.tagCategory.name}` : 'Edit tag category'),
+    },
+  ];
+}

@@ -1,8 +1,10 @@
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from 'react-router';
+import { appContext, type AppContextValue } from './appContext';
 import { fetchAppConfig } from './appConfig';
 import AppProviders from './AppProviders';
 import { initSentry } from './initSentry';
+import { createLarpLibraryApolloClient } from './larpLibraryApolloClient';
 import { formatPageTitle } from './pageTitle';
 import RouteErrorDisplay from './RouteErrorDisplay';
 import type { Route } from './+types/root';
@@ -14,10 +16,31 @@ export function meta() {
   return [{ title: formatPageTitle() }];
 }
 
-export async function clientLoader() {
-  const config = await fetchAppConfig();
-  initSentry(config.sentryDsn, config.currentUserId);
-  return config;
+// The app configuration and Apollo client are needed by every loader, and loaders for sibling routes run in parallel,
+// so they're set up in middleware (which runs before them) rather than in this route's own loader.  Middleware runs
+// on every navigation, but the configuration only has to be fetched once per page load.
+let appContextValue: Promise<AppContextValue> | undefined;
+
+function loadAppContextValue(): Promise<AppContextValue> {
+  appContextValue ??= fetchAppConfig().then((config) => {
+    initSentry(config.sentryDsn, config.currentUserId);
+    return { config, apolloClient: createLarpLibraryApolloClient(config.graphqlCSRFToken) };
+  });
+  // if loading the configuration failed, let the next navigation try again
+  appContextValue.catch(() => {
+    appContextValue = undefined;
+  });
+  return appContextValue;
+}
+
+export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
+  async ({ context }) => {
+    context.set(appContext, await loadAppContextValue());
+  },
+];
+
+export function clientLoader({ context }: Route.ClientLoaderArgs) {
+  return context.get(appContext);
 }
 clientLoader.hydrate = true as const;
 
@@ -50,10 +73,10 @@ export function HydrateFallback() {
 }
 
 export default function Root() {
-  const config = useLoaderData<typeof clientLoader>();
+  const { config, apolloClient } = useLoaderData<typeof clientLoader>();
 
   return (
-    <AppProviders config={config}>
+    <AppProviders config={config} apolloClient={apolloClient}>
       <Outlet />
     </AppProviders>
   );

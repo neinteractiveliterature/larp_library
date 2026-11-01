@@ -1,7 +1,5 @@
 import { gql } from '@apollo/client';
-import { renderHook } from '@testing-library/react';
-
-import useLarpLibraryApolloClient, { typePolicies } from './useLarpLibraryApolloClient';
+import { createLarpLibraryApolloClient, typePolicies } from './larpLibraryApolloClient';
 
 const TestQuery = gql`
   query TestQuery {
@@ -15,7 +13,7 @@ function jsonResponse(body: unknown) {
   return new Response(JSON.stringify(body), { headers: { 'content-type': 'application/json' } });
 }
 
-describe('useLarpLibraryApolloClient', () => {
+describe('createLarpLibraryApolloClient', () => {
   const fetchMock = vi.fn<typeof fetch>();
 
   beforeEach(() => {
@@ -29,9 +27,9 @@ describe('useLarpLibraryApolloClient', () => {
 
   it('posts GraphQL queries to /graphql with the CSRF token and cookies', async () => {
     fetchMock.mockResolvedValue(jsonResponse({ data: { currentUser: { __typename: 'User', id: '1' } } }));
-    const { result } = renderHook(() => useLarpLibraryApolloClient('csrf-123', { current: () => {} }));
+    const client = createLarpLibraryApolloClient('csrf-123');
 
-    const queryResult = await result.current.query({ query: TestQuery });
+    const queryResult = await client.query({ query: TestQuery });
 
     expect(queryResult.data).toEqual({ currentUser: { __typename: 'User', id: '1' } });
     expect(fetchMock).toHaveBeenCalledTimes(1);
@@ -47,11 +45,9 @@ describe('useLarpLibraryApolloClient', () => {
     fetchMock.mockResolvedValue(
       jsonResponse({ data: null, errors: [{ message: 'sign in first', extensions: { code: 'NOT_AUTHENTICATED' } }] }),
     );
-    const { result } = renderHook(() => useLarpLibraryApolloClient('csrf', { current: onUnauthenticated }));
+    const client = createLarpLibraryApolloClient('csrf', onUnauthenticated);
 
-    await expect(result.current.query({ query: TestQuery, fetchPolicy: 'network-only' })).rejects.toThrow(
-      /sign in first/,
-    );
+    await expect(client.query({ query: TestQuery, fetchPolicy: 'network-only' })).rejects.toThrow(/sign in first/);
 
     expect(onUnauthenticated).toHaveBeenCalledTimes(1);
   });
@@ -59,21 +55,11 @@ describe('useLarpLibraryApolloClient', () => {
   it('does not treat other errors as being signed out', async () => {
     const onUnauthenticated = vi.fn();
     fetchMock.mockResolvedValue(jsonResponse({ data: null, errors: [{ message: 'kaboom' }] }));
-    const { result } = renderHook(() => useLarpLibraryApolloClient('csrf', { current: onUnauthenticated }));
+    const client = createLarpLibraryApolloClient('csrf', onUnauthenticated);
 
-    await expect(result.current.query({ query: TestQuery })).rejects.toThrow(/kaboom/);
+    await expect(client.query({ query: TestQuery })).rejects.toThrow(/kaboom/);
 
     expect(onUnauthenticated).not.toHaveBeenCalled();
-  });
-
-  it('keeps the same client across renders', () => {
-    const ref = { current: () => {} };
-    const { result, rerender } = renderHook(() => useLarpLibraryApolloClient('csrf', ref));
-    const firstClient = result.current;
-
-    rerender();
-
-    expect(result.current).toBe(firstClient);
   });
 
   it('paginates every connection the app pages through', () => {

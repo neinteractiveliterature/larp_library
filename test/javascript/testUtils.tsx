@@ -1,11 +1,28 @@
-import { Suspense } from 'react';
-import { InMemoryCache } from '@apollo/client';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { Suspense, type ComponentType } from 'react';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { MockedProvider, MockedResponse, MockLink } from '@apollo/client/testing';
 import { render, RenderResult } from '@testing-library/react';
 import { Confirm } from '@neinteractiveliterature/litform';
-import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
+import {
+  createMemoryRouter,
+  MemoryRouter,
+  Outlet,
+  Route,
+  RouterContextProvider,
+  RouterProvider,
+  Routes,
+  useActionData,
+  useLoaderData,
+  useLocation,
+  useParams,
+  useRouteError,
+  type ActionFunction,
+  type LoaderFunction,
+  type RouteObject,
+} from 'react-router';
+import { appContext } from '../../app/javascript/appContext';
 
-import { typePolicies } from '../../app/javascript/useLarpLibraryApolloClient';
+import { typePolicies } from '../../app/javascript/larpLibraryApolloClient';
 import { CSRFTokensContext } from '../../app/javascript/CSRFTokensContext';
 import { S3ConfigurationContext } from '../../app/javascript/S3ConfigurationContext';
 
@@ -75,4 +92,111 @@ export async function selectReactSelectOption(
     await user.keyboard('{ArrowDown}');
   }
   await user.click(await screen.findByText(optionText, { selector: '[class*="-menu"] *' }));
+}
+
+/** The parts of a route module (a page file) that the framework would wire up */
+export type RouteModuleUnderTest = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  default: ComponentType<any>;
+  clientLoader?: LoaderFunction;
+  clientAction?: ActionFunction;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ErrorBoundary?: ComponentType<any>;
+};
+
+/** An Apollo client whose network is replaced by the given mocks, with the app's real cache type policies */
+export function createMockApolloClient(mocks: MockedResponse[]) {
+  return new ApolloClient({ link: new MockLink(mocks), cache: new InMemoryCache({ typePolicies }) });
+}
+
+/** Passes a route module's component the same props the framework would (`loaderData`, `actionData`, `params`) */
+function withRouteProps(module: RouteModuleUnderTest): ComponentType {
+  return function RouteComponent() {
+    return <module.default loaderData={useLoaderData()} actionData={useActionData()} params={useParams()} />;
+  };
+}
+
+function withErrorBoundaryProps(module: RouteModuleUnderTest): ComponentType | undefined {
+  const { ErrorBoundary } = module;
+  if (!ErrorBoundary) {
+    return undefined;
+  }
+  return function RouteErrorBoundary() {
+    return <ErrorBoundary error={useRouteError()} />;
+  };
+}
+
+/** Turns a route module into a react-router route, the way the framework build does */
+export function routeFromModule(module: RouteModuleUnderTest, props: { path?: string; index?: boolean }): RouteObject {
+  return {
+    ...props,
+    Component: withRouteProps(module),
+    ErrorBoundary: withErrorBoundaryProps(module),
+    loader: module.clientLoader,
+    action: module.clientAction,
+  } as RouteObject;
+}
+
+export type RenderRouteModuleOptions = {
+  /** Apollo mocks, in the order the loaders and actions will request them */
+  mocks?: MockedResponse[];
+  /** The URL to start at */
+  route?: string;
+  /** The route pattern the module is mounted at, e.g. "/tags/:tagId/edit" */
+  path?: string;
+};
+
+/**
+ * Renders a page the way the framework build does: its `clientLoader` and `clientAction` run against the Apollo mocks,
+ * and its component gets `loaderData`, `actionData` and `params`.  Anywhere else in the app is an empty page, so a
+ * redirect can be seen in the LocationDisplay.
+ */
+export function renderRouteModule(
+  module: RouteModuleUnderTest,
+  { mocks = [], route = '/', path = '/' }: RenderRouteModuleOptions = {},
+): RenderResult {
+  const apolloClient = createMockApolloClient(mocks);
+  const config = {
+    graphqlCSRFToken: 'graphql-token',
+    signInCSRFToken: 'sign-in-token',
+    signOutCSRFToken: 'sign-out-token',
+    s3Configuration: { awsRegion: 'us-east-1', awsAccessKeyId: 'test-key-id', bucketName: 'test-bucket' },
+    sentryDsn: null,
+    currentUserId: null,
+  };
+
+  function Root() {
+    return (
+      <>
+        <Outlet />
+        <LocationDisplay />
+      </>
+    );
+  }
+
+  const router = createMemoryRouter(
+    [
+      {
+        path: '/',
+        Component: Root,
+        children: [routeFromModule(module, { path }), { path: '*', Component: () => null }],
+      },
+    ],
+    {
+      initialEntries: [route],
+      getContext: () => new RouterContextProvider(new Map([[appContext, { config, apolloClient }]])),
+    },
+  );
+
+  return render(
+    <ApolloProvider client={apolloClient}>
+      <S3ConfigurationContext.Provider value={config.s3Configuration}>
+        <CSRFTokensContext.Provider value={{ signInCSRFToken: 'sign-in-token', signOutCSRFToken: 'sign-out-token' }}>
+          <Confirm>
+            <RouterProvider router={router} />
+          </Confirm>
+        </CSRFTokensContext.Provider>
+      </S3ConfigurationContext.Provider>
+    </ApolloProvider>,
+  );
 }

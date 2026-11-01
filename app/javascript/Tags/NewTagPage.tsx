@@ -1,37 +1,51 @@
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
-import { useState, type JSX } from 'react';
-import { useNavigate } from 'react-router';
-import buildTagAttributes from './buildTagAttributes';
-import { useCreateTagMutation } from './mutations.generated';
-import TagFormFields, { TagFormFieldsProps } from './TagFormFields';
+import { useState, type FormEvent } from 'react';
+import { Form, redirect, useNavigation, useSubmit } from 'react-router';
+import { appContext } from '../appContext';
+import { getApolloActionError, withApolloErrors } from '../actionHelpers';
+import type { TagAttributes } from '../graphqlTypes.generated';
 import { pageTitle } from '../pageTitle';
+import buildTagAttributes from './buildTagAttributes';
+import { CreateTagDocument } from './mutations.generated';
+import TagFormFields, { TagFormFieldsProps } from './TagFormFields';
+import type { Route } from './+types/NewTagPage';
 
-export default function NewTagPage(): JSX.Element {
+export async function clientAction({ context, request }: Route.ClientActionArgs) {
+  const { apolloClient } = context.get(appContext);
+  const { tagAttributes } = (await request.json()) as { tagAttributes: TagAttributes };
+
+  return withApolloErrors(async () => {
+    await apolloClient.mutate({ mutation: CreateTagDocument, variables: { tagAttributes } });
+    return redirect('/tags');
+  });
+}
+
+export default function NewTagPage({ actionData }: Route.ComponentProps) {
   const [tag, setTag] = useState<TagFormFieldsProps['tag']>({
     name: '',
   });
-  const [createTag, { loading, error }] = useCreateTagMutation();
-  const navigate = useNavigate();
+  const submit = useSubmit();
+  const navigation = useNavigation();
 
-  const createClicked = async () => {
-    await createTag({ variables: { tagAttributes: buildTagAttributes(tag) } });
-    navigate('/tags');
+  const createSubmitted = (event: FormEvent) => {
+    event.preventDefault();
+    submit({ tagAttributes: buildTagAttributes(tag) }, { method: 'post', encType: 'application/json' });
   };
 
   return (
-    <>
+    <Form method="post" onSubmit={createSubmitted}>
       <header className="d-flex">
         <h1>Create a new tag</h1>
       </header>
 
       <TagFormFields tag={tag} onChange={setTag} />
 
-      <button type="button" className="btn btn-primary" disabled={loading} onClick={createClicked}>
+      <button type="submit" className="btn btn-primary" disabled={navigation.state !== 'idle'}>
         Create tag
       </button>
 
-      <ErrorDisplay graphQLError={error} />
-    </>
+      <ErrorDisplay graphQLError={getApolloActionError(actionData)} />
+    </Form>
   );
 }
 
