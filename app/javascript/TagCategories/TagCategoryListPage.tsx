@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { Waypoint } from '../Waypoint';
 import { useTagCategoryListPageQuery } from './queries.generated';
 import TagCategory from './TagCategory';
+import { pageTitle } from '../pageTitle';
 
 export default function TagCategoryListPage(): JSX.Element {
   const { data, loading, error, fetchMore } = useTagCategoryListPageQuery({
@@ -46,3 +47,5 @@ export default function TagCategoryListPage(): JSX.Element {
     </>
   );
 }
+
+export const meta = pageTitle('Tag categories');

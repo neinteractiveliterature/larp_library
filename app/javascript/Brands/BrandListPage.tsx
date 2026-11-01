@@ -3,6 +3,7 @@ import React, { type JSX } from 'react';
 import { Waypoint } from '../Waypoint';
 import BrandCard from './BrandCard';
 import { useBrandsPageQuery } from './queries.generated';
+import { pageTitle } from '../pageTitle';
 
 export default function BrandListPage(): JSX.Element {
   const { data, loading, error, fetchMore } = useBrandsPageQuery();
@@ -40,3 +41,5 @@ export default function BrandListPage(): JSX.Element {
     </>
   );
 }
+
+export const meta = pageTitle('Larp creators');

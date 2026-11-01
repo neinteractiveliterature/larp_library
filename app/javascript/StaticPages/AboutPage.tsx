@@ -1,3 +1,4 @@
+import { pageTitle } from '../pageTitle';
 export default function AboutPage() {
   return (
     <>
@@ -10,15 +11,15 @@ export default function AboutPage() {
           <strong>Curator:</strong> Eva Schiffer (valleyviolet AT gmail DOT com)
         </li>
         <li>
-          A project of{' '}
-          <a href="http://interactiveliterature.org">New England Interactive Literature</a>.
+          A project of <a href="http://interactiveliterature.org">New England Interactive Literature</a>.
         </li>
       </ul>
       <p>
-        Larp Library is made with Ruby on Rails, TypeScript, and React. The source code for the app
-        is available <a href="https://github.com/neinteractiveliterature/larp_library">on Github</a>
-        .
+        Larp Library is made with Ruby on Rails, TypeScript, and React. The source code for the app is available{' '}
+        <a href="https://github.com/neinteractiveliterature/larp_library">on Github</a>.
       </p>
     </>
   );
 }
+
+export const meta = pageTitle('About us');

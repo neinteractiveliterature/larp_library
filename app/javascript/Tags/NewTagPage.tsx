@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import buildTagAttributes from './buildTagAttributes';
 import { useCreateTagMutation } from './mutations.generated';
 import TagFormFields, { TagFormFieldsProps } from './TagFormFields';
+import { pageTitle } from '../pageTitle';
 
 export default function NewTagPage(): JSX.Element {
   const [tag, setTag] = useState<TagFormFieldsProps['tag']>({
@@ -33,3 +34,5 @@ export default function NewTagPage(): JSX.Element {
     </>
   );
 }
+
+export const meta = pageTitle('New tag');

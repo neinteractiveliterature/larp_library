@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 import { generateBrandPath } from '../URLGenerators';
 import { useApproveBrandMutation } from './mutations.generated';
 import { UnapprovedBrandsListPageQueryDocument, useUnapprovedBrandsListPageQuery } from './queries.generated';
+import { pageTitle } from '../pageTitle';
 
 export default LoadQueryWrapper(useUnapprovedBrandsListPageQuery, function UnapprovedBrandsListPage({ data }) {
   const [approveBrand] = useApproveBrandMutation();
@@ -79,3 +80,5 @@ export default LoadQueryWrapper(useUnapprovedBrandsListPageQuery, function Unapp
     </>
   );
 });
+
+export const meta = pageTitle('Pending creators');

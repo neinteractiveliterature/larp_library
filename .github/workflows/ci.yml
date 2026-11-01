@@ -24,6 +24,8 @@ jobs:
         run: yarn install
       - name: graphql-codegen
         run: yarn run graphql:codegen
+      - name: react-router typegen
+        run: yarn run typegen
       - name: tsc on resulting generated files
         run: yarn run tsc --noEmit
   lint:
