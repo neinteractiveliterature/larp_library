@@ -66,5 +66,3 @@ end
 group :production do
   gem "puma"
 end
-
-gem "vite_rails", "~> 3.11"

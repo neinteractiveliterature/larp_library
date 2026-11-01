@@ -6,7 +6,7 @@ import { Confirm } from '@neinteractiveliterature/litform';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router';
 
 import { typePolicies } from '../../app/javascript/useLarpLibraryApolloClient';
-import { CSRFTokensContext } from '../../app/javascript/AppRoot';
+import { CSRFTokensContext } from '../../app/javascript/CSRFTokensContext';
 import { S3ConfigurationContext } from '../../app/javascript/S3ConfigurationContext';
 
 export type { MockedResponse };

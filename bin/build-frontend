@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Builds the single-page app and installs it in public/packs, where Rails serves the assets from
+# (public/packs/assets/*) and SinglePageAppController reads the app shell from (public/packs/index.html).
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+yarn react-router build
+rm -rf public/packs
+cp -R build/client public/packs

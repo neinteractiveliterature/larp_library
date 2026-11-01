@@ -37,8 +37,7 @@ ENV RAILS_ENV production
 ENV NODE_ENV production
 ENV AWS_ACCESS_KEY_ID dummy
 ENV AWS_SECRET_ACCESS_KEY dummy
-# The JS bundle is built by `yarn run build` in CI and copied in, so don't run vite:build here (no Node in this image)
-ENV VITE_RUBY_SKIP_ASSETS_PRECOMPILE_EXTENSION true
+# The JS bundle (public/packs) is built by `yarn run build` in CI and copied in, since there is no Node in this image
 
 RUN DATABASE_URL=postgresql://fakehost/not_a_real_database AWS_S3_BUCKET=fakebucket ASSETS_HOST=fakehost SECRET_KEY_BASE=fakekey bundle exec rails assets:precompile
 

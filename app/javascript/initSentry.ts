@@ -1,16 +1,13 @@
 import * as Sentry from '@sentry/browser';
 
-declare global {
-  interface Window {
-    larpLibrarySentryDsn?: string;
-    larpLibraryCurrentUserId?: number;
+export function initSentry(dsn: string | null | undefined, currentUserId?: number | null): void {
+  if (!dsn) {
+    return;
   }
-}
 
-if (window.larpLibrarySentryDsn) {
-  Sentry.init({ dsn: window.larpLibrarySentryDsn });
+  Sentry.init({ dsn });
 
-  if (window.larpLibraryCurrentUserId != null) {
-    Sentry.setUser({ id: String(window.larpLibraryCurrentUserId) });
+  if (currentUserId != null) {
+    Sentry.setUser({ id: String(currentUserId) });
   }
 }

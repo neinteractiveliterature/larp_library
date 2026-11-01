@@ -9,5 +9,7 @@ Rails.application.routes.draw do
     delete "/users/sign_out", to: "devise/sessions#destroy", as: :destroy_user_session
   end
 
+  get "/app_config", to: "app_config#show"
+
   get "/(*extra)" => "single_page_app#show", :as => "root", :constraints => { extra: %r{(?!(uploads|packs|assets)/).*} }
 end
