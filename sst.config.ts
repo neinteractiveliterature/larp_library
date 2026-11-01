@@ -39,6 +39,7 @@ export default $config({
     const appEnvironment = {
       DATABASE_URL: databaseUrl.value,
       AWS_S3_BUCKET: uploadsBucket.name,
+      APP_URL_BASE: $app.stage === 'production' ? 'https://www.larplibrary.org' : 'http://localhost:3042',
       NODE_EXTRA_CA_CERTS: '/var/task/rds-global-bundle.pem',
     };
 
