@@ -1826,19 +1826,41 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/core@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@floating-ui/core@npm:1.0.1"
-  checksum: 10/c61bf0b108f445ae0f369d44779fc95c81275b3cf0a8c45acdbe998d1f0bac070b7f81ea70ee29b59adb5482dfc95eb984caaf3b07abf4bc4f4b3274d684e4d2
+"@floating-ui/core@npm:^1.8.0":
+  version: 1.8.0
+  resolution: "@floating-ui/core@npm:1.8.0"
+  dependencies:
+    "@floating-ui/utils": "npm:^0.2.12"
+  checksum: 10/762cd5677fd4e82597db2efdd8f1e81d248eac5615d8be755e1bbb5f12a14c56a6bccd735676374d4914db7ccb3f09ec405ec7433e8c48a5521f5d66dc8dd5d6
   languageName: node
   linkType: hard
 
-"@floating-ui/dom@npm:^1.0.1":
-  version: 1.0.4
-  resolution: "@floating-ui/dom@npm:1.0.4"
+"@floating-ui/dom@npm:^1.0.1, @floating-ui/dom@npm:^1.8.0":
+  version: 1.8.0
+  resolution: "@floating-ui/dom@npm:1.8.0"
   dependencies:
-    "@floating-ui/core": "npm:^1.0.1"
-  checksum: 10/3024bd0cc27128595160f8d2eeed940f4dd4d3a7b2ab0f6eadaabc11e2a5eeb31cf8627e3777edb87a9fc534a6da11d4adcdbf998453da7e8e008298e41d33f1
+    "@floating-ui/core": "npm:^1.8.0"
+    "@floating-ui/utils": "npm:^0.2.12"
+  checksum: 10/2e7d75fb702875a62795dd8529569f27eff53167768d75476056d6bf824a1ba608177a8877ed9d728eadb5787b4bd07b043fb2c3125b7ad2505a398680b323c0
+  languageName: node
+  linkType: hard
+
+"@floating-ui/react-dom@npm:^2.1.9":
+  version: 2.1.9
+  resolution: "@floating-ui/react-dom@npm:2.1.9"
+  dependencies:
+    "@floating-ui/dom": "npm:^1.8.0"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 10/d775609760291d0f1477a9e23fc3508a35bcda1f36601d74bd3e94b817841b266914fa9964697963cb1ac09b451e51283a2ce25f0c3719d0aca761e327bdee43
+  languageName: node
+  linkType: hard
+
+"@floating-ui/utils@npm:^0.2.12":
+  version: 0.2.12
+  resolution: "@floating-ui/utils@npm:0.2.12"
+  checksum: 10/ec4e176fb22d33d75df752c5acf82dcaacae40ed2d09c1a5015cb4081318fff20260db216678e952344b95f90c6b43214762b69eba7c51556ecd82c35a795cff
   languageName: node
   linkType: hard
 
@@ -2986,21 +3008,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform-apollo@npm:0.35.2":
-  version: 0.35.2
-  resolution: "@neinteractiveliterature/litform-apollo@npm:0.35.2"
+"@neinteractiveliterature/litform-apollo@npm:0.36.0":
+  version: 0.36.0
+  resolution: "@neinteractiveliterature/litform-apollo@npm:0.36.0"
   dependencies:
-    "@neinteractiveliterature/litform-core": "npm:^0.35.2"
+    "@neinteractiveliterature/litform-core": "npm:^0.36.0"
   peerDependencies:
     "@apollo/client": ">= 3.3.18"
     react: ">= 18"
-  checksum: 10/c6094100783637e709d302824770924dcf38df884c91ea52a1eb3382388194cd05a92ff24b52c40e048fe101a86a899f829f04fa5ec1e61b19392ec69207d5f0
+  checksum: 10/6577bba4f4df74bb664822eb939ef0c058ef591b6d0eceb413055b8a819c46a1721c28c140447f7319e81e8d8cdbdbcea403a823e90f7f18a0e3052bdeddea8f
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform-codemirror@npm:^0.35.2":
-  version: 0.35.2
-  resolution: "@neinteractiveliterature/litform-codemirror@npm:0.35.2"
+"@neinteractiveliterature/litform-codemirror@npm:^0.36.0":
+  version: 0.36.0
+  resolution: "@neinteractiveliterature/litform-codemirror@npm:0.36.0"
   dependencies:
     "@codemirror/commands": "npm:^6.8.0"
     "@codemirror/lang-html": "npm:^6.4.9"
@@ -3010,20 +3032,20 @@ __metadata:
     "@lezer/common": "npm:^1.2.3"
     "@lezer/highlight": "npm:^1.2.1"
     "@lezer/lr": "npm:^1.4.2"
-    "@neinteractiveliterature/litform-core": "npm:^0.35.2"
+    "@neinteractiveliterature/litform-core": "npm:^0.36.0"
     classnames: "npm:^2.5.1"
     codemirror: "npm:^6.0.1"
   peerDependencies:
     react: ">= 18"
-  checksum: 10/25fcfa84c3a517214ac8910672257223033991947fcfc8eaf61aeca87198dbd9f867035ce97ce0e4fd265592b1fc2a0c6bf8aa6127b7e63097db2915e549fb88
+  checksum: 10/2a26aaf161b8b09076280567ec13cce9711e1302229e175790a7eb59cd2d597d2763976775f679f7fd0df2da8896a02c2d6126c0277a5e0967e57a30d5ad55c5
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform-controls@npm:^0.35.2":
-  version: 0.35.2
-  resolution: "@neinteractiveliterature/litform-controls@npm:0.35.2"
+"@neinteractiveliterature/litform-controls@npm:^0.36.0":
+  version: 0.36.0
+  resolution: "@neinteractiveliterature/litform-controls@npm:0.36.0"
   dependencies:
-    "@neinteractiveliterature/litform-core": "npm:^0.35.2"
+    "@neinteractiveliterature/litform-core": "npm:^0.36.0"
     classnames: "npm:^2.5.1"
     copy-to-clipboard: "npm:^3.3.3"
     graphql: "npm:^16.10.0"
@@ -3031,13 +3053,13 @@ __metadata:
     temporal-polyfill: "npm:^0.3.0"
   peerDependencies:
     react: ">= 18"
-  checksum: 10/8267e2edb298fab12d0a4f2303d0ffb8b0e9f5d89aab073f12223836d55dc9d696603b5c0694e7d6d5a8581a080f4497df96f68d76f1b9f86c09e39e108ca946
+  checksum: 10/c58a368423c2217be6ced028d392fe81ee391bf6acd58713f1447cf3cb2f5e4262593316d3cb743cd7be81c02a7bb67a0d9bef82bf329b580f73daeb8a879c73
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform-core@npm:^0.35.2":
-  version: 0.35.2
-  resolution: "@neinteractiveliterature/litform-core@npm:0.35.2"
+"@neinteractiveliterature/litform-core@npm:^0.36.0":
+  version: 0.36.0
+  resolution: "@neinteractiveliterature/litform-core@npm:0.36.0"
   dependencies:
     classnames: "npm:^2.5.1"
     graphql: "npm:^16.10.0"
@@ -3046,48 +3068,47 @@ __metadata:
     uuid: "npm:^11.1.0"
   peerDependencies:
     react: ">= 18"
-  checksum: 10/a9b31d517c478f47b39f9b00a74dff98d23075ff50142afd0b91b6880551756f536501bd1919b7cd5d75a9290da95fbd0be748ba64ee8240c9c0585e7eb6d1fa
+  checksum: 10/37e44914dbb09894952bd0a0212dc9aeead26bf6ee2166ea78bf32728b972d2e2f5cdd7db2ce4f9515cb490dbb2bb971a6e5ff86dfab87a7b1b9f9369065a1be
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform-modals@npm:^0.35.2":
-  version: 0.35.2
-  resolution: "@neinteractiveliterature/litform-modals@npm:0.35.2"
+"@neinteractiveliterature/litform-modals@npm:^0.36.0":
+  version: 0.36.0
+  resolution: "@neinteractiveliterature/litform-modals@npm:0.36.0"
   dependencies:
-    "@neinteractiveliterature/litform-core": "npm:^0.35.2"
+    "@neinteractiveliterature/litform-core": "npm:^0.36.0"
     react-bootstrap4-modal: "npm:^3.0.10"
   peerDependencies:
     react: ">= 18"
-  checksum: 10/e7c5eb9573390444a9de1778405af9f05395a824718cd9cc0a0f4426c6ed57f9afeefea33ed3cdab19f82ae4f27e0cc5499ef9afd67919493104c084db1178f5
+  checksum: 10/7d85823b605018e90d59ab6dc52ccf93783d187d681d3dd7daabc78eff866de2ce9e695080121024fb246e2d63e8da9e72a5424efd737df02353640b26084651
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform-popovers@npm:^0.35.2":
-  version: 0.35.2
-  resolution: "@neinteractiveliterature/litform-popovers@npm:0.35.2"
+"@neinteractiveliterature/litform-popovers@npm:^0.36.0":
+  version: 0.36.0
+  resolution: "@neinteractiveliterature/litform-popovers@npm:0.36.0"
   dependencies:
-    "@neinteractiveliterature/litform-core": "npm:^0.35.2"
-    "@popperjs/core": "npm:^2.11.8"
+    "@floating-ui/react-dom": "npm:^2.1.9"
+    "@neinteractiveliterature/litform-core": "npm:^0.36.0"
     classnames: "npm:^2.5.1"
     react-cool-onclickoutside: "npm:^1.7.0"
-    react-popper: "npm:^2.3.0"
   peerDependencies:
     react: ">= 18"
     react-dom: ">= 18"
-  checksum: 10/6a3bd3df45e486b25ba6717bbd126584c551de496d3518f4dce08893106da35b8e35329aa9b1392eb424e9fe7bc1607c4f9a260d38ec5e794595cd2750971338
+  checksum: 10/394ecee73be4b3548728acd2d9a47840c36e35429e61deadad02ff154051aa44d00299881c5ae79672d3fbcd67b13c067e05cbe1d806e4a605d5e963451c2b03
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform@npm:0.35.2":
-  version: 0.35.2
-  resolution: "@neinteractiveliterature/litform@npm:0.35.2"
+"@neinteractiveliterature/litform@npm:0.36.0":
+  version: 0.36.0
+  resolution: "@neinteractiveliterature/litform@npm:0.36.0"
   dependencies:
-    "@neinteractiveliterature/litform-codemirror": "npm:^0.35.2"
-    "@neinteractiveliterature/litform-controls": "npm:^0.35.2"
-    "@neinteractiveliterature/litform-core": "npm:^0.35.2"
-    "@neinteractiveliterature/litform-modals": "npm:^0.35.2"
-    "@neinteractiveliterature/litform-popovers": "npm:^0.35.2"
-  checksum: 10/5728d8d8c7c5f0ead252a63fe1ef17a2f123596a25a739ce0270a5558cfb0f56425a552cd98724f2b28d2258fe73f6f8498629941f176a498bb3e71d9b7274a7
+    "@neinteractiveliterature/litform-codemirror": "npm:^0.36.0"
+    "@neinteractiveliterature/litform-controls": "npm:^0.36.0"
+    "@neinteractiveliterature/litform-core": "npm:^0.36.0"
+    "@neinteractiveliterature/litform-modals": "npm:^0.36.0"
+    "@neinteractiveliterature/litform-popovers": "npm:^0.36.0"
+  checksum: 10/1df683927158d3cb67b0129087f9ce1f101baf791fe658726a00f66a7e449d8d904002d8455f59da7107792f08003995bf1bdf1d4352146bb15621dfcba73e19
   languageName: node
   linkType: hard
 
@@ -3573,7 +3594,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:2.11.8, @popperjs/core@npm:^2.11.8":
+"@popperjs/core@npm:2.11.8":
   version: 2.11.8
   resolution: "@popperjs/core@npm:2.11.8"
   checksum: 10/ddd16090cde777aaf102940f05d0274602079a95ad9805bd20bc55dcc7c3a2ba1b99dd5c73e5cc2753c3d31250ca52a67d58059459d7d27debb983a9f552936c
@@ -9408,13 +9429,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-fast-compare@npm:^3.0.1":
-  version: 3.2.0
-  resolution: "react-fast-compare@npm:3.2.0"
-  checksum: 10/26ed35d425f197f04c85d572eac943d901a2713335b79483d4f3f94ee5caf97f20678f89bedd385ace9b1637890c88fc5442d732bad0871135643d9703312cd7
-  languageName: node
-  linkType: hard
-
 "react-intersection-observer@npm:11.0.1":
   version: 11.0.1
   resolution: "react-intersection-observer@npm:11.0.1"
@@ -9461,20 +9475,6 @@ __metadata:
     "@types/react": ">=18"
     react: ">=18"
   checksum: 10/07045797b926afafc6aff692c9ee7d1cb9b12bc0e2d2b9f22ab17f2d1036dd807034a58565d67cfcfe94fe43961452a977496a175cbc9028ed51f2eec823c2f4
-  languageName: node
-  linkType: hard
-
-"react-popper@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "react-popper@npm:2.3.0"
-  dependencies:
-    react-fast-compare: "npm:^3.0.1"
-    warning: "npm:^4.0.2"
-  peerDependencies:
-    "@popperjs/core": ^2.0.0
-    react: ^16.8.0 || ^17 || ^18
-    react-dom: ^16.8.0 || ^17 || ^18
-  checksum: 10/2afc495479ae4b9e67f9a1642debd7121947fe71a00c5b326301adb8288a18dca53ebd836fe9c3b7a4e2feb838df0abe8e044eb278e89b1c5d50978b0b93d0ac
   languageName: node
   linkType: hard
 
@@ -9853,8 +9853,8 @@ __metadata:
     "@graphql-codegen/typescript-apollo-client-helpers": "npm:4.0.0"
     "@graphql-codegen/typescript-operations": "npm:5.0.0"
     "@graphql-codegen/typescript-react-apollo": "npm:4.3.2"
-    "@neinteractiveliterature/litform": "npm:0.35.2"
-    "@neinteractiveliterature/litform-apollo": "npm:0.35.2"
+    "@neinteractiveliterature/litform": "npm:0.36.0"
+    "@neinteractiveliterature/litform-apollo": "npm:0.36.0"
     "@oxlint/migrate": "npm:^1.90.0"
     "@popperjs/core": "npm:2.11.8"
     "@prettier/plugin-ruby": "npm:4.0.4"
@@ -11118,15 +11118,6 @@ __metadata:
   dependencies:
     xml-name-validator: "npm:^5.0.0"
   checksum: 10/0a61cfbfc2b042a5422f4e3f853973ce9019cee88a18d13ad4d8522ce928b474aee9c682f30e2d1004aa117f36e66ae7d97861f39b1745aa0084420b72c91505
-  languageName: node
-  linkType: hard
-
-"warning@npm:^4.0.2":
-  version: 4.0.3
-  resolution: "warning@npm:4.0.3"
-  dependencies:
-    loose-envify: "npm:^1.0.0"
-  checksum: 10/e7842aff036e2e07ce7a6cc3225e707775b969fe3d0577ad64bd24660e3a9ce3017f0b8c22a136566dcd3a151f37b8ed1ccee103b3bd82bd8a571bf80b247bc4
   languageName: node
   linkType: hard
 
