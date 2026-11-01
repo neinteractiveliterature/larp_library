@@ -1,9 +1,9 @@
 import { screen, within } from '@testing-library/react';
 
-import HomePage from './HomePage';
+import * as HomePage from './HomePage';
 import { HomePageQueryDocument } from './queries.generated';
 import { buildConnection, buildProjectHeaders, buildTag, buildTagCategory } from '../../../test/javascript/fixtures';
-import { renderPage } from '../../../test/javascript/testUtils';
+import { renderRouteModule } from '../../../test/javascript/testUtils';
 
 describe('HomePage', () => {
   it('shows the featured larps and tags grouped by category', async () => {
@@ -13,7 +13,7 @@ describe('HomePage', () => {
     const comedy = buildTag({ id: 't2', name: 'comedy', tagCategory: genre });
     const misc = buildTag({ id: 't3', name: 'uncategorized-tag', tagCategory: null });
 
-    renderPage(<HomePage />, {
+    renderRouteModule(HomePage, {
       mocks: [
         {
           request: { query: HomePageQueryDocument },

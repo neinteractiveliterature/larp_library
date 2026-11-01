@@ -1,20 +1,32 @@
 import { useQuery } from '@apollo/client';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import React, { useState, type JSX } from 'react';
 import { Waypoint } from '../Waypoint';
+import { appContext } from '../appContext';
+import { loadQuery } from '../loadQuery';
 import { ProjectSearchQueryDocument } from './queries.generated';
 import ProjectCard from './ProjectCard';
 import SimpleProjectSearchControls from './SimpleProjectSearchControls';
-import useProjectSearchParams from './useProjectSearchParams';
+import useProjectSearchParams, { decodeProjectSearchParams } from './useProjectSearchParams';
 import AdvancedProjectSearchControls from './AdvancedProjectSearchControls';
 import { pageTitle } from '../pageTitle';
+import type { Route } from './+types/ProjectSearchPage';
 
 enum ProjectSearchMode {
   SIMPLE = 'SIMPLE',
   ADVANCED = 'ADVANCED',
 }
 
-export default function ProjectSearchPage(): JSX.Element {
+export async function clientLoader({ context, request }: Route.ClientLoaderArgs) {
+  const { apolloClient } = context.get(appContext);
+  // the search lives in the URL, so a new search is a navigation, and the previous results stay up while it loads
+  return loadQuery(
+    apolloClient,
+    ProjectSearchQueryDocument,
+    decodeProjectSearchParams(new URL(request.url).searchParams),
+  );
+}
+
+export default function ProjectSearchPage({ loaderData }: Route.ComponentProps): JSX.Element {
   const [projectSearchParams, setProjectSearchParams] = useProjectSearchParams();
   const [searchMode, setSearchMode] = useState<ProjectSearchMode>(() => {
     if (
@@ -43,10 +55,9 @@ export default function ProjectSearchPage(): JSX.Element {
     setSearchMode(ProjectSearchMode.SIMPLE);
   };
 
-  const { data, loading, error, fetchMore } = useQuery(ProjectSearchQueryDocument, {
-    variables: projectSearchParams,
-    fetchPolicy: 'network-only',
-  });
+  // The loader put the first page of results in the Apollo cache.  Reading them back from there is what lets
+  // fetchMore page in the rest as the page is scrolled.
+  const { data = loaderData, fetchMore } = useQuery(ProjectSearchQueryDocument, { variables: projectSearchParams });
 
   return (
     <>
@@ -71,31 +82,25 @@ export default function ProjectSearchPage(): JSX.Element {
         <AdvancedProjectSearchControls data={data} switchToSimpleSearch={switchToSimpleSearch} />
       )}
 
-      <ErrorDisplay graphQLError={error} />
-      <PageLoadingIndicator visible={loading} iconSet="bootstrap-icons" />
-
-      {!error &&
-        !loading &&
-        data &&
-        data.projects.edges.map(({ node: project }, index) => (
-          <React.Fragment key={project.id}>
-            <ProjectCard project={project} />
-            {index === data.projects.edges.length - 5 && (
-              <Waypoint
-                onEnter={() => {
-                  if (data.projects.edges.length < data.projects.totalCount) {
-                    fetchMore({
-                      variables: {
-                        ...projectSearchParams,
-                        after: data.projects.pageInfo.endCursor,
-                      },
-                    });
-                  }
-                }}
-              />
-            )}
-          </React.Fragment>
-        ))}
+      {data.projects.edges.map(({ node: project }, index) => (
+        <React.Fragment key={project.id}>
+          <ProjectCard project={project} />
+          {index === data.projects.edges.length - 5 && (
+            <Waypoint
+              onEnter={() => {
+                if (data.projects.edges.length < data.projects.totalCount) {
+                  fetchMore({
+                    variables: {
+                      ...projectSearchParams,
+                      after: data.projects.pageInfo.endCursor,
+                    },
+                  });
+                }
+              }}
+            />
+          )}
+        </React.Fragment>
+      ))}
     </>
   );
 }
