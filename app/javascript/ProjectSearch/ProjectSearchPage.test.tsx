@@ -1,40 +1,62 @@
-import { screen, waitFor, within } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import * as ProjectSearchPage from './ProjectSearchPage';
-import { ProjectSearchQueryDocument } from './queries.generated';
-import { buildConnection, buildProjectHeaders, buildTag, resetFixtureIds } from '../../../test/javascript/fixtures';
-import { MockedResponse, renderRouteModule, withRouteErrorDisplay } from '../../../test/javascript/testUtils';
+import ProjectSearchPage from './ProjectSearchPage';
+import type { ProjectSearchResult } from '../server/lib/projectSearch.server';
+import type { TagData } from '../projectData';
+import { renderRouteModule, withRouteErrorDisplay } from '../../../test/javascript/testUtils';
 
 vi.mock('../Waypoint', () => import('../../../test/javascript/mockWaypoint'));
 
-function buildProject(overrides: Record<string, unknown> = {}) {
-  return { ...buildProjectHeaders(), description: 'A **fun** larp.', ...overrides };
-}
+let nextId = 1;
 
-function searchMock(
-  projects: ReturnType<typeof buildProject>[],
-  {
-    totalCount = projects.length,
-    tagByName = null as ReturnType<typeof buildTag> | null,
-    matchVariables = (() => true) as (variables: Record<string, unknown>) => boolean,
-  } = {},
-): MockedResponse {
+function buildResult(title: string, overrides: Partial<ProjectSearchResult> = {}): ProjectSearchResult {
+  const id = nextId++;
   return {
-    request: { query: ProjectSearchQueryDocument },
-    variableMatcher: matchVariables,
-    result: { data: { projects: buildConnection(projects, { totalCount }), tagByName } },
+    id,
+    title,
+    authors: null,
+    minPlayers: null,
+    maxPlayers: null,
+    minFacilitators: null,
+    maxFacilitators: null,
+    publicationYear: null,
+    lengthQuantity: null,
+    lengthUnits: null,
+    brand: { id: 1, name: 'Cool Games', slug: 'cool-games' },
+    tags: [],
+    description: 'A **fun** larp.',
+    ...overrides,
   };
 }
 
+type LoaderData = { projects: ProjectSearchResult[]; totalCount: number; offset: number; tag: TagData | null };
+
+/** A stand-in for the route's loader: it's handed the URL it was asked for, and answers with whatever the test decides */
+function fakeLoader(answer: (url: URL) => Partial<LoaderData>) {
+  const requests: URL[] = [];
+  const loader = ({ request }: { request: Request }): LoaderData => {
+    const url = new URL(request.url);
+    requests.push(url);
+    const partial = answer(url);
+    const projects = partial.projects ?? [];
+    return { projects, totalCount: projects.length, offset: 0, tag: null, ...partial };
+  };
+  return { loader, requests };
+}
+
+function renderSearchPage(route: string, loader: ReturnType<typeof fakeLoader>['loader']) {
+  return renderRouteModule({ ...ProjectSearchPage, default: ProjectSearchPage, loader }, { route, path: '/projects' });
+}
+
 describe('ProjectSearchPage', () => {
-  beforeEach(() => resetFixtureIds());
+  beforeEach(() => {
+    nextId = 1;
+  });
 
   it('lists the matching projects', async () => {
-    renderRouteModule(ProjectSearchPage, {
-      route: '/projects',
-      mocks: [searchMock([buildProject({ title: 'First Larp' }), buildProject({ title: 'Second Larp' })])],
-    });
+    const { loader } = fakeLoader(() => ({ projects: [buildResult('First Larp'), buildResult('Second Larp')] }));
+    renderSearchPage('/projects', loader);
 
     expect(await screen.findByRole('heading', { name: 'Larps' })).toBeInTheDocument();
     expect(await screen.findByText('First Larp')).toBeInTheDocument();
@@ -44,69 +66,57 @@ describe('ProjectSearchPage', () => {
   });
 
   it('shows an error when the search fails', async () => {
-    renderRouteModule(withRouteErrorDisplay(ProjectSearchPage), {
-      route: '/projects',
-      mocks: [
-        { request: { query: ProjectSearchQueryDocument }, variableMatcher: () => true, error: new Error('boom') },
-      ],
-    });
+    renderRouteModule(
+      withRouteErrorDisplay({
+        default: ProjectSearchPage,
+        loader: () => {
+          throw new Error('boom');
+        },
+      }),
+      { route: '/projects' },
+    );
 
     expect(await screen.findByText(/boom/)).toBeInTheDocument();
   });
 
-  it('puts the typed search in the URL and sends it to the API', async () => {
+  it('puts the typed search in the URL and sends it to the loader', async () => {
     const user = userEvent.setup();
-    const seenQueryStrings: unknown[] = [];
-    // Typing is debounced, but a slow machine can pause long enough mid-word to send a partial search (e.g. "wo"), so
-    // every non-empty search gets the same answer rather than only the finished word.
-    const answerFor = (title: string, applies: (queryString: unknown) => boolean) => ({
-      ...searchMock([buildProject({ title })], {
-        matchVariables: (variables) => {
-          seenQueryStrings.push(variables.queryString);
-          return applies(variables.queryString);
-        },
-      }),
-      maxUsageCount: Number.POSITIVE_INFINITY,
-    });
-    renderRouteModule(ProjectSearchPage, {
-      route: '/projects',
-      mocks: [
-        answerFor('Everything', (queryString) => queryString == null),
-        answerFor('Just Wolves', (queryString) => typeof queryString === 'string' && queryString !== ''),
-      ],
-    });
+    // Typing is debounced, but a slow machine can pause long enough mid-word to send a partial search (e.g. "wo"), so any
+    // search gets the same answer rather than only the finished word.
+    const { loader, requests } = fakeLoader((url) => ({
+      projects: [buildResult(url.searchParams.get('q') ? 'Just Wolves' : 'Everything')],
+    }));
+    renderSearchPage('/projects', loader);
 
     await screen.findByText('Everything');
     await user.type(screen.getByRole('searchbox'), 'wolf');
 
     await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/projects?q=wolf'));
     expect(await screen.findByText('Just Wolves')).toBeInTheDocument();
-    expect(seenQueryStrings).toContain('wolf');
+    expect(requests.map((url) => url.searchParams.get('q'))).toContain('wolf');
   });
 
   it('shows the filtered tag and removes it when dismissed', async () => {
     const user = userEvent.setup();
-    const horde = buildTag({ name: 'horde' });
-    renderRouteModule(ProjectSearchPage, {
-      route: '/projects?tag=horde',
-      mocks: [
-        searchMock([buildProject({ title: 'Hordey' })], { tagByName: horde }),
-        searchMock([buildProject({ title: 'Anything' })]),
-      ],
-    });
+    const horde: TagData = { id: 5, name: 'horde', tagCategory: null };
+    const { loader } = fakeLoader((url) =>
+      url.searchParams.get('tag')
+        ? { projects: [buildResult('Hordey')], tag: horde }
+        : { projects: [buildResult('Anything')] },
+    );
+    renderSearchPage('/projects?tag=horde', loader);
 
     await screen.findByText('Hordey');
     await user.click(screen.getByRole('button', { name: 'Remove horde' }));
 
     await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent(/^\/projects\??$/));
+    expect(await screen.findByText('Anything')).toBeInTheDocument();
   });
 
   it('switches to advanced search, which opens automatically when advanced params are in the URL', async () => {
     const user = userEvent.setup();
-    renderRouteModule(ProjectSearchPage, {
-      route: '/projects?title=Wolf&player_count_lower=4',
-      mocks: [searchMock([buildProject({ title: 'Wolf Larp' })]), searchMock([buildProject({ title: 'Wolf Larp' })])],
-    });
+    const { loader } = fakeLoader(() => ({ projects: [buildResult('Wolf Larp')] }));
+    renderSearchPage('/projects?title=Wolf&player_count_lower=4', loader);
 
     expect(await screen.findByText('Advanced search')).toBeInTheDocument();
     expect(screen.getByLabelText('Title')).toHaveValue('Wolf');
@@ -120,11 +130,8 @@ describe('ProjectSearchPage', () => {
 
   it('lets you fill in each advanced search field', { timeout: 30000 }, async () => {
     const user = userEvent.setup();
-    renderRouteModule(ProjectSearchPage, {
-      route: '/projects',
-      // every field that lands in the URL is a new search, answered by the same mock
-      mocks: [{ ...searchMock([buildProject({ title: 'Anything' })]), maxUsageCount: Number.POSITIVE_INFINITY }],
-    });
+    const { loader } = fakeLoader(() => ({ projects: [buildResult('Anything')] }));
+    renderSearchPage('/projects', loader);
 
     await screen.findByText('Anything');
     await user.click(screen.getByRole('button', { name: 'Switch to advanced search' }));
@@ -143,36 +150,62 @@ describe('ProjectSearchPage', () => {
     await typeAndWaitForUrl('and', '2', 'facilitator_count_upper=2', 1);
   });
 
-  it('loads the next page when the end of the list scrolls into view', async () => {
+  it('loads the next page, by offset, when the end of the list scrolls into view', async () => {
     const user = userEvent.setup();
-    const firstPage = Array.from({ length: 5 }, (_, i) => buildProject({ title: `Page One Larp ${i + 1}` }));
-    const secondPage = [buildProject({ title: 'Page Two Larp' })];
-    renderRouteModule(ProjectSearchPage, {
-      route: '/projects',
-      mocks: [
-        searchMock(firstPage, { totalCount: 6 }),
-        searchMock(secondPage, {
-          totalCount: 6,
-          matchVariables: (variables) => variables.after === `cursor-${firstPage[4].id}`,
-        }),
-      ],
-    });
+    const firstPage = Array.from({ length: 5 }, (_, i) => buildResult(`Page One Larp ${i + 1}`));
+    const secondPage = [buildResult('Page Two Larp')];
+    const { loader, requests } = fakeLoader((url) =>
+      url.searchParams.get('offset') === '5'
+        ? { projects: secondPage, totalCount: 6, offset: 5 }
+        : { projects: firstPage, totalCount: 6, offset: 0 },
+    );
+    renderSearchPage('/projects?q=larp', loader);
 
     await screen.findByText('Page One Larp 1');
     expect(screen.queryByText('Page Two Larp')).not.toBeInTheDocument();
     await user.click(screen.getByTestId('waypoint'));
 
     expect(await screen.findByText('Page Two Larp')).toBeInTheDocument();
-    expect(within(document.body).getByText('Page One Larp 5')).toBeInTheDocument();
+    expect(screen.getByText('Page One Larp 5')).toBeInTheDocument();
+    // the next page is the same search, from where the first page ended
+    const nextRequest = requests.find((url) => url.searchParams.get('offset') === '5');
+    expect(nextRequest?.searchParams.get('q')).toEqual('larp');
+  });
+
+  it('drops the pages it loaded when the search changes', async () => {
+    const user = userEvent.setup();
+    const firstPage = Array.from({ length: 5 }, (_, i) => buildResult(`Old Larp ${i + 1}`));
+    const { loader } = fakeLoader((url) => {
+      if (url.searchParams.get('q')) {
+        return { projects: [buildResult('New Result')] };
+      }
+      return url.searchParams.get('offset') === '5'
+        ? { projects: [buildResult('Old Page Two')], totalCount: 6, offset: 5 }
+        : { projects: firstPage, totalCount: 6, offset: 0 };
+    });
+    renderSearchPage('/projects', loader);
+
+    await screen.findByText('Old Larp 1');
+    await user.click(screen.getByTestId('waypoint'));
+    await screen.findByText('Old Page Two');
+
+    await user.type(screen.getByRole('searchbox'), 'new');
+
+    expect(await screen.findByText('New Result')).toBeInTheDocument();
+    expect(screen.queryByText('Old Page Two')).not.toBeInTheDocument();
+    expect(screen.queryByText('Old Larp 1')).not.toBeInTheDocument();
   });
 
   it('does not request more when everything is already loaded', async () => {
     const user = userEvent.setup();
-    const projects = Array.from({ length: 5 }, (_, i) => buildProject({ title: `Only Larp ${i + 1}` }));
-    renderRouteModule(ProjectSearchPage, { route: '/projects', mocks: [searchMock(projects, { totalCount: 5 })] });
+    const { loader, requests } = fakeLoader(() => ({
+      projects: Array.from({ length: 5 }, (_, i) => buildResult(`Only Larp ${i + 1}`)),
+    }));
+    renderSearchPage('/projects', loader);
 
     await screen.findByText('Only Larp 1');
     await user.click(screen.getByTestId('waypoint'));
     expect(screen.getAllByText(/^Only Larp/)).toHaveLength(5);
+    expect(requests).toHaveLength(1);
   });
 });

@@ -12,7 +12,6 @@ import { appContext } from './appContext';
 import { abilityContext, userContext } from './server/lib/authContext';
 import { buildAbility } from './server/lib/authorization.server';
 import { BrandPageQueryDocument, BrandsPageQueryDocument } from './Brands/queries.generated';
-import { ProjectSearchQueryDocument } from './ProjectSearch/queries.generated';
 import { ProjectPromotionsPageQueryDocument } from './ProjectPromotions/queries.generated';
 import { TagCategoryListPageQueryDocument } from './TagCategories/queries.generated';
 import { TagListPageQueryDocument } from './Tags/queries.generated';
@@ -33,11 +32,6 @@ const pageMocks: MockedResponse[] = [
     request: { query: BrandsPageQueryDocument },
     ...anyVariables,
     result: { data: { brands: buildConnection(empty) } },
-  },
-  {
-    request: { query: ProjectSearchQueryDocument },
-    ...anyVariables,
-    result: { data: { projects: buildConnection(empty), tagByName: null } },
   },
   {
     request: { query: ProjectPromotionsPageQueryDocument },
@@ -71,6 +65,7 @@ const routeModules = import.meta.glob<RouteModuleUnderTest>(
 
 const serverLoaderStubs: Record<string, () => unknown> = {
   './HomePage/HomePage.tsx': () => ({ promotedProjects: [], tagGroups: [] }),
+  './ProjectSearch/ProjectSearchPage.tsx': () => ({ projects: [], totalCount: 0, offset: 0, tag: null }),
 };
 
 function toRouteObjects(entries: RouteConfigEntry[]): RouteObject[] {
