@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
 import { reactRouter } from '@react-router/dev/vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
@@ -6,6 +6,26 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills';
 // belong to Rails.
 const railsUrl = process.env['RAILS_URL'] ?? 'http://localhost:3000';
 const railsPaths = ['/graphql', '/graphiql', '/app_config', '/users', '/uploads', '/rails'];
+
+// vite-plugin-node-polyfills aliases Node's built-in modules to browser shims through its `config` hook, which is global
+// (applyToEnvironment doesn't gate it); the build also runs the app in Node, which needs the real modules.  Move the
+// plugin's config into the client environment, and keep its other hooks off the server environment.
+function clientOnly(plugin: Plugin): Plugin {
+  const { config } = plugin;
+  return {
+    ...plugin,
+    config:
+      typeof config === 'function'
+        ? (userConfig, env) => {
+            const result = config.call({} as never, userConfig, env);
+            return result instanceof Promise
+              ? result.then((c) => ({ environments: { client: c } }))
+              : result && { environments: { client: result } };
+          }
+        : undefined,
+    applyToEnvironment: (environment) => environment.name === 'client',
+  };
+}
 
 export default defineConfig(({ command }) => ({
   // In production Rails serves the built files from public/packs (see bin/build-frontend)
@@ -15,7 +35,7 @@ export default defineConfig(({ command }) => ({
     // @aws-sdk/lib-storage pulls in stream-browserify/readable-stream, which expect Node's `global`, `process` and
     // `Buffer`. Webpack shimmed these automatically; Vite doesn't.  (Only the browser bundle needs them: the build also
     // runs the app in Node to generate the HTML shell, where these modules should be Node's own.)
-    { ...nodePolyfills(), applyToEnvironment: (environment) => environment.name === 'client' },
+    ...[nodePolyfills()].flat().map(clientOnly),
   ],
   css: {
     preprocessorOptions: {
