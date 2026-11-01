@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "scripts": {
     "build": "bin/build-frontend",
     "graphql:codegen": "graphql-codegen --config codegen.yml",
