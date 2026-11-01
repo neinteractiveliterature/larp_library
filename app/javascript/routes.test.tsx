@@ -1,6 +1,15 @@
-import { screen, waitFor } from '@testing-library/react';
+/// <reference types="vite/client" />
+import { InMemoryCache } from '@apollo/client';
+import { MockedProvider } from '@apollo/client/testing';
+import { Confirm } from '@neinteractiveliterature/litform';
+import type { RouteConfigEntry } from '@react-router/dev/routes';
+import { render, screen, waitFor } from '@testing-library/react';
+import { createMemoryRouter, RouterProvider, type RouteObject } from 'react-router';
 
-import AppRoot from './AppRoot';
+import routes from './routes';
+import { CSRFTokensContext } from './CSRFTokensContext';
+import { S3ConfigurationContext } from './S3ConfigurationContext';
+import { typePolicies } from './useLarpLibraryApolloClient';
 import { AppLayoutQueryDocument } from './queries.generated';
 import { SetReturnUrlDocument } from './mutations.generated';
 import { LicensingPageQueryDocument } from './StaticPages/queries.generated';
@@ -11,7 +20,7 @@ import { TagCategoryListPageQueryDocument } from './TagCategories/queries.genera
 import { TagListPageQueryDocument } from './Tags/queries.generated';
 import { TagCategoryAutocompleteQueryDocument } from './TagCategories/queries.generated';
 import { buildConnection } from '../../test/javascript/fixtures';
-import { MockedResponse, renderPage } from '../../test/javascript/testUtils';
+import type { MockedResponse } from '../../test/javascript/testUtils';
 
 const anyVariables = { variableMatcher: () => true, maxUsageCount: Number.POSITIVE_INFINITY };
 const empty = [] as { id: string }[];
@@ -68,7 +77,44 @@ const pageMocks: MockedResponse[] = [
   },
 ];
 
-describe('AppRoot', () => {
+// routes.ts is the framework-mode route config (file paths, loaded lazily by the build); here the same config is turned
+// into ordinary react-router route objects so the URL → page mapping can be tested.
+const routeModules = import.meta.glob<{ default: React.ComponentType }>('./**/*.tsx');
+
+function toRouteObjects(entries: RouteConfigEntry[]): RouteObject[] {
+  return entries.map((entry): RouteObject => {
+    const loadModule = routeModules[entry.file];
+    if (!loadModule) {
+      throw new Error(`routes.ts refers to ${entry.file}, which doesn't exist`);
+    }
+    const lazy = async () => ({ Component: (await loadModule()).default });
+    if (entry.index) {
+      return { index: true, lazy };
+    }
+    return { path: entry.path, lazy, children: entry.children ? toRouteObjects(entry.children) : undefined };
+  });
+}
+
+function renderRoute(route: string, mocks: MockedResponse[]) {
+  const router = createMemoryRouter(toRouteObjects(routes), {
+    initialEntries: [route],
+    hydrationData: { loaderData: {} },
+  });
+
+  return render(
+    <MockedProvider mocks={mocks} cache={new InMemoryCache({ typePolicies })}>
+      <S3ConfigurationContext.Provider value={{ awsRegion: 'us-east-1', awsAccessKeyId: 'key', bucketName: 'bucket' }}>
+        <CSRFTokensContext.Provider value={{ signInCSRFToken: 'in', signOutCSRFToken: 'out' }}>
+          <Confirm>
+            <RouterProvider router={router} />
+          </Confirm>
+        </CSRFTokensContext.Provider>
+      </S3ConfigurationContext.Provider>
+    </MockedProvider>,
+  );
+}
+
+describe('routes', () => {
   it.each([
     ['/pages/about', 'About Us'],
     ['/pages/licensing', 'Licensing'],
@@ -80,14 +126,7 @@ describe('AppRoot', () => {
     ['/tag_categories', 'Tag categories'],
     ['/tag_categories/new', 'Create a new tag category'],
   ])('routes %s to the page headed “%s”', async (route, heading) => {
-    renderPage(
-      <AppRoot
-        s3Configuration={{ awsRegion: 'us-east-1', awsAccessKeyId: 'key', bucketName: 'bucket' }}
-        signInCSRFToken="in"
-        signOutCSRFToken="out"
-      />,
-      { route, mocks: pageMocks },
-    );
+    renderRoute(route, pageMocks);
 
     expect(await screen.findByRole('heading', { name: heading })).toBeInTheDocument();
     // every page sits inside the app layout
@@ -109,14 +148,7 @@ describe('AppRoot', () => {
     ['/tags/5/edit', 'EditTagQuery'],
     ['/tag_categories/3/edit', 'EditTagCategoryQuery'],
   ])('routes %s to the page that runs %s', async (route, queryName) => {
-    renderPage(
-      <AppRoot
-        s3Configuration={{ awsRegion: 'us-east-1', awsAccessKeyId: 'key', bucketName: 'bucket' }}
-        signInCSRFToken="in"
-        signOutCSRFToken="out"
-      />,
-      { route, mocks: [layoutMock] },
-    );
+    renderRoute(route, [layoutMock]);
 
     expect(
       await screen.findByText(new RegExp(`No more mocked responses for the query: query ${queryName}\\b`)),
@@ -129,24 +161,14 @@ describe('AppRoot', () => {
     vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(function (this: HTMLFormElement) {
       submitted.push(this.getAttribute('action') ?? '');
     });
-    renderPage(
-      <AppRoot
-        s3Configuration={{ awsRegion: 'us-east-1', awsAccessKeyId: 'key', bucketName: 'bucket' }}
-        signInCSRFToken="in"
-        signOutCSRFToken="out"
-      />,
+    renderRoute('/brands/new', [
+      layoutMock,
       {
-        route: '/brands/new',
-        mocks: [
-          layoutMock,
-          {
-            request: { query: SetReturnUrlDocument },
-            variableMatcher: () => true,
-            result: { data: { setReturnUrl: { __typename: 'SetReturnUrlPayload', clientMutationId: null } } },
-          },
-        ],
+        request: { query: SetReturnUrlDocument },
+        variableMatcher: () => true,
+        result: { data: { setReturnUrl: { __typename: 'SetReturnUrlPayload', clientMutationId: null } } },
       },
-    );
+    ]);
 
     expect(await screen.findByText('Please wait, redirecting...')).toBeInTheDocument();
     // Testing Library's waitFor (not vi.waitFor) tells React that async updates are expected while it waits; the sign-in
@@ -156,17 +178,10 @@ describe('AppRoot', () => {
     document.querySelectorAll('form').forEach((form) => form.remove());
   });
 
-  it('shows just the layout for a URL no page claims', async () => {
-    renderPage(
-      <AppRoot
-        s3Configuration={{ awsRegion: 'us-east-1', awsAccessKeyId: 'key', bucketName: 'bucket' }}
-        signInCSRFToken="in"
-        signOutCSRFToken="out"
-      />,
-      { route: '/no/such/page', mocks: pageMocks },
-    );
+  it('shows a not-found page inside the layout for a URL no page claims', async () => {
+    renderRoute('/no/such/page', pageMocks);
 
-    expect(await screen.findByRole('link', { name: 'Larp Library' })).toBeInTheDocument();
-    expect(screen.queryByRole('heading')).not.toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Larp Library' })).toBeInTheDocument();
   });
 });

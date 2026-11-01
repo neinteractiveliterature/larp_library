@@ -1,5 +1,5 @@
 import { useContext, useCallback, type JSX } from 'react';
-import { CSRFTokensContext } from './AppRoot';
+import { CSRFTokensContext } from './CSRFTokensContext';
 
 export function useSignOut() {
   const { signOutCSRFToken } = useContext(CSRFTokensContext);

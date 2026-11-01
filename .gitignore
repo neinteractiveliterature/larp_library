@@ -56,3 +56,7 @@ yarn-debug.log*
 /test/reports
 /test/html_reports
 /.vitest
+
+# React Router build output
+/build
+/.react-router

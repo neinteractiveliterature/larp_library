@@ -1,9 +1,0 @@
-<%=
-  react_component "AppRoot",
-  s3Configuration: {
-    awsRegion: ENV['AWS_REGION'],
-    bucketName: ProjectFile.s3_bucket
-  },
-  signInCSRFToken: form_authenticity_token(form_options: { action: '/users/auth/intercode', method: 'POST' }),
-  signOutCSRFToken: form_authenticity_token(form_options: { action: '/'})
-%>
