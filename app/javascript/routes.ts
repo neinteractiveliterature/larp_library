@@ -16,6 +16,8 @@ export default [
     route('brands/:brandSlug/projects/:projectId', './Project/ProjectPage.tsx'),
     route('brands/:brandSlug/projects/:projectId/edit', './Project/EditProjectPage.tsx'),
     route('brands/:brandSlug/projects/:projectId/initial_content', './Project/ProjectInitialContentPage.tsx'),
+    // no page, just the actions the content tab's file and link cards submit to
+    route('brands/:brandSlug/projects/:projectId/content', './Project/ProjectContentRoute.ts'),
 
     route('project_promotions', './ProjectPromotions/ProjectPromotionsPage.tsx'),
 

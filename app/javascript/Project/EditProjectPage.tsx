@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client';
 import { ErrorDisplay, Tabs, useTabsWithRouter } from '@neinteractiveliterature/litform';
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { Form, Link, useFetcher, useLocation, useNavigate } from 'react-router';
@@ -36,11 +35,7 @@ export async function clientAction({ context, request }: Route.ClientActionArgs)
   });
 }
 
-export default function EditProjectPage({ loaderData, params }: Route.ComponentProps) {
-  // The loader put the project in the Apollo cache.  Reading it from there (rather than using `loaderData` directly)
-  // keeps the content tab's file and link lists up to date as files are uploaded, links are added and items are
-  // dragged into a new order, since those all update the cache.
-  const { data = loaderData } = useQuery(ProjectPageQueryDocument, { variables: { projectId: params.projectId } });
+export default function EditProjectPage({ loaderData: data }: Route.ComponentProps) {
   const [project, setProject] = useState(data.project);
   const saveFetcher = useFetcher<typeof clientAction>();
   const location = useLocation();

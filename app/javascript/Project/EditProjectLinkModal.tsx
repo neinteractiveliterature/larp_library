@@ -1,23 +1,26 @@
-import { useMutation } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
-import { useEffect, useState, type JSX } from 'react';
+import { useEffect, useRef, useState, type JSX } from 'react';
 import Modal from 'react-bootstrap4-modal';
 
+import { getApolloActionError } from '../actionHelpers';
 import { ProjectLink } from '../graphqlTypes.generated';
-import { UpdateProjectLinkDocument } from './mutations.generated';
 import ProjectLinkFormFields, { ProjectLinkFormProjectLink } from './ProjectLinkFormFields';
+import { useProjectContentFetcher } from './useProjectContentFetcher';
 
 export type EditProjectLinkModalProps = {
   visible: boolean;
   close: () => void;
   initialProjectLink?: ProjectLinkFormProjectLink & Pick<ProjectLink, 'id'>;
+  /** Where to submit the changes (see ProjectContentRoute) */
+  action: string;
 };
 
-function EditProjectLinkModal({ initialProjectLink, visible, close }: EditProjectLinkModalProps): JSX.Element {
-  const [updateProjectLink, { loading, error }] = useMutation(UpdateProjectLinkDocument);
+function EditProjectLinkModal({ initialProjectLink, visible, close, action }: EditProjectLinkModalProps): JSX.Element {
+  const [fetcher, submit] = useProjectContentFetcher(action);
   const [projectLink, setProjectLink] = useState<ProjectLinkFormProjectLink>(
     initialProjectLink ?? { title: '', url: '' },
   );
+  const loading = fetcher.state !== 'idle';
 
   useEffect(() => {
     if (initialProjectLink) {
@@ -25,22 +28,25 @@ function EditProjectLinkModal({ initialProjectLink, visible, close }: EditProjec
     }
   }, [initialProjectLink]);
 
-  const addClicked = async () => {
+  // once the changes have gone through, close the modal
+  const closeRef = useRef(close);
+  closeRef.current = close;
+  useEffect(() => {
+    if (fetcher.state === 'idle' && fetcher.data && 'done' in fetcher.data) {
+      closeRef.current();
+    }
+  }, [fetcher.state, fetcher.data]);
+
+  const saveClicked = () => {
     if (!initialProjectLink) {
       return;
     }
 
-    await updateProjectLink({
-      variables: {
-        projectLinkAttributes: {
-          icon: projectLink.icon,
-          title: projectLink.title,
-          url: projectLink.url,
-        },
-        id: initialProjectLink.id,
-      },
+    submit({
+      intent: 'updateLink',
+      id: initialProjectLink.id,
+      projectLinkAttributes: { icon: projectLink.icon, title: projectLink.title, url: projectLink.url },
     });
-    close();
   };
 
   return (
@@ -48,13 +54,13 @@ function EditProjectLinkModal({ initialProjectLink, visible, close }: EditProjec
       <div className="modal-header">Edit link</div>
       <div className="modal-body">
         <ProjectLinkFormFields projectLink={projectLink} onChange={setProjectLink} />
-        <ErrorDisplay graphQLError={error} />
+        <ErrorDisplay graphQLError={getApolloActionError(fetcher.data)} />
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" onClick={close} disabled={loading}>
           Cancel
         </button>
-        <button type="button" className="btn btn-primary" onClick={addClicked} disabled={loading}>
+        <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={loading}>
           Save
         </button>
       </div>

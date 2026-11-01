@@ -23,7 +23,6 @@
     "@dnd-kit/utilities": "3.2.2",
     "@graphql-typed-document-node/core": "^3.2.0",
     "@neinteractiveliterature/litform": "0.36.1",
-    "@neinteractiveliterature/litform-apollo": "0.36.1",
     "@popperjs/core": "2.11.8",
     "@rails/ujs": "7.1.600",
     "@react-router/node": "8.5.1",

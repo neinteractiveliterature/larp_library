@@ -1,35 +1,35 @@
-import { useMutation } from '@apollo/client';
 import {
+  ErrorDisplay,
   useConfirm,
   useModal,
-  buildOptimisticArrayForMove,
   useArrayBasicSortableHandlers,
   useMatchWidthStyle,
   ModalData,
 } from '@neinteractiveliterature/litform';
-import { deleteObjectFromReferenceArrayUpdater } from '@neinteractiveliterature/litform-apollo';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useMemo, useCallback, type JSX } from 'react';
-import { Project, ProjectLink } from '../graphqlTypes.generated';
+import { ProjectLink } from '../graphqlTypes.generated';
+import { getApolloActionError } from '../actionHelpers';
 import { getSortableStyle, useSortableDndSensors } from '../SortableUtils';
+import { generateProjectContentActionPath } from '../URLGenerators';
 import AddProjectLinkModal from './AddProjectLinkModal';
 import EditProjectLinkModal, { EditProjectLinkModalProps } from './EditProjectLinkModal';
-import { DeleteProjectLinkDocument, MoveProjectLinkDocument } from './mutations.generated';
 import { ProjectLinkDisplayProps, ProjectLinkDisplay } from './ProjectLinkDisplay';
 import { ProjectFieldsFragment } from './queries.generated';
+import { useOptimisticMove } from './useOptimisticMove';
+import { useProjectContentFetcher } from './useProjectContentFetcher';
 
 type EditProjectLinkProps = {
-  project: Pick<Project, 'id'> & {
-    projectLinks: Pick<ProjectLink, 'id'>[];
-  };
   link: ProjectLinkDisplayProps['link'] & Pick<ProjectLink, 'id'>;
   editProjectLinkModal: ModalData<Pick<EditProjectLinkModalProps, 'initialProjectLink'>>;
+  /** Where to submit changes to the link (see ProjectContentRoute) */
+  action: string;
 };
 
-function EditProjectLink({ project, link, editProjectLinkModal }: EditProjectLinkProps) {
+function EditProjectLink({ link, editProjectLinkModal, action }: EditProjectLinkProps) {
   const confirm = useConfirm();
-  const [deleteProjectLink] = useMutation(DeleteProjectLinkDocument);
+  const [deleteFetcher, submitDelete] = useProjectContentFetcher(action);
 
   const { attributes, listeners, isDragging, setNodeRef, transform, transition } = useSortable({
     id: link.id,
@@ -59,17 +59,17 @@ function EditProjectLink({ project, link, editProjectLinkModal }: EditProjectLin
           onClick={() =>
             confirm({
               prompt: `Are you sure you want to delete the “${link.title}” link?`,
-              action: () =>
-                deleteProjectLink({
-                  variables: { id: link.id },
-                  update: deleteObjectFromReferenceArrayUpdater(project, 'projectLinks', link),
-                }),
+              action: async () => {
+                await submitDelete({ intent: 'deleteLink', id: link.id });
+              },
             })
           }
           aria-label="Delete link"
+          disabled={deleteFetcher.state !== 'idle'}
         >
           <i className="bi-trash" />
         </button>
+        <ErrorDisplay graphQLError={getApolloActionError(deleteFetcher.data)} />
       </div>
     </li>
   );
@@ -104,35 +104,21 @@ export type EditProjectLinksCardProps = {
 function EditProjectLinksCard({ project }: EditProjectLinksCardProps): JSX.Element {
   const addProjectLinkModal = useModal();
   const editProjectLinkModal = useModal<Pick<EditProjectLinkModalProps, 'initialProjectLink'>>();
-  const [moveProjectLink] = useMutation(MoveProjectLinkDocument);
+  const action = generateProjectContentActionPath(project);
+  const [moveFetcher, submitMove] = useProjectContentFetcher(action);
 
-  const sortedLinks = useMemo(
+  const linksByPosition = useMemo(
     () => [...project.projectLinks].sort((a, b) => a.position - b.position),
     [project.projectLinks],
   );
+  // while a move is being saved, show the links where they're going to end up
+  const sortedLinks = useOptimisticMove(linksByPosition, moveFetcher, 'moveLink');
 
   const moveLink = useCallback(
     (dragIndex: number, hoverIndex: number) => {
-      const optimisticLinks = buildOptimisticArrayForMove(sortedLinks, dragIndex, hoverIndex);
-
-      moveProjectLink({
-        variables: {
-          id: sortedLinks[dragIndex].id,
-          destinationIndex: hoverIndex,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          moveProjectLink: {
-            __typename: 'MoveProjectLinkPayload',
-            project: {
-              ...project,
-              projectLinks: optimisticLinks,
-            },
-          },
-        },
-      });
+      submitMove({ intent: 'moveLink', id: sortedLinks[dragIndex].id, destinationIndex: hoverIndex });
     },
-    [project, moveProjectLink, sortedLinks],
+    [submitMove, sortedLinks],
   );
 
   const sensors = useSortableDndSensors();
@@ -149,8 +135,8 @@ function EditProjectLinksCard({ project }: EditProjectLinksCardProps): JSX.Eleme
               {sortedLinks.map((link) => (
                 <EditProjectLink
                   link={link}
-                  project={project}
                   editProjectLinkModal={editProjectLinkModal}
+                  action={action}
                   key={link.id}
                 />
               ))}
@@ -160,13 +146,20 @@ function EditProjectLinksCard({ project }: EditProjectLinksCardProps): JSX.Eleme
           <button type="button" className="btn btn-outline-success" onClick={() => addProjectLinkModal.open()}>
             Add link
           </button>
+          <ErrorDisplay graphQLError={getApolloActionError(moveFetcher.data)} />
         </div>
       </div>
-      <AddProjectLinkModal visible={addProjectLinkModal.visible} close={addProjectLinkModal.close} project={project} />
+      <AddProjectLinkModal
+        visible={addProjectLinkModal.visible}
+        close={addProjectLinkModal.close}
+        project={project}
+        action={action}
+      />
       <EditProjectLinkModal
         visible={editProjectLinkModal.visible}
         close={editProjectLinkModal.close}
         initialProjectLink={editProjectLinkModal.state?.initialProjectLink}
+        action={action}
       />
       {draggingItem && (
         <DragOverlay>

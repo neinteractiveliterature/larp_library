@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client';
 import { Link } from 'react-router';
 import { appContext } from '../appContext';
 import { loadQuery } from '../loadQuery';
@@ -13,11 +12,7 @@ export async function clientLoader({ context, params }: Route.ClientLoaderArgs) 
   return loadQuery(apolloClient, ProjectPageQueryDocument, { projectId: params.projectId });
 }
 
-export default function ProjectInitialContentPage({ loaderData, params }: Route.ComponentProps) {
-  // The loader put the project in the Apollo cache.  Reading it from there (rather than using `loaderData` directly)
-  // keeps the file and link lists up to date as files are uploaded and links are added, since those update the cache.
-  const { data = loaderData } = useQuery(ProjectPageQueryDocument, { variables: { projectId: params.projectId } });
-
+export default function ProjectInitialContentPage({ loaderData: data }: Route.ComponentProps) {
   return (
     <>
       <h1>Content</h1>
