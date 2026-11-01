@@ -69,8 +69,8 @@
     "@types/tinycolor2": "1.4.6",
     "@types/uuid": "10.0.0",
     "@vitejs/plugin-react": "^6.1.2",
-    "@vitest/coverage-v8": "^4",
-    "@vitest/ui": "^4",
+    "@vitest/coverage-v8": "^5.0.0",
+    "@vitest/ui": "^5.0.0",
     "graphql-tag": "2.12.7",
     "husky": "9.1.7",
     "jsdom": "^30.0.0",
@@ -81,7 +81,7 @@
     "vite": "^8",
     "vite-plugin-node-polyfills": "^0.28.0",
     "vite-plugin-ruby": "^5.2.6",
-    "vitest": "^4"
+    "vitest": "^5.0.0"
   },
   "browserslist": [
     "defaults"
