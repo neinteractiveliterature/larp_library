@@ -69,16 +69,23 @@ const routeModules = import.meta.glob<RouteModuleUnderTest>(
   { eager: true },
 );
 
+const serverLoaderStubs: Record<string, () => unknown> = {
+  './HomePage/HomePage.tsx': () => ({ promotedProjects: [], tagGroups: [] }),
+};
+
 function toRouteObjects(entries: RouteConfigEntry[]): RouteObject[] {
   return entries.map((entry): RouteObject => {
     // The server-only resource routes (better-auth's endpoints, sign-in and sign-out) aren't pages, and nothing here
     // runs them; they're empty routes, so a redirect to one can be seen
     const routeModule = entry.file.startsWith('./server/routes/') ? {} : routeModules[entry.file];
+    // Pages whose loaders query the database can't run theirs here (those are tested against a real database); this only
+    // checks that the URL reaches the page, so it's given empty data
+    const loaderStub = serverLoaderStubs[entry.file];
     if (!routeModule) {
       throw new Error(`routes.ts refers to ${entry.file}, which doesn't exist`);
     }
     const route = routeFromModule(
-      routeModule,
+      loaderStub ? { ...routeModule, loader: loaderStub } : routeModule,
       entry.index ? { index: true, id: entry.file } : { path: entry.path, id: entry.file },
     );
     return entry.children && !route.index ? { ...route, children: toRouteObjects(entry.children) } : route;
@@ -118,6 +125,7 @@ function renderRoute(route: string, mocks: MockedResponse[]) {
 
 describe('routes', () => {
   it.each([
+    ['/', 'Welcome to Larp Library'],
     ['/pages/about', 'About Us'],
     ['/pages/licensing', 'Licensing'],
     ['/projects', 'Larps'],
@@ -138,7 +146,6 @@ describe('routes', () => {
   // These pages need richer data than is worth building here, so they're left unmocked: Apollo's "No more mocked
   // responses" error names the query the page ran, which shows the URL reached the right page.
   it.each([
-    ['/', 'HomePageQuery'],
     ['/brands/unapproved', 'UnapprovedBrandsListPageQuery'],
     ['/brands/acme', 'BrandPageQuery'],
     ['/brands/acme/edit', 'EditBrandQuery'],
