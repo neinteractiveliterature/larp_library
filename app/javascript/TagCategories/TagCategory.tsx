@@ -10,7 +10,6 @@ export default function TagCategory({ tagCategory, ...otherProps }: TagCategoryP
   return (
     <Tag
       tag={{
-        __typename: 'Tag',
         id: tagCategory.id,
         name: tagCategory.name,
         tagCategory: tagCategory,

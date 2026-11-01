@@ -1,9 +1,15 @@
 import type { JSX } from 'react';
 import { Link } from 'react-router';
-import { TagFragment } from './queries.generated';
+
+/** What a tag badge needs: satisfied by both the server loaders' plain data and the GraphQL fragments */
+export type TagLike = {
+  id: string | number;
+  name: string;
+  tagCategory?: { color?: string | null; textColor?: string | null; icon?: string | null } | null;
+};
 
 export type TagProps = {
-  tag: TagFragment;
+  tag: TagLike;
   onDismiss?: () => void;
   linkTo?: string;
 };

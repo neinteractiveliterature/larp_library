@@ -1,38 +1,16 @@
-import groupBy from 'lodash/groupBy';
-import sortBy from 'lodash/sortBy';
-import { useMemo } from 'react';
 import { Link } from 'react-router';
-import { appContext } from '../appContext';
-import { loadQuery } from '../loadQuery';
 import ProjectHeaders from '../ProjectSearch/ProjectHeaders';
+import { loadHomePage } from '../server/lib/homePage.server';
+import { readDbContext } from '../server/lib/dbContext';
 import Tag from '../Tags/Tag';
 import { generateProjectSearchPath } from '../URLGenerators';
-import { HomePageQueryDocument } from './queries.generated';
 import type { Route } from './+types/HomePage';
 
-export async function clientLoader({ context }: Route.ClientLoaderArgs) {
-  const { apolloClient } = context.get(appContext);
-  return loadQuery(apolloClient, HomePageQueryDocument);
+export function loader({ context }: Route.LoaderArgs) {
+  return loadHomePage(context.get(readDbContext));
 }
 
 export default function HomePage({ loaderData: data }: Route.ComponentProps) {
-  const tagsByCategoryId = useMemo(
-    () =>
-      groupBy(
-        data.tags.edges.map((edge) => edge.node),
-        (tag) => tag.tagCategory?.id ?? 'uncategorized',
-      ),
-    [data.tags],
-  );
-  const tagCategoriesSorted = useMemo(
-    () =>
-      sortBy(
-        data.tagCategories.edges.map((edge) => edge.node),
-        (tagCategory) => tagCategory.name,
-      ),
-    [data.tagCategories],
-  );
-
   return (
     <div className="row mb-4">
       <div className="col-md-4">
@@ -59,10 +37,10 @@ export default function HomePage({ loaderData: data }: Route.ComponentProps) {
             <h2 className="m-0">Featured larps</h2>
           </div>
           <ul className="list-group list-group-flush">
-            {data.projectPromotions.map((projectPromotion) => (
-              <li className="list-group-item" key={projectPromotion.id}>
+            {data.promotedProjects.map((project) => (
+              <li className="list-group-item" key={project.id}>
                 <ProjectHeaders
-                  project={projectPromotion.project}
+                  project={project}
                   renderTitle={(title) => <h4 className="m-0">{title}</h4>}
                   metadataClassName="text-muted"
                   hideAuthors
@@ -84,39 +62,21 @@ export default function HomePage({ loaderData: data }: Route.ComponentProps) {
             <h2 className="m-0">Browse by tag</h2>
           </div>
           <ul className="list-group list-group-flush">
-            {tagCategoriesSorted.map(
-              (category) =>
-                tagsByCategoryId[category.id] && (
-                  <li className="list-group-item" key={category.id}>
-                    <h4 className="mt-0">{category.name}</h4>
-                    <ul className="list-unstyled">
-                      {tagsByCategoryId[category.id].map((tag) => (
-                        <li className="mb-1" key={tag.id}>
-                          <Tag tag={tag} linkTo={generateProjectSearchPath({ tag: tag.name })} />
-                          <small className="ms-1">
-                            ({tag.projects.totalCount} {tag.projects.totalCount === 1 ? 'project' : 'projects'})
-                          </small>
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
-                ),
-            )}
-            {tagsByCategoryId['uncategorized'] && (
-              <li className="list-group-item">
-                <h4 className="mt-0">Miscellaneous</h4>
+            {data.tagGroups.map((group) => (
+              <li className="list-group-item" key={group.category?.id ?? 'uncategorized'}>
+                <h4 className="mt-0">{group.category?.name ?? 'Miscellaneous'}</h4>
                 <ul className="list-unstyled">
-                  {tagsByCategoryId['uncategorized'].map((tag) => (
+                  {group.tags.map((tag) => (
                     <li className="mb-1" key={tag.id}>
-                      <Tag key={tag.id} tag={tag} linkTo={generateProjectSearchPath({ tag: tag.name })} />
+                      <Tag tag={tag} linkTo={generateProjectSearchPath({ tag: tag.name })} />
                       <small className="ms-1">
-                        ({tag.projects.totalCount} {tag.projects.totalCount === 1 ? 'project' : 'projects'})
+                        ({tag.projectCount} {tag.projectCount === 1 ? 'project' : 'projects'})
                       </small>
                     </li>
                   ))}
                 </ul>
               </li>
-            )}
+            ))}
           </ul>
         </div>
       </div>

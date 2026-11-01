@@ -1,10 +1,12 @@
-import { Brand, Project } from './graphqlTypes.generated';
-
-export function generateBrandPath(brand: Pick<Brand, 'slug'>): string {
+export function generateBrandPath(brand: { slug: string }): string {
   return `/brands/${brand.slug}`;
 }
 
-export function generateProjectPath(project: Pick<Project, 'title' | 'id'> & { brand: Pick<Brand, 'slug'> }): string {
+export function generateProjectPath(project: {
+  id: string | number;
+  title?: string | null;
+  brand: { slug: string };
+}): string {
   return `${generateBrandPath(project.brand)}/projects/${project.id}-${project.title
     ?.replace(/[^0-9A-Za-z]/g, '-')
     .replace(/--+/, '-')
@@ -14,9 +16,11 @@ export function generateProjectPath(project: Pick<Project, 'title' | 'id'> & { b
 }
 
 /** Where the file and link cards on a project's content tab send their changes (see Project/ProjectContentRoute.ts) */
-export function generateProjectContentActionPath(
-  project: Pick<Project, 'title' | 'id'> & { brand: Pick<Brand, 'slug'> },
-): string {
+export function generateProjectContentActionPath(project: {
+  id: string | number;
+  title?: string | null;
+  brand: { slug: string };
+}): string {
   return `${generateProjectPath(project)}/content`;
 }
 

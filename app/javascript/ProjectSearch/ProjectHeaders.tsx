@@ -2,27 +2,24 @@ import sortBy from 'lodash/sortBy';
 import uniq from 'lodash/uniq';
 import { ReactNode, useMemo, type JSX } from 'react';
 import { Link } from 'react-router';
-import { Brand, Project } from '../graphqlTypes.generated';
-import { TagFragment } from '../Tags/queries.generated';
-import Tag from '../Tags/Tag';
+import Tag, { type TagLike } from '../Tags/Tag';
 import { generateBrandPath, generateProjectPath } from '../URLGenerators';
 
+/** What the card needs of a project: satisfied by both the server loaders' plain data and the GraphQL fragments */
 export type ProjectHeadersProps = {
-  project: Pick<
-    Project,
-    | 'id'
-    | 'title'
-    | 'publicationYear'
-    | 'authors'
-    | 'minPlayers'
-    | 'maxPlayers'
-    | 'minFacilitators'
-    | 'maxFacilitators'
-    | 'lengthQuantity'
-    | 'lengthUnits'
-  > & {
-    brand: Pick<Brand, 'slug' | 'name'>;
-    tags: TagFragment[];
+  project: {
+    id: string | number;
+    title?: string | null;
+    publicationYear?: number | null;
+    authors?: string | null;
+    minPlayers?: number | null;
+    maxPlayers?: number | null;
+    minFacilitators?: number | null;
+    maxFacilitators?: number | null;
+    lengthQuantity?: number | null;
+    lengthUnits?: string | null;
+    brand: { slug: string; name: string };
+    tags: TagLike[];
   };
   renderTitle?: (content: ReactNode) => ReactNode;
   metadataClassName?: string;
