@@ -7,24 +7,13 @@
 .DS_Store
 
 # Local config files
+/.env
 /.env.*.local
 
-# Build artifacts
-/public/packs
+# Build artifacts (the two under public/ are what the Rails version of the app built, and may linger in an old checkout)
 /public/assets
+/public/packs
 /stats.json
-
-# Ignore bundler config.
-/.bundle
-
-# Ignore the default SQLite database.
-/db/*.sqlite3
-/db/*.sqlite3-journal
-
-# Ignore all logfiles and tempfiles.
-/log/*
-!/log/.keep
-/tmp
 
 # Yarn stuff for non-zeroinstall setup
 .yarn/*
@@ -37,10 +26,6 @@
 
 /.vscode/settings.json
 /dist
-/public/packs
-/public/packs-test
-/public/vite-dev
-/public/vite-test
 /node_modules
 /yarn-error.log
 yarn-debug.log*
@@ -50,6 +35,8 @@ yarn-debug.log*
 /*.sql.gz
 /stats.json
 /workspaceConfiguration
+/tmp
+/log
 
 # Frontend test output
 /coverage
