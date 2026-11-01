@@ -51,6 +51,7 @@ export default defineConfig({
       TEST_DATABASE_URL: process.env['TEST_DATABASE_URL'] ?? 'postgres://postgres@localhost/larp_library_test',
       DATABASE_URL: 'postgres://localhost/larp_library_test',
       APP_URL_BASE: 'http://localhost:3042',
+      AWS_S3_BUCKET: 'test-bucket',
       BETTER_AUTH_SECRET: 'test-secret-test-secret-test-secret-12',
       INTERCODE_URL: 'https://intercode.test',
       INTERCODE_APP_ID: 'test-app-id',

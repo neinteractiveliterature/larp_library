@@ -1,47 +1,34 @@
-import { ErrorDisplay, useGraphQLConfirm } from '@neinteractiveliterature/litform';
-import sortBy from 'lodash/sortBy';
-import { useMemo } from 'react';
+import { useConfirm } from '@neinteractiveliterature/litform';
 import ReactMarkdown from 'react-markdown';
 import { Link, redirect, useFetcher } from 'react-router';
-import { appContext } from '../appContext';
-import { getApolloActionError, withApolloErrors } from '../actionHelpers';
-import { loadQuery } from '../loadQuery';
+import ActionErrorDisplay from '../ActionErrorDisplay';
 import { formatPageTitle } from '../pageTitle';
 import ProjectHeaders from '../ProjectSearch/ProjectHeaders';
+import { abilityContext } from '../server/lib/authContext';
+import { readDbContext } from '../server/lib/dbContext';
+import { deleteProject, findProjectPage, projectIdFromParam } from '../server/lib/projects.server';
 import { generateProjectPath } from '../URLGenerators';
-import { DeleteProjectDocument } from './mutations.generated';
 import ProjectFileDisplay from './ProjectFileDisplay';
 import { ProjectLinkDisplay } from './ProjectLinkDisplay';
-import { ProjectPageQueryDocument } from './queries.generated';
 import type { Route } from './+types/ProjectPage';
 
-// the URL has a readable suffix after the id, e.g. 112-1-900-psy-chic
-const projectIdFromParam = (projectId: string) => projectId.replace(/-.*$/, '');
-
-export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
-  const { apolloClient } = context.get(appContext);
-  return loadQuery(apolloClient, ProjectPageQueryDocument, { projectId: projectIdFromParam(params.projectId) });
+export function loader({ context, params }: Route.LoaderArgs) {
+  return findProjectPage(context.get(readDbContext), context.get(abilityContext), params.projectId);
 }
 
-export async function clientAction({ context, params }: Route.ClientActionArgs) {
-  const { apolloClient } = context.get(appContext);
-
-  return withApolloErrors(async () => {
-    await apolloClient.mutate({
-      mutation: DeleteProjectDocument,
-      variables: { id: projectIdFromParam(params.projectId) },
-    });
-    return redirect('/projects');
-  });
+export async function action({ context, params }: Route.ActionArgs) {
+  await deleteProject(context.get(abilityContext), projectIdFromParam(params.projectId));
+  return redirect('/projects');
 }
 
-export default function ProjectPage({ loaderData: data }: Route.ComponentProps) {
-  const { project } = data;
-  const confirm = useGraphQLConfirm();
-  const deleteFetcher = useFetcher<typeof clientAction>();
+export default function ProjectPage({ loaderData }: Route.ComponentProps) {
+  const { project } = loaderData;
+  const confirm = useConfirm();
+  const deleteFetcher = useFetcher<typeof action>();
 
-  const sortedFiles = useMemo(() => sortBy(project.projectFiles, (file) => file.position), [project.projectFiles]);
-  const sortedLinks = useMemo(() => sortBy(project.projectLinks, (link) => link.position), [project.projectLinks]);
+  // (the loader gives the files and links in the order they're shown)
+  const sortedFiles = project.projectFiles;
+  const sortedLinks = project.projectLinks;
 
   const hasLinksAndFiles = project.projectLinks.length > 0 && project.projectFiles.length > 0;
 
@@ -80,7 +67,7 @@ export default function ProjectPage({ loaderData: data }: Route.ComponentProps) 
                 >
                   Delete project
                 </button>
-                <ErrorDisplay graphQLError={getApolloActionError(deleteFetcher.data)} />
+                <ActionErrorDisplay data={deleteFetcher.data} />
               </li>
             )}
           </ul>

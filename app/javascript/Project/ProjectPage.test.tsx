@@ -1,66 +1,45 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { redirect } from 'react-router';
 
 import ProjectFileDisplay from './ProjectFileDisplay';
-import * as ProjectPage from './ProjectPage';
-import { ProjectPageQueryDocument } from './queries.generated';
-import { DeleteProjectDocument } from './mutations.generated';
-import {
-  buildLicense,
-  buildProjectFile,
-  buildProjectHeaders,
-  buildProjectLink,
-  buildTag,
-  resetFixtureIds,
-} from '../../../test/javascript/fixtures';
-import { MockedResponse, renderRouteModule } from '../../../test/javascript/testUtils';
+import ProjectPage from './ProjectPage';
+import type { ProjectFileData, ProjectPageData } from '../server/lib/projects.server';
+import { buildFile, buildLink, buildProject } from '../../../test/javascript/projectFixtures';
+import { renderRouteModule } from '../../../test/javascript/testUtils';
 
-function buildProject(overrides: Record<string, unknown> = {}) {
-  return {
-    ...buildProjectHeaders({
-      id: '7',
-      title: 'The Big Larp',
-      brand: { __typename: 'Brand', id: 'b1', name: 'Acme', slug: 'acme' },
-      ...overrides,
-    }),
+/** A project seen by someone who can't do anything to it, which is what most of these tests are about */
+const asVisitor = (overrides: Partial<ProjectPageData['project']> = {}) =>
+  buildProject({
     description: 'About the **big** larp.',
     currentUserCanEdit: false,
     currentUserCanDelete: false,
     currentUserCanUploadFiles: false,
     currentUserCanDeleteFiles: false,
-    license: buildLicense({ name: 'CC BY', url: 'https://example.com/by' }) as ReturnType<typeof buildLicense> | null,
-    projectFiles: [] as ReturnType<typeof buildProjectFile>[],
-    projectLinks: [] as ReturnType<typeof buildProjectLink>[],
     ...overrides,
-  };
-}
-
-function projectMock(project: ReturnType<typeof buildProject>): MockedResponse {
-  return {
-    request: { query: ProjectPageQueryDocument, variables: { projectId: '7' } },
-    // React Router reloads the page's data after an action, so the query can be asked again
-    maxUsageCount: Number.POSITIVE_INFINITY,
-    result: { data: { project, licenses: [buildLicense()] } },
-  };
-}
-
-const renderProjectPage = (mocks: MockedResponse[]) =>
-  renderRouteModule(ProjectPage, {
-    mocks,
-    route: '/brands/b/projects/7-the-big-larp',
-    path: '/brands/:brandSlug/projects/:projectId',
   });
 
-describe('ProjectPage', () => {
-  beforeEach(() => resetFixtureIds());
+function renderProjectPage(
+  project: ProjectPageData['project'],
+  action: (args: { request: Request }) => unknown = () => redirect('/projects'),
+) {
+  return renderRouteModule(
+    { default: ProjectPage, loader: () => ({ project }), action },
+    { route: '/brands/b/projects/7-the-big-larp', path: '/brands/:brandSlug/projects/:projectId' },
+  );
+}
 
+describe('ProjectPage', () => {
   it('shows the project, its description and its license', async () => {
-    renderProjectPage([projectMock(buildProject({ tags: [buildTag({ name: 'comedy' })] }))]);
+    renderProjectPage(asVisitor({ tags: [{ id: 1, name: 'comedy', tagCategory: null }] }));
 
     expect(await screen.findByRole('link', { name: 'The Big Larp' })).toBeInTheDocument();
     expect(screen.getByText('big').tagName).toEqual('STRONG');
     expect(screen.getByText('comedy')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'CC BY' })).toHaveAttribute('href', 'https://example.com/by');
+    expect(screen.getByRole('link', { name: 'CC BY' })).toHaveAttribute(
+      'href',
+      'https://creativecommons.org/licenses/by/4.0/',
+    );
     expect(screen.getByRole('link', { name: 'CC BY' })).toHaveAttribute('rel', 'license');
     // no permissions, so no editing or deleting
     expect(screen.queryByRole('link', { name: 'Edit project' })).not.toBeInTheDocument();
@@ -68,9 +47,7 @@ describe('ProjectPage', () => {
   });
 
   it('labels the card "Downloads" when the project only has files', async () => {
-    renderProjectPage([
-      projectMock(buildProject({ projectFiles: [buildProjectFile({ filename: 'rules.pdf', position: 1 })] })),
-    ]);
+    renderProjectPage(asVisitor({ projectFiles: [buildFile({ filename: 'rules.pdf' })] }));
 
     expect(await screen.findByRole('heading', { name: 'Downloads' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /rules\.pdf/ })).toBeInTheDocument();
@@ -78,28 +55,23 @@ describe('ProjectPage', () => {
   });
 
   it('labels the card "Content" when the project only has links', async () => {
-    renderProjectPage([projectMock(buildProject({ projectLinks: [buildProjectLink({ title: 'Official site' })] }))]);
+    renderProjectPage(asVisitor({ projectLinks: [buildLink({ title: 'Official site' })] }));
 
     expect(await screen.findByRole('heading', { name: 'Content' })).toBeInTheDocument();
     const link = screen.getByRole('link', { name: /Official site/ });
     expect(link).toHaveAttribute('target', '_blank');
   });
 
-  it('separates downloads from links, each sorted by position', async () => {
-    renderProjectPage([
-      projectMock(
-        buildProject({
-          projectFiles: [
-            buildProjectFile({ filename: 'second.pdf', position: 2 }),
-            buildProjectFile({ filename: 'first.pdf', position: 1 }),
-          ],
-          projectLinks: [
-            buildProjectLink({ title: 'Link B', position: 2 }),
-            buildProjectLink({ title: 'Link A', position: 1 }),
-          ],
-        }),
-      ),
-    ]);
+  it('separates downloads from links, in the order the loader gave them', async () => {
+    renderProjectPage(
+      asVisitor({
+        projectFiles: [
+          buildFile({ filename: 'first.pdf', position: 1 }),
+          buildFile({ filename: 'second.pdf', position: 2 }),
+        ],
+        projectLinks: [buildLink({ title: 'Link A', position: 1 }), buildLink({ title: 'Link B', position: 2 })],
+      }),
+    );
 
     expect(await screen.findByRole('heading', { name: 'Downloads' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Links' })).toBeInTheDocument();
@@ -109,18 +81,19 @@ describe('ProjectPage', () => {
   });
 
   it('shows a custom dedication and the license logo when the license has them', async () => {
-    renderProjectPage([
-      projectMock(
-        buildProject({
-          license: buildLicense({
-            name: 'CC0',
-            url: 'https://example.com/cc0',
-            logoUrl: 'https://example.com/cc0.png',
-            dedicationHtml: '<p>Dedicated to the <em>public domain</em>.</p>',
-          }),
-        }),
-      ),
-    ]);
+    renderProjectPage(
+      asVisitor({
+        license: {
+          id: 'cc0',
+          name: 'CC0',
+          url: 'https://example.com/cc0',
+          logoUrl: 'https://example.com/cc0.png',
+          dedicationHtml: '<p>Dedicated to the <em>public domain</em>.</p>',
+          discouraged: false,
+          discouragedReason: null,
+        },
+      }),
+    );
 
     expect(await screen.findByText('public domain')).toBeInTheDocument();
     expect(screen.queryByText(/This work is licensed under a/)).not.toBeInTheDocument();
@@ -128,14 +101,14 @@ describe('ProjectPage', () => {
   });
 
   it('copes with a project that has no license or description', async () => {
-    renderProjectPage([projectMock(buildProject({ license: null, description: null }))]);
+    renderProjectPage(asVisitor({ license: null, description: null }));
 
     expect(await screen.findByRole('link', { name: 'The Big Larp' })).toBeInTheDocument();
     expect(screen.queryByText(/licensed under/)).not.toBeInTheDocument();
   });
 
   it('offers editing to people who can edit', async () => {
-    renderProjectPage([projectMock(buildProject({ currentUserCanEdit: true }))]);
+    renderProjectPage(asVisitor({ currentUserCanEdit: true }));
 
     expect(await screen.findByRole('link', { name: 'Edit project' })).toHaveAttribute(
       'href',
@@ -149,40 +122,39 @@ describe('ProjectPage', () => {
 
   it('deletes the project after confirmation and goes back to the search page', async () => {
     const user = userEvent.setup();
-    let deleted = false;
-    renderProjectPage([
-      projectMock(buildProject({ currentUserCanDelete: true })),
-      {
-        request: { query: DeleteProjectDocument, variables: { id: '7' } },
-        result: () => {
-          deleted = true;
-          return { data: { deleteProject: { __typename: 'DeleteProjectPayload', clientMutationId: null } } };
-        },
-      },
-    ]);
+    const deleted = vi.fn();
+    renderProjectPage(asVisitor({ currentUserCanDelete: true }), () => {
+      deleted();
+      return redirect('/projects');
+    });
 
     await user.click(await screen.findByRole('button', { name: 'Delete project' }));
     expect(await screen.findByText(/completely delete The Big Larp/)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'OK', hidden: true }));
 
     await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent('/projects'));
-    expect(deleted).toBe(true);
+    expect(deleted).toHaveBeenCalledTimes(1);
   });
 
   it('does not delete when the confirmation is cancelled', async () => {
     const user = userEvent.setup();
-    renderProjectPage([projectMock(buildProject({ currentUserCanDelete: true }))]);
+    const deleted = vi.fn();
+    renderProjectPage(asVisitor({ currentUserCanDelete: true }), () => {
+      deleted();
+      return redirect('/projects');
+    });
 
     await user.click(await screen.findByRole('button', { name: 'Delete project' }));
     await user.click(await screen.findByRole('button', { name: 'Cancel', hidden: true }));
 
     expect(screen.getByTestId('location')).toHaveTextContent('/brands/b/projects/7-the-big-larp');
+    expect(deleted).not.toHaveBeenCalled();
   });
 });
 
 describe('ProjectFileDisplay', () => {
-  const fileOf = (overrides: Record<string, unknown>) =>
-    buildProjectFile({ filename: 'thing', filesize: 100, filetype: 'application/octet-stream', ...overrides });
+  const fileOf = (overrides: Partial<ProjectFileData>) =>
+    buildFile({ filename: 'thing', filesize: 100, filetype: 'application/octet-stream', ...overrides });
 
   it.each([
     ['application/pdf', 'bi-file-earmark-pdf'],

@@ -6,32 +6,31 @@ import {
   BootstrapFormSelect,
 } from '@neinteractiveliterature/litform';
 import React, { type JSX } from 'react';
-import { License, Project } from '../graphqlTypes.generated';
+import type { License } from '../licenses';
 import MarkdownEditor from '../MarkdownEditor';
-import { TagFragment } from '../Tags/queries.generated';
-import TagSelector from '../Tags/TagSelector';
+import TagSelector, { type TagOption } from '../Tags/TagSelector';
 
-type ProjectFormProject = Pick<
-  Project,
-  | 'title'
-  | 'authors'
-  | 'publicationYear'
-  | 'description'
-  | 'minPlayers'
-  | 'maxPlayers'
-  | 'minFacilitators'
-  | 'maxFacilitators'
-  | 'lengthQuantity'
-  | 'lengthUnits'
-> & {
-  tags: TagFragment[];
-  license?: Pick<License, 'id' | 'name' | 'discouraged' | 'discouragedReason'> | null;
+type LicenseOption = Pick<License, 'id' | 'name' | 'discouraged' | 'discouragedReason'>;
+
+export type ProjectFormValues = {
+  title?: string | null;
+  authors?: string | null;
+  publicationYear?: number | null;
+  description?: string | null;
+  minPlayers?: number | null;
+  maxPlayers?: number | null;
+  minFacilitators?: number | null;
+  maxFacilitators?: number | null;
+  lengthQuantity?: number | null;
+  lengthUnits?: string | null;
+  tags: TagOption[];
+  license?: LicenseOption | null;
 };
 
 export type ProjectFormProps = {
-  project: ProjectFormProject;
-  onChange: React.Dispatch<React.SetStateAction<ProjectFormProject>>;
-  licenseOptions: NonNullable<ProjectFormProject['license']>[];
+  project: ProjectFormValues;
+  onChange: React.Dispatch<React.SetStateAction<ProjectFormValues>>;
+  licenseOptions: readonly LicenseOption[];
 };
 
 export default function ProjectFormFields({ project, onChange, licenseOptions }: ProjectFormProps): JSX.Element {

@@ -1,113 +1,112 @@
-import React, { useContext, useMemo, useState, type JSX } from 'react';
-import { CompleteProjectFileUploadDocument } from './mutations.generated';
-import { S3ConfigurationContext } from '../S3ConfigurationContext';
-import { Project } from '../graphqlTypes.generated';
+import React, { useState, type JSX } from 'react';
 import { LoadingIndicator } from '@neinteractiveliterature/litform';
 import { useRevalidator } from 'react-router';
-import { ObjectCannedACL, S3Client } from '@aws-sdk/client-s3';
-import { Upload } from '@aws-sdk/lib-storage';
-import { createRequestSigner } from './uploadSigning';
-import { useApolloClient } from '@apollo/client';
-import { getApplyMd5BodyChecksumPlugin, resolveMd5BodyChecksumConfig } from '@smithy/middleware-apply-body-checksum';
+import { generateProjectUploadActionPath } from '../URLGenerators';
 
-export type S3UploadFile = { id: number; url: string; filename: string; filesize: number; filetype: string };
+export type S3UploadProps = { project: Parameters<typeof generateProjectUploadActionPath>[0] };
 
-export type S3UploadProps = { project: Pick<Project, 'id'> };
+/** What came back from the server's upload route: JSON with either what was asked for or `errors` saying what's wrong */
+async function postJson(path: string, body: unknown): Promise<Record<string, unknown>> {
+  const response = await fetch(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) {
+    const failure = await response.json().catch(() => ({}));
+    const errors: unknown = failure.errors;
+    throw new Error(Array.isArray(errors) ? errors.join('; ') : `The server refused the upload (${response.status})`);
+  }
+  return response.json();
+}
+
+type UploadTarget = { uploadUrl: string; headers: Record<string, string>; key: string };
+
+function isUploadTarget(value: unknown): value is UploadTarget {
+  return (
+    typeof value === 'object' &&
+    value != null &&
+    'uploadUrl' in value &&
+    typeof value.uploadUrl === 'string' &&
+    'key' in value &&
+    typeof value.key === 'string' &&
+    'headers' in value &&
+    typeof value.headers === 'object'
+  );
+}
+
+/** Sends a file's bytes to storage with a PUT, reporting progress (which `fetch` can't do for an upload) */
+function putFile(target: UploadTarget, file: File, onProgress: (percent: number) => void): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const request = new XMLHttpRequest();
+    request.open('PUT', target.uploadUrl);
+    for (const [name, value] of Object.entries(target.headers)) {
+      request.setRequestHeader(name, value);
+    }
+    request.upload.onprogress = (event) => {
+      if (event.lengthComputable) {
+        onProgress(Math.round((event.loaded / event.total) * 100));
+      }
+    };
+    request.onload = () => {
+      if (request.status >= 200 && request.status < 300) {
+        resolve();
+      } else {
+        reject(new Error(`Storage refused the file (${request.status})`));
+      }
+    };
+    request.onerror = () => reject(new Error('The upload failed. Check your connection and try again.'));
+    request.send(file);
+  });
+}
 
 function S3Upload({ project }: S3UploadProps): JSX.Element {
-  const { awsRegion, bucketName } = useContext(S3ConfigurationContext);
+  const uploadPath = generateProjectUploadActionPath(project);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState<string>();
   const [progressPercent, setProgressPercent] = useState(0);
   const [error, setError] = useState<string>();
-  const apolloClient = useApolloClient();
   const { revalidate } = useRevalidator();
-  const requestSigner = useMemo(() => createRequestSigner(apolloClient), [apolloClient]);
 
-  const s3Client = useMemo(() => {
-    const client = new S3Client({
-      signer: requestSigner,
-      region: awsRegion,
-      credentials: { accessKeyId: 'ANONYMOUS', secretAccessKey: 'ANONYMOUS' },
-    });
-    client.middlewareStack.use(getApplyMd5BodyChecksumPlugin(resolveMd5BodyChecksumConfig(client.config)));
-    client.config.logger = console;
-    return client;
-  }, [requestSigner, awsRegion]);
-
-  const uploadNextFile = async (fileQueue: File[]) => {
-    if (!fileQueue || fileQueue.length === 0) {
-      setUploading(false);
-      setMessage(undefined);
-      return;
-    }
-
-    const file = fileQueue[0];
-    const contents = await file.arrayBuffer();
+  /** Uploads one file: ask where to send it, send it, and tell the server it's there */
+  const uploadFile = async (file: File) => {
     setMessage(`Uploading ${file.name}...`);
+    setProgressPercent(0);
+    const filetype = file.type || null;
 
-    const abortController = new AbortController();
-    const uniqueId = Math.random().toString(36).slice(2, 18);
-    const objectName = `uploads/${new Date().getTime()}-${uniqueId}/${file.name.replace(/[^A-Za-z0-9.]/g, '_')}`;
+    const { upload } = await postJson(uploadPath, { intent: 'request', filename: file.name, filetype });
+    if (!isUploadTarget(upload)) {
+      throw new Error('The server did not say where to send the file');
+    }
+    await putFile(upload, file, setProgressPercent);
+    await postJson(uploadPath, { intent: 'complete', key: upload.key, filename: file.name, filetype });
 
-    const upload = new Upload({
-      client: s3Client,
-      abortController,
-      params: {
-        Bucket: bucketName,
-        Key: objectName,
-        ACL: ObjectCannedACL.public_read,
-        Body: new Uint8Array(contents),
-        ContentDisposition: `attachment; filename="${file.name.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`,
-        ContentType: file.type,
-        StorageClass: 'STANDARD',
-      },
-    });
-    upload.on('httpUploadProgress', (progress) => {
-      setProgressPercent(Math.round(((progress.loaded ?? 0) / (progress.total ?? 1)) * 100));
-    });
+    // the file isn't a form submission (its bytes went straight to storage), so tell the page to reload its project to
+    // show it
+    await revalidate();
+  };
 
+  const uploadFiles = async (files: File[]) => {
+    setUploading(true);
+    setError(undefined);
     try {
-      await upload.done();
-
-      await apolloClient.mutate({
-        mutation: CompleteProjectFileUploadDocument,
-        variables: {
-          projectId: project.id,
-          url: `https://${bucketName}.s3.amazonaws.com/${objectName}`,
-          filename: file.name,
-          filetype: file.type,
-          filesize: file.size,
-          filepath: objectName,
-        },
-      });
-      // the file isn't a form submission (its bytes went straight to S3), so tell the page to reload its project to
-      // show it
-      await revalidate();
-
-      uploadNextFile(fileQueue.slice(1));
-    } catch (error) {
-      console.error(error);
-      setError(error.toString());
+      for (const file of files) {
+        await uploadFile(file);
+      }
+      setMessage(undefined);
+    } catch (uploadError) {
+      console.error(uploadError);
+      setError(uploadError instanceof Error ? uploadError.message : String(uploadError));
+    } finally {
       setUploading(false);
     }
   };
 
   const fileChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const eventFiles = event.target.files;
-    if (eventFiles == null) {
-      return;
+    const files = Array.from(event.target.files ?? []);
+    if (files.length > 0) {
+      void uploadFiles(files);
     }
-
-    const files: File[] = [];
-    for (let i = 0; i < eventFiles.length; i++) {
-      files.push(eventFiles[i]);
-    }
-
-    setUploading(true);
-    setProgressPercent(0);
-    setError(undefined);
-    uploadNextFile(files);
   };
 
   return (

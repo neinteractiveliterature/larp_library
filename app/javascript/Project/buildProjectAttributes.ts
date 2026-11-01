@@ -1,19 +1,19 @@
-import { ProjectAttributes } from '../graphqlTypes.generated';
-import { ProjectFormProps } from './ProjectFormFields';
+import type { ProjectFormProps } from './ProjectFormFields';
 
-export function buildProjectAttributes(project: ProjectFormProps['project']): ProjectAttributes {
+/** What the project form sends to the server (JSON, so anything blank is null rather than missing) */
+export function buildProjectAttributes(project: ProjectFormProps['project']) {
   return {
-    authors: project.authors,
-    description: project.description,
-    lengthQuantity: project.lengthQuantity,
-    lengthUnits: project.lengthUnits,
+    authors: project.authors ?? null,
+    description: project.description ?? null,
+    lengthQuantity: project.lengthQuantity ?? null,
+    lengthUnits: project.lengthUnits ?? null,
     licenseId: project.license?.id ?? null,
-    maxPlayers: project.maxPlayers,
-    minPlayers: project.minPlayers,
-    maxFacilitators: project.maxFacilitators,
-    minFacilitators: project.minFacilitators,
-    publicationYear: project.publicationYear,
+    maxPlayers: project.maxPlayers ?? null,
+    minPlayers: project.minPlayers ?? null,
+    maxFacilitators: project.maxFacilitators ?? null,
+    minFacilitators: project.minFacilitators ?? null,
+    publicationYear: project.publicationYear ?? null,
     tagNames: project.tags.map((tag) => tag.name),
-    title: project.title,
+    title: project.title ?? null,
   };
 }

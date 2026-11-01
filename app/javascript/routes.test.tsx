@@ -10,6 +10,7 @@ import { S3ConfigurationContext } from './S3ConfigurationContext';
 import { appContext } from './appContext';
 import { abilityContext, userContext } from './server/lib/authContext';
 import { buildAbility } from './server/lib/authorization.server';
+import { buildProject } from '../../test/javascript/projectFixtures';
 import {
   createMockApolloClient,
   mockFetchJson,
@@ -67,6 +68,10 @@ const serverLoaderStubs: Record<string, (args: any) => unknown> = {
     brandMembership: { id: 1, admin: false, brand: { id: 1, name: 'Acme Games', slug: 'acme' } },
     currentUser: null,
   }),
+  './Project/ProjectPage.tsx': () => ({ project: buildProject() }),
+  './Project/EditProjectPage.tsx': () => ({ project: buildProject() }),
+  './Project/ProjectInitialContentPage.tsx': () => ({ project: buildProject() }),
+  './Project/NewProjectPage.tsx': () => ({ brand: { id: 1, name: 'Acme', slug: 'acme' } }),
   './Tags/TagListPage.tsx': () => ({ tags: [] }),
   './ProjectPromotions/ProjectPromotionsPage.tsx': () => ({ projectPromotions: [] }),
   './TagCategories/TagCategoryListPage.tsx': () => ({ tagCategories: [] }),
@@ -156,7 +161,10 @@ describe('routes', () => {
     ['/tag_categories/new', 'Create a new tag category'],
     ['/tags/5/edit', 'Editing tag: horde'],
     ['/tag_categories/3/edit', 'Editing tag category: Genre'],
-  ])('routes %s to the page headed “%s”', async (route, heading) => {
+    ['/brands/acme/projects/7-the-big-larp', /^The Big Larp/],
+    ['/brands/acme/projects/7-the-big-larp/edit', 'Editing project “The Big Larp”'],
+    ['/brands/acme/projects/7-the-big-larp/initial_content', 'Content'],
+  ])('routes %s to the page headed %s', async (route, heading) => {
     renderRoute(route, []);
 
     expect(await screen.findByRole('heading', { name: heading })).toBeInTheDocument();
@@ -164,19 +172,11 @@ describe('routes', () => {
     expect(screen.getByRole('link', { name: 'Larp Library' })).toHaveAttribute('href', '/');
   });
 
-  // These pages need richer data than is worth building here, so they're left unmocked: Apollo's "No more mocked
-  // responses" error names the query the page ran, which shows the URL reached the right page.
-  it.each([
-    ['/brands/acme/projects/new', 'NewProjectFormQuery'],
-    ['/brands/acme/projects/7-the-big-larp', 'ProjectPageQuery'],
-    ['/brands/acme/projects/7-the-big-larp/edit', 'ProjectPageQuery'],
-    ['/brands/acme/projects/7-the-big-larp/initial_content', 'ProjectPageQuery'],
-  ])('routes %s to the page that runs %s', async (route, queryName) => {
-    renderRoute(route, []);
+  it('routes the new project page to its form', async () => {
+    renderRoute('/brands/acme/projects/new', []);
 
-    expect(
-      await screen.findByText(new RegExp(`No more mocked responses for the query: query ${queryName}\\b`)),
-    ).toBeInTheDocument();
+    expect(await screen.findByLabelText('Title')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Save project' })).toBeInTheDocument();
   });
 
   it('sends signed out visitors who open /brands/new off to sign in, before loading the page', async () => {

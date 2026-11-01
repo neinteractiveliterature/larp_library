@@ -1,74 +1,58 @@
 import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { data } from 'react-router';
 
-import * as ProjectContentRoute from './ProjectContentRoute';
-import * as ProjectInitialContentPage from './ProjectInitialContentPage';
-import {
-  CompleteProjectFileUploadDocument,
-  CreateProjectLinkDocument,
-  DeleteProjectFileDocument,
-  DeleteProjectLinkDocument,
-  MoveProjectFileDocument,
-  MoveProjectLinkDocument,
-  UpdateProjectLinkDocument,
-} from './mutations.generated';
-import { ProjectPageQueryDocument } from './queries.generated';
-import {
-  buildLicense,
-  buildProjectFields,
-  buildProjectFile,
-  buildProjectLink,
-  resetFixtureIds,
-} from '../../../test/javascript/fixtures';
-import { MockedResponse, renderRouteModule } from '../../../test/javascript/testUtils';
+import ProjectInitialContentPage from './ProjectInitialContentPage';
+import type { ProjectContentActionBody } from './ProjectContentRoute';
+import type { ProjectPageData } from '../server/lib/projects.server';
+import { moveItem } from '../server/lib/orderedList.server';
+import { buildFile, buildLink, buildProject } from '../../../test/javascript/projectFixtures';
+import { FakeXMLHttpRequest, mockFetch, renderRouteModule } from '../../../test/javascript/testUtils';
 
-// Replace only the AWS uploader, so no request ever leaves the test.  Each test controls what `done()` does.
-const uploads: { params: Record<string, unknown>; handlers: Record<string, (progress: unknown) => void> }[] = [];
-let uploadBehavior: () => Promise<unknown> = () => Promise.resolve({});
-vi.mock('@aws-sdk/lib-storage', () => ({
-  Upload: class {
-    handlers: Record<string, (progress: unknown) => void> = {};
-    constructor(options: { params: Record<string, unknown> }) {
-      uploads.push({ params: options.params, handlers: this.handlers });
-    }
-    on(event: string, handler: (progress: unknown) => void) {
-      this.handlers[event] = handler;
-    }
-    done() {
-      return uploadBehavior();
-    }
-  },
-}));
+type Project = ProjectPageData['project'];
 
-type Project = ReturnType<typeof buildProjectFields>;
-
-const projectMock = (project: Project, maxUsageCount: number): MockedResponse => ({
-  request: { query: ProjectPageQueryDocument, variables: { projectId: '7-the-big-larp' } },
-  maxUsageCount,
-  result: { data: { project, licenses: [buildLicense()] } },
-});
+/** A stand-in for the server: the project it would load, and a record of what the cards asked it to change */
+type FakeServer = { project: Project; submitted: ProjectContentActionBody[] };
 
 /**
- * Renders the content page.  Every change the page makes reloads its project, so `reloadedProject` is what the server
- * returns from then on (by default, the same project).
+ * Renders the content page. The cards submit their changes to the content route, which here records them and lets the test
+ * decide what changed (`handle`, by default nothing), after which the page reloads the project from the fake server.
  */
-const renderContentPage = (project: Project, extraMocks: MockedResponse[] = [], reloadedProject: Project = project) =>
-  renderRouteModule(ProjectInitialContentPage, {
-    route: '/brands/acme/projects/7-the-big-larp/initial_content',
-    path: '/brands/:brandSlug/projects/:projectId/initial_content',
-    // the file and link cards submit their changes here
-    extraRoutes: [{ path: '/brands/:brandSlug/projects/:projectId/content', module: ProjectContentRoute }],
-    mocks: [projectMock(project, 1), ...extraMocks, projectMock(reloadedProject, Number.POSITIVE_INFINITY)],
-  });
+function renderContentPage(
+  project: Project,
+  handle: (body: ProjectContentActionBody, server: FakeServer) => unknown = () => undefined,
+) {
+  const server: FakeServer = { project, submitted: [] };
+
+  renderRouteModule(
+    { default: ProjectInitialContentPage, loader: () => ({ project: server.project }) },
+    {
+      route: '/brands/acme/projects/7-the-big-larp/initial_content',
+      path: '/brands/:brandSlug/projects/:projectId/initial_content',
+      // the file and link cards submit their changes here
+      extraRoutes: [
+        {
+          path: '/brands/:brandSlug/projects/:projectId/content',
+          module: {
+            action: async ({ request }: { request: Request }) => {
+              const body: ProjectContentActionBody = await request.json();
+              server.submitted.push(body);
+              return handle(body, server) ?? { done: body.intent };
+            },
+          },
+        },
+      ],
+    },
+  );
+  return server;
+}
 
 describe('project links', () => {
-  beforeEach(() => resetFixtureIds());
-
-  const link = (title: string, position: number, extra: Record<string, unknown> = {}) =>
-    buildProjectLink({ id: `link-${position}`, title, position, url: `https://example.com/${position}`, ...extra });
+  const link = (title: string, position: number, extra: Partial<ReturnType<typeof buildLink>> = {}) =>
+    buildLink({ id: position, title, position, url: `https://example.com/${position}`, ...extra });
 
   it('lists the links in order', async () => {
-    renderContentPage(buildProjectFields({ projectLinks: [link('Second', 2), link('First', 1)] }));
+    renderContentPage(buildProject({ projectLinks: [link('First', 1), link('Second', 2)] }));
 
     await screen.findByText('First');
     const titles = screen.getAllByRole('link', { name: /First|Second/ }).map((a) => a.textContent?.trim());
@@ -77,28 +61,11 @@ describe('project links', () => {
 
   it('adds a link, then closes and clears the form', async () => {
     const user = userEvent.setup();
-    let sent: unknown;
-    renderContentPage(
-      buildProjectFields(),
-      [
-        {
-          request: { query: CreateProjectLinkDocument },
-          variableMatcher: () => true,
-          result: (variables: unknown) => {
-            sent = variables;
-            return {
-              data: {
-                createProjectLink: {
-                  __typename: 'CreateProjectLinkPayload',
-                  projectLink: link('Brand New Link', 1),
-                },
-              },
-            };
-          },
-        },
-      ],
-      buildProjectFields({ projectLinks: [link('Brand New Link', 1)] }),
-    );
+    const server = renderContentPage(buildProject(), (body, state) => {
+      if (body.intent === 'createLink') {
+        state.project = { ...state.project, projectLinks: [link('Brand New Link', 1)] };
+      }
+    });
 
     await user.click(await screen.findByRole('button', { name: 'Add link' }));
     const [addTitle] = screen.getAllByLabelText('Title');
@@ -108,53 +75,36 @@ describe('project links', () => {
     await user.click(screen.getByRole('button', { name: 'Add' }));
 
     expect(await screen.findByRole('link', { name: 'Brand New Link' })).toBeInTheDocument();
-    expect(sent).toEqual({
-      projectId: '7',
-      projectLinkAttributes: { title: 'Brand New Link', url: 'https://example.com/1', icon: '' },
-    });
+    expect(server.submitted).toEqual([
+      {
+        intent: 'createLink',
+        projectId: 7,
+        projectLinkAttributes: { title: 'Brand New Link', url: 'https://example.com/1', icon: '' },
+      },
+    ]);
     // the modal clears itself once the save has fully settled, just after the page reloads
     await waitFor(() => expect(addTitle).toHaveValue(''));
   });
 
-  it('shows the error if adding fails, and can be cancelled', async () => {
+  it('shows what the server says is wrong with a new link, and can be cancelled', async () => {
     const user = userEvent.setup();
-    renderContentPage(buildProjectFields(), [
-      {
-        request: { query: CreateProjectLinkDocument },
-        variableMatcher: () => true,
-        error: new Error('url is invalid'),
-      },
-    ]);
+    renderContentPage(buildProject(), () => data({ errors: ['Url must be a web address'] }, { status: 422 }));
 
     await user.click(await screen.findByRole('button', { name: 'Add link' }));
     // the modal fades in, so it only becomes accessible a moment after it opens
     await user.click(await screen.findByRole('button', { name: 'Add' }));
 
-    expect(await screen.findByText(/url is invalid/)).toBeInTheDocument();
+    expect(await screen.findByText(/Url must be a web address/)).toBeInTheDocument();
     await user.click(screen.getAllByRole('button', { name: 'Cancel', hidden: true })[1]);
   });
 
   it('edits a link', async () => {
     const user = userEvent.setup();
-    let sent: unknown;
-    renderContentPage(
-      buildProjectFields({ projectLinks: [link('Old Title', 1)] }),
-      [
-        {
-          request: { query: UpdateProjectLinkDocument },
-          variableMatcher: () => true,
-          result: (variables: unknown) => {
-            sent = variables;
-            return {
-              data: {
-                updateProjectLink: { __typename: 'UpdateProjectLinkPayload', projectLink: link('New Title', 1) },
-              },
-            };
-          },
-        },
-      ],
-      buildProjectFields({ projectLinks: [link('New Title', 1)] }),
-    );
+    const server = renderContentPage(buildProject({ projectLinks: [link('Old Title', 1)] }), (body, state) => {
+      if (body.intent === 'updateLink') {
+        state.project = { ...state.project, projectLinks: [link('New Title', 1)] };
+      }
+    });
 
     await user.click(await screen.findByRole('button', { name: /Edit/ }));
     const editTitle = screen.getAllByLabelText('Title')[1];
@@ -163,53 +113,55 @@ describe('project links', () => {
     await user.type(editTitle, 'New Title');
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
-    await waitFor(() => expect(sent).toBeDefined());
-    expect(sent).toEqual({
-      id: 'link-1',
-      projectLinkAttributes: { title: 'New Title', url: 'https://example.com/1', icon: 'bi-link' },
-    });
     expect(await screen.findByRole('link', { name: 'New Title' })).toBeInTheDocument();
+    expect(server.submitted).toEqual([
+      {
+        intent: 'updateLink',
+        id: 1,
+        projectLinkAttributes: { title: 'New Title', url: 'https://example.com/1', icon: 'link' },
+      },
+    ]);
   });
 
   it('deletes a link after confirmation', async () => {
     const user = userEvent.setup();
-    let deleted = false;
-    renderContentPage(
-      buildProjectFields({ projectLinks: [link('Doomed Link', 1), link('Safe Link', 2)] }),
-      [
-        {
-          request: { query: DeleteProjectLinkDocument, variables: { id: 'link-1' } },
-          result: () => {
-            deleted = true;
-            return { data: { deleteProjectLink: { __typename: 'DeleteProjectLinkPayload', clientMutationId: null } } };
-          },
-        },
-      ],
-      buildProjectFields({ projectLinks: [link('Safe Link', 2)] }),
+    const server = renderContentPage(
+      buildProject({ projectLinks: [link('Doomed Link', 1), link('Safe Link', 2)] }),
+      (body, state) => {
+        if (body.intent === 'deleteLink') {
+          state.project = {
+            ...state.project,
+            projectLinks: state.project.projectLinks.filter((l) => l.id !== body.id),
+          };
+        }
+      },
     );
 
     await user.click((await screen.findAllByRole('button', { name: 'Delete link' }))[0]);
     expect(await screen.findByText('Are you sure you want to delete the “Doomed Link” link?')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'OK', hidden: true }));
 
-    await waitFor(() => expect(deleted).toBe(true));
     await waitFor(() => expect(screen.queryByRole('link', { name: 'Doomed Link' })).not.toBeInTheDocument());
+    expect(server.submitted).toEqual([{ intent: 'deleteLink', id: 1 }]);
     expect(screen.getByRole('link', { name: 'Safe Link' })).toBeInTheDocument();
   });
 });
 
 describe('project files', () => {
   beforeEach(() => {
-    resetFixtureIds();
-    uploads.length = 0;
-    uploadBehavior = () => Promise.resolve({});
+    FakeXMLHttpRequest.reset();
+    vi.stubGlobal('XMLHttpRequest', FakeXMLHttpRequest);
   });
 
-  const file = (filename: string, position: number) =>
-    buildProjectFile({ id: `file-${position}`, filename, position, filesize: 1024 });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  const file = (filename: string, position: number) => buildFile({ id: position, filename, position, filesize: 1024 });
 
   it('lists the files in order', async () => {
-    renderContentPage(buildProjectFields({ projectFiles: [file('b.pdf', 2), file('a.pdf', 1)] }));
+    renderContentPage(buildProject({ projectFiles: [file('a.pdf', 1), file('b.pdf', 2)] }));
 
     await screen.findByRole('link', { name: /a\.pdf/ });
     const names = screen.getAllByRole('link', { name: /\.pdf/ }).map((a) => a.textContent?.trim());
@@ -218,161 +170,193 @@ describe('project files', () => {
 
   it('deletes a file after confirmation', async () => {
     const user = userEvent.setup();
-    let deleted = false;
-    renderContentPage(
-      buildProjectFields({ projectFiles: [file('doomed.pdf', 1), file('safe.pdf', 2)] }),
-      [
-        {
-          request: { query: DeleteProjectFileDocument, variables: { id: 'file-1' } },
-          result: () => {
-            deleted = true;
-            return { data: { deleteProjectFile: { __typename: 'DeleteProjectFilePayload', clientMutationId: null } } };
-          },
-        },
-      ],
-      buildProjectFields({ projectFiles: [file('safe.pdf', 2)] }),
+    const server = renderContentPage(
+      buildProject({ projectFiles: [file('doomed.pdf', 1), file('safe.pdf', 2)] }),
+      (body, state) => {
+        if (body.intent === 'deleteFile') {
+          state.project = {
+            ...state.project,
+            projectFiles: state.project.projectFiles.filter((f) => f.id !== body.id),
+          };
+        }
+      },
     );
 
     await user.click(await screen.findByRole('button', { name: 'Delete file doomed.pdf' }));
     expect(await screen.findByText('Are you sure you want to delete doomed.pdf?')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'OK', hidden: true }));
 
-    await waitFor(() => expect(deleted).toBe(true));
     await waitFor(() => expect(screen.queryByRole('link', { name: /doomed\.pdf/ })).not.toBeInTheDocument());
+    expect(server.submitted).toEqual([{ intent: 'deleteFile', id: 1 }]);
     expect(screen.getByRole('link', { name: /safe\.pdf/ })).toBeInTheDocument();
   });
 
   it('hides the delete buttons from people who cannot delete files', async () => {
-    renderContentPage(buildProjectFields({ currentUserCanDeleteFiles: false, projectFiles: [file('a.pdf', 1)] }));
+    renderContentPage(buildProject({ currentUserCanDeleteFiles: false, projectFiles: [file('a.pdf', 1)] }));
 
     await screen.findByRole('link', { name: /a\.pdf/ });
     expect(screen.queryByRole('button', { name: /Delete file/ })).not.toBeInTheDocument();
   });
 
   it('explains why uploads are unavailable without a license', async () => {
-    renderContentPage(buildProjectFields({ license: null }));
+    renderContentPage(buildProject({ license: null }));
 
     expect(await screen.findByText(/Attaching files is disabled for this project/)).toBeInTheDocument();
     expect(screen.queryByLabelText('Upload files')).not.toBeInTheDocument();
   });
 
   it('does not offer uploads to people who cannot upload', async () => {
-    renderContentPage(buildProjectFields({ currentUserCanUploadFiles: false }));
+    renderContentPage(buildProject({ currentUserCanUploadFiles: false }));
 
     expect(await screen.findByText(/Attaching files is disabled/)).toBeInTheDocument();
   });
 
-  it('uploads a file to S3 and then records it on the project', async () => {
-    const user = userEvent.setup();
-    let completed: Record<string, unknown> | undefined;
-    renderContentPage(
-      buildProjectFields(),
-      [
-        {
-          request: { query: CompleteProjectFileUploadDocument },
-          variableMatcher: () => true,
-          result: (variables: Record<string, unknown>) => {
-            completed = variables;
-            return {
-              data: {
-                completeProjectFileUpload: {
-                  __typename: 'CompleteProjectFileUploadPayload',
-                  projectFile: buildProjectFile({ id: 'uploaded', filename: 'My File.pdf', position: 1 }),
-                },
-              },
-            };
+  /**
+   * Answers the upload route as the server would: where to send a file, and (once it's been sent) recording it on the
+   * project. Returns what was asked of it.
+   */
+  function serveUploads(server: FakeServer, { refuse }: { refuse?: 'request' | 'complete' } = {}) {
+    const asked: Record<string, unknown>[] = [];
+    mockFetch((url, init) => {
+      expect(url.pathname).toEqual('/brands/acme/projects/7-the-big-larp/uploads');
+      const body = JSON.parse(String(init?.body));
+      asked.push(body);
+
+      if (refuse === body.intent) {
+        return {
+          status: 422,
+          body: { errors: ['Attaching files is only allowed for projects that specify a license'] },
+        };
+      }
+      if (body.intent === 'request') {
+        return {
+          body: {
+            upload: {
+              uploadUrl: `https://storage.example.com/put/${body.filename}`,
+              headers: { 'Content-Type': body.filetype ?? 'application/octet-stream' },
+              key: `uploads/1-abc/${body.filename}`,
+            },
           },
-        },
-      ],
-      buildProjectFields({
-        projectFiles: [buildProjectFile({ id: 'uploaded', filename: 'My File.pdf', position: 1 })],
-      }),
-    );
+        };
+      }
+      const position = server.project.projectFiles.length + 1;
+      server.project = {
+        ...server.project,
+        projectFiles: [...server.project.projectFiles, buildFile({ id: position, filename: body.filename, position })],
+      };
+      return { body: { done: true } };
+    });
+    return asked;
+  }
+
+  it('uploads a file straight to storage and then records it on the project', async () => {
+    const user = userEvent.setup();
+    const server = renderContentPage(buildProject());
+    const asked = serveUploads(server);
 
     const upload = new File(['hello'], 'My File.pdf', { type: 'application/pdf' });
     await user.upload(await screen.findByLabelText('Upload files'), upload);
 
     expect(await screen.findByRole('link', { name: /My File\.pdf/ })).toBeInTheDocument();
-    expect(uploads).toHaveLength(1);
-    const key = uploads[0].params.Key as string;
-    expect(key).toMatch(/^uploads\/\d+-[a-z0-9]+\/My_File\.pdf$/);
-    expect(uploads[0].params).toMatchObject({
-      Bucket: 'test-bucket',
-      ContentType: 'application/pdf',
-      ContentDisposition: 'attachment; filename="My File.pdf"',
-    });
-    expect(completed).toEqual({
-      projectId: '7',
-      url: `https://test-bucket.s3.amazonaws.com/${key}`,
-      filename: 'My File.pdf',
-      filetype: 'application/pdf',
-      filesize: 5,
-      filepath: key,
+    // it asked where to send the file, sent it there with the headers it was told to, and then said it was done
+    expect(asked).toEqual([
+      { intent: 'request', filename: 'My File.pdf', filetype: 'application/pdf' },
+      { intent: 'complete', key: 'uploads/1-abc/My File.pdf', filename: 'My File.pdf', filetype: 'application/pdf' },
+    ]);
+    const [put] = FakeXMLHttpRequest.requests;
+    expect(put).toMatchObject({
+      method: 'PUT',
+      url: 'https://storage.example.com/put/My File.pdf',
+      headers: { 'Content-Type': 'application/pdf' },
+      body: upload,
     });
     expect(screen.getByLabelText('Upload files')).not.toBeDisabled();
   });
 
   it('uploads several files one after another', async () => {
     const user = userEvent.setup();
-    let completions = 0;
-    renderContentPage(buildProjectFields(), [
-      {
-        request: { query: CompleteProjectFileUploadDocument },
-        variableMatcher: () => true,
-        maxUsageCount: 2,
-        result: () => {
-          completions += 1;
-          return {
-            data: {
-              completeProjectFileUpload: {
-                __typename: 'CompleteProjectFileUploadPayload',
-                projectFile: buildProjectFile({
-                  id: `uploaded-${completions}`,
-                  filename: `f${completions}.txt`,
-                  position: completions,
-                }),
-              },
-            },
-          };
-        },
-      },
-    ]);
+    const server = renderContentPage(buildProject());
+    const asked = serveUploads(server);
 
     await user.upload(await screen.findByLabelText('Upload files'), [
       new File(['1'], 'one.txt', { type: 'text/plain' }),
       new File(['2'], 'two.txt', { type: 'text/plain' }),
     ]);
 
-    await waitFor(() => expect(completions).toBe(2));
-    expect(uploads.map((u) => (u.params.Key as string).split('/').pop())).toEqual(['one.txt', 'two.txt']);
+    expect(await screen.findByRole('link', { name: /two\.txt/ })).toBeInTheDocument();
+    expect(asked.map((body) => `${body.intent} ${body.filename}`)).toEqual([
+      'request one.txt',
+      'complete one.txt',
+      'request two.txt',
+      'complete two.txt',
+    ]);
+    expect(FakeXMLHttpRequest.requests.map((request) => request.url)).toEqual([
+      'https://storage.example.com/put/one.txt',
+      'https://storage.example.com/put/two.txt',
+    ]);
   });
 
   it('shows upload progress', async () => {
     const user = userEvent.setup();
-    // never finishes, so the page stays in its "uploading" state
-    uploadBehavior = () => new Promise(() => {});
-    renderContentPage(buildProjectFields());
+    // the PUT never finishes, so the page stays in its "uploading" state
+    FakeXMLHttpRequest.autoRespond = false;
+    const server = renderContentPage(buildProject());
+    serveUploads(server);
 
     await user.upload(await screen.findByLabelText('Upload files'), new File(['x'], 'big.bin'));
     expect(await screen.findByText('Uploading big.bin...')).toBeInTheDocument();
     expect(screen.getByLabelText('Upload files')).toBeDisabled();
 
-    act(() => uploads[0].handlers['httpUploadProgress']({ loaded: 25, total: 100 }));
+    await waitFor(() => expect(FakeXMLHttpRequest.requests).toHaveLength(1));
+    act(() => FakeXMLHttpRequest.requests[0].progress(25, 100));
     expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '25');
   });
 
-  it('shows what went wrong when the upload fails, and lets you try again', async () => {
+  it('shows what went wrong when storage refuses the file, and lets you try again', async () => {
     const user = userEvent.setup();
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
-    uploadBehavior = () => Promise.reject(new Error('Access Denied'));
-    renderContentPage(buildProjectFields());
+    FakeXMLHttpRequest.status = 403;
+    const server = renderContentPage(buildProject());
+    const asked = serveUploads(server);
 
     await user.upload(await screen.findByLabelText('Upload files'), new File(['x'], 'nope.txt'));
 
-    expect(await screen.findByText('Error: Access Denied')).toBeInTheDocument();
+    expect(await screen.findByText('Storage refused the file (403)')).toBeInTheDocument();
     expect(screen.getByLabelText('Upload files')).not.toBeDisabled();
-    const bar = within(screen.getByRole('progressbar')).getByText('0% Complete');
-    expect(bar).toBeInTheDocument();
+    expect(within(screen.getByRole('progressbar')).getByText('0% Complete')).toBeInTheDocument();
+    // the file never arrived, so the server was never told it was done
+    expect(asked.map((body) => body.intent)).toEqual(['request']);
+    consoleError.mockRestore();
+  });
+
+  it('shows what went wrong when the connection fails', async () => {
+    const user = userEvent.setup();
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    FakeXMLHttpRequest.autoRespond = false;
+    const server = renderContentPage(buildProject());
+    serveUploads(server);
+
+    await user.upload(await screen.findByLabelText('Upload files'), new File(['x'], 'lost.txt'));
+    await waitFor(() => expect(FakeXMLHttpRequest.requests).toHaveLength(1));
+    act(() => FakeXMLHttpRequest.requests[0].failToConnect());
+
+    expect(await screen.findByText(/The upload failed/)).toBeInTheDocument();
+    expect(screen.getByLabelText('Upload files')).not.toBeDisabled();
+    consoleError.mockRestore();
+  });
+
+  it.each(['request', 'complete'] as const)('shows what the server says when it refuses the %s step', async (step) => {
+    const user = userEvent.setup();
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const server = renderContentPage(buildProject());
+    serveUploads(server, { refuse: step });
+
+    await user.upload(await screen.findByLabelText('Upload files'), new File(['x'], 'refused.txt'));
+
+    expect(
+      await screen.findByText(/Attaching files is only allowed for projects that specify a license/),
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText('Upload files')).not.toBeDisabled();
     consoleError.mockRestore();
   });
 });
@@ -407,7 +391,6 @@ const isDragging = () => document.querySelector('[style*="grabbing"]') != null;
 
 describe('reordering by dragging', () => {
   beforeEach(() => {
-    resetFixtureIds();
     stubSortableLayout();
   });
 
@@ -415,40 +398,34 @@ describe('reordering by dragging', () => {
     vi.restoreAllMocks();
   });
 
+  /** What the server does for a move: puts the item at its new place and renumbers the others */
+  function applyMove<T extends { id: number; position: number | null }>(
+    items: T[],
+    id: number,
+    destinationIndex: number,
+  ) {
+    const ordered = moveItem(
+      items,
+      items.findIndex((item) => item.id === id),
+      destinationIndex,
+    );
+    return ordered.map((item, index) => ({ ...item, position: index + 1 }));
+  }
+
   it('moves a link with the keyboard', async () => {
     const user = userEvent.setup();
-    let moved: unknown;
-    const reordered = [
-      buildProjectLink({ id: 'link-2', title: 'Second', position: 1, url: 'https://example.com/2' }),
-      buildProjectLink({ id: 'link-1', title: 'First', position: 2, url: 'https://example.com/1' }),
-      buildProjectLink({ id: 'link-3', title: 'Third', position: 3, url: 'https://example.com/3' }),
-    ];
-    renderContentPage(
-      buildProjectFields({
-        projectLinks: [
-          buildProjectLink({ id: 'link-1', title: 'First', position: 1, url: 'https://example.com/1' }),
-          buildProjectLink({ id: 'link-2', title: 'Second', position: 2, url: 'https://example.com/2' }),
-          buildProjectLink({ id: 'link-3', title: 'Third', position: 3, url: 'https://example.com/3' }),
-        ],
-      }),
-      [
-        {
-          request: { query: MoveProjectLinkDocument },
-          variableMatcher: (variables) => {
-            moved = variables;
-            return true;
-          },
-          result: {
-            data: {
-              moveProjectLink: {
-                __typename: 'MoveProjectLinkPayload',
-                project: buildProjectFields({ projectLinks: reordered }),
-              },
-            },
-          },
-        },
-      ],
-      buildProjectFields({ projectLinks: reordered }),
+    const link = (id: number, title: string) =>
+      buildLink({ id, title, position: id, url: `https://example.com/${id}` });
+    const server = renderContentPage(
+      buildProject({ projectLinks: [link(1, 'First'), link(2, 'Second'), link(3, 'Third')] }),
+      (body, state) => {
+        if (body.intent === 'moveLink') {
+          state.project = {
+            ...state.project,
+            projectLinks: applyMove(state.project.projectLinks, body.id, body.destinationIndex),
+          };
+        }
+      },
     );
 
     await screen.findByRole('link', { name: 'First' });
@@ -458,7 +435,7 @@ describe('reordering by dragging', () => {
     await waitFor(() => expect(isDragging()).toBe(true));
     await user.keyboard('[ArrowDown]');
 
-    await waitFor(() => expect(moved).toEqual({ id: 'link-1', destinationIndex: 1 }));
+    await waitFor(() => expect(server.submitted).toEqual([{ intent: 'moveLink', id: 1, destinationIndex: 1 }]));
     await user.keyboard('[Space]');
     await waitFor(() => expect(isDragging()).toBe(false));
     await waitFor(() =>
@@ -472,11 +449,11 @@ describe('reordering by dragging', () => {
 
   it('moves nothing when a drag is cancelled', async () => {
     const user = userEvent.setup();
-    renderContentPage(
-      buildProjectFields({
+    const server = renderContentPage(
+      buildProject({
         projectLinks: [
-          buildProjectLink({ id: 'link-1', title: 'First', position: 1 }),
-          buildProjectLink({ id: 'link-2', title: 'Second', position: 2 }),
+          buildLink({ id: 1, title: 'First', position: 1 }),
+          buildLink({ id: 2, title: 'Second', position: 2 }),
         ],
       }),
     );
@@ -488,6 +465,7 @@ describe('reordering by dragging', () => {
     await user.keyboard('[Escape]');
 
     await waitFor(() => expect(isDragging()).toBe(false));
+    expect(server.submitted).toEqual([]);
     expect(screen.getAllByRole('link', { name: /First|Second/ }).map((a) => a.textContent?.trim())).toEqual([
       'First',
       'Second',
@@ -496,35 +474,17 @@ describe('reordering by dragging', () => {
 
   it('moves a file with the keyboard', async () => {
     const user = userEvent.setup();
-    let moved: unknown;
-    const file = (id: string, filename: string, position: number) =>
-      buildProjectFile({ id, filename, position, filesize: 1024 });
-    renderContentPage(
-      buildProjectFields({
-        projectFiles: [file('file-1', 'a.pdf', 1), file('file-2', 'b.pdf', 2), file('file-3', 'c.pdf', 3)],
-      }),
-      [
-        {
-          request: { query: MoveProjectFileDocument },
-          variableMatcher: (variables) => {
-            moved = variables;
-            return true;
-          },
-          result: {
-            data: {
-              moveProjectFile: {
-                __typename: 'MoveProjectFilePayload',
-                project: buildProjectFields({
-                  projectFiles: [file('file-2', 'b.pdf', 1), file('file-1', 'a.pdf', 2), file('file-3', 'c.pdf', 3)],
-                }),
-              },
-            },
-          },
-        },
-      ],
-      buildProjectFields({
-        projectFiles: [file('file-2', 'b.pdf', 1), file('file-1', 'a.pdf', 2), file('file-3', 'c.pdf', 3)],
-      }),
+    const file = (id: number, filename: string) => buildFile({ id, filename, position: id, filesize: 1024 });
+    const server = renderContentPage(
+      buildProject({ projectFiles: [file(1, 'a.pdf'), file(2, 'b.pdf'), file(3, 'c.pdf')] }),
+      (body, state) => {
+        if (body.intent === 'moveFile') {
+          state.project = {
+            ...state.project,
+            projectFiles: applyMove(state.project.projectFiles, body.id, body.destinationIndex),
+          };
+        }
+      },
     );
 
     await screen.findByRole('link', { name: /a\.pdf/ });
@@ -534,7 +494,7 @@ describe('reordering by dragging', () => {
     await waitFor(() => expect(isDragging()).toBe(true));
     await user.keyboard('[ArrowDown]');
 
-    await waitFor(() => expect(moved).toEqual({ id: 'file-1', destinationIndex: 1 }));
+    await waitFor(() => expect(server.submitted).toEqual([{ intent: 'moveFile', id: 1, destinationIndex: 1 }]));
     await user.keyboard('[Space]');
     await waitFor(() => expect(isDragging()).toBe(false));
     await waitFor(() =>

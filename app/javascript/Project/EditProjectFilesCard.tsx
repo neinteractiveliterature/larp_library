@@ -1,35 +1,30 @@
 import React, { useCallback, useMemo, type JSX } from 'react';
-import {
-  ErrorDisplay,
-  useArrayBasicSortableHandlers,
-  useGraphQLConfirm,
-  useMatchWidthStyle,
-} from '@neinteractiveliterature/litform';
+import { useArrayBasicSortableHandlers, useConfirm, useMatchWidthStyle } from '@neinteractiveliterature/litform';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { ProjectPageQueryData } from './queries.generated';
-import { getApolloActionError } from '../actionHelpers';
-import { Project } from '../graphqlTypes.generated';
+import ActionErrorDisplay from '../ActionErrorDisplay';
+import type { ProjectFileData, ProjectPageData } from '../server/lib/projects.server';
 import ProjectFileDisplay from './ProjectFileDisplay';
-import S3Upload, { S3UploadProps } from './S3Upload';
+import S3Upload from './S3Upload';
 import { getSortableStyle, useSortableDndSensors } from '../SortableUtils';
 import { generateProjectContentActionPath } from '../URLGenerators';
 import { useOptimisticMove } from './useOptimisticMove';
 import { useProjectContentFetcher } from './useProjectContentFetcher';
 
 export type EditProjectFileProps = {
-  file: ProjectPageQueryData['project']['projectFiles'][number];
-  project: Pick<Project, 'id' | 'currentUserCanDeleteFiles'>;
+  file: ProjectFileData;
+  project: Pick<ProjectPageData['project'], 'id' | 'currentUserCanDeleteFiles'>;
   /** Where to submit changes to the file (see ProjectContentRoute) */
   action: string;
 };
 
 export function EditProjectFile({ file, project, action }: EditProjectFileProps): JSX.Element {
   const [deleteFetcher, submitDelete] = useProjectContentFetcher(action);
-  const confirm = useGraphQLConfirm();
+  const confirm = useConfirm();
 
   const { attributes, listeners, isDragging, setNodeRef, transform, transition } = useSortable({
-    id: file.id,
+    // a string, because litform finds the dragged item by comparing its id's string form to this
+    id: String(file.id),
   });
   const style = getSortableStyle(transform, transition, isDragging);
 
@@ -63,7 +58,7 @@ export function EditProjectFile({ file, project, action }: EditProjectFileProps)
             <i className="bi-trash" />
             <span className="visually-hidden">Delete file {file.filename}</span>
           </button>
-          <ErrorDisplay graphQLError={getApolloActionError(deleteFetcher.data)} />
+          <ActionErrorDisplay data={deleteFetcher.data} />
         </div>
       )}
     </li>
@@ -90,15 +85,15 @@ function EditProjectFileDragPreview({ file, project }: Omit<EditProjectFileProps
   );
 }
 
-export type EditProjectFilesCardProps = Omit<S3UploadProps, 'projectId'> & {
-  project: ProjectPageQueryData['project'];
+export type EditProjectFilesCardProps = {
+  project: ProjectPageData['project'];
 };
 
-function EditProjectFilesCard({ project, ...s3UploadProps }: EditProjectFilesCardProps): JSX.Element {
+function EditProjectFilesCard({ project }: EditProjectFilesCardProps): JSX.Element {
   const action = generateProjectContentActionPath(project);
   const [moveFetcher, submitMove] = useProjectContentFetcher(action);
   const filesByPosition = useMemo(
-    () => [...project.projectFiles].sort((a, b) => a.position - b.position),
+    () => [...project.projectFiles].sort((a, b) => (a.position ?? Infinity) - (b.position ?? Infinity) || a.id - b.id),
     [project.projectFiles],
   );
   // while a move is being saved, show the files where they're going to end up
@@ -120,7 +115,7 @@ function EditProjectFilesCard({ project, ...s3UploadProps }: EditProjectFilesCar
         <div className="card-header">Files</div>
         <div className="card-body">
           <ul className="list-unstyled">
-            <SortableContext items={sortedFiles.map((file) => file.id)} strategy={verticalListSortingStrategy}>
+            <SortableContext items={sortedFiles.map((file) => String(file.id))} strategy={verticalListSortingStrategy}>
               {sortedFiles.map((file) => (
                 <EditProjectFile file={file} project={project} action={action} key={file.id} />
               ))}
@@ -128,11 +123,11 @@ function EditProjectFilesCard({ project, ...s3UploadProps }: EditProjectFilesCar
           </ul>
 
           {project.license != null && project.currentUserCanUploadFiles ? (
-            <S3Upload project={project} {...s3UploadProps} />
+            <S3Upload project={project} />
           ) : (
             <div>Attaching files is disabled for this project because it does not specify a license.</div>
           )}
-          <ErrorDisplay graphQLError={getApolloActionError(moveFetcher.data)} />
+          <ActionErrorDisplay data={moveFetcher.data} />
         </div>
       </div>
 

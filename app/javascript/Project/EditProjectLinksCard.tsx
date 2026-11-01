@@ -1,5 +1,4 @@
 import {
-  ErrorDisplay,
   useConfirm,
   useModal,
   useArrayBasicSortableHandlers,
@@ -9,19 +8,18 @@ import {
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useMemo, useCallback, type JSX } from 'react';
-import { ProjectLink } from '../graphqlTypes.generated';
-import { getApolloActionError } from '../actionHelpers';
+import ActionErrorDisplay from '../ActionErrorDisplay';
+import type { ProjectPageData } from '../server/lib/projects.server';
 import { getSortableStyle, useSortableDndSensors } from '../SortableUtils';
 import { generateProjectContentActionPath } from '../URLGenerators';
 import AddProjectLinkModal from './AddProjectLinkModal';
 import EditProjectLinkModal, { EditProjectLinkModalProps } from './EditProjectLinkModal';
 import { ProjectLinkDisplayProps, ProjectLinkDisplay } from './ProjectLinkDisplay';
-import { ProjectFieldsFragment } from './queries.generated';
 import { useOptimisticMove } from './useOptimisticMove';
 import { useProjectContentFetcher } from './useProjectContentFetcher';
 
 type EditProjectLinkProps = {
-  link: ProjectLinkDisplayProps['link'] & Pick<ProjectLink, 'id'>;
+  link: ProjectLinkDisplayProps['link'] & { id: number };
   editProjectLinkModal: ModalData<Pick<EditProjectLinkModalProps, 'initialProjectLink'>>;
   /** Where to submit changes to the link (see ProjectContentRoute) */
   action: string;
@@ -32,7 +30,8 @@ function EditProjectLink({ link, editProjectLinkModal, action }: EditProjectLink
   const [deleteFetcher, submitDelete] = useProjectContentFetcher(action);
 
   const { attributes, listeners, isDragging, setNodeRef, transform, transition } = useSortable({
-    id: link.id,
+    // a string, because litform finds the dragged item by comparing its id's string form to this
+    id: String(link.id),
   });
   const style = getSortableStyle(transform, transition, isDragging);
 
@@ -69,7 +68,7 @@ function EditProjectLink({ link, editProjectLinkModal, action }: EditProjectLink
         >
           <i className="bi-trash" />
         </button>
-        <ErrorDisplay graphQLError={getApolloActionError(deleteFetcher.data)} />
+        <ActionErrorDisplay data={deleteFetcher.data} />
       </div>
     </li>
   );
@@ -98,7 +97,7 @@ function EditProjectLinkDragPreview({ link }: Pick<EditProjectLinkProps, 'link'>
 }
 
 export type EditProjectLinksCardProps = {
-  project: ProjectFieldsFragment;
+  project: ProjectPageData['project'];
 };
 
 function EditProjectLinksCard({ project }: EditProjectLinksCardProps): JSX.Element {
@@ -131,7 +130,7 @@ function EditProjectLinksCard({ project }: EditProjectLinksCardProps): JSX.Eleme
         <div className="card-header">Links</div>
         <div className="card-body">
           <ul className="list-unstyled">
-            <SortableContext items={sortedLinks.map((link) => link.id)} strategy={verticalListSortingStrategy}>
+            <SortableContext items={sortedLinks.map((link) => String(link.id))} strategy={verticalListSortingStrategy}>
               {sortedLinks.map((link) => (
                 <EditProjectLink
                   link={link}
@@ -146,7 +145,7 @@ function EditProjectLinksCard({ project }: EditProjectLinksCardProps): JSX.Eleme
           <button type="button" className="btn btn-outline-success" onClick={() => addProjectLinkModal.open()}>
             Add link
           </button>
-          <ErrorDisplay graphQLError={getApolloActionError(moveFetcher.data)} />
+          <ActionErrorDisplay data={moveFetcher.data} />
         </div>
       </div>
       <AddProjectLinkModal

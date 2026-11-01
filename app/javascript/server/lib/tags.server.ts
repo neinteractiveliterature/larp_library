@@ -1,4 +1,4 @@
-import { eq, sql } from 'drizzle-orm';
+import { eq, ilike, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import type { TagData } from '../../projectData';
 import { db as realDb, type DbOrTx, type ReadDb } from '../db';
@@ -25,6 +25,39 @@ function toTagData(row: TagRow): TagData {
 /** Every tag, alphabetically regardless of case */
 export async function listTags(db: ReadDb): Promise<TagData[]> {
   const rows = await db.query.tags.findMany({ with: { tagCategory: true }, orderBy: sql`upper(${tags.name})` });
+  return rows.map(toTagData);
+}
+
+const AUTOCOMPLETE_LIMIT = 25;
+
+/** For the tag pickers: tags whose name, or whose category's name, starts with what's been typed */
+export async function autocompleteTags(db: ReadDb, queryString: string): Promise<TagData[]> {
+  // % and _ are wildcards in LIKE; what was typed means them literally
+  const prefix = `${queryString.replace(/[\\%_]/g, '\\$&')}%`;
+
+  const matching = queryString
+    ? await db
+        .select({ id: tags.id })
+        .from(tags)
+        .leftJoin(tagCategories, eq(tagCategories.id, tags.tagCategoryId))
+        .where(or(ilike(tags.name, prefix), ilike(tagCategories.name, prefix)))
+    : undefined;
+  if (matching?.length === 0) {
+    return [];
+  }
+
+  const rows = await db.query.tags.findMany({
+    where: matching
+      ? (table, { inArray }) =>
+          inArray(
+            table.id,
+            matching.map((row) => row.id),
+          )
+      : undefined,
+    with: { tagCategory: true },
+    orderBy: sql`upper(${tags.name})`,
+    limit: AUTOCOMPLETE_LIMIT,
+  });
   return rows.map(toTagData);
 }
 
