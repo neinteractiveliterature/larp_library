@@ -86,7 +86,7 @@ const pageMocks: MockedResponse[] = [
 // into ordinary react-router route objects, with the modules loaded up front, so the URL → page mapping can be tested.
 // (entry.client.tsx isn't a route, and hydrates the page as soon as it's imported.)
 const routeModules = import.meta.glob<RouteModuleUnderTest>(
-  ['./**/*.{ts,tsx}', '!./**/*.test.{ts,tsx}', '!./**/*.generated.ts', '!./entry.client.tsx'],
+  ['./**/*.{ts,tsx}', '!./**/*.test.{ts,tsx}', '!./**/*.generated.ts', '!./entry.client.tsx', '!./server/**'],
   { eager: true },
 );
 
