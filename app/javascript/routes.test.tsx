@@ -11,7 +11,6 @@ import { S3ConfigurationContext } from './S3ConfigurationContext';
 import { appContext } from './appContext';
 import { abilityContext, userContext } from './server/lib/authContext';
 import { buildAbility } from './server/lib/authorization.server';
-import { LicensingPageQueryDocument } from './StaticPages/queries.generated';
 import { BrandPageQueryDocument, BrandsPageQueryDocument } from './Brands/queries.generated';
 import { ProjectSearchQueryDocument } from './ProjectSearch/queries.generated';
 import { ProjectPromotionsPageQueryDocument } from './ProjectPromotions/queries.generated';
@@ -30,7 +29,6 @@ const anyVariables = { variableMatcher: () => true, maxUsageCount: Number.POSITI
 const empty = [] as { id: string }[];
 
 const pageMocks: MockedResponse[] = [
-  { request: { query: LicensingPageQueryDocument }, ...anyVariables, result: { data: { licenses: [] } } },
   {
     request: { query: BrandsPageQueryDocument },
     ...anyVariables,

@@ -1,15 +1,7 @@
-import { appContext } from '../appContext';
-import { loadQuery } from '../loadQuery';
+import { LICENSES } from '../licenses';
 import { pageTitle } from '../pageTitle';
-import { LicensingPageQueryDocument } from './queries.generated';
-import type { Route } from './+types/LicensingPage';
 
-export async function clientLoader({ context }: Route.ClientLoaderArgs) {
-  const { apolloClient } = context.get(appContext);
-  return loadQuery(apolloClient, LicensingPageQueryDocument);
-}
-
-export default function LicensingPage({ loaderData: data }: Route.ComponentProps) {
+export default function LicensingPage() {
   return (
     <>
       <h1>Licensing</h1>
@@ -45,7 +37,7 @@ export default function LicensingPage({ loaderData: data }: Route.ComponentProps
         unencumbered:
       </p>
       <ul>
-        {data.licenses.map((license) => (
+        {LICENSES.map((license) => (
           <li key={license.id}>
             <a href={license.url} target="_blank" rel="noreferrer noopener">
               {license.name}
