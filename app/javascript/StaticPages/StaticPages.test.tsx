@@ -1,10 +1,8 @@
 import { screen } from '@testing-library/react';
 
 import AboutPage from './AboutPage';
-import * as LicensingPage from './LicensingPage';
-import { LicensingPageQueryDocument } from './queries.generated';
-import { buildLicense, resetFixtureIds } from '../../../test/javascript/fixtures';
-import { renderPage, renderRouteModule } from '../../../test/javascript/testUtils';
+import LicensingPage from './LicensingPage';
+import { renderPage } from '../../../test/javascript/testUtils';
 
 describe('AboutPage', () => {
   it('credits the team and links to the source', () => {
@@ -23,29 +21,21 @@ describe('AboutPage', () => {
 });
 
 describe('LicensingPage', () => {
-  beforeEach(() => resetFixtureIds());
+  it('lists the licenses, flagging the discouraged ones', () => {
+    renderPage(<LicensingPage />);
 
-  it('lists the licenses, flagging the discouraged ones', async () => {
-    renderRouteModule(LicensingPage, {
-      mocks: [
-        {
-          request: { query: LicensingPageQueryDocument },
-          result: {
-            data: {
-              licenses: [
-                buildLicense({ name: 'CC BY-SA', url: 'https://example.com/by-sa' }),
-                buildLicense({ name: 'CC BY-NC', discouraged: true, discouragedReason: null }),
-                buildLicense({ name: 'MIT', discouraged: true, discouragedReason: 'it is for software.' }),
-              ],
-            },
-          },
-        },
-      ],
-    });
-
-    expect(await screen.findByRole('heading', { name: 'Licensing' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'CC BY-SA' })).toHaveAttribute('href', 'https://example.com/by-sa');
-    expect(screen.getByRole('link', { name: 'CC BY-NC' }).closest('li')).toHaveTextContent('CC BY-NC (discouraged)');
-    expect(screen.getByRole('link', { name: 'MIT' }).closest('li')).toHaveTextContent(/MIT \(.*it is for software/);
+    expect(screen.getByRole('heading', { name: 'Licensing' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Creative Commons Attribution 4.0 International' })).toHaveAttribute(
+      'href',
+      'http://creativecommons.org/licenses/by/4.0/',
+    );
+    // discouraged with the default reason
+    expect(
+      screen.getByRole('link', { name: 'Creative Commons Attribution-NonCommercial 4.0 International' }).closest('li'),
+    ).toHaveTextContent('Creative Commons Attribution-NonCommercial 4.0 International (discouraged)');
+    // discouraged with its own reason
+    expect(
+      screen.getByRole('link', { name: 'Creative Commons Attribution 2.0 Generic' }).closest('li'),
+    ).toHaveTextContent(/Attribution 2\.0 Generic \(obsolete, please use 4\.0 if possible\)/);
   });
 });
