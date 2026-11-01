@@ -1,11 +1,9 @@
-import { notEmpty, parseIntOrNull } from '@neinteractiveliterature/litform';
+import { notEmpty } from '@neinteractiveliterature/litform';
 import pickBy from 'lodash/pickBy';
 import { useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import stringPresence from '../stringPresence';
-import { ProjectSearchQueryVariables } from './queries.generated';
-
-export type ProjectSearchParams = Omit<ProjectSearchQueryVariables, 'after'>;
+import { decodeProjectSearchParams, encodeProjectSearchParams, type ProjectSearchParams } from './projectSearchParams';
 
 function useSearchParams<T>(
   path: string,
@@ -31,32 +29,6 @@ function useSearchParams<T>(
   );
 
   return [paramsObject, setParamsObject] as const;
-}
-
-export function decodeProjectSearchParams(urlSearchParams: URLSearchParams): ProjectSearchParams {
-  return {
-    queryString: stringPresence(urlSearchParams.get('q')),
-    tag: stringPresence(urlSearchParams.get('tag')),
-    title: stringPresence(urlSearchParams.get('title')),
-    authors: stringPresence(urlSearchParams.get('authors')),
-    playerCountLowerBound: parseIntOrNull(urlSearchParams.get('player_count_lower') ?? '') ?? undefined,
-    playerCountUpperBound: parseIntOrNull(urlSearchParams.get('player_count_upper') ?? '') ?? undefined,
-    facilitatorCountLowerBound: parseIntOrNull(urlSearchParams.get('facilitator_count_lower') ?? '') ?? undefined,
-    facilitatorCountUpperBound: parseIntOrNull(urlSearchParams.get('facilitator_count_upper') ?? '') ?? undefined,
-  };
-}
-
-function encodeProjectSearchParams(params: ProjectSearchParams) {
-  return {
-    q: params.queryString,
-    tag: params.tag,
-    title: params.title,
-    authors: params.authors,
-    player_count_lower: params.playerCountLowerBound?.toString(),
-    player_count_upper: params.playerCountUpperBound?.toString(),
-    facilitator_count_lower: params.facilitatorCountLowerBound?.toString(),
-    facilitator_count_upper: params.facilitatorCountUpperBound?.toString(),
-  };
 }
 
 export default function useProjectSearchParams(): readonly [

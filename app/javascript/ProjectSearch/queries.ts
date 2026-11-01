@@ -29,6 +29,8 @@ export const ProjectHeadersFragment = gql`
   ${TagFragment}
 `;
 
+// Still used by the project picker on the promotions page, which hasn't moved off GraphQL yet; the search page itself loads
+// its results on the server (see projectSearch.server.ts).
 export const ProjectSearchQuery = gql`
   query ProjectSearchQuery(
     $queryString: String

@@ -7,16 +7,29 @@ import {
 } from '@neinteractiveliterature/litform';
 import { useId, type JSX } from 'react';
 import TagSelector from '../Tags/TagSelector';
-import { ProjectSearchQueryData } from './queries.generated';
+import type { TagData } from '../projectData';
+import type { TagFragment } from '../Tags/queries.generated';
 import useProjectSearchParams from './useProjectSearchParams';
 
 export type AdvancedProjectSearchControlsProps = {
-  data: ProjectSearchQueryData | null | undefined;
+  /** The tag the search is filtered to, if any */
+  tag: TagData | null;
   switchToSimpleSearch: () => void;
 };
 
+// TagSelector still works in terms of the GraphQL tag type, because it's used by pages that haven't moved off Apollo yet.
+// This adapter goes away when it does.
+function toTagFragment(tag: TagData): TagFragment {
+  return {
+    __typename: 'Tag',
+    id: String(tag.id),
+    name: tag.name,
+    tagCategory: tag.tagCategory && { __typename: 'TagCategory', ...tag.tagCategory, id: String(tag.tagCategory.id) },
+  };
+}
+
 export default function AdvancedProjectSearchControls({
-  data,
+  tag,
   switchToSimpleSearch,
 }: AdvancedProjectSearchControlsProps): JSX.Element {
   const [projectSearchParams, setProjectSearchParams] = useProjectSearchParams();
@@ -93,7 +106,7 @@ export default function AdvancedProjectSearchControls({
               {(id) => (
                 <TagSelector
                   id={id}
-                  value={data?.tagByName}
+                  value={tag && toTagFragment(tag)}
                   onChange={(newTag) => setProjectSearchParams({ tag: newTag?.name })}
                   isMulti={false}
                   isCreatable={false}
