@@ -1,13 +1,18 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import BrandPage from './BrandPage';
+import * as BrandPage from './BrandPage';
 import UnapprovedBrandAlert from './UnapprovedBrandAlert';
-import UnapprovedBrandsListPage from './UnapprovedBrandsListPage';
+import * as UnapprovedBrandsListPage from './UnapprovedBrandsListPage';
 import { BrandPageQueryDocument, UnapprovedBrandsListPageQueryDocument } from './queries.generated';
 import { ApproveBrandDocument } from './mutations.generated';
 import { buildBrand, buildConnection, buildProjectHeaders, resetFixtureIds } from '../../../test/javascript/fixtures';
-import { MockedResponse, renderPage } from '../../../test/javascript/testUtils';
+import {
+  MockedResponse,
+  renderPage,
+  renderRouteModule,
+  withRouteErrorDisplay,
+} from '../../../test/javascript/testUtils';
 
 vi.mock('../Waypoint', () => import('../../../test/javascript/mockWaypoint'));
 
@@ -32,7 +37,11 @@ describe('BrandPage', () => {
   beforeEach(() => resetFixtureIds());
 
   const renderBrandPage = (mocks: MockedResponse[]) =>
-    renderPage(<BrandPage />, { mocks, route: '/brands/team-no-pants', path: '/brands/:brandSlug' });
+    renderRouteModule(withRouteErrorDisplay(BrandPage), {
+      mocks,
+      route: '/brands/team-no-pants',
+      path: '/brands/:brandSlug',
+    });
 
   it('shows the brand, its description and its projects', async () => {
     const brand = buildBrand({ name: 'Team No Pants', slug: 'team-no-pants', description: 'We make **bold** games.' });
@@ -141,7 +150,7 @@ describe('UnapprovedBrandsListPage', () => {
   }
 
   it('lists the pending brands alphabetically with their creators', async () => {
-    renderPage(<UnapprovedBrandsListPage />, {
+    renderRouteModule(UnapprovedBrandsListPage, {
       mocks: [
         {
           request: { query: UnapprovedBrandsListPageQueryDocument },
@@ -167,7 +176,7 @@ describe('UnapprovedBrandsListPage', () => {
       result: { data: { brands: buildConnection(brands) } },
     });
     let approved = false;
-    renderPage(<UnapprovedBrandsListPage />, {
+    renderRouteModule(UnapprovedBrandsListPage, {
       mocks: [
         listMock([zeta]),
         {
@@ -193,7 +202,7 @@ describe('UnapprovedBrandsListPage', () => {
     await user.click(screen.getByRole('button', { name: 'OK', hidden: true }));
 
     await screen.findByRole('heading', { name: 'Brands pending approval' });
-    await vi.waitFor(() => expect(approved).toBe(true));
-    await vi.waitFor(() => expect(screen.queryByRole('link', { name: 'Zeta' })).not.toBeInTheDocument());
+    await waitFor(() => expect(approved).toBe(true));
+    await waitFor(() => expect(screen.queryByRole('link', { name: 'Zeta' })).not.toBeInTheDocument());
   });
 });

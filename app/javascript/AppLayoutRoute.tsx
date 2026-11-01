@@ -2,17 +2,14 @@ import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { Outlet, useNavigation } from 'react-router';
 import AppLayout from './AppLayout';
 import { appContext } from './appContext';
+import { loadQuery } from './loadQuery';
 import { AppLayoutQueryDocument, type AppLayoutQueryData, type AppLayoutQueryVariables } from './queries.generated';
 import RouteErrorDisplay from './RouteErrorDisplay';
 import type { Route } from './+types/AppLayoutRoute';
 
 export async function clientLoader({ context }: Route.ClientLoaderArgs) {
   const { apolloClient } = context.get(appContext);
-  const { data } = await apolloClient.query<AppLayoutQueryData, AppLayoutQueryVariables>({
-    query: AppLayoutQueryDocument,
-    fetchPolicy: 'network-only',
-  });
-  return data;
+  return loadQuery<AppLayoutQueryData, AppLayoutQueryVariables>(apolloClient, AppLayoutQueryDocument);
 }
 
 /** The layout route: the site header and footer around whichever page the URL matched */

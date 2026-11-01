@@ -1,11 +1,11 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import InvitationPage from './InvitationPage';
+import * as InvitationPage from './InvitationPage';
 import { InvitationPageQueryDocument } from './queries.generated';
 import { AcceptBrandMembershipInvitationDocument } from './mutations.generated';
 import { SetReturnUrlDocument } from '../mutations.generated';
-import { MockedResponse, renderPage } from '../../../test/javascript/testUtils';
+import { MockedResponse, renderRouteModule } from '../../../test/javascript/testUtils';
 
 function invitationMock(options: { admin?: boolean; signedIn?: boolean } = {}): MockedResponse {
   const { admin = false, signedIn = true } = options;
@@ -27,7 +27,7 @@ function invitationMock(options: { admin?: boolean; signedIn?: boolean } = {}): 
 }
 
 const renderInvitationPage = (mocks: MockedResponse[]) =>
-  renderPage(<InvitationPage />, {
+  renderRouteModule(InvitationPage, {
     mocks,
     route: '/brands/acme/invitations/tok123',
     path: '/brands/:brandSlug/invitations/:invitationToken',
@@ -36,7 +36,7 @@ const renderInvitationPage = (mocks: MockedResponse[]) =>
 describe('InvitationPage', () => {
   afterEach(() => {
     vi.restoreAllMocks();
-    document.querySelectorAll('form').forEach((form) => form.remove());
+    document.querySelectorAll('body > form').forEach((form) => form.remove());
   });
 
   it('explains what a regular membership allows', async () => {
@@ -87,7 +87,7 @@ describe('InvitationPage', () => {
           query: AcceptBrandMembershipInvitationDocument,
           variables: { brandId: 'b1', invitationToken: 'tok123' },
         },
-        error: new Error('[expected unhandled] invitation already used'),
+        error: new Error('invitation already used'),
       },
     ]);
 

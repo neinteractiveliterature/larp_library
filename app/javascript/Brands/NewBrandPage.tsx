@@ -1,54 +1,53 @@
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
-import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
 import sortBy from 'lodash/sortBy';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
-import { Link } from 'react-router';
-import { useSignIn } from '../SignInButton';
+import { useState, type FormEvent } from 'react';
+import { Form, Link, redirect, useNavigation, useSubmit } from 'react-router';
+import { appContext } from '../appContext';
+import { loadQuery } from '../loadQuery';
+import { getApolloActionError, withApolloErrors } from '../actionHelpers';
+import type { BrandAttributes } from '../graphqlTypes.generated';
+import { pageTitle } from '../pageTitle';
 import { generateBrandPath } from '../URLGenerators';
 import BrandFormFields, { BrandFormFieldsProps } from './BrandFormFields';
-import { useCreateBrandMutation } from './mutations.generated';
-import { useNewBrandQuery } from './queries.generated';
-import { pageTitle } from '../pageTitle';
+import { CreateBrandDocument } from './mutations.generated';
+import { NewBrandQueryDocument, type NewBrandQueryData, type NewBrandQueryVariables } from './queries.generated';
+import type { Route } from './+types/NewBrandPage';
 
-export default LoadQueryWrapper(useNewBrandQuery, function NewBrandPage({ data }) {
-  const navigate = useNavigate();
-  const [brand, setBrand] = useState<BrandFormFieldsProps['brand']>({ name: '', description: '' });
-  const [createBrand, { loading, error }] = useCreateBrandMutation();
-  const signIn = useSignIn();
+export async function clientLoader({ context }: Route.ClientLoaderArgs) {
+  const { apolloClient } = context.get(appContext);
+  return loadQuery<NewBrandQueryData, NewBrandQueryVariables>(apolloClient, NewBrandQueryDocument);
+}
 
-  const submitBrand = async () => {
-    const result = await createBrand({
-      variables: {
-        brandAttributes: {
-          name: brand.name,
-          description: brand.description,
-        },
-      },
-    });
+export async function clientAction({ context, request }: Route.ClientActionArgs) {
+  const { apolloClient } = context.get(appContext);
+  const { brandAttributes } = (await request.json()) as { brandAttributes: BrandAttributes };
 
+  return withApolloErrors(async () => {
+    const result = await apolloClient.mutate({ mutation: CreateBrandDocument, variables: { brandAttributes } });
     const newBrand = result.data?.createBrand?.brand;
-    if (newBrand) {
-      navigate(generateBrandPath(newBrand));
-    }
-  };
+    return newBrand ? redirect(generateBrandPath(newBrand)) : null;
+  });
+}
 
+// This page is only reached through SignedInRoute, so there's always a current user
+export default function NewBrandPage({ loaderData: data, actionData }: Route.ComponentProps) {
+  const [brand, setBrand] = useState<BrandFormFieldsProps['brand']>({ name: '', description: '' });
+  const submit = useSubmit();
+  const navigation = useNavigation();
   const { currentUser } = data;
 
-  useEffect(() => {
-    if (!currentUser) {
-      signIn('/brands/new');
-    }
-  }, [signIn, currentUser]);
-
-  if (!currentUser) {
-    return <>Please wait, redirecting...</>;
-  }
+  const submitBrand = (event: FormEvent) => {
+    event.preventDefault();
+    submit(
+      { brandAttributes: { name: brand.name, description: brand.description ?? null } },
+      { method: 'post', encType: 'application/json' },
+    );
+  };
 
   return (
-    <>
+    <Form method="post" onSubmit={submitBrand}>
       <h1>Publish your larps</h1>
-      {currentUser.brands.length > 0 && (
+      {currentUser && currentUser.brands.length > 0 && (
         <div className="alert alert-warning">
           <p>
             <strong>Hey {currentUser.name}!</strong>
@@ -73,13 +72,13 @@ export default LoadQueryWrapper(useNewBrandQuery, function NewBrandPage({ data }
       </p>
       <BrandFormFields brand={brand} onChange={setBrand} />
 
-      <button type="button" className="btn btn-primary" onClick={submitBrand} disabled={loading}>
+      <button type="submit" className="btn btn-primary" disabled={navigation.state !== 'idle'}>
         Submit
       </button>
 
-      <ErrorDisplay graphQLError={error} />
-    </>
+      <ErrorDisplay graphQLError={getApolloActionError(actionData)} />
+    </Form>
   );
-});
+}
 
 export const meta = pageTitle('Publish your larps');

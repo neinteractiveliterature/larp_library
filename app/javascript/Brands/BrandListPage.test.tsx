@@ -1,10 +1,10 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import BrandListPage from './BrandListPage';
+import * as BrandListPage from './BrandListPage';
 import { BrandsPageQueryDocument } from './queries.generated';
 import { buildBrand, buildConnection, resetFixtureIds } from '../../../test/javascript/fixtures';
-import { MockedResponse, renderPage } from '../../../test/javascript/testUtils';
+import { MockedResponse, renderRouteModule, withRouteErrorDisplay } from '../../../test/javascript/testUtils';
 
 vi.mock('../Waypoint', () => import('../../../test/javascript/mockWaypoint'));
 
@@ -27,7 +27,7 @@ describe('BrandListPage', () => {
   beforeEach(() => resetFixtureIds());
 
   it('lists the brands with their larp counts', async () => {
-    renderPage(<BrandListPage />, {
+    renderRouteModule(BrandListPage, {
       mocks: [
         brandsMock([
           brandWithProjects({ name: 'Team No Pants', slug: 'team-no-pants' }, 1),
@@ -43,7 +43,7 @@ describe('BrandListPage', () => {
   });
 
   it('truncates long descriptions with a read more link', async () => {
-    renderPage(<BrandListPage />, {
+    renderRouteModule(BrandListPage, {
       mocks: [
         brandsMock([
           brandWithProjects({ name: 'Wordy', slug: 'wordy', description: 'word '.repeat(200) }),
@@ -60,7 +60,7 @@ describe('BrandListPage', () => {
   });
 
   it('shows an error if the brands cannot be loaded', async () => {
-    renderPage(<BrandListPage />, {
+    renderRouteModule(withRouteErrorDisplay(BrandListPage), {
       mocks: [{ request: { query: BrandsPageQueryDocument }, variableMatcher: () => true, error: new Error('nope') }],
     });
 
@@ -70,7 +70,7 @@ describe('BrandListPage', () => {
   it('loads more brands when scrolled to the end', async () => {
     const user = userEvent.setup();
     const firstPage = Array.from({ length: 5 }, (_, i) => brandWithProjects({ name: `First Page Brand ${i + 1}` }));
-    renderPage(<BrandListPage />, {
+    renderRouteModule(BrandListPage, {
       mocks: [
         brandsMock(firstPage, { totalCount: 6 }),
         brandsMock([brandWithProjects({ name: 'Second Page Brand' })], {
@@ -88,7 +88,7 @@ describe('BrandListPage', () => {
   it('does not load more when everything is already loaded', async () => {
     const user = userEvent.setup();
     const brands = Array.from({ length: 5 }, (_, i) => brandWithProjects({ name: `Brand Number ${i + 1}` }));
-    renderPage(<BrandListPage />, { mocks: [brandsMock(brands, { totalCount: 5 })] });
+    renderRouteModule(BrandListPage, { mocks: [brandsMock(brands, { totalCount: 5 })] });
 
     await screen.findByText('Brand Number 1');
     await user.click(screen.getByTestId('waypoint'));

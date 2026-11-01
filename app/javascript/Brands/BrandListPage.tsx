@@ -1,43 +1,49 @@
-import { PageLoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
-import React, { type JSX } from 'react';
+import React from 'react';
+import { appContext } from '../appContext';
+import { loadQuery } from '../loadQuery';
+import { pageTitle } from '../pageTitle';
 import { Waypoint } from '../Waypoint';
 import BrandCard from './BrandCard';
-import { useBrandsPageQuery } from './queries.generated';
-import { pageTitle } from '../pageTitle';
+import {
+  BrandsPageQueryDocument,
+  useBrandsPageQuery,
+  type BrandsPageQueryData,
+  type BrandsPageQueryVariables,
+} from './queries.generated';
+import type { Route } from './+types/BrandListPage';
 
-export default function BrandListPage(): JSX.Element {
-  const { data, loading, error, fetchMore } = useBrandsPageQuery();
+export async function clientLoader({ context }: Route.ClientLoaderArgs) {
+  const { apolloClient } = context.get(appContext);
+  return loadQuery<BrandsPageQueryData, BrandsPageQueryVariables>(apolloClient, BrandsPageQueryDocument);
+}
+
+export default function BrandListPage({ loaderData }: Route.ComponentProps) {
+  // the loader fetched the first page into the Apollo cache; reading it back from there is what lets fetchMore work
+  const { data = loaderData, fetchMore } = useBrandsPageQuery();
 
   return (
     <>
       <h1>Larp creators</h1>
 
-      <ErrorDisplay graphQLError={error} />
-      <PageLoadingIndicator visible={loading} iconSet="bootstrap-icons" />
+      {data.brands.edges.map(({ node: brand }, index) => (
+        <React.Fragment key={brand.id}>
+          <BrandCard brand={brand} />
 
-      {!error && !loading && data && (
-        <>
-          {data.brands.edges.map(({ node: brand }, index) => (
-            <React.Fragment key={brand.id}>
-              <BrandCard brand={brand} />
-
-              {index === data.brands.edges.length - 5 && (
-                <Waypoint
-                  onEnter={() => {
-                    if (data.brands.edges.length < data.brands.totalCount) {
-                      fetchMore({
-                        variables: {
-                          after: data.brands.pageInfo.endCursor,
-                        },
-                      });
-                    }
-                  }}
-                />
-              )}
-            </React.Fragment>
-          ))}
-        </>
-      )}
+          {index === data.brands.edges.length - 5 && (
+            <Waypoint
+              onEnter={() => {
+                if (data.brands.edges.length < data.brands.totalCount) {
+                  fetchMore({
+                    variables: {
+                      after: data.brands.pageInfo.endCursor,
+                    },
+                  });
+                }
+              }}
+            />
+          )}
+        </React.Fragment>
+      ))}
     </>
   );
 }

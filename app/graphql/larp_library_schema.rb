@@ -51,7 +51,8 @@ class LarpLibrarySchema < GraphQL::Schema
 
     raise GraphQL::ExecutionError, "Record not found while evaluating #{field.name}" if type_name == "Boolean"
 
-    raise GraphQL::ExecutionError, "#{field.type.unwrap.graphql_name} not found"
+    # the code lets the frontend show a 404 page rather than a generic error
+    raise GraphQL::ExecutionError.new("#{type_name} not found", extensions: { code: "NOT_FOUND" })
   end
 
   # Union and Interface Resolution

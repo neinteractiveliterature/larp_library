@@ -2,6 +2,7 @@ import { ErrorDisplay, useGraphQLConfirm } from '@neinteractiveliterature/litfor
 import { useState, type FormEvent } from 'react';
 import { Form, Link, redirect, useFetcher } from 'react-router';
 import { appContext } from '../appContext';
+import { loadQuery } from '../loadQuery';
 import { getApolloActionError, withApolloErrors } from '../actionHelpers';
 import type { TagAttributes } from '../graphqlTypes.generated';
 import { formatPageTitle } from '../pageTitle';
@@ -13,12 +14,7 @@ import type { Route } from './+types/EditTagPage';
 
 export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
   const { apolloClient } = context.get(appContext);
-  const { data } = await apolloClient.query<EditTagQueryData, EditTagQueryVariables>({
-    query: EditTagQueryDocument,
-    variables: { id: params.tagId },
-    fetchPolicy: 'network-only',
-  });
-  return data;
+  return loadQuery<EditTagQueryData, EditTagQueryVariables>(apolloClient, EditTagQueryDocument, { id: params.tagId });
 }
 
 type EditTagActionBody = { intent: 'save'; tagAttributes: TagAttributes } | { intent: 'delete' };

@@ -1,35 +1,33 @@
-import { ErrorDisplay, LoadingIndicator } from '@neinteractiveliterature/litform';
-import React, { type JSX } from 'react';
+import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { useParams } from 'react-router';
 import { Link } from 'react-router';
 import { Waypoint } from '../Waypoint';
 import ProjectCard from '../ProjectSearch/ProjectCard';
 import { generateBrandPath } from '../URLGenerators';
-import { useBrandPageQuery } from './queries.generated';
+import { appContext } from '../appContext';
+import { loadQuery } from '../loadQuery';
+import { formatPageTitle } from '../pageTitle';
+import {
+  BrandPageQueryDocument,
+  useBrandPageQuery,
+  type BrandPageQueryData,
+  type BrandPageQueryVariables,
+} from './queries.generated';
 import UnapprovedBrandAlert from './UnapprovedBrandAlert';
+import type { Route } from './+types/BrandPage';
 
-export default function BrandPage(): JSX.Element {
-  const { brandSlug } = useParams();
-  if (brandSlug == null) {
-    throw new Error('brandSlug param is required');
-  }
-
-  const { data, loading, error, fetchMore } = useBrandPageQuery({
-    variables: {
-      slug: brandSlug,
-    },
+export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
+  const { apolloClient } = context.get(appContext);
+  return loadQuery<BrandPageQueryData, BrandPageQueryVariables>(apolloClient, BrandPageQueryDocument, {
+    slug: params.brandSlug,
   });
+}
 
-  if (loading) {
-    return <LoadingIndicator iconSet="bootstrap-icons" />;
-  }
-
-  if (error) {
-    return <ErrorDisplay graphQLError={error} />;
-  }
-
-  const { brand } = data!;
+export default function BrandPage({ loaderData, params }: Route.ComponentProps) {
+  // the loader fetched the first page of projects into the Apollo cache; reading it back from there is what lets
+  // fetchMore work
+  const { data = loaderData, fetchMore } = useBrandPageQuery({ variables: { slug: params.brandSlug } });
+  const { brand } = data;
 
   return (
     <>
@@ -61,7 +59,7 @@ export default function BrandPage(): JSX.Element {
                 if (brand.projects.edges.length < brand.projects.totalCount) {
                   fetchMore({
                     variables: {
-                      slug: brandSlug,
+                      slug: params.brandSlug,
                       projectsAfter: brand.projects.pageInfo.endCursor,
                     },
                   });
@@ -78,4 +76,8 @@ export default function BrandPage(): JSX.Element {
       )}
     </>
   );
+}
+
+export function meta({ loaderData }: Route.MetaArgs) {
+  return [{ title: formatPageTitle(loaderData?.brand.name) }];
 }

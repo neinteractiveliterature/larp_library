@@ -39,7 +39,7 @@ describe('AppLayout', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
-    document.querySelectorAll('form').forEach((form) => form.remove());
+    document.querySelectorAll('body > form').forEach((form) => form.remove());
   });
 
   it('shows the navigation, the page, and a sign in button to anonymous visitors', () => {
@@ -150,6 +150,6 @@ describe('useSignIn', () => {
     await vi.waitFor(() => expect(submitted).toEqual(['/users/auth/intercode']));
     expect(returnUrlSet).toBe(true);
     vi.restoreAllMocks();
-    document.querySelectorAll('form').forEach((form) => form.remove());
+    document.querySelectorAll('body > form').forEach((form) => form.remove());
   });
 });

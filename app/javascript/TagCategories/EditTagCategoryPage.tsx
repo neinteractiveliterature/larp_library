@@ -2,6 +2,7 @@ import { ErrorDisplay, useGraphQLConfirm } from '@neinteractiveliterature/litfor
 import { useState, type FormEvent } from 'react';
 import { Form, redirect, useFetcher } from 'react-router';
 import { appContext } from '../appContext';
+import { loadQuery } from '../loadQuery';
 import { getApolloActionError, withApolloErrors } from '../actionHelpers';
 import type { TagCategoryAttributes } from '../graphqlTypes.generated';
 import { formatPageTitle } from '../pageTitle';
@@ -18,12 +19,11 @@ import type { Route } from './+types/EditTagCategoryPage';
 
 export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
   const { apolloClient } = context.get(appContext);
-  const { data } = await apolloClient.query<EditTagCategoryQueryData, EditTagCategoryQueryVariables>({
-    query: EditTagCategoryQueryDocument,
-    variables: { id: params.tagCategoryId },
-    fetchPolicy: 'network-only',
-  });
-  return data;
+  return loadQuery<EditTagCategoryQueryData, EditTagCategoryQueryVariables>(
+    apolloClient,
+    EditTagCategoryQueryDocument,
+    { id: params.tagCategoryId },
+  );
 }
 
 type EditTagCategoryActionBody =

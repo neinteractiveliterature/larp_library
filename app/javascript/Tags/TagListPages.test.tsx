@@ -6,8 +6,7 @@ import { TagListPageQueryDocument } from './queries.generated';
 import * as TagCategoryListPage from '../TagCategories/TagCategoryListPage';
 import { TagCategoryListPageQueryDocument } from '../TagCategories/queries.generated';
 import { buildConnection, buildTag, buildTagCategory, resetFixtureIds } from '../../../test/javascript/fixtures';
-import RouteErrorDisplay from '../RouteErrorDisplay';
-import { MockedResponse, renderRouteModule } from '../../../test/javascript/testUtils';
+import { MockedResponse, renderRouteModule, withRouteErrorDisplay } from '../../../test/javascript/testUtils';
 
 vi.mock('../Waypoint', () => import('../../../test/javascript/mockWaypoint'));
 
@@ -36,18 +35,15 @@ describe('TagListPage', () => {
   });
 
   it('shows the error instead of the page if the first page of tags fails to load', async () => {
-    renderRouteModule(
-      { ...TagListPage, ErrorBoundary: ({ error }: { error: unknown }) => <RouteErrorDisplay error={error} /> },
-      {
-        mocks: [
-          {
-            request: { query: TagListPageQueryDocument },
-            variableMatcher: () => true,
-            error: new Error('tags are unavailable'),
-          },
-        ],
-      },
-    );
+    renderRouteModule(withRouteErrorDisplay(TagListPage), {
+      mocks: [
+        {
+          request: { query: TagListPageQueryDocument },
+          variableMatcher: () => true,
+          error: new Error('tags are unavailable'),
+        },
+      ],
+    });
 
     expect(await screen.findByText(/tags are unavailable/)).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Tags' })).not.toBeInTheDocument();
