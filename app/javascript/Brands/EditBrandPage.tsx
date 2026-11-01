@@ -1,71 +1,59 @@
-import {
-  BootstrapFormCheckbox,
-  BootstrapFormInput,
-  ErrorDisplay,
-  useGraphQLConfirm,
-} from '@neinteractiveliterature/litform';
+import { BootstrapFormCheckbox, BootstrapFormInput, useConfirm } from '@neinteractiveliterature/litform';
 import { useEffect, useState, type FormEvent } from 'react';
-import { Form, redirect, useFetcher } from 'react-router';
-import { appContext } from '../appContext';
-import { loadQuery } from '../loadQuery';
-import { getApolloActionError, withApolloErrors } from '../actionHelpers';
-import type { BrandAttributes } from '../graphqlTypes.generated';
+import { data, Form, redirect, useFetcher } from 'react-router';
+import ActionErrorDisplay from '../ActionErrorDisplay';
 import { formatPageTitle } from '../pageTitle';
+import { abilityContext, userContext } from '../server/lib/authContext';
+import { removeBrandMembership, inviteBrandMember } from '../server/lib/brandMemberships.server';
+import { findBrandForEditing, updateBrand } from '../server/lib/brands.server';
+import { readDbContext } from '../server/lib/dbContext';
 import { generateBrandPath } from '../URLGenerators';
 import BrandFormFields from './BrandFormFields';
-import { DeleteBrandMembershipDocument, InviteBrandMemberDocument, UpdateBrandDocument } from './mutations.generated';
-import { EditBrandQueryDocument } from './queries.generated';
 import UnapprovedBrandAlert from './UnapprovedBrandAlert';
 import type { Route } from './+types/EditBrandPage';
 
-export async function clientLoader({ context, params }: Route.ClientLoaderArgs) {
-  const { apolloClient } = context.get(appContext);
-  return loadQuery(apolloClient, EditBrandQueryDocument, {
-    slug: params.brandSlug,
-  });
+export async function loader({ context, params }: Route.LoaderArgs) {
+  const editing = await findBrandForEditing(context.get(readDbContext), context.get(abilityContext), params.brandSlug);
+  return { ...editing, currentUserId: context.get(userContext)?.id ?? null };
 }
 
-type EditBrandActionBody =
-  | { intent: 'save'; brandId: string; brandAttributes: BrandAttributes }
-  | { intent: 'invite'; brandId: string; email: string; admin: boolean }
-  | { intent: 'removeMembership'; membershipId: string };
-
-export async function clientAction({ context, params, request }: Route.ClientActionArgs) {
-  const { apolloClient } = context.get(appContext);
-  const body = (await request.json()) as EditBrandActionBody;
+export async function action({ context, params, request }: Route.ActionArgs) {
+  const ability = context.get(abilityContext);
+  const body = await request.json();
 
   // React Router reloads the page's data afterward, so new and removed memberships show up in the table
-  return withApolloErrors(async () => {
-    switch (body.intent) {
-      case 'save':
-        await apolloClient.mutate({
-          mutation: UpdateBrandDocument,
-          variables: { id: body.brandId, brandAttributes: body.brandAttributes },
-        });
-        return redirect(generateBrandPath({ slug: params.brandSlug }));
-      case 'invite':
-        await apolloClient.mutate({
-          mutation: InviteBrandMemberDocument,
-          variables: { brandId: body.brandId, admin: body.admin, email: body.email },
-        });
-        return { invited: true };
-      case 'removeMembership':
-        await apolloClient.mutate({ mutation: DeleteBrandMembershipDocument, variables: { id: body.membershipId } });
-        return null;
+  switch (body.intent) {
+    case 'save': {
+      const result = await updateBrand(ability, body.brandId, body.brandAttributes);
+      return result.ok
+        ? redirect(generateBrandPath({ slug: params.brandSlug }))
+        : data({ errors: result.errors }, { status: 422 });
     }
-  });
+    case 'invite': {
+      const result = await inviteBrandMember(ability, context.get(userContext), body.brandId, {
+        email: body.email,
+        admin: body.admin,
+      });
+      return result.ok ? { invited: true } : data({ errors: result.errors }, { status: 422 });
+    }
+    case 'removeMembership':
+      await removeBrandMembership(ability, body.membershipId);
+      return data(null);
+    default:
+      throw new Response(null, { status: 400, statusText: 'Bad Request' });
+  }
 }
 
 const jsonPost = { method: 'post', encType: 'application/json' } as const;
 
-export default function EditBrandPage({ loaderData: data }: Route.ComponentProps) {
-  const [brand, setBrand] = useState(data.brand);
+export default function EditBrandPage({ loaderData }: Route.ComponentProps) {
+  const [brand, setBrand] = useState(loaderData.brand);
   const [inviteUserEmail, setInviteUserEmail] = useState('');
   const [inviteUserAdmin, setInviteUserAdmin] = useState(false);
-  const saveFetcher = useFetcher<typeof clientAction>();
-  const inviteFetcher = useFetcher<typeof clientAction>();
-  const removeFetcher = useFetcher<typeof clientAction>();
-  const confirm = useGraphQLConfirm();
+  const saveFetcher = useFetcher<typeof action>();
+  const inviteFetcher = useFetcher<typeof action>();
+  const removeFetcher = useFetcher<typeof action>();
+  const confirm = useConfirm();
 
   // once an invitation has gone through, clear the invitation fields for the next one
   useEffect(() => {
@@ -90,12 +78,12 @@ export default function EditBrandPage({ loaderData: data }: Route.ComponentProps
   const sendInvitation = (event: FormEvent) => {
     event.preventDefault();
     inviteFetcher.submit(
-      { intent: 'invite', brandId: data.brand.id, admin: inviteUserAdmin, email: inviteUserEmail },
+      { intent: 'invite', brandId: loaderData.brand.id, admin: inviteUserAdmin, email: inviteUserEmail },
       jsonPost,
     );
   };
 
-  const removeMembership = async (membership: (typeof data)['brand']['brandMemberships'][number]) => {
+  const removeMembership = async (membership: (typeof loaderData)['brandMemberships'][number]) => {
     await removeFetcher.submit({ intent: 'removeMembership', membershipId: membership.id }, jsonPost);
   };
 
@@ -110,7 +98,7 @@ export default function EditBrandPage({ loaderData: data }: Route.ComponentProps
           <button type="submit" className="btn btn-primary" disabled={saveFetcher.state !== 'idle'}>
             Save changes
           </button>
-          <ErrorDisplay graphQLError={getApolloActionError(saveFetcher.data)} />
+          <ActionErrorDisplay data={saveFetcher.data} />
         </Form>
       </section>
 
@@ -129,7 +117,7 @@ export default function EditBrandPage({ loaderData: data }: Route.ComponentProps
               </tr>
             </thead>
             <tbody>
-              {data.brand.brandMemberships.map((membership) => (
+              {loaderData.brandMemberships.map((membership) => (
                 <tr key={membership.id}>
                   <td>
                     {membership.user ? (
@@ -152,25 +140,26 @@ export default function EditBrandPage({ loaderData: data }: Route.ComponentProps
                     )}
                   </td>
                   <td className="text-end">
-                    {data.brand.currentUserCanManageMemberships && membership.user?.id !== data.currentUser?.id && (
-                      <button
-                        type="button"
-                        className="btn btn-danger"
-                        disabled={removeFetcher.state !== 'idle'}
-                        onClick={() =>
-                          confirm({
-                            action: () => removeMembership(membership),
-                            prompt: `Are you sure you want to remove ${
-                              membership.user?.email ?? membership.invitationEmail
-                            }’s
+                    {loaderData.brand.currentUserCanManageMemberships &&
+                      membership.user?.id !== loaderData.currentUserId && (
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          disabled={removeFetcher.state !== 'idle'}
+                          onClick={() =>
+                            confirm({
+                              action: () => removeMembership(membership),
+                              prompt: `Are you sure you want to remove ${
+                                membership.user?.email ?? membership.invitationEmail
+                              }’s
                               membership from ${brand.name}?  This will revoke any privileges they
                               have on ${brand.name} projects.`,
-                          })
-                        }
-                      >
-                        Remove
-                      </button>
-                    )}
+                            })
+                          }
+                        >
+                          Remove
+                        </button>
+                      )}
                   </td>
                 </tr>
               ))}
@@ -202,8 +191,8 @@ export default function EditBrandPage({ loaderData: data }: Route.ComponentProps
             <tfoot>
               <tr>
                 <td colSpan={3}>
-                  <ErrorDisplay graphQLError={getApolloActionError(inviteFetcher.data)} />
-                  <ErrorDisplay graphQLError={getApolloActionError(removeFetcher.data)} />
+                  <ActionErrorDisplay data={inviteFetcher.data} />
+                  <ActionErrorDisplay data={removeFetcher.data} />
                 </td>
               </tr>
             </tfoot>

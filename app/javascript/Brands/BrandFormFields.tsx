@@ -1,13 +1,12 @@
 import { BootstrapFormInput, FormGroupWithLabel, usePropertySetters } from '@neinteractiveliterature/litform';
 import React, { type JSX } from 'react';
-import { Brand } from '../graphqlTypes.generated';
 import MarkdownEditor from '../MarkdownEditor';
 
-type BrandFormBrand = Pick<Brand, 'name' | 'description'>;
+export type BrandFormValues = { name: string; description?: string | null };
 
 export type BrandFormFieldsProps = {
-  brand: BrandFormBrand;
-  onChange: React.Dispatch<React.SetStateAction<BrandFormBrand>>;
+  brand: BrandFormValues;
+  onChange: React.Dispatch<React.SetStateAction<BrandFormValues>>;
 };
 
 export default function BrandFormFields({ brand, onChange }: BrandFormFieldsProps): JSX.Element {
