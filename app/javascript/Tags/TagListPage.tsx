@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { Waypoint } from '../Waypoint';
 import { useTagListPageQuery } from './queries.generated';
 import Tag from './Tag';
+import { pageTitle } from '../pageTitle';
 
 export default function TagListPage(): JSX.Element {
   const { data, loading, error, fetchMore } = useTagListPageQuery({ fetchPolicy: 'network-only' });
@@ -44,3 +45,5 @@ export default function TagListPage(): JSX.Element {
     </>
   );
 }
+
+export const meta = pageTitle('Tags');

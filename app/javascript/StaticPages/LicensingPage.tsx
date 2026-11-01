@@ -1,5 +1,6 @@
 import { LoadQueryWrapper } from '@neinteractiveliterature/litform-apollo';
 import { useLicensingPageQuery } from './queries.generated';
+import { pageTitle } from '../pageTitle';
 
 export default LoadQueryWrapper(useLicensingPageQuery, function LicensingPage({ data }) {
   return (
@@ -112,3 +113,5 @@ export default LoadQueryWrapper(useLicensingPageQuery, function LicensingPage({ 
     </>
   );
 });
+
+export const meta = pageTitle('Licensing');

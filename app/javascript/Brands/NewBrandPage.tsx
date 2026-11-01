@@ -9,6 +9,7 @@ import { generateBrandPath } from '../URLGenerators';
 import BrandFormFields, { BrandFormFieldsProps } from './BrandFormFields';
 import { useCreateBrandMutation } from './mutations.generated';
 import { useNewBrandQuery } from './queries.generated';
+import { pageTitle } from '../pageTitle';
 
 export default LoadQueryWrapper(useNewBrandQuery, function NewBrandPage({ data }) {
   const navigate = useNavigate();
@@ -80,3 +81,5 @@ export default LoadQueryWrapper(useNewBrandQuery, function NewBrandPage({ data }
     </>
   );
 });
+
+export const meta = pageTitle('Publish your larps');

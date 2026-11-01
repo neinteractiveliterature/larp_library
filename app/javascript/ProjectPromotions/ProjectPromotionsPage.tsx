@@ -14,6 +14,7 @@ import {
   ProjectPromotionsPageQueryDocument,
   useProjectPromotionsPageQuery,
 } from './queries.generated';
+import { pageTitle } from '../pageTitle';
 
 type ProjectSearchProject = ProjectSearchQueryData['projects']['edges'][number]['node'];
 
@@ -160,3 +161,5 @@ export default LoadQueryWrapper(useProjectPromotionsPageQuery, function ProjectP
     </>
   );
 });
+
+export const meta = pageTitle('Project promotions');

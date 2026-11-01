@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import buildTagCategoryAttributes from './buildTagCategoryAttributes';
 import { useCreateTagCategoryMutation } from './mutations.generated';
 import TagCategoryFormFields, { TagCategoryFormFieldsProps } from './TagCategoryFormFields';
+import { pageTitle } from '../pageTitle';
 
 export default function NewTagCategoryPage(): JSX.Element {
   const [tagCategory, setTagCategory] = useState<TagCategoryFormFieldsProps['tagCategory']>({
@@ -35,3 +36,5 @@ export default function NewTagCategoryPage(): JSX.Element {
     </>
   );
 }
+
+export const meta = pageTitle('New tag category');

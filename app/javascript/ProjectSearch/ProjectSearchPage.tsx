@@ -6,6 +6,7 @@ import ProjectCard from './ProjectCard';
 import SimpleProjectSearchControls from './SimpleProjectSearchControls';
 import useProjectSearchParams from './useProjectSearchParams';
 import AdvancedProjectSearchControls from './AdvancedProjectSearchControls';
+import { pageTitle } from '../pageTitle';
 
 enum ProjectSearchMode {
   SIMPLE = 'SIMPLE',
@@ -97,3 +98,5 @@ export default function ProjectSearchPage(): JSX.Element {
     </>
   );
 }
+
+export const meta = pageTitle('Larps');

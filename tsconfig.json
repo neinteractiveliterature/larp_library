@@ -6,6 +6,7 @@
     "module": "esnext", // specify module code generation
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
+    "rootDirs": [".", "./.react-router/types"], // lets route modules import their generated ./+types/* files
     "jsx": "react-jsx", // use typescript to transpile jsx to js
     "target": "es6", // specify ECMAScript target version
     "allowJs": true, // allow a partial TypeScript and JavaScript codebase,
@@ -25,6 +26,7 @@
   "include": [
     "./app/javascript/",
     "./test/javascript/",
+    "./.react-router/types/**/*",
     ".eslintrc.js"
   ]
 }
