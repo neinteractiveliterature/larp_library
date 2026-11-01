@@ -60,3 +60,6 @@ yarn-debug.log*
 # React Router build output
 /build
 /.react-router
+
+# SST
+/.sst
