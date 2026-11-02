@@ -39,7 +39,7 @@ export default $config({
     const sentryRelease = process.env['SENTRY_RELEASE'] ?? process.env['GITHUB_SHA'];
 
     // The full set of environment variables every Lambda that runs app code boots with (the web function, the migrator,
-    // and later the job handlers). Each of them imports app/javascript/server/env.ts, which validates all of it, so a
+    // and later the job handlers). Each of them imports app/server/env.ts, which validates all of it, so a
     // function given only the variables it "currently uses" would break the day its code reaches a module that wants
     // another one.
     const appEnvironment = {
@@ -61,7 +61,7 @@ export default $config({
     // Runs every pending Drizzle migration before the web function is deployed (and, since the web function depends on this
     // invocation, before it starts serving the new code).
     const migrator = new sst.aws.Function('MigratorFn', {
-      handler: 'app/javascript/server/handlers/migrate.handler',
+      handler: 'app/server/handlers/migrate.handler',
       copyFiles: COPY_FILES,
       timeout: '10 minutes',
       environment: appEnvironment,
