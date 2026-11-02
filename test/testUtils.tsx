@@ -19,7 +19,7 @@ import {
   type LoaderFunction,
   type RouteObject,
 } from 'react-router';
-import RouteErrorDisplay from '~/RouteErrorDisplay';
+import RouteErrorDisplay from '~/components/RouteErrorDisplay';
 
 /** Renders the current URL (path, search and hash) so tests can assert on navigation */
 export function LocationDisplay() {

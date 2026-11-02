@@ -1,5 +1,5 @@
 import sortBy from 'lodash/sortBy';
-import type { ProjectHeadersData, TagCategoryData, TagData } from '~/projectData';
+import type { ProjectHeadersData, TagCategoryData, TagData } from '~/lib/projectData';
 import type { ReadDb } from '~/server/db';
 import { listVisiblePromotedProjectIds } from '~/server/repositories/projectPromotions.server';
 import { countVisibleProjectsByTag } from '~/server/repositories/projectsTags.server';

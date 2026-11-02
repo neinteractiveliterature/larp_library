@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from 'react-router';
-import AppProviders from '~/AppProviders';
-import { initSentry } from '~/initSentry';
-import { formatPageTitle } from '~/pageTitle';
-import RouteErrorDisplay from '~/RouteErrorDisplay';
+import AppProviders from '~/components/AppProviders';
+import { initSentry } from '~/lib/initSentry';
+import { formatPageTitle } from '~/lib/pageTitle';
+import RouteErrorDisplay from '~/components/RouteErrorDisplay';
 import { env } from '~/server/env';
 import { userContext } from '~/server/lib/authContext';
 import { authMiddleware } from '~/server/lib/authMiddleware';

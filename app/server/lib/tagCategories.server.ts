@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { TagCategoryData, TagData } from '~/projectData';
+import type { TagCategoryData, TagData } from '~/lib/projectData';
 import { db as realDb, type DbOrTx, type ReadDb } from '~/server/db';
 import {
   deleteTagCategory as deleteTagCategoryRow,

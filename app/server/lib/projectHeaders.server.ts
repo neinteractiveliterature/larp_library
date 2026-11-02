@@ -1,4 +1,4 @@
-import type { ProjectHeadersData } from '~/projectData';
+import type { ProjectHeadersData } from '~/lib/projectData';
 import type { ReadDb } from '~/server/db';
 import {
   DESCRIPTION_EXCERPT_LENGTH,
