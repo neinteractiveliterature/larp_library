@@ -1,8 +1,13 @@
 import { defineConfig } from 'vite';
 import { reactRouter } from '@react-router/dev/vite';
+import { fileURLToPath } from 'node:url';
 
 export default defineConfig(({ command }) => ({
   plugins: [reactRouter()],
+  resolve: {
+    // "~/" is the app directory, so imports don't need long relative paths; see tsconfig.json
+    alias: [{ find: /^~\//, replacement: fileURLToPath(new URL('./app/', import.meta.url)) }],
+  },
   css: {
     preprocessorOptions: {
       scss: {

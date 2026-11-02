@@ -1,14 +1,14 @@
 import { useConfirm } from '@neinteractiveliterature/litform';
 import { useState, type FormEvent } from 'react';
 import { data, Form, Link, redirect, useFetcher } from 'react-router';
-import ActionErrorDisplay from '../ActionErrorDisplay';
-import { formatPageTitle } from '../pageTitle';
-import { abilityContext } from '../server/lib/authContext';
-import { requireAbility } from '../server/lib/authorization.server';
-import { readDbContext } from '../server/lib/dbContext';
-import { deleteTag, findTagForEditing, updateTag } from '../server/lib/tags.server';
-import buildTagAttributes from './buildTagAttributes';
-import TagFormFields from './TagFormFields';
+import ActionErrorDisplay from '~/ActionErrorDisplay';
+import { formatPageTitle } from '~/pageTitle';
+import { abilityContext } from '~/server/lib/authContext';
+import { requireAbility } from '~/server/lib/authorization.server';
+import { readDbContext } from '~/server/lib/dbContext';
+import { deleteTag, findTagForEditing, updateTag } from '~/server/lib/tags.server';
+import buildTagAttributes from '~/Tags/buildTagAttributes';
+import TagFormFields from '~/Tags/TagFormFields';
 import type { Route } from './+types/EditTagPage';
 
 function parseTagId(tagId: string): number {

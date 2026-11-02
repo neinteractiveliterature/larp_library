@@ -1,4 +1,4 @@
-import type { ProjectFormProps } from './ProjectFormFields';
+import type { ProjectFormProps } from '~/Project/ProjectFormFields';
 
 /** What the project form sends to the server (JSON, so anything blank is null rather than missing) */
 export function buildProjectAttributes(project: ProjectFormProps['project']) {

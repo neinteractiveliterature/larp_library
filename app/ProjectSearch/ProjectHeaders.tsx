@@ -2,8 +2,8 @@ import sortBy from 'lodash/sortBy';
 import uniq from 'lodash/uniq';
 import { ReactNode, useMemo, type JSX } from 'react';
 import { Link } from 'react-router';
-import Tag, { type TagLike } from '../Tags/Tag';
-import { generateBrandPath, generateProjectPath } from '../URLGenerators';
+import Tag, { type TagLike } from '~/Tags/Tag';
+import { generateBrandPath, generateProjectPath } from '~/URLGenerators';
 
 /** What the card needs of a project: satisfied by both the server loaders' plain data and the GraphQL fragments */
 export type ProjectHeadersProps = {

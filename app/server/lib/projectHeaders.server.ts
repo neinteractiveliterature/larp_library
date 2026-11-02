@@ -1,11 +1,11 @@
-import type { ProjectHeadersData } from '../../projectData';
-import type { ReadDb } from '../db';
+import type { ProjectHeadersData } from '~/projectData';
+import type { ReadDb } from '~/server/db';
 import {
   DESCRIPTION_EXCERPT_LENGTH,
   findProjectsWithTags,
   listDescriptionExcerpts,
-} from '../repositories/projects.server';
-import { tagCategoryData } from './tagDisplay';
+} from '~/server/repositories/projects.server';
+import { tagCategoryData } from '~/server/lib/tagDisplay';
 
 /**
  * The cards' worth of data for the given projects, in the order the ids are given (so a caller can sort in the database and

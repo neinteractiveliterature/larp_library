@@ -1,8 +1,8 @@
 import { and, asc, desc, eq, exists, gte, inArray, lte, sql, type SQL } from 'drizzle-orm';
-import type { ProjectSearchParams } from '../../ProjectSearch/projectSearchParams';
-import type { DbOrTx, ReadDb } from '../db';
-import { brands, projectLinks, projects, projectsTags, tags } from '../db/schema';
-import { brandIsApproved } from './brands.server';
+import type { ProjectSearchParams } from '~/ProjectSearch/projectSearchParams';
+import type { DbOrTx, ReadDb } from '~/server/db';
+import { brands, projectLinks, projects, projectsTags, tags } from '~/server/db/schema';
+import { brandIsApproved } from '~/server/repositories/brands.server';
 
 /** How much of a description the cards show (and so how much of it is worth sending) */
 export const DESCRIPTION_EXCERPT_LENGTH = 500;

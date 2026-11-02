@@ -1,5 +1,5 @@
 import { isRouteErrorResponse } from 'react-router';
-import NotFoundPage from './NotFoundPage';
+import NotFoundPage from '~/NotFoundPage';
 
 /** What to show for an error thrown while loading or rendering a route */
 export default function RouteErrorDisplay({ error }: { error: unknown }) {

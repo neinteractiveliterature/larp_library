@@ -1,5 +1,5 @@
 import type { JSX } from 'react';
-import type { ProjectLinkData } from '../server/lib/projects.server';
+import type { ProjectLinkData } from '~/server/lib/projects.server';
 
 export type ProjectLinkDisplayProps = {
   link: Pick<ProjectLinkData, 'url' | 'icon' | 'title'>;

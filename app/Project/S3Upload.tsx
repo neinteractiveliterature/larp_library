@@ -1,7 +1,7 @@
 import React, { useState, type JSX } from 'react';
 import { LoadingIndicator } from '@neinteractiveliterature/litform';
 import { useRevalidator } from 'react-router';
-import { generateProjectUploadActionPath } from '../URLGenerators';
+import { generateProjectUploadActionPath } from '~/URLGenerators';
 
 export type S3UploadProps = { project: Parameters<typeof generateProjectUploadActionPath>[0] };
 

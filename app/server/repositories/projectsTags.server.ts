@@ -1,7 +1,7 @@
 import { and, count, eq, inArray } from 'drizzle-orm';
-import type { DbOrTx, ReadDb } from '../db';
-import { brands, projects, projectsTags, tags } from '../db/schema';
-import { brandIsApproved } from './brands.server';
+import type { DbOrTx, ReadDb } from '~/server/db';
+import { brands, projects, projectsTags, tags } from '~/server/db/schema';
+import { brandIsApproved } from '~/server/repositories/brands.server';
 
 /** The tags a project has (id and name only) */
 export async function listTagsOfProject(db: ReadDb, projectId: number) {

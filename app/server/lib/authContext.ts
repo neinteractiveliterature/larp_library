@@ -1,8 +1,8 @@
 import type { InferSelectModel } from 'drizzle-orm';
 import type { Session } from 'better-auth';
 import { createContext } from 'react-router';
-import type { users } from '../db/schema';
-import type { AppAbility } from './authorization.server';
+import type { users } from '~/server/db/schema';
+import type { AppAbility } from '~/server/lib/authorization.server';
 
 export type AuthUser = InferSelectModel<typeof users>;
 

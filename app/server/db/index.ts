@@ -1,7 +1,7 @@
 import { drizzle, type NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
-import { env } from '../env';
-import * as schema from './schema';
+import { env } from '~/server/env';
+import * as schema from '~/server/db/schema';
 
 // Kept small deliberately: each Lambda execution environment holds its own pool, and a warm container can live for a
 // while, so a large per-container max risks exhausting the database's connection limit under concurrent invocations.

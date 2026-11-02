@@ -3,8 +3,8 @@ import { GroupBase } from 'react-select';
 import AsyncSelect, { AsyncProps } from 'react-select/async';
 import AsyncCreatableSelect, { AsyncCreatableProps } from 'react-select/async-creatable';
 import { v4 as uuidv4 } from 'uuid';
-import type { TagCategoryData } from '../projectData';
-import Tag from './Tag';
+import type { TagCategoryData } from '~/projectData';
+import Tag from '~/Tags/Tag';
 
 /** A tag as the picker deals in it: one from the server, or (for a name typed that no tag has yet) one made up here */
 export type TagOption = { id: string | number; name: string; tagCategory?: TagCategoryData | null };

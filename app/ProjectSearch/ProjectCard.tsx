@@ -1,9 +1,9 @@
 import type { JSX } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router';
-import { MarkdownLink } from '../MarkdownLink';
-import { generateProjectPath } from '../URLGenerators';
-import ProjectHeaders, { ProjectHeadersProps } from './ProjectHeaders';
+import { MarkdownLink } from '~/MarkdownLink';
+import { generateProjectPath } from '~/URLGenerators';
+import ProjectHeaders, { ProjectHeadersProps } from '~/ProjectSearch/ProjectHeaders';
 
 export type ProjectCardProps = {
   project: ProjectHeadersProps['project'] & { description?: string | null };

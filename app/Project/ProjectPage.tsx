@@ -1,15 +1,15 @@
 import { useConfirm } from '@neinteractiveliterature/litform';
 import ReactMarkdown from 'react-markdown';
 import { Link, redirect, useFetcher } from 'react-router';
-import ActionErrorDisplay from '../ActionErrorDisplay';
-import { formatPageTitle } from '../pageTitle';
-import ProjectHeaders from '../ProjectSearch/ProjectHeaders';
-import { abilityContext } from '../server/lib/authContext';
-import { readDbContext } from '../server/lib/dbContext';
-import { deleteProject, findProjectPage, projectIdFromParam } from '../server/lib/projects.server';
-import { generateProjectPath } from '../URLGenerators';
-import ProjectFileDisplay from './ProjectFileDisplay';
-import { ProjectLinkDisplay } from './ProjectLinkDisplay';
+import ActionErrorDisplay from '~/ActionErrorDisplay';
+import { formatPageTitle } from '~/pageTitle';
+import ProjectHeaders from '~/ProjectSearch/ProjectHeaders';
+import { abilityContext } from '~/server/lib/authContext';
+import { readDbContext } from '~/server/lib/dbContext';
+import { deleteProject, findProjectPage, projectIdFromParam } from '~/server/lib/projects.server';
+import { generateProjectPath } from '~/URLGenerators';
+import ProjectFileDisplay from '~/Project/ProjectFileDisplay';
+import { ProjectLinkDisplay } from '~/Project/ProjectLinkDisplay';
 import type { Route } from './+types/ProjectPage';
 
 export function loader({ context, params }: Route.LoaderArgs) {

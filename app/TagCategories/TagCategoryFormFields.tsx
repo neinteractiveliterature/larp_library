@@ -1,7 +1,7 @@
 import { BootstrapFormInput, FormGroupWithLabel, usePropertySetters } from '@neinteractiveliterature/litform';
 import React, { type JSX } from 'react';
-import ColorPicker from '../ColorPicker';
-import IconSelect from '../IconSelect';
+import ColorPicker from '~/ColorPicker';
+import IconSelect from '~/IconSelect';
 
 export type TagCategoryFormValues = {
   name: string;

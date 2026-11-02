@@ -1,11 +1,11 @@
 import sortBy from 'lodash/sortBy';
-import type { ProjectHeadersData, TagCategoryData, TagData } from '../../projectData';
-import type { ReadDb } from '../db';
-import { listVisiblePromotedProjectIds } from '../repositories/projectPromotions.server';
-import { countVisibleProjectsByTag } from '../repositories/projectsTags.server';
-import { listTagsWithCategories } from '../repositories/tags.server';
-import { loadProjectHeaders } from './projectHeaders.server';
-import { tagCategoryData } from './tagDisplay';
+import type { ProjectHeadersData, TagCategoryData, TagData } from '~/projectData';
+import type { ReadDb } from '~/server/db';
+import { listVisiblePromotedProjectIds } from '~/server/repositories/projectPromotions.server';
+import { countVisibleProjectsByTag } from '~/server/repositories/projectsTags.server';
+import { listTagsWithCategories } from '~/server/repositories/tags.server';
+import { loadProjectHeaders } from '~/server/lib/projectHeaders.server';
+import { tagCategoryData } from '~/server/lib/tagDisplay';
 
 export type TagWithProjectCount = TagData & { projectCount: number };
 

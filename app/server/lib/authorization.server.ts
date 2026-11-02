@@ -5,9 +5,9 @@ import {
   type ForcedSubject,
   type MongoAbility,
 } from '@casl/ability';
-import { db, type DbOrTx } from '../db';
-import { listMembershipsOfUser } from '../repositories/brandMemberships.server';
-import type { AuthUser } from './authContext';
+import { db, type DbOrTx } from '~/server/db';
+import { listMembershipsOfUser } from '~/server/repositories/brandMemberships.server';
+import type { AuthUser } from '~/server/lib/authContext';
 
 // A port of the Rails app's CanCan Ability. The rules are the same; what changed is how conditions see the world.
 // CanCan's conditions walked ActiveRecord associations (brand: { brand_memberships: { user: { id: } } }), whereas CASL

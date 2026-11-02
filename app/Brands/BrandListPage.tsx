@@ -1,12 +1,12 @@
 import { Fragment, useEffect, type JSX } from 'react';
 import { useFetcher, useLocation } from 'react-router';
-import { pageTitle } from '../pageTitle';
-import { userContext } from '../server/lib/authContext';
-import { listBrands, type BrandListPageData } from '../server/lib/brands.server';
-import { readDbContext } from '../server/lib/dbContext';
-import { pageUrl, useLoadMorePages } from '../useLoadMorePages';
-import { Waypoint } from '../Waypoint';
-import BrandCard from './BrandCard';
+import { pageTitle } from '~/pageTitle';
+import { userContext } from '~/server/lib/authContext';
+import { listBrands, type BrandListPageData } from '~/server/lib/brands.server';
+import { readDbContext } from '~/server/lib/dbContext';
+import { pageUrl, useLoadMorePages } from '~/useLoadMorePages';
+import { Waypoint } from '~/Waypoint';
+import BrandCard from '~/Brands/BrandCard';
 import type { Route } from './+types/BrandListPage';
 
 // The same loader serves the pages after the first: the list asks for them with an `offset`.

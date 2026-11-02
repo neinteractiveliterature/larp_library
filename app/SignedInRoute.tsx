@@ -1,6 +1,6 @@
 import { Outlet, redirect } from 'react-router';
-import { signInPath } from './signIn';
-import { userContext } from './server/lib/authContext';
+import { signInPath } from '~/signIn';
+import { userContext } from '~/server/lib/authContext';
 import type { Route } from './+types/SignedInRoute';
 
 /**

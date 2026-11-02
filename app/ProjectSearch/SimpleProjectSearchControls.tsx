@@ -1,8 +1,8 @@
 import type { JSX } from 'react';
 import { SearchInput, useDebouncedState } from '@neinteractiveliterature/litform';
-import Tag from '../Tags/Tag';
-import type { TagData } from '../projectData';
-import useProjectSearchParams from './useProjectSearchParams';
+import Tag from '~/Tags/Tag';
+import type { TagData } from '~/projectData';
+import useProjectSearchParams from '~/ProjectSearch/useProjectSearchParams';
 
 export type SimpleProjectSearchControlsProps = {
   /** The tag the search is filtered to, if any */

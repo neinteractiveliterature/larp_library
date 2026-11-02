@@ -1,13 +1,13 @@
 import { useState, type FormEvent } from 'react';
 import { data, Form, Link, redirect, useNavigation, useSubmit } from 'react-router';
-import ActionErrorDisplay from '../ActionErrorDisplay';
-import { pageTitle } from '../pageTitle';
-import { abilityContext, userContext } from '../server/lib/authContext';
-import { requireAbility } from '../server/lib/authorization.server';
-import { createBrand, listUserBrands } from '../server/lib/brands.server';
-import { readDbContext } from '../server/lib/dbContext';
-import { generateBrandPath } from '../URLGenerators';
-import BrandFormFields, { type BrandFormValues } from './BrandFormFields';
+import ActionErrorDisplay from '~/ActionErrorDisplay';
+import { pageTitle } from '~/pageTitle';
+import { abilityContext, userContext } from '~/server/lib/authContext';
+import { requireAbility } from '~/server/lib/authorization.server';
+import { createBrand, listUserBrands } from '~/server/lib/brands.server';
+import { readDbContext } from '~/server/lib/dbContext';
+import { generateBrandPath } from '~/URLGenerators';
+import BrandFormFields, { type BrandFormValues } from '~/Brands/BrandFormFields';
 import type { Route } from './+types/NewBrandPage';
 
 export async function loader({ context }: Route.LoaderArgs) {

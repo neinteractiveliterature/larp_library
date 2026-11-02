@@ -1,7 +1,7 @@
 import { and, asc, eq, sql } from 'drizzle-orm';
-import type { DbOrTx, ReadDb } from '../db';
-import { moveItem, withOrderedListLock } from '../db/orderedList.server';
-import { projectFiles } from '../db/schema';
+import type { DbOrTx, ReadDb } from '~/server/db';
+import { moveItem, withOrderedListLock } from '~/server/db/orderedList.server';
+import { projectFiles } from '~/server/db/schema';
 
 /** A file with its project, which has its brand */
 export async function findProjectFileWithProject(db: ReadDb, id: number) {

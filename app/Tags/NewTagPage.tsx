@@ -1,12 +1,12 @@
 import { useState, type FormEvent } from 'react';
 import { data, Form, redirect, useNavigation, useSubmit } from 'react-router';
-import ActionErrorDisplay from '../ActionErrorDisplay';
-import { pageTitle } from '../pageTitle';
-import { abilityContext } from '../server/lib/authContext';
-import { requireAbility } from '../server/lib/authorization.server';
-import { createTag } from '../server/lib/tags.server';
-import buildTagAttributes from './buildTagAttributes';
-import TagFormFields, { type TagFormValues } from './TagFormFields';
+import ActionErrorDisplay from '~/ActionErrorDisplay';
+import { pageTitle } from '~/pageTitle';
+import { abilityContext } from '~/server/lib/authContext';
+import { requireAbility } from '~/server/lib/authorization.server';
+import { createTag } from '~/server/lib/tags.server';
+import buildTagAttributes from '~/Tags/buildTagAttributes';
+import TagFormFields, { type TagFormValues } from '~/Tags/TagFormFields';
 import type { Route } from './+types/NewTagPage';
 
 export function loader({ context }: Route.LoaderArgs) {

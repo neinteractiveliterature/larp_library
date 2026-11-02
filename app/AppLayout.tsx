@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
-import { SignInButton } from './SignInButton';
-import { SignOutButton } from './SignOutButton';
+import { SignInButton } from '~/SignInButton';
+import { SignOutButton } from '~/SignOutButton';
 
 /** What the site header needs to know about the visitor: whether they're an admin, and which admin pages they can use */
 export type AppLayoutData = {

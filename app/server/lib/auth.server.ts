@@ -2,10 +2,10 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { genericOAuth } from 'better-auth/plugins';
 import { createRemoteJWKSet } from 'jose';
-import { env } from '../env';
-import { db } from '../db';
-import * as schema from '../db/schema';
-import { intercodeProfileFromAccessToken } from './intercodeProfile.server';
+import { env } from '~/server/env';
+import { db } from '~/server/db';
+import * as schema from '~/server/db/schema';
+import { intercodeProfileFromAccessToken } from '~/server/lib/intercodeProfile.server';
 
 export const INTERCODE_PROVIDER_ID = 'intercode';
 

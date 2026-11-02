@@ -1,16 +1,16 @@
 import { Tabs, useTabsWithRouter } from '@neinteractiveliterature/litform';
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { data, Form, Link, useFetcher, useLocation, useNavigate } from 'react-router';
-import ActionErrorDisplay from '../ActionErrorDisplay';
-import { LICENSES } from '../licenses';
-import { formatPageTitle } from '../pageTitle';
-import { abilityContext } from '../server/lib/authContext';
-import { readDbContext } from '../server/lib/dbContext';
-import { findProjectPage, updateProject } from '../server/lib/projects.server';
-import { generateProjectPath } from '../URLGenerators';
-import { buildProjectAttributes } from './buildProjectAttributes';
-import ProjectContentFields from './ProjectContentFields';
-import ProjectFormFields from './ProjectFormFields';
+import ActionErrorDisplay from '~/ActionErrorDisplay';
+import { LICENSES } from '~/licenses';
+import { formatPageTitle } from '~/pageTitle';
+import { abilityContext } from '~/server/lib/authContext';
+import { readDbContext } from '~/server/lib/dbContext';
+import { findProjectPage, updateProject } from '~/server/lib/projects.server';
+import { generateProjectPath } from '~/URLGenerators';
+import { buildProjectAttributes } from '~/Project/buildProjectAttributes';
+import ProjectContentFields from '~/Project/ProjectContentFields';
+import ProjectFormFields from '~/Project/ProjectFormFields';
 import type { Route } from './+types/EditProjectPage';
 
 export function loader({ context, params }: Route.LoaderArgs) {

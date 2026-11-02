@@ -1,4 +1,4 @@
-import { pageTitle } from '../pageTitle';
+import { pageTitle } from '~/pageTitle';
 export default function AboutPage() {
   return (
     <>

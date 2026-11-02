@@ -1,6 +1,6 @@
 import { BootstrapFormInput, FormGroupWithLabel, usePropertySetters } from '@neinteractiveliterature/litform';
 import React, { type JSX } from 'react';
-import MarkdownEditor from '../MarkdownEditor';
+import MarkdownEditor from '~/MarkdownEditor';
 
 export type BrandFormValues = { name: string; description?: string | null };
 

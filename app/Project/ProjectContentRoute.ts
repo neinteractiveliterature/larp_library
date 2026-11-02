@@ -1,12 +1,12 @@
 import { data } from 'react-router';
-import { abilityContext } from '../server/lib/authContext';
+import { abilityContext } from '~/server/lib/authContext';
 import {
   createProjectLink,
   deleteProjectLink,
   moveProjectLink,
   updateProjectLink,
-} from '../server/lib/projectLinks.server';
-import { deleteProjectFile, moveProjectFile } from '../server/lib/projectFiles.server';
+} from '~/server/lib/projectLinks.server';
+import { deleteProjectFile, moveProjectFile } from '~/server/lib/projectFiles.server';
 import type { Route } from './+types/ProjectContentRoute';
 
 /**

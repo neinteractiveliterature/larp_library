@@ -1,4 +1,4 @@
-import stringPresence from '../stringPresence';
+import stringPresence from '~/stringPresence';
 
 // The project search lives in the URL, so the page and its loader (on the server) both read it from there. (Browser-safe:
 // nothing here imports server code.)

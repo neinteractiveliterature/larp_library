@@ -1,15 +1,15 @@
 import { useEffect } from 'react';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from 'react-router';
-import AppProviders from './AppProviders';
-import { initSentry } from './initSentry';
-import { formatPageTitle } from './pageTitle';
-import RouteErrorDisplay from './RouteErrorDisplay';
-import { env } from './server/env';
-import { userContext } from './server/lib/authContext';
-import { authMiddleware } from './server/lib/authMiddleware';
+import AppProviders from '~/AppProviders';
+import { initSentry } from '~/initSentry';
+import { formatPageTitle } from '~/pageTitle';
+import RouteErrorDisplay from '~/RouteErrorDisplay';
+import { env } from '~/server/env';
+import { userContext } from '~/server/lib/authContext';
+import { authMiddleware } from '~/server/lib/authMiddleware';
 import type { Route } from './+types/root';
 
-import './styles/application.scss';
+import '~/styles/application.scss';
 
 // pages override this with their own `meta`
 export function meta() {

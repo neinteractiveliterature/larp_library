@@ -1,15 +1,15 @@
 import { z } from 'zod';
-import { db as realDb, type DbOrTx } from '../db';
-import { findProjectWithBrand } from '../repositories/projects.server';
+import { db as realDb, type DbOrTx } from '~/server/db';
+import { findProjectWithBrand } from '~/server/repositories/projects.server';
 import {
   appendProjectFile,
   findProjectFileWithProject,
   moveProjectFileTo,
   removeProjectFile,
-} from '../repositories/projectFiles.server';
-import { failure, isUniqueViolation, type ActionResult } from './actionResult.server';
-import type { AuthUser } from './authContext';
-import { projectFileSubject, requireAbility, type AppAbility } from './authorization.server';
+} from '~/server/repositories/projectFiles.server';
+import { failure, isUniqueViolation, type ActionResult } from '~/server/lib/actionResult.server';
+import type { AuthUser } from '~/server/lib/authContext';
+import { projectFileSubject, requireAbility, type AppAbility } from '~/server/lib/authorization.server';
 import {
   bucketName,
   fileStorage,
@@ -17,7 +17,7 @@ import {
   UPLOAD_KEY_PREFIX,
   type FileStorage,
   type UploadTarget,
-} from './storage.server';
+} from '~/server/lib/storage.server';
 
 function notFound(): never {
   throw new Response(null, { status: 404, statusText: 'Not Found' });

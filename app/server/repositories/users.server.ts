@@ -1,6 +1,6 @@
 import { and, eq, isNotNull } from 'drizzle-orm';
-import type { ReadDb } from '../db';
-import { users } from '../db/schema';
+import type { ReadDb } from '~/server/db';
+import { users } from '~/server/db/schema';
 
 /**
  * A user's row by id, or null if there's no such user. better-auth hands ids around as strings even though this app's user

@@ -1,7 +1,7 @@
 import type { JSX } from 'react';
-import EditProjectLinksCard from './EditProjectLinksCard';
-import EditProjectFilesCard from './EditProjectFilesCard';
-import type { ProjectPageData } from '../server/lib/projects.server';
+import EditProjectLinksCard from '~/Project/EditProjectLinksCard';
+import EditProjectFilesCard from '~/Project/EditProjectFilesCard';
+import type { ProjectPageData } from '~/server/lib/projects.server';
 
 export type ProjectContentFieldsProps = {
   project: ProjectPageData['project'];

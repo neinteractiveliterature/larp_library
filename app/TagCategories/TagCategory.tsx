@@ -1,5 +1,5 @@
 import type { JSX } from 'react';
-import Tag, { TagProps } from '../Tags/Tag';
+import Tag, { TagProps } from '~/Tags/Tag';
 
 /** What a tag category badge needs: satisfied by both the server loaders' plain data and the GraphQL fragments */
 export type TagCategoryLike = {

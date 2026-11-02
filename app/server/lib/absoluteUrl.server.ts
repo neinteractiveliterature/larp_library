@@ -1,4 +1,4 @@
-import { env } from '../env';
+import { env } from '~/server/env';
 
 /** Builds an absolute URL on this app's own host, for links that go in emails. */
 export function absoluteUrl(path: string): string {

@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import { z } from 'zod';
-import { db as realDb, type DbOrTx, type ReadDb } from '../db';
-import { findBrandById, findBrandBySlug } from '../repositories/brands.server';
+import { db as realDb, type DbOrTx, type ReadDb } from '~/server/db';
+import { findBrandById, findBrandBySlug } from '~/server/repositories/brands.server';
 import {
   claimInvitation,
   deleteMembership,
@@ -9,11 +9,11 @@ import {
   findMembershipByToken,
   findMembershipOfUser,
   insertInvitation,
-} from '../repositories/brandMemberships.server';
-import { failure, type ActionResult } from './actionResult.server';
-import type { AuthUser } from './authContext';
-import { brandMembershipSubject, requireAbility, type AppAbility } from './authorization.server';
-import { sendBrandInvitationEmail, type MailTransport } from './brandMail.server';
+} from '~/server/repositories/brandMemberships.server';
+import { failure, type ActionResult } from '~/server/lib/actionResult.server';
+import type { AuthUser } from '~/server/lib/authContext';
+import { brandMembershipSubject, requireAbility, type AppAbility } from '~/server/lib/authorization.server';
+import { sendBrandInvitationEmail, type MailTransport } from '~/server/lib/brandMail.server';
 
 function notFound(): never {
   throw new Response(null, { status: 404, statusText: 'Not Found' });

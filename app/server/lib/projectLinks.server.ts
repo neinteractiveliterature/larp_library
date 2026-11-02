@@ -1,15 +1,15 @@
 import { z } from 'zod';
-import { db as realDb, type DbOrTx } from '../db';
-import { findProjectWithBrand } from '../repositories/projects.server';
+import { db as realDb, type DbOrTx } from '~/server/db';
+import { findProjectWithBrand } from '~/server/repositories/projects.server';
 import {
   appendProjectLink,
   findProjectLinkWithProject,
   moveProjectLinkTo,
   removeProjectLink,
   updateProjectLink as updateProjectLinkRow,
-} from '../repositories/projectLinks.server';
-import { failure, type ActionResult } from './actionResult.server';
-import { projectLinkSubject, requireAbility, type AppAbility } from './authorization.server';
+} from '~/server/repositories/projectLinks.server';
+import { failure, type ActionResult } from '~/server/lib/actionResult.server';
+import { projectLinkSubject, requireAbility, type AppAbility } from '~/server/lib/authorization.server';
 
 function notFound(): never {
   throw new Response(null, { status: 404, statusText: 'Not Found' });

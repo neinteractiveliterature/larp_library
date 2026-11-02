@@ -1,4 +1,4 @@
-import type { TagCategoryFormFieldsProps } from './TagCategoryFormFields';
+import type { TagCategoryFormFieldsProps } from '~/TagCategories/TagCategoryFormFields';
 
 /** What the form sends to the server for a tag category */
 export default function buildTagCategoryAttributes(tagCategory: TagCategoryFormFieldsProps['tagCategory']) {

@@ -1,12 +1,12 @@
 import type { Transporter } from 'nodemailer';
-import { BrandApproved } from '../emails/templates/BrandApproved.server';
-import { BrandMembershipInvitation } from '../emails/templates/BrandMembershipInvitation.server';
-import { BrandPending } from '../emails/templates/BrandPending.server';
-import { sendTemplatedMail } from '../emails/send';
-import { db as realDb, type ReadDb } from '../db';
-import { listAdminsWithEmail } from '../repositories/users.server';
-import { absoluteUrl } from './absoluteUrl.server';
-import { mailTransport as realMailTransport } from './mail.server';
+import { BrandApproved } from '~/server/emails/templates/BrandApproved.server';
+import { BrandMembershipInvitation } from '~/server/emails/templates/BrandMembershipInvitation.server';
+import { BrandPending } from '~/server/emails/templates/BrandPending.server';
+import { sendTemplatedMail } from '~/server/emails/send';
+import { db as realDb, type ReadDb } from '~/server/db';
+import { listAdminsWithEmail } from '~/server/repositories/users.server';
+import { absoluteUrl } from '~/server/lib/absoluteUrl.server';
+import { mailTransport as realMailTransport } from '~/server/lib/mail.server';
 
 // The emails the brand features send. They go out after the change that caused them has been saved, and a failure to send
 // one is logged rather than thrown: by then the brand or the invitation exists, so failing the request would only leave the

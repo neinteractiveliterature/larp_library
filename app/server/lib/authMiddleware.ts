@@ -1,9 +1,9 @@
 import type { MiddlewareFunction } from 'react-router';
-import { auth } from './auth.server';
-import { abilityContext, sessionContext, userContext } from './authContext';
-import { loadAbility } from './authorization.server';
-import { db } from '../db';
-import { findUserById } from '../repositories/users.server';
+import { auth } from '~/server/lib/auth.server';
+import { abilityContext, sessionContext, userContext } from '~/server/lib/authContext';
+import { loadAbility } from '~/server/lib/authorization.server';
+import { db } from '~/server/db';
+import { findUserById } from '~/server/repositories/users.server';
 
 /**
  * Loads the session from better-auth and puts the signed-in user (or null), and what they're allowed to do, in context. Register it on the root route, so

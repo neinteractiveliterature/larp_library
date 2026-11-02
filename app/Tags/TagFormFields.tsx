@@ -1,7 +1,7 @@
 import { BootstrapFormInput, FormGroupWithLabel, usePropertySetters } from '@neinteractiveliterature/litform';
 import React, { type JSX } from 'react';
-import type { TagCategoryData } from '../projectData';
-import TagCategorySelector from '../TagCategories/TagCategorySelector';
+import type { TagCategoryData } from '~/projectData';
+import TagCategorySelector from '~/TagCategories/TagCategorySelector';
 
 export type TagFormValues = {
   name: string;

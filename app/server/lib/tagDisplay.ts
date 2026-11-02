@@ -1,4 +1,4 @@
-import type { TagCategoryData } from '../../projectData';
+import type { TagCategoryData } from '~/projectData';
 
 const DEFAULT_COLOR = '#777777';
 const DEFAULT_ICON = 'tag';

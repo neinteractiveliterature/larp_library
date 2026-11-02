@@ -1,14 +1,14 @@
 import { useState, type FormEvent } from 'react';
 import { data, Form, redirect, useNavigation, useSubmit } from 'react-router';
-import ActionErrorDisplay from '../ActionErrorDisplay';
-import { LICENSES } from '../licenses';
-import { pageTitle } from '../pageTitle';
-import { abilityContext } from '../server/lib/authContext';
-import { readDbContext } from '../server/lib/dbContext';
-import { createProject, findBrandForNewProject } from '../server/lib/projects.server';
-import { generateProjectPath } from '../URLGenerators';
-import { buildProjectAttributes } from './buildProjectAttributes';
-import ProjectFormFields, { type ProjectFormValues } from './ProjectFormFields';
+import ActionErrorDisplay from '~/ActionErrorDisplay';
+import { LICENSES } from '~/licenses';
+import { pageTitle } from '~/pageTitle';
+import { abilityContext } from '~/server/lib/authContext';
+import { readDbContext } from '~/server/lib/dbContext';
+import { createProject, findBrandForNewProject } from '~/server/lib/projects.server';
+import { generateProjectPath } from '~/URLGenerators';
+import { buildProjectAttributes } from '~/Project/buildProjectAttributes';
+import ProjectFormFields, { type ProjectFormValues } from '~/Project/ProjectFormFields';
 import type { Route } from './+types/NewProjectPage';
 
 export function loader({ context, params }: Route.LoaderArgs) {

@@ -1,15 +1,15 @@
 import { BootstrapFormCheckbox, BootstrapFormInput, useConfirm } from '@neinteractiveliterature/litform';
 import { useEffect, useState, type FormEvent } from 'react';
 import { data, Form, redirect, useFetcher } from 'react-router';
-import ActionErrorDisplay from '../ActionErrorDisplay';
-import { formatPageTitle } from '../pageTitle';
-import { abilityContext, userContext } from '../server/lib/authContext';
-import { removeBrandMembership, inviteBrandMember } from '../server/lib/brandMemberships.server';
-import { findBrandForEditing, updateBrand } from '../server/lib/brands.server';
-import { readDbContext } from '../server/lib/dbContext';
-import { generateBrandPath } from '../URLGenerators';
-import BrandFormFields from './BrandFormFields';
-import UnapprovedBrandAlert from './UnapprovedBrandAlert';
+import ActionErrorDisplay from '~/ActionErrorDisplay';
+import { formatPageTitle } from '~/pageTitle';
+import { abilityContext, userContext } from '~/server/lib/authContext';
+import { removeBrandMembership, inviteBrandMember } from '~/server/lib/brandMemberships.server';
+import { findBrandForEditing, updateBrand } from '~/server/lib/brands.server';
+import { readDbContext } from '~/server/lib/dbContext';
+import { generateBrandPath } from '~/URLGenerators';
+import BrandFormFields from '~/Brands/BrandFormFields';
+import UnapprovedBrandAlert from '~/Brands/UnapprovedBrandAlert';
 import type { Route } from './+types/EditBrandPage';
 
 export async function loader({ context, params }: Route.LoaderArgs) {

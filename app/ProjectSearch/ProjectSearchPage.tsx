@@ -1,19 +1,19 @@
 import { Fragment, useEffect, useState, type JSX } from 'react';
 import { useFetcher, useLocation } from 'react-router';
-import { pageUrl, useLoadMorePages } from '../useLoadMorePages';
-import { Waypoint } from '../Waypoint';
-import { pageTitle } from '../pageTitle';
-import { readDbContext } from '../server/lib/dbContext';
+import { pageUrl, useLoadMorePages } from '~/useLoadMorePages';
+import { Waypoint } from '~/Waypoint';
+import { pageTitle } from '~/pageTitle';
+import { readDbContext } from '~/server/lib/dbContext';
 import {
   findTagByName,
   searchProjects,
   type ProjectSearchPage as ProjectSearchPageData,
-} from '../server/lib/projectSearch.server';
-import ProjectCard from './ProjectCard';
-import SimpleProjectSearchControls from './SimpleProjectSearchControls';
-import { decodeProjectSearchParams } from './projectSearchParams';
-import useProjectSearchParams from './useProjectSearchParams';
-import AdvancedProjectSearchControls from './AdvancedProjectSearchControls';
+} from '~/server/lib/projectSearch.server';
+import ProjectCard from '~/ProjectSearch/ProjectCard';
+import SimpleProjectSearchControls from '~/ProjectSearch/SimpleProjectSearchControls';
+import { decodeProjectSearchParams } from '~/ProjectSearch/projectSearchParams';
+import useProjectSearchParams from '~/ProjectSearch/useProjectSearchParams';
+import AdvancedProjectSearchControls from '~/ProjectSearch/AdvancedProjectSearchControls';
 import type { Route } from './+types/ProjectSearchPage';
 
 enum ProjectSearchMode {

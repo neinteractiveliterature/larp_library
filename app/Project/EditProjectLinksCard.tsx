@@ -8,15 +8,15 @@ import {
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useMemo, useCallback, type JSX } from 'react';
-import ActionErrorDisplay from '../ActionErrorDisplay';
-import type { ProjectPageData } from '../server/lib/projects.server';
-import { getSortableStyle, useSortableDndSensors } from '../SortableUtils';
-import { generateProjectContentActionPath } from '../URLGenerators';
-import AddProjectLinkModal from './AddProjectLinkModal';
-import EditProjectLinkModal, { EditProjectLinkModalProps } from './EditProjectLinkModal';
-import { ProjectLinkDisplayProps, ProjectLinkDisplay } from './ProjectLinkDisplay';
-import { useOptimisticMove } from './useOptimisticMove';
-import { useProjectContentFetcher } from './useProjectContentFetcher';
+import ActionErrorDisplay from '~/ActionErrorDisplay';
+import type { ProjectPageData } from '~/server/lib/projects.server';
+import { getSortableStyle, useSortableDndSensors } from '~/SortableUtils';
+import { generateProjectContentActionPath } from '~/URLGenerators';
+import AddProjectLinkModal from '~/Project/AddProjectLinkModal';
+import EditProjectLinkModal, { EditProjectLinkModalProps } from '~/Project/EditProjectLinkModal';
+import { ProjectLinkDisplayProps, ProjectLinkDisplay } from '~/Project/ProjectLinkDisplay';
+import { useOptimisticMove } from '~/Project/useOptimisticMove';
+import { useProjectContentFetcher } from '~/Project/useProjectContentFetcher';
 
 type EditProjectLinkProps = {
   link: ProjectLinkDisplayProps['link'] & { id: number };

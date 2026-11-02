@@ -1,12 +1,12 @@
 import { useState, type FormEvent } from 'react';
 import { data, Form, redirect, useNavigation, useSubmit } from 'react-router';
-import ActionErrorDisplay from '../ActionErrorDisplay';
-import { pageTitle } from '../pageTitle';
-import { abilityContext } from '../server/lib/authContext';
-import { requireAbility } from '../server/lib/authorization.server';
-import { createTagCategory } from '../server/lib/tagCategories.server';
-import buildTagCategoryAttributes from './buildTagCategoryAttributes';
-import TagCategoryFormFields, { type TagCategoryFormValues } from './TagCategoryFormFields';
+import ActionErrorDisplay from '~/ActionErrorDisplay';
+import { pageTitle } from '~/pageTitle';
+import { abilityContext } from '~/server/lib/authContext';
+import { requireAbility } from '~/server/lib/authorization.server';
+import { createTagCategory } from '~/server/lib/tagCategories.server';
+import buildTagCategoryAttributes from '~/TagCategories/buildTagCategoryAttributes';
+import TagCategoryFormFields, { type TagCategoryFormValues } from '~/TagCategories/TagCategoryFormFields';
 import type { Route } from './+types/NewTagCategoryPage';
 
 export function loader({ context }: Route.LoaderArgs) {

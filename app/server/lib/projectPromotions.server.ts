@@ -1,14 +1,14 @@
 import { z } from 'zod';
-import { db as realDb, type DbOrTx, type ReadDb } from '../db';
+import { db as realDb, type DbOrTx, type ReadDb } from '~/server/db';
 import {
   deletePromotionOfProject,
   insertPromotion,
   listPromotionsWithProjects,
-} from '../repositories/projectPromotions.server';
-import { findProjectById } from '../repositories/projects.server';
-import { failure, isUniqueViolation, type ActionResult } from './actionResult.server';
-import { requireAbility, type AppAbility } from './authorization.server';
-import { searchProjects } from './projectSearch.server';
+} from '~/server/repositories/projectPromotions.server';
+import { findProjectById } from '~/server/repositories/projects.server';
+import { failure, isUniqueViolation, type ActionResult } from '~/server/lib/actionResult.server';
+import { requireAbility, type AppAbility } from '~/server/lib/authorization.server';
+import { searchProjects } from '~/server/lib/projectSearch.server';
 
 export type ProjectPromotionData = {
   id: number;

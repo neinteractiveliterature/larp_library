@@ -1,9 +1,9 @@
 import type { JSX } from 'react';
 import { Link } from 'react-router';
-import { pageTitle } from '../pageTitle';
-import { readDbContext } from '../server/lib/dbContext';
-import { listTagCategories } from '../server/lib/tagCategories.server';
-import TagCategory from './TagCategory';
+import { pageTitle } from '~/pageTitle';
+import { readDbContext } from '~/server/lib/dbContext';
+import { listTagCategories } from '~/server/lib/tagCategories.server';
+import TagCategory from '~/TagCategories/TagCategory';
 import type { Route } from './+types/TagCategoryListPage';
 
 export async function loader({ context }: Route.LoaderArgs) {
