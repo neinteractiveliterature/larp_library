@@ -2,8 +2,12 @@ import { notEmpty } from '@neinteractiveliterature/litform';
 import pickBy from 'lodash/pickBy';
 import { useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import stringPresence from '../stringPresence';
-import { decodeProjectSearchParams, encodeProjectSearchParams, type ProjectSearchParams } from './projectSearchParams';
+import stringPresence from '~/stringPresence';
+import {
+  decodeProjectSearchParams,
+  encodeProjectSearchParams,
+  type ProjectSearchParams,
+} from '~/ProjectSearch/projectSearchParams';
 
 function useSearchParams<T>(
   path: string,

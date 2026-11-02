@@ -1,15 +1,15 @@
 import { Fragment, useEffect, type JSX } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Link, useFetcher, useLocation } from 'react-router';
-import { Waypoint } from '../Waypoint';
-import ProjectCard from '../ProjectSearch/ProjectCard';
-import { generateBrandPath } from '../URLGenerators';
-import { formatPageTitle } from '../pageTitle';
-import { abilityContext } from '../server/lib/authContext';
-import { findBrandPage, type BrandPageData } from '../server/lib/brands.server';
-import { readDbContext } from '../server/lib/dbContext';
-import { pageUrl, useLoadMorePages } from '../useLoadMorePages';
-import UnapprovedBrandAlert from './UnapprovedBrandAlert';
+import { Waypoint } from '~/Waypoint';
+import ProjectCard from '~/ProjectSearch/ProjectCard';
+import { generateBrandPath } from '~/URLGenerators';
+import { formatPageTitle } from '~/pageTitle';
+import { abilityContext } from '~/server/lib/authContext';
+import { findBrandPage, type BrandPageData } from '~/server/lib/brands.server';
+import { readDbContext } from '~/server/lib/dbContext';
+import { pageUrl, useLoadMorePages } from '~/useLoadMorePages';
+import UnapprovedBrandAlert from '~/Brands/UnapprovedBrandAlert';
 import type { Route } from './+types/BrandPage';
 
 // The same loader serves the pages of projects after the first: the list asks for them with an `offset`.

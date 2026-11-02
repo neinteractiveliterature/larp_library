@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, type JSX } from 'react';
 import Modal from 'react-bootstrap4-modal';
 
-import ActionErrorDisplay from '../ActionErrorDisplay';
-import ProjectLinkFormFields, { ProjectLinkFormProjectLink } from './ProjectLinkFormFields';
-import { useProjectContentFetcher } from './useProjectContentFetcher';
+import ActionErrorDisplay from '~/ActionErrorDisplay';
+import ProjectLinkFormFields, { ProjectLinkFormProjectLink } from '~/Project/ProjectLinkFormFields';
+import { useProjectContentFetcher } from '~/Project/useProjectContentFetcher';
 
 export type EditProjectLinkModalProps = {
   visible: boolean;

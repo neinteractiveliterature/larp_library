@@ -1,6 +1,6 @@
 import type { JSX } from 'react';
 import { BootstrapFormInput, FormGroupWithLabel, usePropertySetters } from '@neinteractiveliterature/litform';
-import IconSelect from '../IconSelect';
+import IconSelect from '~/IconSelect';
 
 export type ProjectLinkFormProjectLink = { title: string; url: string; icon?: string | null };
 

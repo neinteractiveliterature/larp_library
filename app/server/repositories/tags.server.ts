@@ -1,6 +1,6 @@
 import { eq, ilike, inArray, or, sql } from 'drizzle-orm';
-import type { DbOrTx, ReadDb } from '../db';
-import { tagCategories, tags } from '../db/schema';
+import type { DbOrTx, ReadDb } from '~/server/db';
+import { tagCategories, tags } from '~/server/db/schema';
 
 const AUTOCOMPLETE_LIMIT = 25;
 

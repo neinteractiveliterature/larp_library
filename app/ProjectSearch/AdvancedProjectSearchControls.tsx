@@ -6,9 +6,9 @@ import {
   useDebouncedState,
 } from '@neinteractiveliterature/litform';
 import { useId, type JSX } from 'react';
-import TagSelector from '../Tags/TagSelector';
-import type { TagData } from '../projectData';
-import useProjectSearchParams from './useProjectSearchParams';
+import TagSelector from '~/Tags/TagSelector';
+import type { TagData } from '~/projectData';
+import useProjectSearchParams from '~/ProjectSearch/useProjectSearchParams';
 
 export type AdvancedProjectSearchControlsProps = {
   /** The tag the search is filtered to, if any */

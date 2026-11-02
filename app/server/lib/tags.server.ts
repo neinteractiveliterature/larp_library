@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import type { TagData } from '../../projectData';
-import { db as realDb, type DbOrTx, type ReadDb } from '../db';
-import { countProjectsWithTag, removeTagFromAllProjects } from '../repositories/projectsTags.server';
+import type { TagData } from '~/projectData';
+import { db as realDb, type DbOrTx, type ReadDb } from '~/server/db';
+import { countProjectsWithTag, removeTagFromAllProjects } from '~/server/repositories/projectsTags.server';
 import {
   deleteTag as deleteTagRow,
   findTagWithCategory,
@@ -10,10 +10,10 @@ import {
   searchTagsByPrefix,
   updateTag as updateTagRow,
   type TagWithCategory,
-} from '../repositories/tags.server';
-import { failure, isForeignKeyViolation, type ActionResult } from './actionResult.server';
-import { requireAbility, type AppAbility } from './authorization.server';
-import { tagCategoryData } from './tagDisplay';
+} from '~/server/repositories/tags.server';
+import { failure, isForeignKeyViolation, type ActionResult } from '~/server/lib/actionResult.server';
+import { requireAbility, type AppAbility } from '~/server/lib/authorization.server';
+import { tagCategoryData } from '~/server/lib/tagDisplay';
 
 const tagAttributes = z.object({
   name: z.string().trim().min(1, "Name can't be blank"),

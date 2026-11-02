@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import type { ProjectHeadersData } from '../../projectData';
-import { findLicense, type License } from '../../licenses';
-import { db as realDb, type DbOrTx, type ReadDb } from '../db';
-import { findBrandById, findBrandBySlug } from '../repositories/brands.server';
-import { countFilesOfProject, deleteFilesOfProject } from '../repositories/projectFiles.server';
-import { deleteLinksOfProject } from '../repositories/projectLinks.server';
-import { deletePromotionOfProject } from '../repositories/projectPromotions.server';
+import type { ProjectHeadersData } from '~/projectData';
+import { findLicense, type License } from '~/licenses';
+import { db as realDb, type DbOrTx, type ReadDb } from '~/server/db';
+import { findBrandById, findBrandBySlug } from '~/server/repositories/brands.server';
+import { countFilesOfProject, deleteFilesOfProject } from '~/server/repositories/projectFiles.server';
+import { deleteLinksOfProject } from '~/server/repositories/projectLinks.server';
+import { deletePromotionOfProject } from '~/server/repositories/projectPromotions.server';
 import {
   deleteProject as deleteProjectRow,
   findProjectWithBrand,
@@ -13,24 +13,24 @@ import {
   findProjectWithDetails,
   insertProject,
   updateProject as updateProjectRow,
-} from '../repositories/projects.server';
+} from '~/server/repositories/projects.server';
 import {
   addTagToProject,
   listTagsOfProject,
   removeAllTagsFromProject,
   removeTagsFromProject,
-} from '../repositories/projectsTags.server';
-import { findTagIdByName, insertTag } from '../repositories/tags.server';
-import { failure, type ActionResult } from './actionResult.server';
+} from '~/server/repositories/projectsTags.server';
+import { findTagIdByName, insertTag } from '~/server/repositories/tags.server';
+import { failure, type ActionResult } from '~/server/lib/actionResult.server';
 import {
   brandSubject,
   projectFileSubject,
   projectSubject,
   requireAbility,
   type AppAbility,
-} from './authorization.server';
-import { loadProjectHeaders } from './projectHeaders.server';
-import { bucketName, fileStorage, keyFromFilepath, type FileStorage } from './storage.server';
+} from '~/server/lib/authorization.server';
+import { loadProjectHeaders } from '~/server/lib/projectHeaders.server';
+import { bucketName, fileStorage, keyFromFilepath, type FileStorage } from '~/server/lib/storage.server';
 
 function notFound(): never {
   throw new Response(null, { status: 404, statusText: 'Not Found' });

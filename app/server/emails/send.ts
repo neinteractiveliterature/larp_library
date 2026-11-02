@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import type { SendMailOptions, Transporter } from 'nodemailer';
-import { renderEmail } from './render';
+import { renderEmail } from '~/server/emails/render';
 
 const DEFAULT_FROM = 'Larp Library <noreply@larplibrary.org>';
 

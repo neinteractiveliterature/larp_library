@@ -1,5 +1,5 @@
 import { createContext } from 'react-router';
-import { db, type ReadDb } from '../db';
+import { db, type ReadDb } from '~/server/db';
 
 export type { ReadDb };
 

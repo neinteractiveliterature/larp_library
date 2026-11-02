@@ -1,6 +1,6 @@
-import { abilityContext } from '../server/lib/authContext';
-import { readDbContext } from '../server/lib/dbContext';
-import { findProjectsToPromote } from '../server/lib/projectPromotions.server';
+import { abilityContext } from '~/server/lib/authContext';
+import { readDbContext } from '~/server/lib/dbContext';
+import { findProjectsToPromote } from '~/server/lib/projectPromotions.server';
 import type { Route } from './+types/ProjectSearchRoute';
 
 // No page, just the JSON the project picker on the promotions page asks for as the user types

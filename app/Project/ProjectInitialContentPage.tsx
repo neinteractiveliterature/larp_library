@@ -1,10 +1,10 @@
 import { Link } from 'react-router';
-import { pageTitle } from '../pageTitle';
-import { abilityContext } from '../server/lib/authContext';
-import { readDbContext } from '../server/lib/dbContext';
-import { findProjectPage } from '../server/lib/projects.server';
-import { generateProjectPath } from '../URLGenerators';
-import ProjectContentFields from './ProjectContentFields';
+import { pageTitle } from '~/pageTitle';
+import { abilityContext } from '~/server/lib/authContext';
+import { readDbContext } from '~/server/lib/dbContext';
+import { findProjectPage } from '~/server/lib/projects.server';
+import { generateProjectPath } from '~/URLGenerators';
+import ProjectContentFields from '~/Project/ProjectContentFields';
 import type { Route } from './+types/ProjectInitialContentPage';
 
 export function loader({ context, params }: Route.LoaderArgs) {

@@ -1,5 +1,5 @@
 import type { JSX } from 'react';
-import type { ProjectFileData } from '../server/lib/projects.server';
+import type { ProjectFileData } from '~/server/lib/projects.server';
 
 function getIconForMimeType(mimeType: string | null | undefined): string {
   if (mimeType == null) {

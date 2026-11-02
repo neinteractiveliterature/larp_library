@@ -1,9 +1,9 @@
 import { Link } from 'react-router';
-import ProjectHeaders from '../ProjectSearch/ProjectHeaders';
-import { loadHomePage } from '../server/lib/homePage.server';
-import { readDbContext } from '../server/lib/dbContext';
-import Tag from '../Tags/Tag';
-import { generateProjectSearchPath } from '../URLGenerators';
+import ProjectHeaders from '~/ProjectSearch/ProjectHeaders';
+import { loadHomePage } from '~/server/lib/homePage.server';
+import { readDbContext } from '~/server/lib/dbContext';
+import Tag from '~/Tags/Tag';
+import { generateProjectSearchPath } from '~/URLGenerators';
 import type { Route } from './+types/HomePage';
 
 export function loader({ context }: Route.LoaderArgs) {

@@ -1,4 +1,4 @@
-import type { TagFormFieldsProps } from './TagFormFields';
+import type { TagFormFieldsProps } from '~/Tags/TagFormFields';
 
 /** What the form sends to the server for a tag */
 export default function buildTagAttributes(tag: TagFormFieldsProps['tag']) {

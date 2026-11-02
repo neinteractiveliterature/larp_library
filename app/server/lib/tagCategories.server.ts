@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import type { TagCategoryData, TagData } from '../../projectData';
-import { db as realDb, type DbOrTx, type ReadDb } from '../db';
+import type { TagCategoryData, TagData } from '~/projectData';
+import { db as realDb, type DbOrTx, type ReadDb } from '~/server/db';
 import {
   deleteTagCategory as deleteTagCategoryRow,
   findTagCategoryWithTags,
@@ -8,11 +8,11 @@ import {
   listTagCategories as selectTagCategories,
   searchTagCategoriesByPrefix,
   updateTagCategory as updateTagCategoryRow,
-} from '../repositories/tagCategories.server';
-import { clearTagCategory } from '../repositories/tags.server';
-import { failure, isUniqueViolation, type ActionResult } from './actionResult.server';
-import { requireAbility, type AppAbility } from './authorization.server';
-import { tagCategoryData } from './tagDisplay';
+} from '~/server/repositories/tagCategories.server';
+import { clearTagCategory } from '~/server/repositories/tags.server';
+import { failure, isUniqueViolation, type ActionResult } from '~/server/lib/actionResult.server';
+import { requireAbility, type AppAbility } from '~/server/lib/authorization.server';
+import { tagCategoryData } from '~/server/lib/tagDisplay';
 
 const tagCategoryAttributes = z.object({
   name: z.string().trim().min(1, "Name can't be blank"),

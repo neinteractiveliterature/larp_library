@@ -1,6 +1,6 @@
 import type { Transporter } from 'nodemailer';
-import { env } from '../env';
-import { createMailTransport } from './mailTransport.server';
+import { env } from '~/server/env';
+import { createMailTransport } from '~/server/lib/mailTransport.server';
 
 export const mailTransport: Transporter = createMailTransport({
   smtpUrl: env.SMTP_URL,

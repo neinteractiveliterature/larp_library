@@ -1,7 +1,7 @@
 import { and, asc, eq, sql } from 'drizzle-orm';
-import type { DbOrTx, ReadDb } from '../db';
-import { moveItem, withOrderedListLock } from '../db/orderedList.server';
-import { projectLinks } from '../db/schema';
+import type { DbOrTx, ReadDb } from '~/server/db';
+import { moveItem, withOrderedListLock } from '~/server/db/orderedList.server';
+import { projectLinks } from '~/server/db/schema';
 
 /** A link with its project, which has its brand */
 export async function findProjectLinkWithProject(db: ReadDb, id: number) {

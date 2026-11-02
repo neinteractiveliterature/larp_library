@@ -1,7 +1,7 @@
 import { DeleteObjectCommand, HeadObjectCommand, NotFound, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { randomBytes } from 'node:crypto';
-import { env } from '../env';
+import { env } from '~/server/env';
 
 /** How long a presigned upload URL stays valid, in seconds */
 const UPLOAD_URL_LIFETIME = 15 * 60;

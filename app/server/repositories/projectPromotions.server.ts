@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
-import type { DbOrTx, ReadDb } from '../db';
-import { brands, projectPromotions, projects } from '../db/schema';
-import { brandIsApproved } from './brands.server';
+import type { DbOrTx, ReadDb } from '~/server/db';
+import { brands, projectPromotions, projects } from '~/server/db/schema';
+import { brandIsApproved } from '~/server/repositories/brands.server';
 
 /** Every promotion with its project and the project's brand */
 export async function listPromotionsWithProjects(db: ReadDb) {

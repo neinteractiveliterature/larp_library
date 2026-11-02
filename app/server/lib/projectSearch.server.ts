@@ -1,10 +1,10 @@
-import type { TagData } from '../../projectData';
-import type { ProjectSearchParams } from '../../ProjectSearch/projectSearchParams';
-import type { ReadDb } from '../db';
-import { searchProjectIds } from '../repositories/projects.server';
-import { findTagWithCategoryByName } from '../repositories/tags.server';
-import { loadProjectCards, type ProjectCardData } from './projectHeaders.server';
-import { tagCategoryData } from './tagDisplay';
+import type { TagData } from '~/projectData';
+import type { ProjectSearchParams } from '~/ProjectSearch/projectSearchParams';
+import type { ReadDb } from '~/server/db';
+import { searchProjectIds } from '~/server/repositories/projects.server';
+import { findTagWithCategoryByName } from '~/server/repositories/tags.server';
+import { loadProjectCards, type ProjectCardData } from '~/server/lib/projectHeaders.server';
+import { tagCategoryData } from '~/server/lib/tagDisplay';
 
 export const PROJECT_SEARCH_PAGE_SIZE = 25;
 

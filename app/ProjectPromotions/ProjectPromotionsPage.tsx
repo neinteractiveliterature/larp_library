@@ -2,12 +2,12 @@ import { useConfirm } from '@neinteractiveliterature/litform';
 import { useEffect, useState } from 'react';
 import { data, useFetcher } from 'react-router';
 import AsyncSelect from 'react-select/async';
-import ActionErrorDisplay from '../ActionErrorDisplay';
-import { pageTitle } from '../pageTitle';
-import { abilityContext } from '../server/lib/authContext';
-import { requireAbility } from '../server/lib/authorization.server';
-import { readDbContext } from '../server/lib/dbContext';
-import { listProjectPromotions, promoteProject, unpromoteProject } from '../server/lib/projectPromotions.server';
+import ActionErrorDisplay from '~/ActionErrorDisplay';
+import { pageTitle } from '~/pageTitle';
+import { abilityContext } from '~/server/lib/authContext';
+import { requireAbility } from '~/server/lib/authorization.server';
+import { readDbContext } from '~/server/lib/dbContext';
+import { listProjectPromotions, promoteProject, unpromoteProject } from '~/server/lib/projectPromotions.server';
 import type { Route } from './+types/ProjectPromotionsPage';
 
 type ProjectOption = { id: number; title: string | null };

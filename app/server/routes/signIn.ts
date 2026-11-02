@@ -1,6 +1,6 @@
-import { auth, INTERCODE_PROVIDER_ID } from '../lib/auth.server';
-import { redirectWithCookies } from '../lib/authRedirects.server';
-import { safeReturnTo } from '../lib/safeReturnTo';
+import { auth, INTERCODE_PROVIDER_ID } from '~/server/lib/auth.server';
+import { redirectWithCookies } from '~/server/lib/authRedirects.server';
+import { safeReturnTo } from '~/server/lib/safeReturnTo';
 import type { Route } from './+types/signIn';
 
 /** Sends the visitor to Intercode to sign in, and brings them back to `returnTo` (a path on this site) afterward. */

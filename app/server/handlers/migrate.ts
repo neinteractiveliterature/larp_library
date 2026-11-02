@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { Pool } from 'pg';
-import { env } from '../env';
+import { env } from '~/server/env';
 
 // sst.config.ts copies the repo's drizzle/ folder (the migration SQL and its meta/) next to this handler in the
 // function's deployment package, so a relative path resolves regardless of where this source file lives.

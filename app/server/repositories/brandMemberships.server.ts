@@ -1,6 +1,6 @@
 import { and, asc, eq } from 'drizzle-orm';
-import type { DbOrTx, ReadDb } from '../db';
-import { brandMemberships } from '../db/schema';
+import type { DbOrTx, ReadDb } from '~/server/db';
+import { brandMemberships } from '~/server/db/schema';
 
 /** Which brands a user belongs to, and whether they administer each. An unaccepted invitation has no user, so isn't here. */
 export async function listMembershipsOfUser(db: ReadDb, userId: number) {

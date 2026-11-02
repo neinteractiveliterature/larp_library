@@ -1,11 +1,11 @@
 import { useConfirm } from '@neinteractiveliterature/litform';
 import { data, Link, useFetcher } from 'react-router';
-import ActionErrorDisplay from '../ActionErrorDisplay';
-import { pageTitle } from '../pageTitle';
-import { abilityContext } from '../server/lib/authContext';
-import { approveBrand, listUnapprovedBrands } from '../server/lib/brands.server';
-import { readDbContext } from '../server/lib/dbContext';
-import { generateBrandPath } from '../URLGenerators';
+import ActionErrorDisplay from '~/ActionErrorDisplay';
+import { pageTitle } from '~/pageTitle';
+import { abilityContext } from '~/server/lib/authContext';
+import { approveBrand, listUnapprovedBrands } from '~/server/lib/brands.server';
+import { readDbContext } from '~/server/lib/dbContext';
+import { generateBrandPath } from '~/URLGenerators';
 import type { Route } from './+types/UnapprovedBrandsListPage';
 
 export async function loader({ context }: Route.LoaderArgs) {

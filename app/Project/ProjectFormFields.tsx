@@ -6,9 +6,9 @@ import {
   BootstrapFormSelect,
 } from '@neinteractiveliterature/litform';
 import React, { type JSX } from 'react';
-import type { License } from '../licenses';
-import MarkdownEditor from '../MarkdownEditor';
-import TagSelector, { type TagOption } from '../Tags/TagSelector';
+import type { License } from '~/licenses';
+import MarkdownEditor from '~/MarkdownEditor';
+import TagSelector, { type TagOption } from '~/Tags/TagSelector';
 
 type LicenseOption = Pick<License, 'id' | 'name' | 'discouraged' | 'discouragedReason'>;
 

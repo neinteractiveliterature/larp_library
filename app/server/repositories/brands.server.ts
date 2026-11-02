@@ -1,6 +1,6 @@
 import { and, asc, desc, eq, sql, type SQL } from 'drizzle-orm';
-import type { DbOrTx, ReadDb } from '../db';
-import { brandMemberships, brands } from '../db/schema';
+import type { DbOrTx, ReadDb } from '~/server/db';
+import { brandMemberships, brands } from '~/server/db/schema';
 
 /** A brand's approval controls whether anyone but its members can see it or its projects. */
 export const brandIsApproved = eq(brands.approved, true);

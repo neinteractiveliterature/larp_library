@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import type { DbOrTx } from './index';
+import type { DbOrTx } from '~/server/db/index';
 
 /**
  * Runs `change` in a transaction that holds a lock for one ordered list (a project's files, say).

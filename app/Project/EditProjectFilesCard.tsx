@@ -2,14 +2,14 @@ import React, { useCallback, useMemo, type JSX } from 'react';
 import { useArrayBasicSortableHandlers, useConfirm, useMatchWidthStyle } from '@neinteractiveliterature/litform';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import ActionErrorDisplay from '../ActionErrorDisplay';
-import type { ProjectFileData, ProjectPageData } from '../server/lib/projects.server';
-import ProjectFileDisplay from './ProjectFileDisplay';
-import S3Upload from './S3Upload';
-import { getSortableStyle, useSortableDndSensors } from '../SortableUtils';
-import { generateProjectContentActionPath } from '../URLGenerators';
-import { useOptimisticMove } from './useOptimisticMove';
-import { useProjectContentFetcher } from './useProjectContentFetcher';
+import ActionErrorDisplay from '~/ActionErrorDisplay';
+import type { ProjectFileData, ProjectPageData } from '~/server/lib/projects.server';
+import ProjectFileDisplay from '~/Project/ProjectFileDisplay';
+import S3Upload from '~/Project/S3Upload';
+import { getSortableStyle, useSortableDndSensors } from '~/SortableUtils';
+import { generateProjectContentActionPath } from '~/URLGenerators';
+import { useOptimisticMove } from '~/Project/useOptimisticMove';
+import { useProjectContentFetcher } from '~/Project/useProjectContentFetcher';
 
 export type EditProjectFileProps = {
   file: ProjectFileData;

@@ -1,5 +1,5 @@
 import { DrizzleQueryError } from 'drizzle-orm/errors';
-import type { ActionErrors } from '../../actionErrors';
+import type { ActionErrors } from '~/actionErrors';
 
 /** What a server function that changes something returns: the result, or what the user needs to fix */
 export type ActionResult<T> = ({ ok: true } & T) | ({ ok: false } & ActionErrors);

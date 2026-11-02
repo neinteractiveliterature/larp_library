@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router';
 import type { JSX } from 'react';
-import { signInPath } from './signIn';
+import { signInPath } from '~/signIn';
 
 /** Signs the visitor in, and brings them back to the page they're on */
 export function SignInButton(): JSX.Element {

@@ -1,6 +1,6 @@
 import { Body, Container, Head, Heading, Hr, Html, Preview, Section, Tailwind, Text } from '@react-email/components';
 import type { ReactNode } from 'react';
-import { emailTheme } from '../theme';
+import { emailTheme } from '~/server/emails/theme';
 
 export type LayoutProps = {
   previewText: string;

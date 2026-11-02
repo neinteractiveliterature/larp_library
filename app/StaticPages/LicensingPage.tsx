@@ -1,5 +1,5 @@
-import { LICENSES } from '../licenses';
-import { pageTitle } from '../pageTitle';
+import { LICENSES } from '~/licenses';
+import { pageTitle } from '~/pageTitle';
 
 export default function LicensingPage() {
   return (

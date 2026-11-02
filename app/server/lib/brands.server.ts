@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { db as realDb, type DbOrTx, type ReadDb } from '../db';
+import { db as realDb, type DbOrTx, type ReadDb } from '~/server/db';
 import {
   approveBrandById,
   countVisibleBrands,
@@ -11,25 +11,25 @@ import {
   listUnapprovedBrands as selectUnapprovedBrands,
   listVisibleBrands,
   updateBrand as updateBrandRow,
-} from '../repositories/brands.server';
-import { insertMember, listMembershipsOfBrand } from '../repositories/brandMemberships.server';
+} from '~/server/repositories/brands.server';
+import { insertMember, listMembershipsOfBrand } from '~/server/repositories/brandMemberships.server';
 import {
   countProjectsOfBrand,
   DESCRIPTION_EXCERPT_LENGTH,
   listProjectIdsOfBrand,
-} from '../repositories/projects.server';
-import { failure, isUniqueViolation, type ActionResult } from './actionResult.server';
-import type { AuthUser } from './authContext';
+} from '~/server/repositories/projects.server';
+import { failure, isUniqueViolation, type ActionResult } from '~/server/lib/actionResult.server';
+import type { AuthUser } from '~/server/lib/authContext';
 import {
   brandMembershipSubject,
   brandSubject,
   projectSubject,
   requireAbility,
   type AppAbility,
-} from './authorization.server';
-import { sendBrandApprovedEmail, sendBrandPendingEmail, type MailTransport } from './brandMail.server';
-import { parameterize } from './parameterize';
-import { loadProjectCards, type ProjectCardData } from './projectHeaders.server';
+} from '~/server/lib/authorization.server';
+import { sendBrandApprovedEmail, sendBrandPendingEmail, type MailTransport } from '~/server/lib/brandMail.server';
+import { parameterize } from '~/server/lib/parameterize';
+import { loadProjectCards, type ProjectCardData } from '~/server/lib/projectHeaders.server';
 
 export const BRANDS_PAGE_SIZE = 25;
 export const BRAND_PROJECTS_PAGE_SIZE = 25;

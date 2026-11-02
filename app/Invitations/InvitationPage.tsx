@@ -1,11 +1,11 @@
 import { data, Form, redirect, useLocation, useNavigation, useSubmit, type SubmitOptions } from 'react-router';
-import ActionErrorDisplay from '../ActionErrorDisplay';
-import { formatPageTitle } from '../pageTitle';
-import { signInPath } from '../signIn';
-import { userContext } from '../server/lib/authContext';
-import { acceptInvitation, findInvitation } from '../server/lib/brandMemberships.server';
-import { readDbContext } from '../server/lib/dbContext';
-import { generateBrandPath } from '../URLGenerators';
+import ActionErrorDisplay from '~/ActionErrorDisplay';
+import { formatPageTitle } from '~/pageTitle';
+import { signInPath } from '~/signIn';
+import { userContext } from '~/server/lib/authContext';
+import { acceptInvitation, findInvitation } from '~/server/lib/brandMemberships.server';
+import { readDbContext } from '~/server/lib/dbContext';
+import { generateBrandPath } from '~/URLGenerators';
 import type { Route } from './+types/InvitationPage';
 
 export async function loader({ context, params }: Route.LoaderArgs) {

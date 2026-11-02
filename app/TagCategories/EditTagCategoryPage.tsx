@@ -1,15 +1,15 @@
 import { useConfirm } from '@neinteractiveliterature/litform';
 import { useState, type FormEvent } from 'react';
 import { data, Form, redirect, useFetcher } from 'react-router';
-import ActionErrorDisplay from '../ActionErrorDisplay';
-import { formatPageTitle } from '../pageTitle';
-import { abilityContext } from '../server/lib/authContext';
-import { requireAbility } from '../server/lib/authorization.server';
-import { readDbContext } from '../server/lib/dbContext';
-import { deleteTagCategory, findTagCategory, updateTagCategory } from '../server/lib/tagCategories.server';
-import Tag from '../Tags/Tag';
-import buildTagCategoryAttributes from './buildTagCategoryAttributes';
-import TagCategoryFormFields from './TagCategoryFormFields';
+import ActionErrorDisplay from '~/ActionErrorDisplay';
+import { formatPageTitle } from '~/pageTitle';
+import { abilityContext } from '~/server/lib/authContext';
+import { requireAbility } from '~/server/lib/authorization.server';
+import { readDbContext } from '~/server/lib/dbContext';
+import { deleteTagCategory, findTagCategory, updateTagCategory } from '~/server/lib/tagCategories.server';
+import Tag from '~/Tags/Tag';
+import buildTagCategoryAttributes from '~/TagCategories/buildTagCategoryAttributes';
+import TagCategoryFormFields from '~/TagCategories/TagCategoryFormFields';
 import type { Route } from './+types/EditTagCategoryPage';
 
 function parseTagCategoryId(tagCategoryId: string): number {

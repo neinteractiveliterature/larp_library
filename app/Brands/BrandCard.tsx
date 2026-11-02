@@ -1,8 +1,8 @@
 import type { JSX } from 'react';
 import { Link } from 'react-router';
 import ReactMarkdown from 'react-markdown';
-import { MarkdownLink } from '../MarkdownLink';
-import { generateBrandPath } from '../URLGenerators';
+import { MarkdownLink } from '~/MarkdownLink';
+import { generateBrandPath } from '~/URLGenerators';
 
 export type BrandCardProps = {
   brand: {

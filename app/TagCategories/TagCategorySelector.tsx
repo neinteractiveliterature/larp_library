@@ -1,7 +1,7 @@
 import React, { type JSX } from 'react';
 import AsyncSelect from 'react-select/async';
-import type { TagCategoryData } from '../projectData';
-import TagCategory from './TagCategory';
+import type { TagCategoryData } from '~/projectData';
+import TagCategory from '~/TagCategories/TagCategory';
 
 export type TagCategorySelectorProps = {
   value: TagCategoryData | null | undefined;

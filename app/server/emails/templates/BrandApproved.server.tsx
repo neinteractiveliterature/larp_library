@@ -1,6 +1,6 @@
-import { ActionButton } from '../components/ActionButton.server';
-import { Layout } from '../components/Layout.server';
-import { Paragraph } from '../components/Paragraph.server';
+import { ActionButton } from '~/server/emails/components/ActionButton.server';
+import { Layout } from '~/server/emails/components/Layout.server';
+import { Paragraph } from '~/server/emails/components/Paragraph.server';
 
 export type BrandApprovedProps = {
   brandName: string;
