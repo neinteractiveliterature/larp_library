@@ -1,16 +1,16 @@
 // @vitest-environment node
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { asc, eq } from 'drizzle-orm';
-import { projectFiles } from '~/server/db/schema';
+import { projectFiles } from '~/.server/db/schema';
 import { addMember, createBrand, createProject, createUser, responseStatus } from '../support/factories';
 import { db, resetDb, rollbackDb, setupDb, stubDbTransactions, teardownDb } from '../support/db';
-import { buildAbility, loadAbility } from '~/server/lib/authorization.server';
+import { buildAbility, loadAbility } from '~/.server/lib/authorization.server';
 import {
   completeFileUpload,
   deleteProjectFile,
   moveProjectFile,
   requestFileUpload,
-} from '~/server/lib/projectFiles.server';
+} from '~/.server/lib/projectFiles.server';
 
 describe('project files', () => {
   beforeAll(async () => {

@@ -2,9 +2,9 @@ import { data, Form, redirect, useLocation, useNavigation, useSubmit, type Submi
 import ActionErrorDisplay from '~/components/ActionErrorDisplay';
 import { formatPageTitle } from '~/lib/pageTitle';
 import { signInPath } from '~/lib/signIn';
-import { userContext } from '~/server/lib/authContext';
-import { acceptInvitation, findInvitation } from '~/server/lib/brandMemberships.server';
-import { readDbContext } from '~/server/lib/dbContext';
+import { userContext } from '~/.server/lib/authContext';
+import { acceptInvitation, findInvitation } from '~/.server/lib/brandMemberships.server';
+import { readDbContext } from '~/.server/lib/dbContext';
 import { generateBrandPath } from '~/lib/URLGenerators';
 import type { Route } from './+types/InvitationPage';
 

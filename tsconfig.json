@@ -28,6 +28,7 @@
   },
   "include": [
     "./app/",
+    "./app/.server/**/*",
     "./test/",
     "./.react-router/types/**/*",
     ".eslintrc.js"

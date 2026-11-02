@@ -1,14 +1,14 @@
 // @vitest-environment node
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { brands, projectPromotions, projects } from '~/server/db/schema';
+import { brands, projectPromotions, projects } from '~/.server/db/schema';
 import { db, resetDb, rollbackDb, setupDb, stubDbTransactions, teardownDb } from '../support/db';
-import { buildAbility } from '~/server/lib/authorization.server';
+import { buildAbility } from '~/.server/lib/authorization.server';
 import {
   findProjectsToPromote,
   listProjectPromotions,
   promoteProject,
   unpromoteProject,
-} from '~/server/lib/projectPromotions.server';
+} from '~/.server/lib/projectPromotions.server';
 
 const admin = buildAbility({ id: 1, admin: true });
 const notAdmin = buildAbility({ id: 2, admin: false });

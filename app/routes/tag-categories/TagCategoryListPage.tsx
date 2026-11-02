@@ -1,8 +1,8 @@
 import type { JSX } from 'react';
 import { Link } from 'react-router';
 import { pageTitle } from '~/lib/pageTitle';
-import { readDbContext } from '~/server/lib/dbContext';
-import { listTagCategories } from '~/server/lib/tagCategories.server';
+import { readDbContext } from '~/.server/lib/dbContext';
+import { listTagCategories } from '~/.server/lib/tagCategories.server';
 import TagCategory from '~/components/tag-categories/TagCategory';
 import type { Route } from './+types/TagCategoryListPage';
 

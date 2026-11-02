@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
-import { safeReturnTo } from '~/server/lib/safeReturnTo';
+import { safeReturnTo } from '~/.server/lib/safeReturnTo';
 
 describe('safeReturnTo', () => {
   it.each(['/', '/brands', '/brands/cool-games/projects/3?tab=content', '/projects#top'])(

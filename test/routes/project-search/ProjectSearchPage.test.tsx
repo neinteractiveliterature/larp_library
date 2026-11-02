@@ -2,7 +2,7 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import ProjectSearchPage from '~/routes/project-search/ProjectSearchPage';
-import type { ProjectSearchResult } from '~/server/lib/projectSearch.server';
+import type { ProjectSearchResult } from '~/.server/lib/projectSearch.server';
 import type { TagData } from '~/lib/projectData';
 import { renderRouteModule, withRouteErrorDisplay } from '../../testUtils';
 

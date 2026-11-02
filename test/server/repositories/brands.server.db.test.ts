@@ -1,13 +1,13 @@
 // @vitest-environment node
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { brandMemberships, brands } from '~/server/db/schema';
-import { brandSubject, loadAbility } from '~/server/lib/authorization.server';
+import { brandMemberships, brands } from '~/.server/db/schema';
+import { brandSubject, loadAbility } from '~/.server/lib/authorization.server';
 import {
   approveBrandById,
   brandIsApproved,
   countVisibleBrands,
   visibleBrandsCondition,
-} from '~/server/repositories/brands.server';
+} from '~/.server/repositories/brands.server';
 import { db, resetDb, rollbackDb, setupDb, stubDbTransactions, teardownDb } from '../support/db';
 import { addMember, createBrand, createUser } from '../support/factories';
 

@@ -1,8 +1,8 @@
 import { Link } from 'react-router';
 import { pageTitle } from '~/lib/pageTitle';
-import { abilityContext } from '~/server/lib/authContext';
-import { readDbContext } from '~/server/lib/dbContext';
-import { findProjectPage } from '~/server/lib/projects.server';
+import { abilityContext } from '~/.server/lib/authContext';
+import { readDbContext } from '~/.server/lib/dbContext';
+import { findProjectPage } from '~/.server/lib/projects.server';
 import { generateProjectPath } from '~/lib/URLGenerators';
 import ProjectContentFields from '~/components/project/ProjectContentFields';
 import type { Route } from './+types/ProjectInitialContentPage';

@@ -4,7 +4,7 @@ import { redirect } from 'react-router';
 
 import ProjectFileDisplay from '~/components/project/ProjectFileDisplay';
 import ProjectPage from '~/routes/project/ProjectPage';
-import type { ProjectFileData, ProjectPageData } from '~/server/lib/projects.server';
+import type { ProjectFileData, ProjectPageData } from '~/.server/lib/projects.server';
 import { buildFile, buildLink, buildProject } from '../../projectFixtures';
 import { renderRouteModule } from '../../testUtils';
 

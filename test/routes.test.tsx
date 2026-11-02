@@ -5,8 +5,8 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { createMemoryRouter, RouterContextProvider, RouterProvider, type RouteObject } from 'react-router';
 
 import routes from '~/routes';
-import { abilityContext, userContext } from '~/server/lib/authContext';
-import { buildAbility } from '~/server/lib/authorization.server';
+import { abilityContext, userContext } from '~/.server/lib/authContext';
+import { buildAbility } from '~/.server/lib/authorization.server';
 import { buildProject } from './projectFixtures';
 import { mockFetchJson, routeFromModule, type RouteModuleUnderTest } from './testUtils';
 
@@ -20,7 +20,7 @@ const globbedModules = import.meta.glob<RouteModuleUnderTest>(
     '!/app/**/*.generated.ts',
     '!/app/entry.client.tsx',
     '!/app/root.tsx',
-    '!/app/server/**',
+    '!/app/.server/**',
     '!/app/routes/auth/**',
   ],
   { eager: true },

@@ -2,8 +2,8 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import path from 'node:path';
 import { Client } from 'pg';
-import type { Db } from '~/server/db';
-import * as schema from '~/server/db/schema';
+import type { Db } from '~/.server/db';
+import * as schema from '~/.server/db/schema';
 
 // Tests that touch the database run against a real Postgres server (TEST_DATABASE_URL; any local install works, and CI
 // provides one). To let test files run in parallel without colliding on unique values, each Vitest worker process gets its

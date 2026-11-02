@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
-import { createMailTransport } from '~/server/lib/mailTransport.server';
+import { createMailTransport } from '~/.server/lib/mailTransport.server';
 
 // Uses nodemailer's own stream transport as a stand-in for a real SMTP server, by letting the transport's `compile`
 // plugins run against it.

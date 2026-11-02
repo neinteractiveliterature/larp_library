@@ -1,10 +1,10 @@
 // @vitest-environment node
 import { eq } from 'drizzle-orm';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { brandMemberships, brands, users } from '~/server/db/schema';
+import { brandMemberships, brands, users } from '~/.server/db/schema';
 import { db, resetDb, rollbackDb, setupDb, stubDbTransactions, teardownDb } from '../support/db';
-import { buildAbility, loadAbility } from '~/server/lib/authorization.server';
-import { createBrand, findBrandForEditing, listUserBrands, updateBrand } from '~/server/lib/brands.server';
+import { buildAbility, loadAbility } from '~/.server/lib/authorization.server';
+import { createBrand, findBrandForEditing, listUserBrands, updateBrand } from '~/.server/lib/brands.server';
 
 async function responseStatus(promise: Promise<unknown>) {
   try {

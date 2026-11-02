@@ -1,8 +1,8 @@
 import type { JSX } from 'react';
 import { Link } from 'react-router';
 import { pageTitle } from '~/lib/pageTitle';
-import { readDbContext } from '~/server/lib/dbContext';
-import { listTags } from '~/server/lib/tags.server';
+import { readDbContext } from '~/.server/lib/dbContext';
+import { listTags } from '~/.server/lib/tags.server';
 import Tag from '~/components/tags/Tag';
 import type { Route } from './+types/TagListPage';
 

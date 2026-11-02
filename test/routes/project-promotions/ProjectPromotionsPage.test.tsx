@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { data } from 'react-router';
 
 import ProjectPromotionsPage from '~/routes/project-promotions/ProjectPromotionsPage';
-import type { ProjectPromotionData } from '~/server/lib/projectPromotions.server';
+import type { ProjectPromotionData } from '~/.server/lib/projectPromotions.server';
 import { mockFetchJson, renderRouteModule, selectReactSelectOption } from '../../testUtils';
 
 function promotion(

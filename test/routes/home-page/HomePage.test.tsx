@@ -1,7 +1,7 @@
 import { screen, within } from '@testing-library/react';
 
 import HomePage from '~/routes/home-page/HomePage';
-import type { HomePageData } from '~/server/lib/homePage.server';
+import type { HomePageData } from '~/.server/lib/homePage.server';
 import { renderRouteModule } from '../../testUtils';
 
 const element = { id: 1, name: 'Element', color: '#3366cc', textColor: '#ffffff', icon: 'fire' };

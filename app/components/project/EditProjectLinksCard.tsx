@@ -9,7 +9,7 @@ import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useMemo, useCallback, type JSX } from 'react';
 import ActionErrorDisplay from '~/components/ActionErrorDisplay';
-import type { ProjectPageData } from '~/server/lib/projects.server';
+import type { ProjectPageData } from '~/.server/lib/projects.server';
 import { getSortableStyle, useSortableDndSensors } from '~/lib/SortableUtils';
 import { generateProjectContentActionPath } from '~/lib/URLGenerators';
 import AddProjectLinkModal from '~/components/project/AddProjectLinkModal';

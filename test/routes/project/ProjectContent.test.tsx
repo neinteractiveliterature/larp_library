@@ -4,8 +4,8 @@ import { data } from 'react-router';
 
 import ProjectInitialContentPage from '~/routes/project/ProjectInitialContentPage';
 import type { ProjectContentActionBody } from '~/routes/project/ProjectContentRoute';
-import type { ProjectPageData } from '~/server/lib/projects.server';
-import { moveItem } from '~/server/db/orderedList.server';
+import type { ProjectPageData } from '~/.server/lib/projects.server';
+import { moveItem } from '~/.server/db/orderedList.server';
 import { buildFile, buildLink, buildProject } from '../../projectFixtures';
 import { FakeXMLHttpRequest, mockFetch, renderRouteModule } from '../../testUtils';
 

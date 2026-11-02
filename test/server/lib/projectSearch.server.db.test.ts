@@ -1,8 +1,8 @@
 // @vitest-environment node
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { brands, projects, projectsTags, tagCategories, tags } from '~/server/db/schema';
+import { brands, projects, projectsTags, tagCategories, tags } from '~/.server/db/schema';
 import { db, resetDb, rollbackDb, setupDb, teardownDb } from '../support/db';
-import { findTagByName, PROJECT_SEARCH_PAGE_SIZE, searchProjects } from '~/server/lib/projectSearch.server';
+import { findTagByName, PROJECT_SEARCH_PAGE_SIZE, searchProjects } from '~/.server/lib/projectSearch.server';
 
 describe('searchProjects', () => {
   let brandId: number;

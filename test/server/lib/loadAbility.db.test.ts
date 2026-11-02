@@ -1,8 +1,8 @@
 // @vitest-environment node
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { brandMemberships, brands, users } from '~/server/db/schema';
+import { brandMemberships, brands, users } from '~/.server/db/schema';
 import { db, resetDb, rollbackDb, setupDb, teardownDb } from '../support/db';
-import { brandSubject, brandMembershipSubject, loadAbility, projectSubject } from '~/server/lib/authorization.server';
+import { brandSubject, brandMembershipSubject, loadAbility, projectSubject } from '~/.server/lib/authorization.server';
 
 describe('loadAbility, against the database', () => {
   beforeAll(setupDb);

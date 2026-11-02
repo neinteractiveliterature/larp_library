@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
-import { tagCategoryData } from '~/server/lib/tagDisplay';
+import { tagCategoryData } from '~/.server/lib/tagDisplay';
 
 const category = { id: 1, name: 'Genre', color: null, icon: null };
 

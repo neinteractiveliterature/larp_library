@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import BrandListPage from '~/routes/brands/BrandListPage';
-import type { BrandCardData, BrandListPageData } from '~/server/lib/brands.server';
+import type { BrandCardData, BrandListPageData } from '~/.server/lib/brands.server';
 import { recordingLoader, renderRouteModule, withRouteErrorDisplay } from '../../testUtils';
 
 vi.mock('~/components/Waypoint', () => import('../../mockWaypoint'));

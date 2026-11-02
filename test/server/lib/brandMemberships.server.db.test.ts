@@ -1,15 +1,15 @@
 // @vitest-environment node
 import { isNotNull } from 'drizzle-orm';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { brandMemberships, brands, users } from '~/server/db/schema';
+import { brandMemberships, brands, users } from '~/.server/db/schema';
 import { db, resetDb, rollbackDb, setupDb, stubDbTransactions, teardownDb } from '../support/db';
-import { brandSubject, buildAbility, loadAbility } from '~/server/lib/authorization.server';
+import { brandSubject, buildAbility, loadAbility } from '~/.server/lib/authorization.server';
 import {
   acceptInvitation,
   findInvitation,
   inviteBrandMember,
   removeBrandMembership,
-} from '~/server/lib/brandMemberships.server';
+} from '~/.server/lib/brandMemberships.server';
 
 const isInvitation = isNotNull(brandMemberships.invitationToken);
 

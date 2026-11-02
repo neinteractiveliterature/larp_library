@@ -1,9 +1,9 @@
 import { Fragment, useEffect, type JSX } from 'react';
 import { useFetcher, useLocation } from 'react-router';
 import { pageTitle } from '~/lib/pageTitle';
-import { userContext } from '~/server/lib/authContext';
-import { listBrands, type BrandListPageData } from '~/server/lib/brands.server';
-import { readDbContext } from '~/server/lib/dbContext';
+import { userContext } from '~/.server/lib/authContext';
+import { listBrands, type BrandListPageData } from '~/.server/lib/brands.server';
+import { readDbContext } from '~/.server/lib/dbContext';
 import { pageUrl, useLoadMorePages } from '~/lib/useLoadMorePages';
 import { Waypoint } from '~/components/Waypoint';
 import BrandCard from '~/components/brands/BrandCard';
