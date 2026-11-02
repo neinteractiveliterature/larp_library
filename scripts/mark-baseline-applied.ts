@@ -7,7 +7,7 @@
 // (For the production RDS instance, which requires SSL, add `?sslmode=require` to the URL and run with
 // NODE_EXTRA_CA_CERTS=./rds-global-bundle.pem.) It does nothing if any migration has already been recorded, so running it twice,
 // or against a database the migrator has already been run on, is harmless.
-import 'dotenv/config';
+import './loadDevEnv';
 import path from 'node:path';
 import { readMigrationFiles } from 'drizzle-orm/migrator';
 import { Client } from 'pg';
