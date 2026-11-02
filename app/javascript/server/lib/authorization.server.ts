@@ -5,9 +5,8 @@ import {
   type ForcedSubject,
   type MongoAbility,
 } from '@casl/ability';
-import { eq } from 'drizzle-orm';
 import { db, type DbOrTx } from '../db';
-import { brandMemberships } from '../db/schema';
+import { listMembershipsOfUser } from '../repositories/brandMemberships.server';
 import type { AuthUser } from './authContext';
 
 // A port of the Rails app's CanCan Ability. The rules are the same; what changed is how conditions see the world.
@@ -123,10 +122,7 @@ export async function loadAbility(
   // Admins can do everything already, so there's no need to find their memberships.
   if (!user || user.admin) return buildAbility(user, options);
 
-  const rows = await dbOrTx
-    .select({ brandId: brandMemberships.brandId, admin: brandMemberships.admin })
-    .from(brandMemberships)
-    .where(eq(brandMemberships.userId, user.id));
+  const rows = await listMembershipsOfUser(dbOrTx, user.id);
 
   const memberships = rows.flatMap((row) =>
     // An unaccepted invitation has no user yet, and a membership with no brand is meaningless; neither grants anything.

@@ -1,13 +1,18 @@
-import { eq, ilike, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import type { TagCategoryData, TagData } from '../../projectData';
 import { db as realDb, type DbOrTx, type ReadDb } from '../db';
-import { tagCategories, tags } from '../db/schema';
+import {
+  deleteTagCategory as deleteTagCategoryRow,
+  findTagCategoryWithTags,
+  insertTagCategory,
+  listTagCategories as selectTagCategories,
+  searchTagCategoriesByPrefix,
+  updateTagCategory as updateTagCategoryRow,
+} from '../repositories/tagCategories.server';
+import { clearTagCategory } from '../repositories/tags.server';
 import { failure, isUniqueViolation, type ActionResult } from './actionResult.server';
 import { requireAbility, type AppAbility } from './authorization.server';
 import { tagCategoryData } from './tagDisplay';
-
-const AUTOCOMPLETE_LIMIT = 25;
 
 const tagCategoryAttributes = z.object({
   name: z.string().trim().min(1, "Name can't be blank"),
@@ -31,26 +36,16 @@ const tagCategoryAttributes = z.object({
 export type TagCategoryWithTags = { tagCategory: TagCategoryData; tags: TagData[] };
 
 export async function listTagCategories(db: ReadDb): Promise<TagCategoryData[]> {
-  const rows = await db.query.tagCategories.findMany({ orderBy: sql`upper(${tagCategories.name})` });
-  return rows.map(tagCategoryData);
+  return (await selectTagCategories(db)).map(tagCategoryData);
 }
 
 /** For the picker on the tag form: categories whose names start with what's been typed */
 export async function autocompleteTagCategories(db: ReadDb, queryString: string): Promise<TagCategoryData[]> {
-  const prefix = queryString.replace(/[\\%_]/g, '\\$&');
-  const rows = await db.query.tagCategories.findMany({
-    where: queryString ? ilike(tagCategories.name, `${prefix}%`) : undefined,
-    orderBy: sql`upper(${tagCategories.name})`,
-    limit: AUTOCOMPLETE_LIMIT,
-  });
-  return rows.map(tagCategoryData);
+  return (await searchTagCategoriesByPrefix(db, queryString)).map(tagCategoryData);
 }
 
 export async function findTagCategory(db: ReadDb, id: number): Promise<TagCategoryWithTags | null> {
-  const row = await db.query.tagCategories.findFirst({
-    where: eq(tagCategories.id, id),
-    with: { tags: { orderBy: sql`upper(${tags.name})` } },
-  });
+  const row = await findTagCategoryWithTags(db, id);
   if (!row) {
     return null;
   }
@@ -79,7 +74,7 @@ export async function createTagCategory(
   }
 
   try {
-    const [row] = await dbOrTx.transaction((tx) => tx.insert(tagCategories).values(attributes).returning());
+    const row = await dbOrTx.transaction((tx) => insertTagCategory(tx, attributes));
     return { ok: true, tagCategory: tagCategoryData(row) };
   } catch (error) {
     if (isUniqueViolation(error, 'index_tag_categories_on_name')) {
@@ -102,9 +97,7 @@ export async function updateTagCategory(
   }
 
   try {
-    const [row] = await dbOrTx.transaction((tx) =>
-      tx.update(tagCategories).set(attributes).where(eq(tagCategories.id, id)).returning(),
-    );
+    const row = await dbOrTx.transaction((tx) => updateTagCategoryRow(tx, id, attributes));
     if (!row) {
       throw new Response(null, { status: 404, statusText: 'Not Found' });
     }
@@ -122,10 +115,10 @@ export async function deleteTagCategory(ability: AppAbility, id: number, dbOrTx:
   requireAbility(ability, 'delete', 'TagCategory');
 
   const deleted = await dbOrTx.transaction(async (tx) => {
-    await tx.update(tags).set({ tagCategoryId: null }).where(eq(tags.tagCategoryId, id));
-    return tx.delete(tagCategories).where(eq(tagCategories.id, id)).returning({ id: tagCategories.id });
+    await clearTagCategory(tx, id);
+    return deleteTagCategoryRow(tx, id);
   });
-  if (deleted.length === 0) {
+  if (!deleted) {
     throw new Response(null, { status: 404, statusText: 'Not Found' });
   }
 }

@@ -1,8 +1,15 @@
 import { randomBytes } from 'node:crypto';
-import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { db as realDb, type DbOrTx, type ReadDb } from '../db';
-import { brandMemberships, brands } from '../db/schema';
+import { findBrandById, findBrandBySlug } from '../repositories/brands.server';
+import {
+  claimInvitation,
+  deleteMembership,
+  findMembershipById,
+  findMembershipByToken,
+  findMembershipOfUser,
+  insertInvitation,
+} from '../repositories/brandMemberships.server';
 import { failure, type ActionResult } from './actionResult.server';
 import type { AuthUser } from './authContext';
 import { brandMembershipSubject, requireAbility, type AppAbility } from './authorization.server';
@@ -36,7 +43,7 @@ export async function inviteBrandMember(
   if (typeof brandId !== 'number' || !Number.isInteger(brandId)) {
     notFound();
   }
-  const brand = await db.query.brands.findFirst({ where: eq(brands.id, brandId) });
+  const brand = await findBrandById(db, brandId);
   if (!brand) {
     notFound();
   }
@@ -48,10 +55,12 @@ export async function inviteBrandMember(
   }
 
   const invitationToken = generateInvitationToken();
-  const [membership] = await db
-    .insert(brandMemberships)
-    .values({ brandId, admin: parsed.data.admin, invitationEmail: parsed.data.email, invitationToken })
-    .returning({ id: brandMemberships.id });
+  const membership = await insertInvitation(db, {
+    brandId,
+    admin: parsed.data.admin,
+    invitationEmail: parsed.data.email,
+    invitationToken,
+  });
 
   // (Rails sent this twice: once from the model's callback and once from the mutation)
   await sendBrandInvitationEmail({ ...parsed.data, invitationToken }, brand, invitedBy, { transport });
@@ -67,13 +76,13 @@ export async function removeBrandMembership(
   if (typeof membershipId !== 'number' || !Number.isInteger(membershipId)) {
     notFound();
   }
-  const membership = await db.query.brandMemberships.findFirst({ where: eq(brandMemberships.id, membershipId) });
+  const membership = await findMembershipById(db, membershipId);
   if (!membership) {
     notFound();
   }
   requireAbility(ability, 'delete', brandMembershipSubject(membership));
 
-  await db.delete(brandMemberships).where(eq(brandMemberships.id, membershipId));
+  await deleteMembership(db, membershipId);
 }
 
 export type InvitationData = {
@@ -82,12 +91,8 @@ export type InvitationData = {
 
 /** The invitation with this token to the brand with this slug, for the page that lets its holder accept it */
 export async function findInvitation(db: ReadDb, brandSlug: string, invitationToken: string): Promise<InvitationData> {
-  const brand = await db.query.brands.findFirst({ where: eq(brands.slug, brandSlug) });
-  const membership =
-    brand &&
-    (await db.query.brandMemberships.findFirst({
-      where: and(eq(brandMemberships.brandId, brand.id), eq(brandMemberships.invitationToken, invitationToken)),
-    }));
+  const brand = await findBrandBySlug(db, brandSlug);
+  const membership = brand && (await findMembershipByToken(db, brand.id, invitationToken));
   if (!brand || !membership) {
     notFound();
   }
@@ -119,24 +124,17 @@ export async function acceptInvitation(
   }
 
   return db.transaction(async (tx) => {
-    const membership = await tx.query.brandMemberships.findFirst({
-      where: and(eq(brandMemberships.brandId, brandId), eq(brandMemberships.invitationToken, invitationToken)),
-    });
+    const membership = await findMembershipByToken(tx, brandId, invitationToken);
     if (!membership) {
       notFound();
     }
 
-    const alreadyMember = await tx.query.brandMemberships.findFirst({
-      where: and(eq(brandMemberships.brandId, brandId), eq(brandMemberships.userId, user.id)),
-    });
+    const alreadyMember = await findMembershipOfUser(tx, brandId, user.id);
     if (alreadyMember) {
       return failure('User is already a member of this brand');
     }
 
-    await tx
-      .update(brandMemberships)
-      .set({ userId: user.id, invitationToken: null })
-      .where(eq(brandMemberships.id, membership.id));
+    await claimInvitation(tx, membership.id, user.id);
     return { ok: true as const, brandMembership: { id: membership.id } };
   });
 }

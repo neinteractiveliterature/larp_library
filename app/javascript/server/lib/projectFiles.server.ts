@@ -1,11 +1,15 @@
-import { and, asc, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { db as realDb, type DbOrTx } from '../db';
-import { projectFiles, projects } from '../db/schema';
+import { findProjectWithBrand } from '../repositories/projects.server';
+import {
+  appendProjectFile,
+  findProjectFileWithProject,
+  moveProjectFileTo,
+  removeProjectFile,
+} from '../repositories/projectFiles.server';
 import { failure, isUniqueViolation, type ActionResult } from './actionResult.server';
 import type { AuthUser } from './authContext';
 import { projectFileSubject, requireAbility, type AppAbility } from './authorization.server';
-import { moveItem, withOrderedListLock } from '../db/orderedList.server';
 import {
   bucketName,
   fileStorage,
@@ -30,7 +34,7 @@ async function loadProject(db: DbOrTx, projectId: unknown) {
   if (!isId(projectId)) {
     notFound();
   }
-  const project = await db.query.projects.findFirst({ where: eq(projects.id, projectId), with: { brand: true } });
+  const project = await findProjectWithBrand(db, projectId);
   if (!project?.brand) {
     notFound();
   }
@@ -116,27 +120,15 @@ export async function completeFileUpload(
   }
 
   try {
-    return await withOrderedListLock(db, `project_files:${project.id}`, async (tx) => {
-      const [{ last }] = await tx
-        .select({ last: sql<number>`coalesce(max(${projectFiles.position}), 0)` })
-        .from(projectFiles)
-        .where(eq(projectFiles.projectId, project.id));
-
-      const [projectFile] = await tx
-        .insert(projectFiles)
-        .values({
-          projectId: project.id,
-          uploaderId: uploadedBy.id,
-          url: storage.publicUrl(key),
-          filepath: key,
-          filename,
-          filetype: filetype || null,
-          filesize,
-          position: last + 1,
-        })
-        .returning({ id: projectFiles.id });
-      return { ok: true as const, projectFile };
+    const projectFile = await appendProjectFile(db, project.id, {
+      uploaderId: uploadedBy.id,
+      url: storage.publicUrl(key),
+      filepath: key,
+      filename,
+      filetype: filetype || null,
+      filesize,
     });
+    return { ok: true, projectFile };
   } catch (error) {
     if (isUniqueViolation(error, 'index_project_files_on_filepath')) {
       return failure('That file has already been added');
@@ -145,34 +137,11 @@ export async function completeFileUpload(
   }
 }
 
-/** A project's file ids in the order they're shown */
-async function fileIdsInOrder(tx: DbOrTx, projectId: number): Promise<number[]> {
-  const rows = await tx
-    .select({ id: projectFiles.id })
-    .from(projectFiles)
-    .where(eq(projectFiles.projectId, projectId))
-    .orderBy(sql`position nulls last`, asc(projectFiles.id));
-  return rows.map((row) => row.id);
-}
-
-/** Gives the files positions 1, 2, 3... in the order given */
-async function numberFiles(tx: DbOrTx, ids: number[]) {
-  for (const [index, id] of ids.entries()) {
-    await tx
-      .update(projectFiles)
-      .set({ position: index + 1 })
-      .where(and(eq(projectFiles.id, id), sql`position is distinct from ${index + 1}`));
-  }
-}
-
 async function loadFile(db: DbOrTx, fileId: unknown) {
   if (!isId(fileId)) {
     notFound();
   }
-  const file = await db.query.projectFiles.findFirst({
-    where: eq(projectFiles.id, fileId),
-    with: { project: { with: { brand: true } } },
-  });
+  const file = await findProjectFileWithProject(db, fileId);
   if (!file?.project) {
     notFound();
   }
@@ -188,10 +157,7 @@ export async function deleteProjectFile(
   const { file, project } = await loadFile(db, fileId);
   requireAbility(ability, 'delete', projectFileSubject({ project }));
 
-  await withOrderedListLock(db, `project_files:${project.id}`, async (tx) => {
-    await tx.delete(projectFiles).where(eq(projectFiles.id, file.id));
-    await numberFiles(tx, await fileIdsInOrder(tx, project.id));
-  });
+  await removeProjectFile(db, { id: file.id, projectId: project.id });
 
   // It's gone from the database; take it out of storage too, and if that fails say so but don't undo the deletion
   try {
@@ -214,8 +180,5 @@ export async function moveProjectFile(
     notFound();
   }
 
-  await withOrderedListLock(db, `project_files:${project.id}`, async (tx) => {
-    const ids = await fileIdsInOrder(tx, project.id);
-    await numberFiles(tx, moveItem(ids, ids.indexOf(file.id), destinationIndex));
-  });
+  await moveProjectFileTo(db, { id: file.id, projectId: project.id }, destinationIndex);
 }

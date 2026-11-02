@@ -24,8 +24,17 @@ yarn start               # http://localhost:3042
 Sign-in needs an OAuth application registered on Intercode (see `.env.example`); `yarn tsx` scripts and the tests don't.
 
 The code is under `app/javascript`: pages and their loaders and actions beside each other by feature, with the server-only code
-(database, authorization, email, file storage) in `server/`. Server functions take what they depend on (the database, the
-ability, file storage, a mail transport) as arguments, so tests can hand them stand-ins or a test database.
+in `server/`:
+
+- `server/db/` is the Drizzle schema and client.
+- `server/repositories/` has one file per table, with the queries and writes for it. They return rows and know nothing about
+  who is asking or what the page needs.
+- `server/lib/` is what the loaders and actions call: it checks authorization and input, calls the repositories, sends email and
+  uses file storage, and shapes the result into what a page shows.
+- `server/emails/`, `server/routes/` (the auth endpoints) and `server/handlers/` (the migrator Lambda) are what they sound like.
+
+Server functions take what they depend on (the database, the ability, file storage, a mail transport) as arguments, so tests can
+hand them stand-ins or a test database.
 
 ### Database
 
@@ -35,6 +44,9 @@ is the schema the Rails version of the app left behind: a production database th
 (see below) rather than run again.
 
 ### Tests
+
+All the tests are under `test/javascript`, in the same layout as the code they cover (`app/javascript/Brands/BrandPage.tsx` is
+tested by `test/javascript/Brands/BrandPage.test.tsx`), and import the app's code through `~/` (that is, `app/javascript/`).
 
 ```sh
 yarn test            # Vitest

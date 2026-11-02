@@ -1,11 +1,11 @@
-import { eq, inArray, sql } from 'drizzle-orm';
 import type { ProjectHeadersData } from '../../projectData';
 import type { ReadDb } from '../db';
-import { brands, projects } from '../db/schema';
+import {
+  DESCRIPTION_EXCERPT_LENGTH,
+  findProjectsWithTags,
+  listDescriptionExcerpts,
+} from '../repositories/projects.server';
 import { tagCategoryData } from './tagDisplay';
-
-/** A brand's approval controls whether anyone but its members can see it or its projects. */
-export const brandIsApproved = eq(brands.approved, true);
 
 /**
  * The cards' worth of data for the given projects, in the order the ids are given (so a caller can sort in the database and
@@ -16,10 +16,7 @@ export async function loadProjectHeaders(db: ReadDb, projectIds: number[]): Prom
     return [];
   }
 
-  const rows = await db.query.projects.findMany({
-    where: inArray(projects.id, projectIds),
-    with: { brand: true, projectsTags: { with: { tag: { with: { tagCategory: true } } } } },
-  });
+  const rows = await findProjectsWithTags(db, projectIds);
   const rowsById = new Map(rows.map((row) => [row.id, row]));
 
   return projectIds.flatMap((id): ProjectHeadersData[] => {
@@ -57,9 +54,6 @@ export async function loadProjectHeaders(db: ReadDb, projectIds: number[]): Prom
   });
 }
 
-/** How much of a description the cards show (and so how much of it is worth sending) */
-export const DESCRIPTION_EXCERPT_LENGTH = 500;
-
 export type ProjectCardData = ProjectHeadersData & {
   /** The start of the description: no more than DESCRIPTION_EXCERPT_LENGTH characters */
   description: string | null;
@@ -73,13 +67,7 @@ export async function loadProjectCards(db: ReadDb, projectIds: number[]): Promis
 
   const [headers, descriptions] = await Promise.all([
     loadProjectHeaders(db, projectIds),
-    db
-      .select({
-        id: projects.id,
-        excerpt: sql<string | null>`left(${projects.description}, ${DESCRIPTION_EXCERPT_LENGTH})`,
-      })
-      .from(projects)
-      .where(inArray(projects.id, projectIds)),
+    listDescriptionExcerpts(db, projectIds, DESCRIPTION_EXCERPT_LENGTH),
   ]);
   const excerpts = new Map(descriptions.map((row) => [row.id, row.excerpt]));
 

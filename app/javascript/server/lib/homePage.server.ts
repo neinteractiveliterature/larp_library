@@ -1,9 +1,10 @@
-import { count, eq, sql } from 'drizzle-orm';
 import sortBy from 'lodash/sortBy';
 import type { ProjectHeadersData, TagCategoryData, TagData } from '../../projectData';
 import type { ReadDb } from '../db';
-import { brands, projectPromotions, projects, projectsTags, tags } from '../db/schema';
-import { brandIsApproved, loadProjectHeaders } from './projectHeaders.server';
+import { listVisiblePromotedProjectIds } from '../repositories/projectPromotions.server';
+import { countVisibleProjectsByTag } from '../repositories/projectsTags.server';
+import { listTagsWithCategories } from '../repositories/tags.server';
+import { loadProjectHeaders } from './projectHeaders.server';
 import { tagCategoryData } from './tagDisplay';
 
 export type TagWithProjectCount = TagData & { projectCount: number };
@@ -25,32 +26,15 @@ export async function loadHomePage(db: ReadDb): Promise<HomePageData> {
 }
 
 async function loadPromotedProjects(db: ReadDb): Promise<ProjectHeadersData[]> {
-  const promoted = await db
-    .select({ id: projects.id })
-    .from(projectPromotions)
-    .innerJoin(projects, eq(projects.id, projectPromotions.projectId))
-    .innerJoin(brands, eq(brands.id, projects.brandId))
-    .where(brandIsApproved)
-    .orderBy(projects.title);
-
-  return loadProjectHeaders(
-    db,
-    promoted.map((row) => row.id),
-  );
+  return loadProjectHeaders(db, await listVisiblePromotedProjectIds(db));
 }
 
 /** The tags, grouped by category (categories alphabetically, then the uncategorized tags), with how many projects use each */
 async function loadTagGroups(db: ReadDb): Promise<TagGroup[]> {
   const [tagRows, countRows] = await Promise.all([
-    db.query.tags.findMany({ with: { tagCategory: true }, orderBy: sql`upper(${tags.name})` }),
+    listTagsWithCategories(db),
     // Only projects anyone can see count, since the number links to a search that only shows those
-    db
-      .select({ tagId: projectsTags.tagId, projectCount: count() })
-      .from(projectsTags)
-      .innerJoin(projects, eq(projects.id, projectsTags.projectId))
-      .innerJoin(brands, eq(brands.id, projects.brandId))
-      .where(brandIsApproved)
-      .groupBy(projectsTags.tagId),
+    countVisibleProjectsByTag(db),
   ]);
   const projectCounts = new Map(countRows.map((row) => [row.tagId, row.projectCount]));
 
