@@ -1,8 +1,4 @@
-import type {
-  ProjectFileData,
-  ProjectLinkData,
-  ProjectPageData,
-} from '../../app/javascript/server/lib/projects.server';
+import type { ProjectFileData, ProjectLinkData, ProjectPageData } from '~/server/lib/projects.server';
 
 // Builders for the plain data the project pages' loaders return, with sensible defaults, so a test says only what matters to it.
 

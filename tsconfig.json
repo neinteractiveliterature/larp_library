@@ -5,6 +5,9 @@
     "strictNullChecks": true, // enable strict null checks as a best practice
     "module": "esnext", // specify module code generation
     "moduleResolution": "bundler",
+    "paths": {
+      "~/*": ["./app/javascript/*"] // how the tests import the app's code
+    },
     "resolveJsonModule": true,
     "rootDirs": [".", "./.react-router/types"], // lets route modules import their generated ./+types/* files
     "jsx": "react-jsx", // use typescript to transpile jsx to js

@@ -1,4 +1,4 @@
-import type { WaypointProps } from '../../app/javascript/Waypoint';
+import type { WaypointProps } from '~/Waypoint';
 
 /**
  * The real Waypoint needs IntersectionObserver, which jsdom doesn't have.  Tests that cover infinite scroll mock the
