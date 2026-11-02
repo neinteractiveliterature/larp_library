@@ -22,6 +22,8 @@ yarn start               # http://localhost:3042
 ```
 
 Sign-in needs an OAuth application registered on Intercode (see `.env.example`); `yarn tsx` scripts and the tests don't.
+`yarn start` runs Node with `NODE_USE_SYSTEM_CA=1`, so that it trusts the system's certificate authorities, including the
+self-signed one a local Intercode (`https://intercode.test:5050`) uses.
 
 The code is under `app/`: pages and their loaders and actions beside each other by feature, with the server-only code
 in `server/`:
