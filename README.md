@@ -21,7 +21,6 @@ yarn drizzle-kit migrate # create the tables
 yarn start               # http://localhost:3042
 ```
 
-`drizzle-kit` and the scripts read the same env files as `yarn start` (`.env.development.local`, `.env`, and so on).
 Sign-in needs an OAuth application registered on Intercode (see `.env.example`); `yarn tsx` scripts and the tests don't.
 `yarn start` runs Node with `NODE_USE_SYSTEM_CA=1`, so that it trusts the system's certificate authorities, including the
 self-signed one a local Intercode (`https://intercode.test:5050`) uses.
