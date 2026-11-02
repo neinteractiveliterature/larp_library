@@ -4,7 +4,7 @@ import { db as realDb, type DbOrTx } from '../db';
 import { projectLinks, projects } from '../db/schema';
 import { failure, type ActionResult } from './actionResult.server';
 import { projectLinkSubject, requireAbility, type AppAbility } from './authorization.server';
-import { moveItem, withOrderedListLock } from './orderedList.server';
+import { moveItem, withOrderedListLock } from '../db/orderedList.server';
 
 function notFound(): never {
   throw new Response(null, { status: 404, statusText: 'Not Found' });

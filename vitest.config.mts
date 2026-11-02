@@ -9,6 +9,10 @@ function absolutePath(relativePath: string) {
 // Deliberately separate from vite.config.mts: tests don't need the React Router plugin or its build hooks
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    // "~/" is the app's code (app/javascript), so tests don't need long relative paths up to it; see tsconfig.json
+    alias: [{ find: /^~\//, replacement: absolutePath('./app/javascript/') }],
+  },
   test: {
     coverage: {
       enabled: process.env['COVERAGE'] ? true : false,
@@ -41,7 +45,7 @@ export default defineConfig({
     // lazily, so nothing here is ever contacted; tests that need a real database set one up themselves.
     env: {
       // The Postgres server the database tests run against (each test worker makes its own database on it; see
-      // app/javascript/server/test/db.ts). Set TEST_DATABASE_URL to use a different one.
+      // test/javascript/server/support/db.ts). Set TEST_DATABASE_URL to use a different one.
       TEST_DATABASE_URL: process.env['TEST_DATABASE_URL'] ?? 'postgres://postgres@localhost/larp_library_test',
       DATABASE_URL: 'postgres://localhost/larp_library_test',
       APP_URL_BASE: 'http://localhost:3042',
@@ -53,7 +57,7 @@ export default defineConfig({
     },
     globals: true,
     setupFiles: [absolutePath('./test/javascript/setupTests.ts')],
-    include: ['app/javascript/**/*.test.{ts,tsx}', 'test/javascript/**/*.test.{ts,tsx}'],
+    include: ['test/javascript/**/*.test.{ts,tsx}'],
     testTimeout: 10000,
     reporters: [
       'default',

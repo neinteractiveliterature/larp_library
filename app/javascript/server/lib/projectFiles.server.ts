@@ -5,7 +5,7 @@ import { projectFiles, projects } from '../db/schema';
 import { failure, isUniqueViolation, type ActionResult } from './actionResult.server';
 import type { AuthUser } from './authContext';
 import { projectFileSubject, requireAbility, type AppAbility } from './authorization.server';
-import { moveItem, withOrderedListLock } from './orderedList.server';
+import { moveItem, withOrderedListLock } from '../db/orderedList.server';
 import {
   bucketName,
   fileStorage,
