@@ -2,7 +2,7 @@
   "type": "module",
   "scripts": {
     "build": "react-router build",
-    "start": "react-router dev",
+    "start": "NODE_USE_SYSTEM_CA=1 react-router dev",
     "prepare": "husky install",
     "lint": "oxlint",
     "typegen": "react-router typegen",
