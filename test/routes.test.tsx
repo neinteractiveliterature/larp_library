@@ -15,18 +15,12 @@ import { mockFetchJson, routeFromModule, type RouteModuleUnderTest } from './tes
 // (entry.client.tsx and root.tsx aren't routes in this config: the first hydrates the page as soon as it's imported, and the
 // second sets up the server's authentication.)
 const globbedModules = import.meta.glob<RouteModuleUnderTest>(
-  [
-    '/app/javascript/**/*.{ts,tsx}',
-    '!/app/javascript/**/*.generated.ts',
-    '!/app/javascript/entry.client.tsx',
-    '!/app/javascript/root.tsx',
-    '!/app/javascript/server/**',
-  ],
+  ['/app/**/*.{ts,tsx}', '!/app/**/*.generated.ts', '!/app/entry.client.tsx', '!/app/root.tsx', '!/app/server/**'],
   { eager: true },
 );
 // keyed the way routes.ts names a route's file: relative to the app directory ("./HomePage/HomePage.tsx")
 const routeModules = Object.fromEntries(
-  Object.entries(globbedModules).map(([file, routeModule]) => [file.replace('/app/javascript/', './'), routeModule]),
+  Object.entries(globbedModules).map(([file, routeModule]) => [file.replace('/app/', './'), routeModule]),
 );
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

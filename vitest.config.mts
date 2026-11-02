@@ -10,18 +10,18 @@ function absolutePath(relativePath: string) {
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    // "~/" is the app's code (app/javascript), so tests don't need long relative paths up to it; see tsconfig.json
-    alias: [{ find: /^~\//, replacement: absolutePath('./app/javascript/') }],
+    // "~/" is the app's code (app/), so tests don't need long relative paths up to it; see tsconfig.json
+    alias: [{ find: /^~\//, replacement: absolutePath('./app/') }],
   },
   test: {
     coverage: {
       enabled: process.env['COVERAGE'] ? true : false,
-      include: ['app/javascript/**/*.{ts,tsx}'],
+      include: ['app/**/*.{ts,tsx}'],
       exclude: [
         // ambient type declarations
-        'app/javascript/@types/**',
+        'app/@types/**',
         // the browser entry point, which hydrates the page as soon as it's imported
-        'app/javascript/entry.client.tsx',
+        'app/entry.client.tsx',
       ],
       reportsDirectory: absolutePath('./coverage'),
       reporter: ['text', 'cobertura', 'html'],
@@ -41,11 +41,11 @@ export default defineConfig({
       return undefined;
     },
     environment: 'jsdom',
-    // Placeholder values for the server code's env validation (app/javascript/server/env.ts). The database pool connects
+    // Placeholder values for the server code's env validation (app/server/env.ts). The database pool connects
     // lazily, so nothing here is ever contacted; tests that need a real database set one up themselves.
     env: {
       // The Postgres server the database tests run against (each test worker makes its own database on it; see
-      // test/javascript/server/support/db.ts). Set TEST_DATABASE_URL to use a different one.
+      // test/server/support/db.ts). Set TEST_DATABASE_URL to use a different one.
       TEST_DATABASE_URL: process.env['TEST_DATABASE_URL'] ?? 'postgres://postgres@localhost/larp_library_test',
       DATABASE_URL: 'postgres://localhost/larp_library_test',
       APP_URL_BASE: 'http://localhost:3042',
@@ -56,8 +56,8 @@ export default defineConfig({
       INTERCODE_APP_SECRET: 'test-app-secret',
     },
     globals: true,
-    setupFiles: [absolutePath('./test/javascript/setupTests.ts')],
-    include: ['test/javascript/**/*.test.{ts,tsx}'],
+    setupFiles: [absolutePath('./test/setupTests.ts')],
+    include: ['test/**/*.test.{ts,tsx}'],
     testTimeout: 10000,
     reporters: [
       'default',

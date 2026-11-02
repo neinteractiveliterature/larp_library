@@ -23,7 +23,7 @@ yarn start               # http://localhost:3042
 
 Sign-in needs an OAuth application registered on Intercode (see `.env.example`); `yarn tsx` scripts and the tests don't.
 
-The code is under `app/javascript`: pages and their loaders and actions beside each other by feature, with the server-only code
+The code is under `app/`: pages and their loaders and actions beside each other by feature, with the server-only code
 in `server/`:
 
 - `server/db/` is the Drizzle schema and client.
@@ -38,15 +38,15 @@ hand them stand-ins or a test database.
 
 ### Database
 
-The schema is `app/javascript/server/db/schema.ts`. Change it and run `yarn drizzle-kit generate` to write a migration into
+The schema is `app/server/db/schema.ts`. Change it and run `yarn drizzle-kit generate` to write a migration into
 `drizzle/`; migrations run with `yarn drizzle-kit migrate` locally and automatically on every deploy. `drizzle/0000_baseline.sql`
 is the schema the Rails version of the app left behind: a production database that already has it must have it recorded as applied
 (see below) rather than run again.
 
 ### Tests
 
-All the tests are under `test/javascript`, in the same layout as the code they cover (`app/javascript/Brands/BrandPage.tsx` is
-tested by `test/javascript/Brands/BrandPage.test.tsx`), and import the app's code through `~/` (that is, `app/javascript/`).
+All the tests are under `test/`, in the same layout as the code they cover (`app/Brands/BrandPage.tsx` is
+tested by `test/Brands/BrandPage.test.tsx`), and import the app's code through `~/` (that is, `app/`).
 
 ```sh
 yarn test            # Vitest
