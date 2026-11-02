@@ -15,21 +15,28 @@ import { mockFetchJson, routeFromModule, type RouteModuleUnderTest } from './tes
 // (entry.client.tsx and root.tsx aren't routes in this config: the first hydrates the page as soon as it's imported, and the
 // second sets up the server's authentication.)
 const globbedModules = import.meta.glob<RouteModuleUnderTest>(
-  ['/app/**/*.{ts,tsx}', '!/app/**/*.generated.ts', '!/app/entry.client.tsx', '!/app/root.tsx', '!/app/server/**'],
+  [
+    '/app/**/*.{ts,tsx}',
+    '!/app/**/*.generated.ts',
+    '!/app/entry.client.tsx',
+    '!/app/root.tsx',
+    '!/app/server/**',
+    '!/app/routes/auth/**',
+  ],
   { eager: true },
 );
-// keyed the way routes.ts names a route's file: relative to the app directory ("./HomePage/HomePage.tsx")
+// keyed the way routes.ts names a route's file: relative to the app directory ("./routes/home-page/HomePage.tsx")
 const routeModules = Object.fromEntries(
   Object.entries(globbedModules).map(([file, routeModule]) => [file.replace('/app/', './'), routeModule]),
 );
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const serverLoaderStubs: Record<string, (args: any) => unknown> = {
-  './HomePage/HomePage.tsx': () => ({ promotedProjects: [], tagGroups: [] }),
-  './ProjectSearch/ProjectSearchPage.tsx': () => ({ projects: [], totalCount: 0, offset: 0, tag: null }),
-  './Brands/BrandListPage.tsx': () => ({ brands: [], totalCount: 0, offset: 0 }),
-  './Brands/UnapprovedBrandsListPage.tsx': () => ({ brands: [] }),
-  './Brands/BrandPage.tsx': ({ params }: { params: { brandSlug: string } }) => {
+  './routes/home-page/HomePage.tsx': () => ({ promotedProjects: [], tagGroups: [] }),
+  './routes/project-search/ProjectSearchPage.tsx': () => ({ projects: [], totalCount: 0, offset: 0, tag: null }),
+  './routes/brands/BrandListPage.tsx': () => ({ brands: [], totalCount: 0, offset: 0 }),
+  './routes/brands/UnapprovedBrandsListPage.tsx': () => ({ brands: [] }),
+  './routes/brands/BrandPage.tsx': ({ params }: { params: { brandSlug: string } }) => {
     if (params.brandSlug === 'no-such-brand') {
       throw new Response(null, { status: 404, statusText: 'Not Found' });
     }
@@ -48,7 +55,7 @@ const serverLoaderStubs: Record<string, (args: any) => unknown> = {
       offset: 0,
     };
   },
-  './Brands/EditBrandPage.tsx': () => ({
+  './routes/brands/EditBrandPage.tsx': () => ({
     brand: {
       id: 1,
       name: 'Acme Games',
@@ -60,22 +67,22 @@ const serverLoaderStubs: Record<string, (args: any) => unknown> = {
     brandMemberships: [],
     currentUserId: null,
   }),
-  './Invitations/InvitationPage.tsx': () => ({
+  './routes/invitations/InvitationPage.tsx': () => ({
     brandMembership: { id: 1, admin: false, brand: { id: 1, name: 'Acme Games', slug: 'acme' } },
     currentUser: null,
   }),
-  './Project/ProjectPage.tsx': () => ({ project: buildProject() }),
-  './Project/EditProjectPage.tsx': () => ({ project: buildProject() }),
-  './Project/ProjectInitialContentPage.tsx': () => ({ project: buildProject() }),
-  './Project/NewProjectPage.tsx': () => ({ brand: { id: 1, name: 'Acme', slug: 'acme' } }),
-  './Tags/TagListPage.tsx': () => ({ tags: [] }),
-  './ProjectPromotions/ProjectPromotionsPage.tsx': () => ({ projectPromotions: [] }),
-  './TagCategories/TagCategoryListPage.tsx': () => ({ tagCategories: [] }),
+  './routes/project/ProjectPage.tsx': () => ({ project: buildProject() }),
+  './routes/project/EditProjectPage.tsx': () => ({ project: buildProject() }),
+  './routes/project/ProjectInitialContentPage.tsx': () => ({ project: buildProject() }),
+  './routes/project/NewProjectPage.tsx': () => ({ brand: { id: 1, name: 'Acme', slug: 'acme' } }),
+  './routes/tags/TagListPage.tsx': () => ({ tags: [] }),
+  './routes/project-promotions/ProjectPromotionsPage.tsx': () => ({ projectPromotions: [] }),
+  './routes/tag-categories/TagCategoryListPage.tsx': () => ({ tagCategories: [] }),
   // (the promotions, new and edit pages require an administrator or a brand's administrator, which the signed-out visitor of these tests isn't)
-  './Tags/NewTagPage.tsx': () => null,
-  './TagCategories/NewTagCategoryPage.tsx': () => null,
-  './Tags/EditTagPage.tsx': () => ({ tag: { id: 5, name: 'horde', tagCategory: null }, projectCount: 0 }),
-  './TagCategories/EditTagCategoryPage.tsx': () => ({
+  './routes/tags/NewTagPage.tsx': () => null,
+  './routes/tag-categories/NewTagCategoryPage.tsx': () => null,
+  './routes/tags/EditTagPage.tsx': () => ({ tag: { id: 5, name: 'horde', tagCategory: null }, projectCount: 0 }),
+  './routes/tag-categories/EditTagCategoryPage.tsx': () => ({
     tagCategory: { id: 3, name: 'Genre', color: '#777777', textColor: '#ffffff', icon: 'tag' },
     tags: [],
   }),
@@ -85,7 +92,7 @@ function toRouteObjects(entries: RouteConfigEntry[]): RouteObject[] {
   return entries.map((entry): RouteObject => {
     // The server-only resource routes (better-auth's endpoints, sign-in and sign-out) aren't pages, and nothing here
     // runs them; they're empty routes, so a redirect to one can be seen
-    const routeModule = entry.file.startsWith('./server/routes/') ? {} : routeModules[entry.file];
+    const routeModule = entry.file.startsWith('./routes/auth/') ? {} : routeModules[entry.file];
     // Pages whose loaders query the database can't run theirs here (those are tested against a real database); this only
     // checks that the URL reaches the page, so it's given empty data
     const loaderStub = serverLoaderStubs[entry.file];

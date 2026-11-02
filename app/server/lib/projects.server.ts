@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import type { ProjectHeadersData } from '~/projectData';
-import { findLicense, type License } from '~/licenses';
+import type { ProjectHeadersData } from '~/lib/projectData';
+import { findLicense, type License } from '~/lib/licenses';
 import { db as realDb, type DbOrTx, type ReadDb } from '~/server/db';
 import { findBrandById, findBrandBySlug } from '~/server/repositories/brands.server';
 import { countFilesOfProject, deleteFilesOfProject } from '~/server/repositories/projectFiles.server';

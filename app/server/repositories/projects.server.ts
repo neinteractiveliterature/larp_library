@@ -1,5 +1,5 @@
 import { and, asc, desc, eq, exists, gte, inArray, lte, sql, type SQL } from 'drizzle-orm';
-import type { ProjectSearchParams } from '~/ProjectSearch/projectSearchParams';
+import type { ProjectSearchParams } from '~/lib/project-search/projectSearchParams';
 import type { DbOrTx, ReadDb } from '~/server/db';
 import { brands, projectLinks, projects, projectsTags, tags } from '~/server/db/schema';
 import { brandIsApproved } from '~/server/repositories/brands.server';

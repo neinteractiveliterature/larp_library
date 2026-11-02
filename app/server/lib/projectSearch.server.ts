@@ -1,5 +1,5 @@
-import type { TagData } from '~/projectData';
-import type { ProjectSearchParams } from '~/ProjectSearch/projectSearchParams';
+import type { TagData } from '~/lib/projectData';
+import type { ProjectSearchParams } from '~/lib/project-search/projectSearchParams';
 import type { ReadDb } from '~/server/db';
 import { searchProjectIds } from '~/server/repositories/projects.server';
 import { findTagWithCategoryByName } from '~/server/repositories/tags.server';

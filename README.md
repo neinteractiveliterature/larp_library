@@ -25,15 +25,19 @@ Sign-in needs an OAuth application registered on Intercode (see `.env.example`);
 `yarn start` runs Node with `NODE_USE_SYSTEM_CA=1`, so that it trusts the system's certificate authorities, including the
 self-signed one a local Intercode (`https://intercode.test:5050`) uses.
 
-The code is under `app/`: pages and their loaders and actions beside each other by feature, with the server-only code
-in `server/`:
+The code is under `app/`:
 
-- `server/db/` is the Drizzle schema and client.
-- `server/repositories/` has one file per table, with the queries and writes for it. They return rows and know nothing about
-  who is asking or what the page needs.
-- `server/lib/` is what the loaders and actions call: it checks authorization and input, calls the repositories, sends email and
-  uses file storage, and shapes the result into what a page shows.
-- `server/emails/`, `server/routes/` (the auth endpoints) and `server/handlers/` (the migrator Lambda) are what they sound like.
+- `routes/` has the route modules (the pages, with their loaders and actions, and the routes that are only actions or JSON), in a
+  folder per feature. `routes.ts` says which URL each one answers.
+- `components/` and `lib/` have what the routes share: the components, and the helpers and hooks, again with a folder per
+  feature where there is one.
+- `server/` is the server-only code:
+  - `db/` is the Drizzle schema and client.
+  - `repositories/` has one file per table, with the queries and writes for it. They return rows and know nothing about who is
+    asking or what the page needs.
+  - `lib/` is what the loaders and actions call: it checks authorization and input, calls the repositories, sends email and uses
+    file storage, and shapes the result into what a page shows.
+  - `emails/` and `handlers/` (the migrator Lambda) are what they sound like.
 
 Server functions take what they depend on (the database, the ability, file storage, a mail transport) as arguments, so tests can
 hand them stand-ins or a test database.
@@ -47,8 +51,8 @@ is the schema the Rails version of the app left behind: a production database th
 
 ### Tests
 
-All the tests are under `test/`, in the same layout as the code they cover (`app/Brands/BrandPage.tsx` is
-tested by `test/Brands/BrandPage.test.tsx`), and import the app's code through `~/` (that is, `app/`).
+All the tests are under `test/`, in the same layout as the code they cover (`app/routes/brands/BrandPage.tsx` is
+tested by `test/routes/brands/BrandPage.test.tsx`; the tests of `app/server` are in `test/server`), and import the app's code through `~/` (that is, `app/`).
 
 ```sh
 yarn test            # Vitest

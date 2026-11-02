@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { TagData } from '~/projectData';
+import type { TagData } from '~/lib/projectData';
 import { db as realDb, type DbOrTx, type ReadDb } from '~/server/db';
 import { countProjectsWithTag, removeTagFromAllProjects } from '~/server/repositories/projectsTags.server';
 import {
