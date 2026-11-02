@@ -2,7 +2,7 @@ import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { Outlet, useNavigation } from 'react-router';
 import AppLayout, { type AppLayoutData } from '~/components/AppLayout';
 import RouteErrorDisplay from '~/components/RouteErrorDisplay';
-import { abilityContext, userContext } from '~/server/lib/authContext';
+import { abilityContext, userContext } from '~/.server/lib/authContext';
 import type { Route } from './+types/AppLayoutRoute';
 
 export function loader({ context }: Route.LoaderArgs): AppLayoutData {

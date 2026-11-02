@@ -1,6 +1,6 @@
-import { abilityContext, userContext } from '~/server/lib/authContext';
-import { completeFileUpload, requestFileUpload } from '~/server/lib/projectFiles.server';
-import { projectIdFromParam } from '~/server/lib/projects.server';
+import { abilityContext, userContext } from '~/.server/lib/authContext';
+import { completeFileUpload, requestFileUpload } from '~/.server/lib/projectFiles.server';
+import { projectIdFromParam } from '~/.server/lib/projects.server';
 import type { Route } from './+types/ProjectUploadRoute';
 
 /**

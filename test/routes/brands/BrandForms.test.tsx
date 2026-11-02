@@ -5,7 +5,7 @@ import { data, redirect } from 'react-router';
 
 import EditBrandPage from '~/routes/brands/EditBrandPage';
 import NewBrandPage from '~/routes/brands/NewBrandPage';
-import type { BrandEditingData } from '~/server/lib/brands.server';
+import type { BrandEditingData } from '~/.server/lib/brands.server';
 import { renderRouteModule } from '../../testUtils';
 
 function setDescription(text: string) {

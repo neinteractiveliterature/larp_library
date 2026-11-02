@@ -7,7 +7,7 @@ import {
   keyFromFilepath,
   sanitizeFilename,
   UPLOAD_KEY_PREFIX,
-} from '~/server/lib/storage.server';
+} from '~/.server/lib/storage.server';
 
 describe('sanitizeFilename', () => {
   it('replaces anything but letters, digits and dots', () => {

@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
-import { parameterize } from '~/server/lib/parameterize';
+import { parameterize } from '~/.server/lib/parameterize';
 
 describe('parameterize', () => {
   // Every expected value here is what Rails' String#parameterize returned for the same name

@@ -1,8 +1,8 @@
 // @vitest-environment node
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { brands, projects, projectsTags, tagCategories, tags } from '~/server/db/schema';
+import { brands, projects, projectsTags, tagCategories, tags } from '~/.server/db/schema';
 import { db, resetDb, rollbackDb, setupDb, stubDbTransactions, teardownDb } from '../support/db';
-import { buildAbility } from '~/server/lib/authorization.server';
+import { buildAbility } from '~/.server/lib/authorization.server';
 import {
   autocompleteTags,
   createTag,
@@ -10,7 +10,7 @@ import {
   findTagForEditing,
   listTags,
   updateTag,
-} from '~/server/lib/tags.server';
+} from '~/.server/lib/tags.server';
 
 const admin = buildAbility({ id: 1, admin: true });
 const notAdmin = buildAbility({ id: 2, admin: false });

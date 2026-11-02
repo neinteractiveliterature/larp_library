@@ -1,10 +1,10 @@
 // @vitest-environment node
 import { describe, expect, it, vi } from 'vitest';
-import { renderEmail } from '~/server/emails/render';
-import { sendTemplatedMail } from '~/server/emails/send';
-import { BrandApproved } from '~/server/emails/templates/BrandApproved.server';
-import { BrandMembershipInvitation } from '~/server/emails/templates/BrandMembershipInvitation.server';
-import { BrandPending } from '~/server/emails/templates/BrandPending.server';
+import { renderEmail } from '~/.server/emails/render';
+import { sendTemplatedMail } from '~/.server/emails/send';
+import { BrandApproved } from '~/.server/emails/templates/BrandApproved.server';
+import { BrandMembershipInvitation } from '~/.server/emails/templates/BrandMembershipInvitation.server';
+import { BrandPending } from '~/.server/emails/templates/BrandPending.server';
 
 describe('BrandPending', () => {
   it('names the brand and its creator and links to the review page', async () => {

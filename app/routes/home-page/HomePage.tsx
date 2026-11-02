@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import ProjectHeaders from '~/components/project-search/ProjectHeaders';
-import { loadHomePage } from '~/server/lib/homePage.server';
-import { readDbContext } from '~/server/lib/dbContext';
+import { loadHomePage } from '~/.server/lib/homePage.server';
+import { readDbContext } from '~/.server/lib/dbContext';
 import Tag from '~/components/tags/Tag';
 import { generateProjectSearchPath } from '~/lib/URLGenerators';
 import type { Route } from './+types/HomePage';

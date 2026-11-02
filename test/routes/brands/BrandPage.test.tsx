@@ -5,8 +5,8 @@ import { data } from 'react-router';
 import BrandPage from '~/routes/brands/BrandPage';
 import UnapprovedBrandAlert from '~/components/brands/UnapprovedBrandAlert';
 import UnapprovedBrandsListPage from '~/routes/brands/UnapprovedBrandsListPage';
-import type { BrandPageData, UnapprovedBrandData } from '~/server/lib/brands.server';
-import type { ProjectCardData } from '~/server/lib/projectHeaders.server';
+import type { BrandPageData, UnapprovedBrandData } from '~/.server/lib/brands.server';
+import type { ProjectCardData } from '~/.server/lib/projectHeaders.server';
 import { recordingLoader, renderPage, renderRouteModule, withRouteErrorDisplay } from '../../testUtils';
 
 vi.mock('~/components/Waypoint', () => import('../../mockWaypoint'));

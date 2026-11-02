@@ -1,15 +1,15 @@
 // @vitest-environment node
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { brandMemberships, brands, projects, users } from '~/server/db/schema';
+import { brandMemberships, brands, projects, users } from '~/.server/db/schema';
 import { db, resetDb, rollbackDb, setupDb, stubDbTransactions, teardownDb } from '../support/db';
-import { buildAbility, loadAbility } from '~/server/lib/authorization.server';
+import { buildAbility, loadAbility } from '~/.server/lib/authorization.server';
 import {
   approveBrand,
   BRANDS_PAGE_SIZE,
   findBrandPage,
   listBrands,
   listUnapprovedBrands,
-} from '~/server/lib/brands.server';
+} from '~/.server/lib/brands.server';
 
 async function responseStatus(promise: Promise<unknown>) {
   try {

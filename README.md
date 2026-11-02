@@ -31,7 +31,7 @@ The code is under `app/`:
   folder per feature. `routes.ts` says which URL each one answers.
 - `components/` and `lib/` have what the routes share: the components, and the helpers and hooks, again with a folder per
   feature where there is one.
-- `server/` is the server-only code:
+- `.server/` is the server-only code. React Router fails the build if anything the browser loads imports from a `.server` folder:
   - `db/` is the Drizzle schema and client.
   - `repositories/` has one file per table, with the queries and writes for it. They return rows and know nothing about who is
     asking or what the page needs.
@@ -44,7 +44,7 @@ hand them stand-ins or a test database.
 
 ### Database
 
-The schema is `app/server/db/schema.ts`. Change it and run `yarn drizzle-kit generate` to write a migration into
+The schema is `app/.server/db/schema.ts`. Change it and run `yarn drizzle-kit generate` to write a migration into
 `drizzle/`; migrations run with `yarn drizzle-kit migrate` locally and automatically on every deploy. `drizzle/0000_baseline.sql`
 is the schema the Rails version of the app left behind: a production database that already has it must have it recorded as applied
 (see below) rather than run again.
@@ -52,7 +52,7 @@ is the schema the Rails version of the app left behind: a production database th
 ### Tests
 
 All the tests are under `test/`, in the same layout as the code they cover (`app/routes/brands/BrandPage.tsx` is
-tested by `test/routes/brands/BrandPage.test.tsx`; the tests of `app/server` are in `test/server`), and import the app's code through `~/` (that is, `app/`).
+tested by `test/routes/brands/BrandPage.test.tsx`; the tests of `app/.server` are in `test/server`), and import the app's code through `~/` (that is, `app/`).
 
 ```sh
 yarn test            # Vitest

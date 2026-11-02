@@ -1,17 +1,17 @@
 // @vitest-environment node
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { asc } from 'drizzle-orm';
-import { projectLinks } from '~/server/db/schema';
+import { projectLinks } from '~/.server/db/schema';
 import { addMember, createBrand, createProject, createUser, responseStatus } from '../support/factories';
 import { db, resetDb, rollbackDb, setupDb, stubDbTransactions, teardownDb } from '../support/db';
-import { buildAbility, loadAbility } from '~/server/lib/authorization.server';
+import { buildAbility, loadAbility } from '~/.server/lib/authorization.server';
 import {
   createProjectLink,
   deleteProjectLink,
   moveProjectLink,
   normalizeLinkUrl,
   updateProjectLink,
-} from '~/server/lib/projectLinks.server';
+} from '~/.server/lib/projectLinks.server';
 
 describe('normalizeLinkUrl', () => {
   it.each([

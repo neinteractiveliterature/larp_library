@@ -1,5 +1,5 @@
-import { readDbContext } from '~/server/lib/dbContext';
-import { autocompleteTags } from '~/server/lib/tags.server';
+import { readDbContext } from '~/.server/lib/dbContext';
+import { autocompleteTags } from '~/.server/lib/tags.server';
 import type { Route } from './+types/TagAutocompleteRoute';
 
 // No page, just the JSON the tag pickers ask for as the user types

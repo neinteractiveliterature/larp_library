@@ -3,12 +3,12 @@ import { useFetcher, useLocation } from 'react-router';
 import { pageUrl, useLoadMorePages } from '~/lib/useLoadMorePages';
 import { Waypoint } from '~/components/Waypoint';
 import { pageTitle } from '~/lib/pageTitle';
-import { readDbContext } from '~/server/lib/dbContext';
+import { readDbContext } from '~/.server/lib/dbContext';
 import {
   findTagByName,
   searchProjects,
   type ProjectSearchPage as ProjectSearchPageData,
-} from '~/server/lib/projectSearch.server';
+} from '~/.server/lib/projectSearch.server';
 import ProjectCard from '~/components/project-search/ProjectCard';
 import SimpleProjectSearchControls from '~/components/project-search/SimpleProjectSearchControls';
 import { decodeProjectSearchParams } from '~/lib/project-search/projectSearchParams';

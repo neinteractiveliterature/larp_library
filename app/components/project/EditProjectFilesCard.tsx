@@ -3,7 +3,7 @@ import { useArrayBasicSortableHandlers, useConfirm, useMatchWidthStyle } from '@
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import ActionErrorDisplay from '~/components/ActionErrorDisplay';
-import type { ProjectFileData, ProjectPageData } from '~/server/lib/projects.server';
+import type { ProjectFileData, ProjectPageData } from '~/.server/lib/projects.server';
 import ProjectFileDisplay from '~/components/project/ProjectFileDisplay';
 import S3Upload from '~/components/project/S3Upload';
 import { getSortableStyle, useSortableDndSensors } from '~/lib/SortableUtils';

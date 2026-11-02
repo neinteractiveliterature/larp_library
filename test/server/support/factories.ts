@@ -1,4 +1,4 @@
-import { brandMemberships, brands, projects, users } from '~/server/db/schema';
+import { brandMemberships, brands, projects, users } from '~/.server/db/schema';
 import { db } from './db';
 
 // Small helpers for the rows tests need, so a test can say what matters to it and leave the rest to defaults.

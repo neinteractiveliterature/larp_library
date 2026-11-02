@@ -7,7 +7,7 @@ import type { RenderToPipeableStreamOptions } from 'react-dom/server';
 import { renderToPipeableStream } from 'react-dom/server';
 import type { EntryContext } from 'react-router';
 import { isRouteErrorResponse, ServerRouter } from 'react-router';
-import { env } from '~/server/env';
+import { env } from '~/.server/env';
 
 const sentryDebug = !!env.SENTRY_DEBUG_LOGGING;
 

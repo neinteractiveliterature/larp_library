@@ -9,10 +9,10 @@ import {
   projectsTags,
   tagCategories,
   tags,
-} from '~/server/db/schema';
+} from '~/.server/db/schema';
 import { addMember, createBrand, createProject, createUser, responseStatus } from '../support/factories';
 import { db, resetDb, rollbackDb, setupDb, stubDbTransactions, teardownDb } from '../support/db';
-import { buildAbility, loadAbility } from '~/server/lib/authorization.server';
+import { buildAbility, loadAbility } from '~/.server/lib/authorization.server';
 import {
   createProject as createProjectInDb,
   deleteProject,
@@ -20,7 +20,7 @@ import {
   findProjectPage,
   projectIdFromParam,
   updateProject,
-} from '~/server/lib/projects.server';
+} from '~/.server/lib/projects.server';
 
 describe('projectIdFromParam', () => {
   it.each([

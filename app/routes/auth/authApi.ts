@@ -1,4 +1,4 @@
-import { auth } from '~/server/lib/auth.server';
+import { auth } from '~/.server/lib/auth.server';
 import type { Route } from './+types/authApi';
 
 // better-auth's own endpoints (OAuth callbacks, session lookup and so on), all under /api/auth

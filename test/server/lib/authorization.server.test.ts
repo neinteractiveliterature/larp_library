@@ -9,8 +9,8 @@ import {
   projectLinkSubject,
   projectSubject,
   userSubject,
-} from '~/server/lib/authorization.server';
-import type { DbOrTx } from '~/server/db';
+} from '~/.server/lib/authorization.server';
+import type { DbOrTx } from '~/.server/db';
 
 // Brand 1 is approved, brand 2 isn't, and brand 3 is an approved brand nobody in these tests belongs to.
 const approvedProject = { brandId: 1, brand: { approved: true } };

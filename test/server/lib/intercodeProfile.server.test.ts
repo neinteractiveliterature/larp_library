@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { createLocalJWKSet, exportJWK, generateKeyPair, SignJWT } from 'jose';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { intercodeProfileFromAccessToken } from '~/server/lib/intercodeProfile.server';
+import { intercodeProfileFromAccessToken } from '~/.server/lib/intercodeProfile.server';
 
 describe('intercodeProfileFromAccessToken', () => {
   let signingKey: CryptoKey;

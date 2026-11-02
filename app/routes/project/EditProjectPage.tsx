@@ -4,9 +4,9 @@ import { data, Form, Link, useFetcher, useLocation, useNavigate } from 'react-ro
 import ActionErrorDisplay from '~/components/ActionErrorDisplay';
 import { LICENSES } from '~/lib/licenses';
 import { formatPageTitle } from '~/lib/pageTitle';
-import { abilityContext } from '~/server/lib/authContext';
-import { readDbContext } from '~/server/lib/dbContext';
-import { findProjectPage, updateProject } from '~/server/lib/projects.server';
+import { abilityContext } from '~/.server/lib/authContext';
+import { readDbContext } from '~/.server/lib/dbContext';
+import { findProjectPage, updateProject } from '~/.server/lib/projects.server';
 import { generateProjectPath } from '~/lib/URLGenerators';
 import { buildProjectAttributes } from '~/lib/project/buildProjectAttributes';
 import ProjectContentFields from '~/components/project/ProjectContentFields';

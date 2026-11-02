@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { projectsTags, tags } from '~/server/db/schema';
+import { projectsTags, tags } from '~/.server/db/schema';
 import {
   addTagToProject,
   countProjectsWithTag,
@@ -8,7 +8,7 @@ import {
   listTagsOfProject,
   removeTagFromAllProjects,
   removeTagsFromProject,
-} from '~/server/repositories/projectsTags.server';
+} from '~/.server/repositories/projectsTags.server';
 import { db, resetDb, rollbackDb, setupDb, stubDbTransactions, teardownDb } from '../support/db';
 import { createBrand, createProject } from '../support/factories';
 

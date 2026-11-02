@@ -2,9 +2,9 @@ import { useConfirm } from '@neinteractiveliterature/litform';
 import { data, Link, useFetcher } from 'react-router';
 import ActionErrorDisplay from '~/components/ActionErrorDisplay';
 import { pageTitle } from '~/lib/pageTitle';
-import { abilityContext } from '~/server/lib/authContext';
-import { approveBrand, listUnapprovedBrands } from '~/server/lib/brands.server';
-import { readDbContext } from '~/server/lib/dbContext';
+import { abilityContext } from '~/.server/lib/authContext';
+import { approveBrand, listUnapprovedBrands } from '~/.server/lib/brands.server';
+import { readDbContext } from '~/.server/lib/dbContext';
 import { generateBrandPath } from '~/lib/URLGenerators';
 import type { Route } from './+types/UnapprovedBrandsListPage';
 

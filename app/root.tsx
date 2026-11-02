@@ -4,9 +4,9 @@ import AppProviders from '~/components/AppProviders';
 import { initSentry } from '~/lib/initSentry';
 import { formatPageTitle } from '~/lib/pageTitle';
 import RouteErrorDisplay from '~/components/RouteErrorDisplay';
-import { env } from '~/server/env';
-import { userContext } from '~/server/lib/authContext';
-import { authMiddleware } from '~/server/lib/authMiddleware';
+import { env } from '~/.server/env';
+import { userContext } from '~/.server/lib/authContext';
+import { authMiddleware } from '~/.server/lib/authMiddleware';
 import type { Route } from './+types/root';
 
 import '~/styles/application.scss';

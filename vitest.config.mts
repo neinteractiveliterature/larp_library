@@ -41,7 +41,7 @@ export default defineConfig({
       return undefined;
     },
     environment: 'jsdom',
-    // Placeholder values for the server code's env validation (app/server/env.ts). The database pool connects
+    // Placeholder values for the server code's env validation (app/.server/env.ts). The database pool connects
     // lazily, so nothing here is ever contacted; tests that need a real database set one up themselves.
     env: {
       // The Postgres server the database tests run against (each test worker makes its own database on it; see

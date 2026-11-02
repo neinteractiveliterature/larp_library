@@ -1,8 +1,8 @@
 // @vitest-environment node
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { brands, projectPromotions, projects, projectsTags, tagCategories, tags } from '~/server/db/schema';
+import { brands, projectPromotions, projects, projectsTags, tagCategories, tags } from '~/.server/db/schema';
 import { db, resetDb, rollbackDb, setupDb, teardownDb } from '../support/db';
-import { loadHomePage } from '~/server/lib/homePage.server';
+import { loadHomePage } from '~/.server/lib/homePage.server';
 
 describe('loadHomePage', () => {
   beforeAll(setupDb);

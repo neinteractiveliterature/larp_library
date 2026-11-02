@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { findUserById, listAdminsWithEmail } from '~/server/repositories/users.server';
+import { findUserById, listAdminsWithEmail } from '~/.server/repositories/users.server';
 import { db, resetDb, rollbackDb, setupDb, stubDbTransactions, teardownDb } from '../support/db';
 import { createUser } from '../support/factories';
 

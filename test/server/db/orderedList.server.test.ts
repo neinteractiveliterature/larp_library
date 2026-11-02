@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest';
-import { moveItem } from '~/server/db/orderedList.server';
+import { moveItem } from '~/.server/db/orderedList.server';
 
 describe('moveItem', () => {
   const abcde = ['a', 'b', 'c', 'd', 'e'];
