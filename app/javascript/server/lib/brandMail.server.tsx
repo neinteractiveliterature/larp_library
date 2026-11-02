@@ -1,11 +1,10 @@
-import { and, eq, isNotNull } from 'drizzle-orm';
 import type { Transporter } from 'nodemailer';
 import { BrandApproved } from '../emails/templates/BrandApproved.server';
 import { BrandMembershipInvitation } from '../emails/templates/BrandMembershipInvitation.server';
 import { BrandPending } from '../emails/templates/BrandPending.server';
 import { sendTemplatedMail } from '../emails/send';
 import { db as realDb, type ReadDb } from '../db';
-import { users } from '../db/schema';
+import { listAdminsWithEmail } from '../repositories/users.server';
 import { absoluteUrl } from './absoluteUrl.server';
 import { mailTransport as realMailTransport } from './mail.server';
 
@@ -32,10 +31,7 @@ export async function sendBrandPendingEmail(
   { db = realDb, transport = realMailTransport }: { db?: ReadDb; transport?: MailTransport } = {},
 ) {
   await deliverQuietly('brand pending', async () => {
-    const admins = await db
-      .select()
-      .from(users)
-      .where(and(eq(users.admin, true), isNotNull(users.email)));
+    const admins = await listAdminsWithEmail(db);
     if (admins.length === 0) {
       return;
     }

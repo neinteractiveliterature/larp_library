@@ -1,8 +1,16 @@
-import { eq, ilike, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import type { TagData } from '../../projectData';
 import { db as realDb, type DbOrTx, type ReadDb } from '../db';
-import { projectsTags, tagCategories, tags } from '../db/schema';
+import { countProjectsWithTag, removeTagFromAllProjects } from '../repositories/projectsTags.server';
+import {
+  deleteTag as deleteTagRow,
+  findTagWithCategory,
+  insertTag,
+  listTagsWithCategories,
+  searchTagsByPrefix,
+  updateTag as updateTagRow,
+  type TagWithCategory,
+} from '../repositories/tags.server';
 import { failure, isForeignKeyViolation, type ActionResult } from './actionResult.server';
 import { requireAbility, type AppAbility } from './authorization.server';
 import { tagCategoryData } from './tagDisplay';
@@ -12,9 +20,7 @@ const tagAttributes = z.object({
   tagCategoryId: z.number().int().nullish(),
 });
 
-type TagRow = typeof tags.$inferSelect & { tagCategory: typeof tagCategories.$inferSelect | null };
-
-function toTagData(row: TagRow): TagData {
+function toTagData(row: TagWithCategory): TagData {
   return {
     id: row.id,
     name: row.name,
@@ -24,53 +30,24 @@ function toTagData(row: TagRow): TagData {
 
 /** Every tag, alphabetically regardless of case */
 export async function listTags(db: ReadDb): Promise<TagData[]> {
-  const rows = await db.query.tags.findMany({ with: { tagCategory: true }, orderBy: sql`upper(${tags.name})` });
-  return rows.map(toTagData);
+  return (await listTagsWithCategories(db)).map(toTagData);
 }
-
-const AUTOCOMPLETE_LIMIT = 25;
 
 /** For the tag pickers: tags whose name, or whose category's name, starts with what's been typed */
 export async function autocompleteTags(db: ReadDb, queryString: string): Promise<TagData[]> {
-  // % and _ are wildcards in LIKE; what was typed means them literally
-  const prefix = `${queryString.replace(/[\\%_]/g, '\\$&')}%`;
-
-  const matching = queryString
-    ? await db
-        .select({ id: tags.id })
-        .from(tags)
-        .leftJoin(tagCategories, eq(tagCategories.id, tags.tagCategoryId))
-        .where(or(ilike(tags.name, prefix), ilike(tagCategories.name, prefix)))
-    : undefined;
-  if (matching?.length === 0) {
-    return [];
-  }
-
-  const rows = await db.query.tags.findMany({
-    where: matching
-      ? (table, { inArray }) =>
-          inArray(
-            table.id,
-            matching.map((row) => row.id),
-          )
-      : undefined,
-    with: { tagCategory: true },
-    orderBy: sql`upper(${tags.name})`,
-    limit: AUTOCOMPLETE_LIMIT,
-  });
-  return rows.map(toTagData);
+  return (await searchTagsByPrefix(db, queryString)).map(toTagData);
 }
 
 export type TagForEditing = { tag: TagData; projectCount: number };
 
 /** A tag, and how many projects use it (all of them, since this is for an administrator deciding what to do with the tag) */
 export async function findTagForEditing(db: ReadDb, id: number): Promise<TagForEditing | null> {
-  const row = await db.query.tags.findFirst({ where: eq(tags.id, id), with: { tagCategory: true } });
+  const row = await findTagWithCategory(db, id);
   if (!row) {
     return null;
   }
 
-  return { tag: toTagData(row), projectCount: await db.$count(projectsTags, eq(projectsTags.tagId, id)) };
+  return { tag: toTagData(row), projectCount: await countProjectsWithTag(db, id) };
 }
 
 function parseAttributes(input: unknown) {
@@ -81,7 +58,7 @@ function parseAttributes(input: unknown) {
 }
 
 async function loadTag(db: DbOrTx, id: number): Promise<TagData> {
-  const row = await db.query.tags.findFirst({ where: eq(tags.id, id), with: { tagCategory: true } });
+  const row = await findTagWithCategory(db, id);
   if (!row) {
     throw new Response(null, { status: 404, statusText: 'Not Found' });
   }
@@ -100,8 +77,8 @@ export async function createTag(
   }
 
   try {
-    const [row] = await dbOrTx.transaction((tx) => tx.insert(tags).values(attributes).returning({ id: tags.id }));
-    return { ok: true, tag: await loadTag(dbOrTx, row.id) };
+    const id = await dbOrTx.transaction((tx) => insertTag(tx, attributes));
+    return { ok: true, tag: await loadTag(dbOrTx, id) };
   } catch (error) {
     if (isForeignKeyViolation(error)) {
       return failure('Tag category does not exist');
@@ -123,13 +100,11 @@ export async function updateTag(
   }
 
   try {
-    const [row] = await dbOrTx.transaction((tx) =>
-      tx.update(tags).set(attributes).where(eq(tags.id, id)).returning({ id: tags.id }),
-    );
-    if (!row) {
+    const updatedId = await dbOrTx.transaction((tx) => updateTagRow(tx, id, attributes));
+    if (updatedId === undefined) {
       throw new Response(null, { status: 404, statusText: 'Not Found' });
     }
-    return { ok: true, tag: await loadTag(dbOrTx, row.id) };
+    return { ok: true, tag: await loadTag(dbOrTx, updatedId) };
   } catch (error) {
     if (isForeignKeyViolation(error)) {
       return failure('Tag category does not exist');
@@ -143,10 +118,10 @@ export async function deleteTag(ability: AppAbility, id: number, dbOrTx: DbOrTx 
   requireAbility(ability, 'delete', 'Tag');
 
   const deleted = await dbOrTx.transaction(async (tx) => {
-    await tx.delete(projectsTags).where(eq(projectsTags.tagId, id));
-    return tx.delete(tags).where(eq(tags.id, id)).returning({ id: tags.id });
+    await removeTagFromAllProjects(tx, id);
+    return deleteTagRow(tx, id);
   });
-  if (deleted.length === 0) {
+  if (!deleted) {
     throw new Response(null, { status: 404, statusText: 'Not Found' });
   }
 }

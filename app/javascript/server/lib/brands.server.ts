@@ -1,7 +1,23 @@
-import { and, asc, desc, eq, sql, type SQL } from 'drizzle-orm';
 import { z } from 'zod';
 import { db as realDb, type DbOrTx, type ReadDb } from '../db';
-import { brandMemberships, brands, projects } from '../db/schema';
+import {
+  approveBrandById,
+  countVisibleBrands,
+  findBrandById,
+  findBrandByIdWithCreator,
+  findBrandBySlug,
+  insertBrand,
+  listBrandsOfUser,
+  listUnapprovedBrands as selectUnapprovedBrands,
+  listVisibleBrands,
+  updateBrand as updateBrandRow,
+} from '../repositories/brands.server';
+import { insertMember, listMembershipsOfBrand } from '../repositories/brandMemberships.server';
+import {
+  countProjectsOfBrand,
+  DESCRIPTION_EXCERPT_LENGTH,
+  listProjectIdsOfBrand,
+} from '../repositories/projects.server';
 import { failure, isUniqueViolation, type ActionResult } from './actionResult.server';
 import type { AuthUser } from './authContext';
 import {
@@ -13,7 +29,7 @@ import {
 } from './authorization.server';
 import { sendBrandApprovedEmail, sendBrandPendingEmail, type MailTransport } from './brandMail.server';
 import { parameterize } from './parameterize';
-import { DESCRIPTION_EXCERPT_LENGTH, loadProjectCards, type ProjectCardData } from './projectHeaders.server';
+import { loadProjectCards, type ProjectCardData } from './projectHeaders.server';
 
 export const BRANDS_PAGE_SIZE = 25;
 export const BRAND_PROJECTS_PAGE_SIZE = 25;
@@ -22,21 +38,6 @@ type Viewer = Pick<AuthUser, 'id' | 'admin'> | null;
 
 function notFound(): never {
   throw new Response(null, { status: 404, statusText: 'Not Found' });
-}
-
-/**
- * Which brands this viewer may see: approved ones, plus the ones they belong to, or all of them for a site administrator.
- * This is the SQL form of the ability's rules for reading a Brand (CanCan's `accessible_by`, which CASL has no equivalent
- * of), so the two have to agree; the tests check that they do.
- */
-export function visibleBrandsCondition(viewer: Viewer): SQL {
-  if (viewer?.admin) {
-    return sql`true`;
-  }
-  if (!viewer) {
-    return eq(brands.approved, true);
-  }
-  return sql`(brands.approved or brands.id in (select brand_memberships.brand_id from brand_memberships where brand_memberships.user_id = ${viewer.id}))`;
 }
 
 export type BrandCardData = {
@@ -50,29 +51,11 @@ export type BrandCardData = {
 
 export type BrandListPageData = { brands: BrandCardData[]; totalCount: number; offset: number };
 
-// Written out with table names rather than interpolating the columns, because Drizzle leaves a column unqualified in a query
-// with only one table, which would make the brand's id here read as the project's own.
-const projectCountOf = sql<number>`(select count(*)::int from projects where projects.brand_id = brands.id)`;
-
 /** The brands this viewer can see, those with the most larps first, a page at a time */
 export async function listBrands(db: ReadDb, viewer: Viewer, { offset = 0 }: { offset?: number } = {}) {
-  const visible = visibleBrandsCondition(viewer);
-
   const [rows, totalCount] = await Promise.all([
-    db
-      .select({
-        id: brands.id,
-        name: brands.name,
-        slug: brands.slug,
-        description: sql<string | null>`left(${brands.description}, ${DESCRIPTION_EXCERPT_LENGTH})`,
-        projectCount: projectCountOf,
-      })
-      .from(brands)
-      .where(visible)
-      .orderBy(desc(projectCountOf), asc(brands.name))
-      .limit(BRANDS_PAGE_SIZE)
-      .offset(offset),
-    db.$count(brands, visible),
+    listVisibleBrands(db, viewer, { offset, limit: BRANDS_PAGE_SIZE, excerptLength: DESCRIPTION_EXCERPT_LENGTH }),
+    countVisibleBrands(db, viewer),
   ]);
 
   return { brands: rows, totalCount, offset } satisfies BrandListPageData;
@@ -90,11 +73,7 @@ export type UnapprovedBrandData = {
 export async function listUnapprovedBrands(db: ReadDb, ability: AppAbility): Promise<UnapprovedBrandData[]> {
   requireAbility(ability, 'approve', 'Brand');
 
-  const rows = await db.query.brands.findMany({
-    where: eq(brands.approved, false),
-    with: { creator: true },
-    orderBy: sql`upper(${brands.name})`,
-  });
+  const rows = await selectUnapprovedBrands(db);
   return rows.map((row) => ({
     id: row.id,
     name: row.name,
@@ -130,20 +109,14 @@ export async function findBrandPage(
   slug: string,
   { offset = 0 }: { offset?: number } = {},
 ): Promise<BrandPageData> {
-  const brand = await db.query.brands.findFirst({ where: eq(brands.slug, slug) });
+  const brand = await findBrandBySlug(db, slug);
   if (!brand || !ability.can('read', brandSubject(brand))) {
     notFound();
   }
 
-  const [projectRows, totalCount] = await Promise.all([
-    db
-      .select({ id: projects.id })
-      .from(projects)
-      .where(eq(projects.brandId, brand.id))
-      .orderBy(asc(projects.titleForOrdering), asc(projects.id))
-      .limit(BRAND_PROJECTS_PAGE_SIZE)
-      .offset(offset),
-    db.$count(projects, eq(projects.brandId, brand.id)),
+  const [projectIds, totalCount] = await Promise.all([
+    listProjectIdsOfBrand(db, brand.id, { offset, limit: BRAND_PROJECTS_PAGE_SIZE }),
+    countProjectsOfBrand(db, brand.id),
   ]);
 
   return {
@@ -159,10 +132,7 @@ export async function findBrandPage(
         projectSubject({ brandId: brand.id, brand: { approved: brand.approved } }),
       ),
     },
-    projects: await loadProjectCards(
-      db,
-      projectRows.map((row) => row.id),
-    ),
+    projects: await loadProjectCards(db, projectIds),
     totalCount,
     offset,
   };
@@ -179,18 +149,13 @@ export async function approveBrand(
     notFound();
   }
 
-  const brand = await db.query.brands.findFirst({ where: eq(brands.id, brandId), with: { creator: true } });
+  const brand = await findBrandByIdWithCreator(db, brandId);
   if (!brand) {
     notFound();
   }
 
   // Only the request that actually makes the change sends the email, so approving twice doesn't tell the creator twice
-  const [approved] = await db
-    .update(brands)
-    .set({ approved: true })
-    .where(and(eq(brands.id, brandId), eq(brands.approved, false)))
-    .returning({ id: brands.id });
-  if (approved) {
+  if (await approveBrandById(db, brandId)) {
     await sendBrandApprovedEmail(brand, brand.creator, { transport });
   }
 }
@@ -251,11 +216,8 @@ export async function createBrand(
   let brand: { id: number; name: string; slug: string };
   try {
     brand = await db.transaction(async (tx) => {
-      const [created] = await tx
-        .insert(brands)
-        .values({ ...attributes, slug, creatorId: user.id, approved: false })
-        .returning({ id: brands.id, name: brands.name, slug: brands.slug });
-      await tx.insert(brandMemberships).values({ brandId: created.id, userId: user.id, admin: true });
+      const created = await insertBrand(tx, { ...attributes, slug, creatorId: user.id });
+      await insertMember(tx, { brandId: created.id, userId: user.id, admin: true });
       return created;
     });
   } catch (error) {
@@ -280,7 +242,7 @@ export async function updateBrand(
   if (typeof id !== 'number' || !Number.isInteger(id)) {
     notFound();
   }
-  const brand = await db.query.brands.findFirst({ where: eq(brands.id, id) });
+  const brand = await findBrandById(db, id);
   if (!brand) {
     notFound();
   }
@@ -292,7 +254,7 @@ export async function updateBrand(
   }
 
   try {
-    await db.transaction((tx) => tx.update(brands).set(attributes).where(eq(brands.id, id)));
+    await db.transaction((tx) => updateBrandRow(tx, id, attributes));
   } catch (error) {
     const failed = uniquenessFailure(error);
     if (failed) {
@@ -308,12 +270,7 @@ export async function listUserBrands(
   db: ReadDb,
   userId: number,
 ): Promise<{ id: number; name: string; slug: string }[]> {
-  return db
-    .select({ id: brands.id, name: brands.name, slug: brands.slug })
-    .from(brands)
-    .innerJoin(brandMemberships, eq(brandMemberships.brandId, brands.id))
-    .where(eq(brandMemberships.userId, userId))
-    .orderBy(sql`upper(${brands.name})`);
+  return listBrandsOfUser(db, userId);
 }
 
 export type BrandEditingData = {
@@ -335,17 +292,13 @@ export type BrandEditingData = {
 
 /** A brand with its members and pending invitations, for the people who can edit it (a 404 for those who can't even see it) */
 export async function findBrandForEditing(db: ReadDb, ability: AppAbility, slug: string): Promise<BrandEditingData> {
-  const brand = await db.query.brands.findFirst({ where: eq(brands.slug, slug) });
+  const brand = await findBrandBySlug(db, slug);
   if (!brand || !ability.can('read', brandSubject(brand))) {
     notFound();
   }
   requireAbility(ability, 'update', brandSubject(brand));
 
-  const memberships = await db.query.brandMemberships.findMany({
-    where: eq(brandMemberships.brandId, brand.id),
-    with: { user: true },
-    orderBy: asc(brandMemberships.id),
-  });
+  const memberships = await listMembershipsOfBrand(db, brand.id);
 
   return {
     brand: {

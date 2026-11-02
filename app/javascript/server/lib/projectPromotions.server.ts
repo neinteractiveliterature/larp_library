@@ -1,7 +1,11 @@
-import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { db as realDb, type DbOrTx, type ReadDb } from '../db';
-import { projectPromotions, projects } from '../db/schema';
+import {
+  deletePromotionOfProject,
+  insertPromotion,
+  listPromotionsWithProjects,
+} from '../repositories/projectPromotions.server';
+import { findProjectById } from '../repositories/projects.server';
 import { failure, isUniqueViolation, type ActionResult } from './actionResult.server';
 import { requireAbility, type AppAbility } from './authorization.server';
 import { searchProjects } from './projectSearch.server';
@@ -14,9 +18,7 @@ export type ProjectPromotionData = {
 
 /** Every promoted project (whoever's it is, since this is for the administrators who manage them), alphabetically by title */
 export async function listProjectPromotions(db: ReadDb): Promise<ProjectPromotionData[]> {
-  const rows = await db.query.projectPromotions.findMany({
-    with: { project: { with: { brand: true } } },
-  });
+  const rows = await listPromotionsWithProjects(db);
 
   return rows
     .map((row) => ({
@@ -58,16 +60,12 @@ export async function promoteProject(
 
   try {
     return await dbOrTx.transaction(async (tx) => {
-      const project = await tx.query.projects.findFirst({ where: eq(projects.id, parsed.data) });
+      const project = await findProjectById(tx, parsed.data);
       if (!project) {
         throw new Response(null, { status: 404, statusText: 'Not Found' });
       }
 
-      const [promotion] = await tx
-        .insert(projectPromotions)
-        .values({ projectId: project.id })
-        .returning({ id: projectPromotions.id });
-      return { ok: true as const, projectPromotion: promotion };
+      return { ok: true as const, projectPromotion: await insertPromotion(tx, project.id) };
     });
   } catch (error) {
     if (isUniqueViolation(error, 'index_project_promotions_on_project_id')) {
@@ -84,11 +82,7 @@ export async function unpromoteProject(ability: AppAbility, input: unknown, dbOr
     throw new Response(null, { status: 404, statusText: 'Not Found' });
   }
 
-  const deleted = await dbOrTx
-    .delete(projectPromotions)
-    .where(eq(projectPromotions.projectId, parsed.data))
-    .returning({ id: projectPromotions.id });
-  if (deleted.length === 0) {
+  if (!(await deletePromotionOfProject(dbOrTx, parsed.data))) {
     throw new Response(null, { status: 404, statusText: 'Not Found' });
   }
 }

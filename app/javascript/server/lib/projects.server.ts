@@ -1,9 +1,26 @@
-import { and, asc, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import type { ProjectHeadersData } from '../../projectData';
 import { findLicense, type License } from '../../licenses';
 import { db as realDb, type DbOrTx, type ReadDb } from '../db';
-import { brands, projectFiles, projectLinks, projectPromotions, projects, projectsTags, tags } from '../db/schema';
+import { findBrandById, findBrandBySlug } from '../repositories/brands.server';
+import { countFilesOfProject, deleteFilesOfProject } from '../repositories/projectFiles.server';
+import { deleteLinksOfProject } from '../repositories/projectLinks.server';
+import { deletePromotionOfProject } from '../repositories/projectPromotions.server';
+import {
+  deleteProject as deleteProjectRow,
+  findProjectWithBrand,
+  findProjectWithBrandAndFiles,
+  findProjectWithDetails,
+  insertProject,
+  updateProject as updateProjectRow,
+} from '../repositories/projects.server';
+import {
+  addTagToProject,
+  listTagsOfProject,
+  removeAllTagsFromProject,
+  removeTagsFromProject,
+} from '../repositories/projectsTags.server';
+import { findTagIdByName, insertTag } from '../repositories/tags.server';
 import { failure, type ActionResult } from './actionResult.server';
 import {
   brandSubject,
@@ -70,14 +87,7 @@ export async function findProjectPage(
 ): Promise<ProjectPageData> {
   const id = projectIdFromParam(projectIdParam);
 
-  const project = await db.query.projects.findFirst({
-    where: eq(projects.id, id),
-    with: {
-      brand: true,
-      projectFiles: { orderBy: sql`position nulls last, id` },
-      projectLinks: { orderBy: [asc(projectLinks.position), asc(projectLinks.id)] },
-    },
-  });
+  const project = await findProjectWithDetails(db, id);
   if (!project?.brand) {
     notFound();
   }
@@ -126,7 +136,7 @@ export async function findBrandForNewProject(
   ability: AppAbility,
   brandSlug: string,
 ): Promise<{ brand: { id: number; name: string; slug: string } }> {
-  const brand = await db.query.brands.findFirst({ where: eq(brands.slug, brandSlug) });
+  const brand = await findBrandBySlug(db, brandSlug);
   if (!brand || !ability.can('read', brandSubject(brand))) {
     notFound();
   }
@@ -193,27 +203,20 @@ async function assignTags(tx: DbOrTx, projectId: number, names: string[]) {
     }
   }
 
-  const current = await tx
-    .select({ id: tags.id, name: tags.name })
-    .from(projectsTags)
-    .innerJoin(tags, eq(tags.id, projectsTags.tagId))
-    .where(eq(projectsTags.projectId, projectId));
+  const current = await listTagsOfProject(tx, projectId);
   const currentNames = new Set(current.map((tag) => tag.name.toLowerCase()));
 
   const removedIds = current.filter((tag) => !wanted.has(tag.name.toLowerCase())).map((tag) => tag.id);
   if (removedIds.length > 0) {
-    await tx
-      .delete(projectsTags)
-      .where(and(eq(projectsTags.projectId, projectId), inArray(projectsTags.tagId, removedIds)));
+    await removeTagsFromProject(tx, projectId, removedIds);
   }
 
   for (const [lowerName, name] of wanted) {
     if (currentNames.has(lowerName)) {
       continue;
     }
-    const existing = await tx.query.tags.findFirst({ where: eq(tags.name, name) });
-    const tagId = existing?.id ?? (await tx.insert(tags).values({ name }).returning({ id: tags.id }))[0].id;
-    await tx.insert(projectsTags).values({ projectId, tagId });
+    const tagId = (await findTagIdByName(tx, name)) ?? (await insertTag(tx, { name }));
+    await addTagToProject(tx, projectId, tagId);
   }
 }
 
@@ -229,7 +232,7 @@ export async function createProject(
   if (typeof brandId !== 'number' || !Number.isInteger(brandId)) {
     notFound();
   }
-  const brand = await db.query.brands.findFirst({ where: eq(brands.id, brandId) });
+  const brand = await findBrandById(db, brandId);
   if (!brand) {
     notFound();
   }
@@ -241,10 +244,7 @@ export async function createProject(
   }
 
   return db.transaction(async (tx) => {
-    const [project] = await tx
-      .insert(projects)
-      .values({ ...values, brandId })
-      .returning({ id: projects.id, title: projects.title });
+    const project = await insertProject(tx, { ...values, brandId });
     await assignTags(tx, project.id, tagNames ?? []);
     return { ok: true as const, project: { ...project, brand: { slug: brand.slug } } };
   });
@@ -260,7 +260,7 @@ export async function updateProject(
   if (typeof id !== 'number' || !Number.isInteger(id)) {
     notFound();
   }
-  const project = await db.query.projects.findFirst({ where: eq(projects.id, id), with: { brand: true } });
+  const project = await findProjectWithBrand(db, id);
   if (!project?.brand) {
     notFound();
   }
@@ -273,15 +273,11 @@ export async function updateProject(
 
   return db.transaction(async (tx) => {
     // Rails' rule: a project can't have downloadable files without a license to say who may have them
-    if (values.license === null && (await tx.$count(projectFiles, eq(projectFiles.projectId, id))) > 0) {
+    if (values.license === null && (await countFilesOfProject(tx, id)) > 0) {
       return failure('License is required because this project has downloadable files');
     }
 
-    const [updated] = await tx
-      .update(projects)
-      .set({ ...values, updatedAt: new Date() })
-      .where(eq(projects.id, id))
-      .returning({ id: projects.id, title: projects.title });
+    const updated = await updateProjectRow(tx, id, values);
     if (tagNames) {
       await assignTags(tx, id, tagNames);
     }
@@ -298,21 +294,18 @@ export async function deleteProject(
   if (typeof id !== 'number' || !Number.isInteger(id)) {
     notFound();
   }
-  const project = await db.query.projects.findFirst({
-    where: eq(projects.id, id),
-    with: { brand: true, projectFiles: true },
-  });
+  const project = await findProjectWithBrandAndFiles(db, id);
   if (!project?.brand) {
     notFound();
   }
   requireAbility(ability, 'delete', projectSubject(project));
 
   await db.transaction(async (tx) => {
-    await tx.delete(projectsTags).where(eq(projectsTags.projectId, id));
-    await tx.delete(projectPromotions).where(eq(projectPromotions.projectId, id));
-    await tx.delete(projectFiles).where(eq(projectFiles.projectId, id));
-    await tx.delete(projectLinks).where(eq(projectLinks.projectId, id));
-    await tx.delete(projects).where(eq(projects.id, id));
+    await removeAllTagsFromProject(tx, id);
+    await deletePromotionOfProject(tx, id);
+    await deleteFilesOfProject(tx, id);
+    await deleteLinksOfProject(tx, id);
+    await deleteProjectRow(tx, id);
   });
 
   // The files are gone from the database; take them out of storage too, and if that fails for one, say so but go on

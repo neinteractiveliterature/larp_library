@@ -1,10 +1,15 @@
-import { and, asc, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { db as realDb, type DbOrTx } from '../db';
-import { projectLinks, projects } from '../db/schema';
+import { findProjectWithBrand } from '../repositories/projects.server';
+import {
+  appendProjectLink,
+  findProjectLinkWithProject,
+  moveProjectLinkTo,
+  removeProjectLink,
+  updateProjectLink as updateProjectLinkRow,
+} from '../repositories/projectLinks.server';
 import { failure, type ActionResult } from './actionResult.server';
 import { projectLinkSubject, requireAbility, type AppAbility } from './authorization.server';
-import { moveItem, withOrderedListLock } from '../db/orderedList.server';
 
 function notFound(): never {
   throw new Response(null, { status: 404, statusText: 'Not Found' });
@@ -54,34 +59,11 @@ async function loadLink(db: DbOrTx, linkId: unknown) {
   if (!isId(linkId)) {
     notFound();
   }
-  const link = await db.query.projectLinks.findFirst({
-    where: eq(projectLinks.id, linkId),
-    with: { project: { with: { brand: true } } },
-  });
+  const link = await findProjectLinkWithProject(db, linkId);
   if (!link?.project) {
     notFound();
   }
   return { link, project: link.project };
-}
-
-/** A project's link ids in the order they're shown */
-async function linkIdsInOrder(tx: DbOrTx, projectId: number): Promise<number[]> {
-  const rows = await tx
-    .select({ id: projectLinks.id })
-    .from(projectLinks)
-    .where(eq(projectLinks.projectId, projectId))
-    .orderBy(asc(projectLinks.position), asc(projectLinks.id));
-  return rows.map((row) => row.id);
-}
-
-/** Gives the links positions 1, 2, 3... in the order given */
-async function numberLinks(tx: DbOrTx, ids: number[]) {
-  for (const [index, id] of ids.entries()) {
-    await tx
-      .update(projectLinks)
-      .set({ position: index + 1 })
-      .where(and(eq(projectLinks.id, id), sql`position is distinct from ${index + 1}`));
-  }
 }
 
 /** Adds a link to the end of a project's list of links */
@@ -94,7 +76,7 @@ export async function createProjectLink(
   if (!isId(projectId)) {
     notFound();
   }
-  const project = await db.query.projects.findFirst({ where: eq(projects.id, projectId), with: { brand: true } });
+  const project = await findProjectWithBrand(db, projectId);
   if (!project?.brand) {
     notFound();
   }
@@ -105,18 +87,7 @@ export async function createProjectLink(
     return failure(...errors);
   }
 
-  return withOrderedListLock(db, `project_links:${projectId}`, async (tx) => {
-    const [{ last }] = await tx
-      .select({ last: sql<number>`coalesce(max(${projectLinks.position}), 0)` })
-      .from(projectLinks)
-      .where(eq(projectLinks.projectId, projectId));
-
-    const [projectLink] = await tx
-      .insert(projectLinks)
-      .values({ ...attributes, projectId, position: last + 1 })
-      .returning({ id: projectLinks.id });
-    return { ok: true as const, projectLink };
-  });
+  return { ok: true, projectLink: await appendProjectLink(db, projectId, attributes) };
 }
 
 export async function updateProjectLink(
@@ -133,7 +104,7 @@ export async function updateProjectLink(
     return failure(...errors);
   }
 
-  await db.update(projectLinks).set(attributes).where(eq(projectLinks.id, link.id));
+  await updateProjectLinkRow(db, link.id, attributes);
   return { ok: true, projectLink: { id: link.id } };
 }
 
@@ -146,10 +117,7 @@ export async function deleteProjectLink(
   const { link, project } = await loadLink(db, linkId);
   requireAbility(ability, 'delete', projectLinkSubject({ project }));
 
-  await withOrderedListLock(db, `project_links:${project.id}`, async (tx) => {
-    await tx.delete(projectLinks).where(eq(projectLinks.id, link.id));
-    await numberLinks(tx, await linkIdsInOrder(tx, project.id));
-  });
+  await removeProjectLink(db, link);
 }
 
 /** Moves a link to `destinationIndex` (counting from 0) in its project's list of links */
@@ -165,8 +133,5 @@ export async function moveProjectLink(
     notFound();
   }
 
-  await withOrderedListLock(db, `project_links:${project.id}`, async (tx) => {
-    const ids = await linkIdsInOrder(tx, project.id);
-    await numberLinks(tx, moveItem(ids, ids.indexOf(link.id), destinationIndex));
-  });
+  await moveProjectLinkTo(db, link, destinationIndex);
 }

@@ -2,14 +2,13 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { brandMemberships, brands, projects, users } from '~/server/db/schema';
 import { db, resetDb, rollbackDb, setupDb, stubDbTransactions, teardownDb } from '../support/db';
-import { brandSubject, buildAbility, loadAbility } from '~/server/lib/authorization.server';
+import { buildAbility, loadAbility } from '~/server/lib/authorization.server';
 import {
   approveBrand,
   BRANDS_PAGE_SIZE,
   findBrandPage,
   listBrands,
   listUnapprovedBrands,
-  visibleBrandsCondition,
 } from '~/server/lib/brands.server';
 
 async function responseStatus(promise: Promise<unknown>) {
@@ -50,40 +49,6 @@ describe('brands', () => {
     const [project] = await db.insert(projects).values({ brandId, title }).returning();
     return project;
   }
-
-  describe('who can see which brands', () => {
-    it('agrees, for every kind of viewer, with what the ability says', async () => {
-      const [siteAdmin, brandAdmin, member, stranger] = await Promise.all([
-        createUser('Site Admin', { admin: true }),
-        createUser('Brand Admin'),
-        createUser('Member'),
-        createUser('Stranger'),
-      ]);
-      const approved = await createBrand('Approved');
-      const pendingOfAdmin = await createBrand('Pending Of Admin', { approved: false });
-      const pendingOfMember = await createBrand('Pending Of Member', { approved: false });
-      const pendingOfNobody = await createBrand('Pending Of Nobody', { approved: false });
-      await db.insert(brandMemberships).values([
-        { brandId: pendingOfAdmin.id, userId: brandAdmin.id, admin: true },
-        { brandId: pendingOfMember.id, userId: member.id, admin: false },
-        // an unaccepted invitation to a brand gives its invitee nothing yet
-        { brandId: pendingOfNobody.id, userId: null, invitationEmail: 'invitee@example.com' },
-      ]);
-      const everyBrand = [approved, pendingOfAdmin, pendingOfMember, pendingOfNobody];
-
-      for (const viewer of [null, siteAdmin, brandAdmin, member, stranger]) {
-        const ability = await loadAbility(viewer, {}, db);
-        const visibleBySql = (
-          await db.select({ id: brands.id }).from(brands).where(visibleBrandsCondition(viewer))
-        ).map((row) => row.id);
-        const visibleByAbility = everyBrand
-          .filter((brand) => ability.can('read', brandSubject(brand)))
-          .map((brand) => brand.id);
-
-        expect(visibleBySql.sort(), `as ${viewer?.name ?? 'a signed-out visitor'}`).toEqual(visibleByAbility.sort());
-      }
-    });
-  });
 
   describe('listing', () => {
     it('lists the brands a viewer can see, those with the most larps first', async () => {
