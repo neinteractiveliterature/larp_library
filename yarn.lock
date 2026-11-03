@@ -2978,16 +2978,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/browser-utils@npm:10.78.0":
-  version: 10.78.0
-  resolution: "@sentry/browser-utils@npm:10.78.0"
-  dependencies:
-    "@sentry/conventions": "npm:^0.16.0"
-    "@sentry/core": "npm:10.78.0"
-  checksum: 10/ba01e8e6736551da79ce547a672a79a0ac7fc9f4b6aa31bcee430b33a10f777da004eabb40ec24f5bcd9cd336ccf67f1d114773ecfb4de573ad57bb3eee429b8
-  languageName: node
-  linkType: hard
-
 "@sentry/browser-utils@npm:11.10.0":
   version: 11.10.0
   resolution: "@sentry/browser-utils@npm:11.10.0"
@@ -2996,20 +2986,6 @@ __metadata:
     "@sentry/core": "npm:11.10.0"
     web-vitals: "npm:^6.2.3"
   checksum: 10/0c62f732a40bcdb2af37e4f3180be5700fd32c516e8329bfcdec45496cc0c853224aab5df3a72d9dd8b563affecda53e29fead5e617f121dd653358f6c1e1b31
-  languageName: node
-  linkType: hard
-
-"@sentry/browser@npm:10.78.0":
-  version: 10.78.0
-  resolution: "@sentry/browser@npm:10.78.0"
-  dependencies:
-    "@sentry/browser-utils": "npm:10.78.0"
-    "@sentry/conventions": "npm:^0.16.0"
-    "@sentry/core": "npm:10.78.0"
-    "@sentry/feedback": "npm:10.78.0"
-    "@sentry/replay": "npm:10.78.0"
-    "@sentry/replay-canvas": "npm:10.78.0"
-  checksum: 10/b8bf479c2da9977a9bbe25134d737c0bc56d711d00a985ffafa8efb105f08e17f0b516d1e3949ee7d8eb13294e7208b57e501cc4c81c657e5a056f95c12a01e9
   languageName: node
   linkType: hard
 
@@ -3050,26 +3026,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/conventions@npm:^0.16.0":
-  version: 0.16.0
-  resolution: "@sentry/conventions@npm:0.16.0"
-  checksum: 10/21c5bdbde32ff5058954a87f7d6b40b670cdd08c10a1c6787fedc3b94b89804b0df92817e5a37d0ed60e8f1ce6747d01b840f05a5e8940742f9a1dcb0f2d490e
-  languageName: node
-  linkType: hard
-
 "@sentry/conventions@npm:^0.29.0":
   version: 0.29.0
   resolution: "@sentry/conventions@npm:0.29.0"
   checksum: 10/ff8809e2deda9cd8c5601f327af3d1ad715b5fe55952b565e02b55558af72618baf2e8773cab8ddc3d176d49bf45f51596534ffef8d27063420bd1bfd3347c91
-  languageName: node
-  linkType: hard
-
-"@sentry/core@npm:10.78.0":
-  version: 10.78.0
-  resolution: "@sentry/core@npm:10.78.0"
-  dependencies:
-    "@sentry/conventions": "npm:^0.16.0"
-  checksum: 10/79e7edf96bddebec3dc3f9bf8dbd475cfaaae13adc53f0a30b15042f29c4c3f3e1b24939e74eb6eff320bfe8657b173df33910d43101b3ffc11c761826e2ca0e
   languageName: node
   linkType: hard
 
@@ -3079,15 +3039,6 @@ __metadata:
   dependencies:
     "@sentry/conventions": "npm:^0.29.0"
   checksum: 10/9eabb5e7b502bfd06654d9ff940ef48973475c615550096f7eae0fb39f51b6a56d337a50311eda857c90c83efca5c918e570a34fe48feecc0e6a861aa7316f96
-  languageName: node
-  linkType: hard
-
-"@sentry/feedback@npm:10.78.0":
-  version: 10.78.0
-  resolution: "@sentry/feedback@npm:10.78.0"
-  dependencies:
-    "@sentry/core": "npm:10.78.0"
-  checksum: 10/a73a0094e3d137b8ba62edbbf6ed6b483752bdcd99480162bfe1c436836dd74284218aac08196d5b93070b4b486f4549141505d33ced8ffd2d35fdf25a89d17d
   languageName: node
   linkType: hard
 
@@ -3167,16 +3118,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/replay-canvas@npm:10.78.0":
-  version: 10.78.0
-  resolution: "@sentry/replay-canvas@npm:10.78.0"
-  dependencies:
-    "@sentry/core": "npm:10.78.0"
-    "@sentry/replay": "npm:10.78.0"
-  checksum: 10/e0027c7ac97817ade3b18a9c09ca1d80f7221dd26ceefcbcfe0e11dadcda0a83fc1f937c5142872ea4cb9a4091a4c8d5fd5a2f8e56cced2b3dac59e69b77062e
-  languageName: node
-  linkType: hard
-
 "@sentry/replay-canvas@npm:11.10.0":
   version: 11.10.0
   resolution: "@sentry/replay-canvas@npm:11.10.0"
@@ -3184,16 +3125,6 @@ __metadata:
     "@sentry/core": "npm:11.10.0"
     "@sentry/replay": "npm:11.10.0"
   checksum: 10/28fb0914becd1e7fae774d60ec32e3dc75ea4a7b147367b6e0431033218bb53712c6b95a515720a97873bfee553877192d666c202fbc9e931939d7a6b61eb4dd
-  languageName: node
-  linkType: hard
-
-"@sentry/replay@npm:10.78.0":
-  version: 10.78.0
-  resolution: "@sentry/replay@npm:10.78.0"
-  dependencies:
-    "@sentry/browser-utils": "npm:10.78.0"
-    "@sentry/core": "npm:10.78.0"
-  checksum: 10/5f7d42fce2e7a1adc09ab105c076e7d07e2aecc94abc20815367fc90684bf8b1db67b264ba9626939460a94affdc3dac321aeac167c0b09efe93b910e0751a7a
   languageName: node
   linkType: hard
 
@@ -7729,7 +7660,7 @@ __metadata:
     "@react-email/render": "npm:^2.2.0"
     "@react-router/dev": "npm:8.5.1"
     "@react-router/node": "npm:8.5.1"
-    "@sentry/browser": "npm:10.78.0"
+    "@sentry/browser": "npm:11.10.0"
     "@sentry/react-router": "npm:^11.10.0"
     "@testing-library/dom": "npm:^10.4.1"
     "@testing-library/jest-dom": "npm:7.0.1"
