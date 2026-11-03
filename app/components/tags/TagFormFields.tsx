@@ -8,12 +8,12 @@ export type TagFormValues = {
   tagCategory?: TagCategoryData | null;
 };
 
-export type TagFormFieldsProps = {
-  tag: TagFormValues;
-  onChange: React.Dispatch<React.SetStateAction<TagFormValues>>;
+export type TagFormFieldsProps<T extends TagFormValues = TagFormValues> = {
+  tag: T;
+  onChange: React.Dispatch<React.SetStateAction<T>>;
 };
 
-export default function TagFormFields({ tag, onChange }: TagFormFieldsProps): JSX.Element {
+export default function TagFormFields<T extends TagFormValues>({ tag, onChange }: TagFormFieldsProps<T>): JSX.Element {
   const [setName, setTagCategory] = usePropertySetters(onChange, 'name', 'tagCategory');
 
   return (

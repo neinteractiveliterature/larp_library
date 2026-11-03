@@ -21,7 +21,7 @@
     "lib": [
       "DOM",
       "DOM.Iterable",
-      "ES2020"
+      "ES2022"
     ],
     "noImplicitAny": true,
     "skipLibCheck": true

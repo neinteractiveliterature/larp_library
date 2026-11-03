@@ -7,7 +7,9 @@ export type MailTransportConfig = {
   emailOverrideRecipient?: string;
 };
 
-function formatAddress(address: string | { address?: string }): string {
+function formatAddress(address: SendMailOptions['to']): string {
+  if (!address) return '';
+  if (Array.isArray(address)) return address.map(formatAddress).join(', ');
   return typeof address === 'string' ? address : (address.address ?? '');
 }
 

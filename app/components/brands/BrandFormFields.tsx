@@ -4,12 +4,15 @@ import MarkdownEditor from '~/components/MarkdownEditor';
 
 export type BrandFormValues = { name: string; description?: string | null };
 
-export type BrandFormFieldsProps = {
-  brand: BrandFormValues;
-  onChange: React.Dispatch<React.SetStateAction<BrandFormValues>>;
+export type BrandFormFieldsProps<T extends BrandFormValues = BrandFormValues> = {
+  brand: T;
+  onChange: React.Dispatch<React.SetStateAction<T>>;
 };
 
-export default function BrandFormFields({ brand, onChange }: BrandFormFieldsProps): JSX.Element {
+export default function BrandFormFields<T extends BrandFormValues>({
+  brand,
+  onChange,
+}: BrandFormFieldsProps<T>): JSX.Element {
   const [setName, setDescription] = usePropertySetters(onChange, 'name', 'description');
 
   return (
