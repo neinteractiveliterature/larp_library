@@ -27,13 +27,17 @@ export type ProjectFormValues = {
   license?: LicenseOption | null;
 };
 
-export type ProjectFormProps = {
-  project: ProjectFormValues;
-  onChange: React.Dispatch<React.SetStateAction<ProjectFormValues>>;
+export type ProjectFormProps<T extends ProjectFormValues = ProjectFormValues> = {
+  project: T;
+  onChange: React.Dispatch<React.SetStateAction<T>>;
   licenseOptions: readonly LicenseOption[];
 };
 
-export default function ProjectFormFields({ project, onChange, licenseOptions }: ProjectFormProps): JSX.Element {
+export default function ProjectFormFields<T extends ProjectFormValues>({
+  project,
+  onChange,
+  licenseOptions,
+}: ProjectFormProps<T>): JSX.Element {
   const [
     setTitle,
     setAuthors,

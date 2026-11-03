@@ -74,7 +74,7 @@ function TagSelector<IsMulti extends boolean, IsCreatable extends boolean>({
   };
 
   if (isMulti) {
-    const onChangeMulti = (newValue: TagOption[]) =>
+    const onChangeMulti = (newValue: readonly TagOption[]) =>
       (onChange as React.Dispatch<React.SetStateAction<TagOption[]>>)([...newValue]);
 
     if (isCreatable) {

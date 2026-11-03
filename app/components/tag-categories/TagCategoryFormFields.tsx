@@ -9,12 +9,15 @@ export type TagCategoryFormValues = {
   icon?: string | null;
 };
 
-export type TagCategoryFormFieldsProps = {
-  tagCategory: TagCategoryFormValues;
-  onChange: React.Dispatch<React.SetStateAction<TagCategoryFormValues>>;
+export type TagCategoryFormFieldsProps<T extends TagCategoryFormValues = TagCategoryFormValues> = {
+  tagCategory: T;
+  onChange: React.Dispatch<React.SetStateAction<T>>;
 };
 
-export default function TagCategoryFormFields({ tagCategory, onChange }: TagCategoryFormFieldsProps): JSX.Element {
+export default function TagCategoryFormFields<T extends TagCategoryFormValues>({
+  tagCategory,
+  onChange,
+}: TagCategoryFormFieldsProps<T>): JSX.Element {
   const [setName, setColor, setIcon] = usePropertySetters(onChange, 'name', 'color', 'icon');
 
   return (
