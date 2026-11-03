@@ -51,7 +51,12 @@ export default $config({
       INTERCODE_APP_ID: intercodeAppId.value,
       INTERCODE_APP_SECRET: intercodeAppSecret.value,
       AWS_S3_BUCKET: uploadsBucket.name,
-      APP_URL_BASE: $app.stage === 'production' ? 'https://www.larplibrary.org' : 'http://localhost:3042',
+      // A stage other than production has no domain of its own. To sign in on one, give the address it's reached at (its
+      // CloudFront address, which is known only after the first deploy) as APP_URL_BASE in the environment of the deploy.
+      APP_URL_BASE:
+        $app.stage === 'production'
+          ? 'https://www.larplibrary.org'
+          : (process.env['APP_URL_BASE'] ?? 'http://localhost:3042'),
       NODE_EXTRA_CA_CERTS: '/var/task/rds-global-bundle.pem',
       // Read by the Sentry SDK itself, which otherwise tags every event as the default environment, with no release
       SENTRY_ENVIRONMENT: $app.stage,
