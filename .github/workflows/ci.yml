@@ -45,7 +45,7 @@ jobs:
     # The server code's tests run against a real Postgres; each test worker creates its own database on it
     services:
       postgres:
-        image: postgres:17
+        image: postgres:18
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
