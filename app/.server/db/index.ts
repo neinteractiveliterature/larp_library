@@ -5,6 +5,8 @@ import * as schema from '~/.server/db/schema';
 
 // Kept small deliberately: each Lambda execution environment holds its own pool, and a warm container can live for a
 // while, so a large per-container max risks exhausting the database's connection limit under concurrent invocations.
+// A container handles one request at a time, so a pool of 1 is enough for almost everything; the production database is
+// shared with other apps and has only 100 connections in total (see the reserved concurrency in sst.config.ts).
 // pg.Pool connects lazily, so constructing this at import time is safe.
 //
 // Every session runs in UTC. The `timestamp` (without time zone) columns store a naive wall-clock value in the
@@ -13,7 +15,7 @@ import * as schema from '~/.server/db/schema';
 const pool = new Pool({
   connectionString: env.DATABASE_URL,
   options: '-c timezone=UTC',
-  max: 3,
+  max: 1,
 });
 
 export const db = drizzle({ client: pool, casing: 'snake_case', schema });

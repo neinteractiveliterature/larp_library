@@ -110,6 +110,11 @@ export default $config({
           server(args) {
             const existing = Array.isArray(args.copyFiles) ? args.copyFiles : [];
             args.copyFiles = [...existing, ...COPY_FILES];
+            // The production RDS instance is shared with other apps and caps out at 100 connections. Each concurrent
+            // container holds its own pool (see app/.server/db/index.ts), so unbounded concurrency lets a burst of traffic
+            // (a crawler, say) exhaust the database and take the other apps down with it. Beyond this, requests are
+            // throttled instead.
+            args.concurrency = { reserved: 15 };
           },
         },
       },
