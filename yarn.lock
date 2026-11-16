@@ -666,11 +666,11 @@ __metadata:
   linkType: hard
 
 "@casl/ability@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "@casl/ability@npm:7.1.1"
+  version: 7.1.3
+  resolution: "@casl/ability@npm:7.1.3"
   dependencies:
     "@ucast/mongo2js": "npm:^2.0.0"
-  checksum: 10/f125745b667ef4b2fb2db2b56ed1e11fee1cb6c4e3863ba0f6f66634326657c142c87158e4b7a246ed8e8554e32db7521c819c15fad0ff5bc34352ec50cb691e
+  checksum: 10/8c258beeea9d0361086a4e09ab106a53865ff764104e9b3c6569c9d16bb839aa86a92c3261f59075902cbc50c57c7864df57df581128b3d87fadf88f8db88c7a
   languageName: node
   linkType: hard
 
