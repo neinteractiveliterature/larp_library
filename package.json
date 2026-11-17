@@ -29,7 +29,7 @@
     "@sentry/react-router": "^11.10.0",
     "@types/react": "19.3.0",
     "better-auth": "^1.7.14",
-    "bootstrap": "5.3.8",
+    "bootstrap": "5.3.9",
     "bootstrap-icons": "1.13.2",
     "classnames": "2.5.1",
     "dotenv": "^18.0.9",
