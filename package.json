@@ -91,5 +91,5 @@
     "*.{js,jsx,ts,tsx,mjs,mts}": "oxlint --fix",
     "*.{js,jsx,ts,tsx,css,md}": "prettier --write"
   },
-  "packageManager": "yarn@4.18.1"
+  "packageManager": "yarn@4.19.0"
 }
