@@ -2382,8 +2382,8 @@ __metadata:
   linkType: hard
 
 "@oxlint/migrate@npm:^1.90.0":
-  version: 1.94.0
-  resolution: "@oxlint/migrate@npm:1.94.0"
+  version: 1.95.0
+  resolution: "@oxlint/migrate@npm:1.95.0"
   dependencies:
     commander: "npm:^15.0.0"
     globals: "npm:^17.0.0"
@@ -2391,7 +2391,7 @@ __metadata:
     tinyglobby: "npm:^0.2.14"
   bin:
     migrate: ./dist/bin/oxlint-migrate.mjs
-  checksum: 10/dbec8919ccca8409dd9363a1d5e6ea1ab41365c9d7a8207c41af7ea1087e91631932ee7a0980ee6bfe44931ce5de93b6d7314cf5b6e44ec1fbb0933718e95f3b
+  checksum: 10/219ebcf114b7c414aca22e74a5222ea23460c172bab5454c1df764e95661b6287e4b9dc56c0b37881caaccf77b9eedff0643d88a94534de7d9dd9c30f56b586d
   languageName: node
   linkType: hard
 
