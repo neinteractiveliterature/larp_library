@@ -63,7 +63,7 @@
     "@testing-library/react": "16.3.3",
     "@testing-library/user-event": "^14.6.1",
     "@types/codemirror": "5.60.18",
-    "@types/lodash": "4.17.27",
+    "@types/lodash": "4.17.28",
     "@types/nodemailer": "^8.0.2",
     "@types/pg": "^8.23.1",
     "@types/react-color": "3.0.13",
